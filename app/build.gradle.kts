@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -55,6 +56,13 @@ dependencies {
     implementation(composeBom)
     testImplementation(composeBom)
     androidTestImplementation(composeBom)
+
+    implementation("androidx.compose.material:material:1.7.8")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    val navVersion = "2.8.9"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
 
     // Specify Compose library dependencies without a version definition
     implementation("androidx.compose.foundation:foundation")
