@@ -116,7 +116,7 @@ fun MainView() {
 
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun MainPreview() {
     RentItTheme {
         MainView()
     }
