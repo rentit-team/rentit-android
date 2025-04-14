@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <application
         android:allowBackup="true"
@@ -11,12 +11,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RentIt"
-        tools:targetApi="31" >
+        tools:targetApi="31">
+        <activity
+            android:name=".feature.chat.ChatListScreen"
+            android:exported="false"
+            android:label="@string/title_activity_chat_list_screen"
+            android:theme="@style/Theme.RentIt" />
+        <activity
+            android:name=".feature.home.HomeScreen"
+            android:exported="false"
+            android:label="@string/title_activity_home_screen"
+            android:theme="@style/Theme.RentIt" />
+        <activity
+            android:name=".feature.mypage.MyPageScreen"
+            android:exported="false"
+            android:label="@string/title_activity_home_screen"
+            android:theme="@style/Theme.RentIt" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.RentIt" >
+            android:theme="@style/Theme.RentIt">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
