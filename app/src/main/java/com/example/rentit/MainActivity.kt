@@ -29,6 +29,8 @@ import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.feature.auth.JoinScreen
+import com.example.rentit.feature.auth.LoginScreen
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
@@ -51,19 +53,26 @@ val navItems = listOf(
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
-
-
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                MainView()
+                LoginNavHost()
             }
         }
     }
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController, paddingValues: PaddingValues) {
+fun LoginNavHost(navController: NavHostController = rememberNavController()){
+    NavHost(navController = navController, startDestination = NavigationRoutes.LOGIN){
+        composable(NavigationRoutes.LOGIN) { LoginScreen({ moveScreen(navController, NavigationRoutes.JOIN, isInclusive = false) }) }
+        composable(NavigationRoutes.JOIN) { JoinScreen() }
+        composable(NavigationRoutes.MAIN) { MainView() }
+    }
+}
+
+@Composable
+fun TabNavHost(navController: NavHostController, paddingValues: PaddingValues) {
     // Create NavGraph - 이동할 Composable 대상을 매핑
     // NavHost - NavGraph의 현재 대상을 표시하는 컨테이너 역할의 Composable
     // TopBar, BottomBar 등에 UI가 가려지지 않도록 padding으로 안전한 영역 확보
@@ -103,17 +112,30 @@ fun MainView() {
                     selectedContentColor = PrimaryBlue500,
                     selected = currentRoute == item.screenRoute,
                     alwaysShowLabel = false,
-                    onClick = { navController.navigate(item.screenRoute){
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }    // 그래프의 시작 지점까지 스택을 정리하면서 이동
-                        }
-                        launchSingleTop = true  // 같은 화면을 여러 번 쌓지 않도록
-                        restoreState = true     // 이전에 방문한 화면이라면 저장된 상태 복원
-                    } },
+                    onClick = { moveScreen(navController, item.screenRoute, saveStateEnabled = true, restoreStateEnabled = true) },
                 )}
         }
     }){
-        NavigationGraph(navController, it)
+        TabNavHost(navController, it)
+    }
+}
+
+fun moveScreen(
+    navController: NavHostController,
+    route: String,
+    saveStateEnabled: Boolean = false,
+    isInclusive: Boolean = false,
+    restoreStateEnabled: Boolean = false
+) {
+    navController.navigate(route){
+        navController.graph.startDestinationRoute?.let {
+            popUpTo(it) {
+                saveState = saveStateEnabled  // 그래프의 시작 지점까지 스택을 정리하면서 이동
+                inclusive = isInclusive    // 화면을 스택에서 제거
+            }
+        }
+        launchSingleTop = true  // 같은 화면을 여러 번 쌓지 않도록
+        restoreState = restoreStateEnabled     // 이전에 방문한 화면이라면 저장된 상태 복원
     }
 }
 
