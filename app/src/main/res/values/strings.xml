@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">랜팃</string>
 
+    <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
+
     <string name="title_activity_home_tab">홈</string>
     <string name="title_activity_chat_tab">채팅</string>
     <string name="title_activity_my_page_tab">마이페이지</string>
