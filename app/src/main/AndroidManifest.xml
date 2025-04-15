@@ -13,28 +13,12 @@
         android:theme="@style/Theme.RentIt"
         tools:targetApi="31">
         <activity
-            android:name=".feature.chat.ChatListScreen"
-            android:exported="false"
-            android:label="@string/title_activity_chat_list_screen"
-            android:theme="@style/Theme.RentIt" />
-        <activity
-            android:name=".feature.home.HomeScreen"
-            android:exported="false"
-            android:label="@string/title_activity_home_screen"
-            android:theme="@style/Theme.RentIt" />
-        <activity
-            android:name=".feature.mypage.MyPageScreen"
-            android:exported="false"
-            android:label="@string/title_activity_home_screen"
-            android:theme="@style/Theme.RentIt" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.RentIt">
+            android:theme="@style/Theme.RentIt.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
