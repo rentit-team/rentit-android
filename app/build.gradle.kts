@@ -57,6 +57,8 @@ dependencies {
     testImplementation(composeBom)
     androidTestImplementation(composeBom)
 
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     implementation("androidx.compose.material:material:1.7.8")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
