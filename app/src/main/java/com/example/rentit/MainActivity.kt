@@ -1,5 +1,7 @@
 package com.example.rentit
 
+import com.example.rentit.data.user.GoogleLoginViewModel
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -20,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -34,6 +37,7 @@ import com.example.rentit.feature.auth.LoginScreen
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
+import dagger.hilt.android.AndroidEntryPoint
 
 sealed class BottomNavItem(
     val title: Int, val icon: Int, val iconSelected: Int, val screenRoute: String
@@ -49,8 +53,10 @@ val navItems = listOf(
     BottomNavItem.MyPage
 )
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private lateinit var googleLoginViewModel: GoogleLoginViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -59,13 +65,20 @@ class MainActivity : ComponentActivity() {
                 LoginNavHost()
             }
         }
+
+        googleLoginViewModel = ViewModelProvider(this)[GoogleLoginViewModel::class.java]
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        googleLoginViewModel.handleSignInResult(requestCode, resultCode, data)
     }
 }
 
 @Composable
 fun LoginNavHost(navController: NavHostController = rememberNavController()){
     NavHost(navController = navController, startDestination = NavigationRoutes.LOGIN){
-        composable(NavigationRoutes.LOGIN) { LoginScreen({ moveScreen(navController, NavigationRoutes.JOIN, isInclusive = false) }) }
+        composable(NavigationRoutes.LOGIN) { LoginScreen() }
         composable(NavigationRoutes.JOIN) { JoinScreen() }
         composable(NavigationRoutes.MAIN) { MainView() }
     }

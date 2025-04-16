@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,18 +20,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.user.GoogleLoginViewModel
 
 @Composable
-fun LoginScreen(onClick: () -> Unit) {
+fun LoginScreen() {
     RentItTheme {
-        Login(onClick)
+        Login()
     }
+
 }
 
 @Composable
-fun Login(onClick: () -> Unit){
-    val viewModel = remember { GoogleLoginViewModel() }
+fun Login(){
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -48,12 +46,13 @@ fun Login(onClick: () -> Unit){
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton(viewModel, { token -> Log.d("CODE", "$token") }, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
+        GoogleLoginButton({ code -> Log.d("CODE", "$code") }, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
     }
 }
+
 
 @Preview
 @Composable
 fun LoginPreview(){
-    LoginScreen {}
+    LoginScreen()
 }
