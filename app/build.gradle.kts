@@ -57,6 +57,12 @@ dependencies {
     testImplementation(composeBom)
     androidTestImplementation(composeBom)
 
+    // Google Play Service
+    val credentialVersion = "1.3.0-alpha01"
+    implementation("androidx.credentials:credentials:$credentialVersion")
+    implementation("androidx.credentials:credentials-play-services-auth:$credentialVersion")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
     implementation("androidx.core:core-splashscreen:1.0.1")
 
     implementation("androidx.compose.material:material:1.7.8")

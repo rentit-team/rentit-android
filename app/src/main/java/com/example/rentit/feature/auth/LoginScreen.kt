@@ -1,20 +1,17 @@
 package com.example.rentit.feature.auth
 
-import androidx.compose.foundation.BorderStroke
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,10 +20,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.theme.AppBlack
-import com.example.rentit.common.theme.Gray200
-import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.data.user.GoogleLoginViewModel
 
 @Composable
 fun LoginScreen(onClick: () -> Unit) {
@@ -37,6 +32,7 @@ fun LoginScreen(onClick: () -> Unit) {
 
 @Composable
 fun Login(onClick: () -> Unit){
+    val viewModel = remember { GoogleLoginViewModel() }
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,40 +48,12 @@ fun Login(onClick: () -> Unit){
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton(onClick)
-    }
-}
-
-@Composable
-fun GoogleLoginButton(onClick: () -> Unit){
-    OutlinedButton(
-        onClick = onClick,
-        modifier = Modifier.width(250.dp).height(46.dp),
-        colors = ButtonDefaults.outlinedButtonColors(
-            containerColor = Color.Transparent,
-            contentColor = AppBlack
-        ),
-        border = BorderStroke(2.dp, Gray200)
-    ){
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Image(
-                modifier = Modifier
-                    .height(20.dp)
-                    .padding(end = 12.dp),
-                painter = painterResource(id = R.drawable.logo_google),
-                contentDescription = stringResource(id = R.string.screen_login_google_logo_description))
-            Text(
-                text = stringResource(id = R.string.screen_login_google_login_button_text),
-                style = PretendardTextStyle.body1_bold
-            )
-        }
+        GoogleLoginButton(viewModel, { token -> Log.d("CODE", "$token") }, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
     }
 }
 
 @Preview
 @Composable
 fun LoginPreview(){
-    LoginScreen({})
+    LoginScreen {}
 }
