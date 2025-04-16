@@ -18,8 +18,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.data.user.UserViewModel
 
 @Composable
 fun LoginScreen() {
@@ -31,6 +33,7 @@ fun LoginScreen() {
 
 @Composable
 fun Login(){
+    val userViewModel: UserViewModel = hiltViewModel()
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -46,10 +49,20 @@ fun Login(){
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton({ code -> Log.d("CODE", "$code") }, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
+        GoogleLoginButton({ authCode -> login(userViewModel, authCode) }, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
     }
 }
 
+fun login(userViewModel: UserViewModel, authCode: String) {
+    userViewModel.onGoogleLogin(authCode)
+    userViewModel.googleLoginResult?.let {
+        if(it.isSuccess) {
+            Log.d("GOOGLE LOGIN SUCCESS", "${it.getOrNull()?.body()?.data}")
+        } else {
+            Log.d("GOOGLE LOGIN FAILED", "${it.exceptionOrNull()?.message}")
+        }
+    }
+}
 
 @Preview
 @Composable
