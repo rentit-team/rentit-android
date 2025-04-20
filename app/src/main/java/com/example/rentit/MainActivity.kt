@@ -1,6 +1,5 @@
 package com.example.rentit
 
-import com.example.rentit.feature.auth.GoogleLoginViewModel
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -32,6 +31,7 @@ import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.feature.auth.AuthViewModel
 import com.example.rentit.feature.auth.JoinScreen
 import com.example.rentit.feature.auth.LoginScreen
 import com.example.rentit.feature.chat.ChatListScreen
@@ -56,7 +56,7 @@ val navItems = listOf(
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var googleLoginViewModel: GoogleLoginViewModel
+    private lateinit var authViewModel: AuthViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -66,12 +66,12 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        googleLoginViewModel = ViewModelProvider(this)[GoogleLoginViewModel::class.java]
+        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        googleLoginViewModel.handleSignInResult(requestCode, resultCode, data)
+        authViewModel.handleGoogleSignInResult(requestCode, resultCode, data)
     }
 }
 
@@ -99,8 +99,7 @@ fun TabNavHost(navController: NavHostController, paddingValues: PaddingValues) {
 
 @Composable
 fun MainView() {
-    // NavController - 대상 간의 이동을 담당
-    val navController = rememberNavController()
+    val navController = rememberNavController()   // 대상 간의 이동을 담당
 
     Scaffold(bottomBar = {
         BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {

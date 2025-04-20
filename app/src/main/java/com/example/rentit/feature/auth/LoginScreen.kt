@@ -35,24 +35,7 @@ fun LoginScreen() {
 }
 
 @Composable
-fun Login(){
-    val context = LocalContext.current
-    val authViewModel: AuthViewModel = hiltViewModel()
-    val loginResult = authViewModel.googleLoginResult
-
-    LaunchedEffect(loginResult) {
-        loginResult?.let {
-            if (it.isSuccess) {
-                val user = it.getOrNull()?.body()?.data?.user
-                val message = "구글 데이터 서버 전송 성공 [${user?.name}/${user?.email}]"
-                Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                Log.d("GOOGLE LOGIN SUCCESS", "${it.getOrNull()?.body()?.data}")
-            } else {
-                Log.d("GOOGLE LOGIN FAILED", "${it.exceptionOrNull()?.message}")
-            }
-        }
-    }
-
+fun Login(authViewModel: AuthViewModel = hiltViewModel()){
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -68,7 +51,29 @@ fun Login(){
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton({authCode -> authViewModel.onGoogleLogin(authCode)}, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
+        GoogleLoginButton({authCode -> authViewModel.onGoogleLogin(authCode)}, { errorMsg  -> Log.d("ErrorMsg", errorMsg) })
+        LoginResultHandler(authViewModel)
+    }
+}
+
+@Composable
+fun LoginResultHandler(authViewModel: AuthViewModel) {
+    val context = LocalContext.current
+    val googleLoginResult = authViewModel.googleLoginResult
+
+    LaunchedEffect(googleLoginResult) {
+        googleLoginResult?.let {
+            var message = ""
+            it.onSuccess { response ->
+                val user = response.data.user
+                message = "구글 데이터 전송 성공 [${user.name}/${user.email}]"
+                Log.d("GOOGLE LOGIN SUCCESS", "${response.data}")
+            }.onFailure { error ->
+                message = "구글 데이터 전송 실패: ${error.message}"
+                Log.d("GOOGLE LOGIN FAILED", "${error.message}")
+            }
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        }
     }
 }
 

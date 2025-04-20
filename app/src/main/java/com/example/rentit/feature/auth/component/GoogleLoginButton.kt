@@ -33,46 +33,20 @@ import com.example.rentit.common.GOOGLE_CLIENT_ID
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PretendardTextStyle
-import com.example.rentit.data.user.model.LoginResult
-import com.example.rentit.feature.auth.GoogleLoginViewModel
+import com.example.rentit.data.user.model.GoogleSignInResult
+import com.example.rentit.feature.auth.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
 @Composable
 fun GoogleLoginButton(onLoginSuccess: (String) -> Unit, onError: (String) -> Unit){
-    val viewModel: GoogleLoginViewModel = viewModel()
-    val loginState by viewModel.loginState.collectAsState()
     val context = LocalContext.current
+    val authViewModel: AuthViewModel = viewModel()
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        viewModel.handleSignInResult(
-            requestCode = 9001,
-            resultCode = result.resultCode,
-            data = result.data
-        )
-    }
-
-    LaunchedEffect(loginState) {
-        when (loginState) {
-            is LoginResult.Success -> {
-                val authCode = (loginState as LoginResult.Success).authCode
-                Log.d("LoginResult", "성공: $authCode")
-                onLoginSuccess(authCode)
-            }
-
-            is LoginResult.Failure -> {
-                val errorMessage = (loginState as LoginResult.Failure).message
-                Log.d("LoginResult", "실패: $errorMessage")
-            }
-
-            else -> Unit
-        }
-    }
+    val launcher = googleSignInLauncher(authViewModel)
 
     OutlinedButton(
-        onClick = { googleSignInLauncher(launcher, context) },
+        onClick = { launchGoogleSignIn(launcher, context) },
         modifier = Modifier.width(250.dp).height(46.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Transparent,
@@ -80,6 +54,7 @@ fun GoogleLoginButton(onLoginSuccess: (String) -> Unit, onError: (String) -> Uni
         ),
         border = BorderStroke(2.dp, Gray200)
     ){
+        GoogleSignInStateHandler(authViewModel, onLoginSuccess)
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -98,11 +73,47 @@ fun GoogleLoginButton(onLoginSuccess: (String) -> Unit, onError: (String) -> Uni
     }
 }
 
-fun googleSignInLauncher( launcher: ManagedActivityResultLauncher<Intent, ActivityResult>, context: Context) {
+
+@Composable
+fun googleSignInLauncher(authViewModel: AuthViewModel): ManagedActivityResultLauncher<Intent, ActivityResult> {
+    return rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        authViewModel.handleGoogleSignInResult(
+            requestCode = 9001,
+            resultCode = result.resultCode,
+            data = result.data
+        )
+    }
+}
+
+@Composable
+fun GoogleSignInStateHandler(viewModel:AuthViewModel, onGoogleSignInSuccess: (String) -> Unit) {
+    val googleSignInState by viewModel.googleSignInState.collectAsState()
+
+    LaunchedEffect(googleSignInState) {
+        when (googleSignInState) {
+            is GoogleSignInResult.Success -> {
+                val authCode = (googleSignInState as GoogleSignInResult.Success).authCode
+                Log.d("GoogleSignInResult", "성공: $authCode")
+                onGoogleSignInSuccess(authCode)
+            }
+
+            is GoogleSignInResult.Failure -> {
+                val errorMessage = (googleSignInState as GoogleSignInResult.Failure).message
+                Log.d("GoogleSignInResult", "실패: $errorMessage")
+            }
+
+            else -> Unit
+        }
+    }
+}
+
+fun launchGoogleSignIn(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>, context: Context) {
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken(GOOGLE_CLIENT_ID)
         .requestServerAuthCode(GOOGLE_CLIENT_ID)
         .build()
     val googleSignInClient = GoogleSignIn.getClient(context, gso)
-    launcher.launch(googleSignInClient.signInIntent)
+    launcher.launch(googleSignInClient.signInIntent)    // Google Login Intent 실행
 }

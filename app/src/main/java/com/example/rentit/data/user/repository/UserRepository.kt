@@ -1,13 +1,13 @@
 package com.example.rentit.data.user.repository
 
-import com.example.rentit.data.user.dto.LoginResponseDto
+import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.remote.UserRemoteDataSource
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
     private val remoteDataSource: UserRemoteDataSource
 ) {
-    suspend fun googleLogin(code: String, redirectUri: String): Result<LoginResponseDto> {
+    suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
         return try {
             val response = remoteDataSource.googleLogin(code, redirectUri)
             when(response.code()) {
