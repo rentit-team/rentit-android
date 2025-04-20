@@ -1,6 +1,6 @@
 package com.example.rentit
 
-import com.example.rentit.data.user.GoogleLoginViewModel
+import com.example.rentit.feature.auth.GoogleLoginViewModel
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity

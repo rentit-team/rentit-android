@@ -1,4 +1,4 @@
-package com.example.rentit.data.user
+package com.example.rentit.data.user.remote
 
 import com.example.rentit.data.user.dto.LoginRequestDto
 import com.example.rentit.data.user.dto.LoginResponseDto

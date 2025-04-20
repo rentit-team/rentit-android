@@ -1,6 +1,5 @@
-package com.example.rentit.data.user
+package com.example.rentit.data.user.remote
 
-import android.util.Log
 import com.example.rentit.data.user.dto.LoginRequestDto
 import com.example.rentit.data.user.dto.LoginResponseDto
 import retrofit2.Response

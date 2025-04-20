@@ -1,7 +1,7 @@
-package com.example.rentit.data.user
+package com.example.rentit.data.user.model
 
 sealed class LoginResult {
-    object Idle : LoginResult()
+    data object Idle : LoginResult()
     data class Success(val authCode: String) : LoginResult()
     data class Failure(val message: String) : LoginResult()
 }

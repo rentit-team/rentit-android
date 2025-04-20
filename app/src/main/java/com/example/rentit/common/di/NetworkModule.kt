@@ -1,6 +1,6 @@
 package com.example.rentit.common.di
 
-import com.example.rentit.data.user.UserApiService
+import com.example.rentit.data.user.remote.UserApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

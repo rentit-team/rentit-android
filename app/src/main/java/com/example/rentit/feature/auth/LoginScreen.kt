@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.user.UserViewModel
+import com.example.rentit.feature.auth.component.GoogleLoginButton
 
 @Composable
 fun LoginScreen() {
@@ -37,8 +37,8 @@ fun LoginScreen() {
 @Composable
 fun Login(){
     val context = LocalContext.current
-    val userViewModel: UserViewModel = hiltViewModel()
-    val loginResult = userViewModel.googleLoginResult
+    val authViewModel: AuthViewModel = hiltViewModel()
+    val loginResult = authViewModel.googleLoginResult
 
     LaunchedEffect(loginResult) {
         loginResult?.let {
@@ -68,7 +68,7 @@ fun Login(){
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton({authCode -> userViewModel.onGoogleLogin(authCode)}, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
+        GoogleLoginButton({authCode -> authViewModel.onGoogleLogin(authCode)}, { errorMsg  -> Log.d("ErrorMsg", "$errorMsg") })
     }
 }
 

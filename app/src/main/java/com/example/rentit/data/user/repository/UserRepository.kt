@@ -1,7 +1,7 @@
-package com.example.rentit.data.user
+package com.example.rentit.data.user.repository
 
-import android.util.Log
 import com.example.rentit.data.user.dto.LoginResponseDto
+import com.example.rentit.data.user.remote.UserRemoteDataSource
 import retrofit2.Response
 import javax.inject.Inject
 

@@ -1,7 +1,8 @@
-package com.example.rentit.data.user
+package com.example.rentit.feature.auth
 
 import android.content.Intent
 import androidx.lifecycle.ViewModel
+import com.example.rentit.data.user.model.LoginResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import kotlinx.coroutines.flow.MutableStateFlow

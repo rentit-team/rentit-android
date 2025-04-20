@@ -1,12 +1,12 @@
-package com.example.rentit.data.user
+package com.example.rentit.feature.auth
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.GOOGLE_REDIRECT_URI
+import com.example.rentit.data.user.repository.UserRepository
 import com.example.rentit.data.user.dto.LoginResponseDto
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,7 +14,7 @@ import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(
+class AuthViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
 

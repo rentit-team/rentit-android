@@ -1,6 +1,5 @@
-package com.example.rentit.feature.auth
+package com.example.rentit.feature.auth.component
 
-import com.example.rentit.data.user.GoogleLoginViewModel
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -34,7 +33,8 @@ import com.example.rentit.common.GOOGLE_CLIENT_ID
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PretendardTextStyle
-import com.example.rentit.data.user.LoginResult
+import com.example.rentit.data.user.model.LoginResult
+import com.example.rentit.feature.auth.GoogleLoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 
