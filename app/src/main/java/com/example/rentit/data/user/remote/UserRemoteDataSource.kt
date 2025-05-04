@@ -6,10 +6,10 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class UserRemoteDataSource @Inject constructor(
-    private val userService: UserApiService
+    private val userApiService: UserApiService
 ) {
     suspend fun googleLogin(code: String, redirectUri: String): Response<GoogleLoginResponseDto> {
         val request = GoogleLoginRequestDto(code, redirectUri)
-        return userService.googleLogin(request)
+        return userApiService.googleLogin(request)
     }
 }

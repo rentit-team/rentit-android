@@ -19,23 +19,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.auth.component.GoogleLoginButton
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavHostController) {
     RentItTheme {
-        Login()
+        Login(navController)
     }
-
 }
 
 @Composable
-fun Login(authViewModel: AuthViewModel = hiltViewModel()){
+fun Login(navController: NavHostController, authViewModel: AuthViewModel = hiltViewModel()){
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,12 +53,12 @@ fun Login(authViewModel: AuthViewModel = hiltViewModel()){
             style = MaterialTheme.typography.labelMedium
         )
         GoogleLoginButton({authCode -> authViewModel.onGoogleLogin(authCode)}, { errorMsg  -> Log.d("ErrorMsg", errorMsg) })
-        LoginResultHandler(authViewModel)
+        LoginResultHandler(navController, authViewModel)
     }
 }
 
 @Composable
-fun LoginResultHandler(authViewModel: AuthViewModel) {
+fun LoginResultHandler(navController: NavHostController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
     val googleLoginResult = authViewModel.googleLoginResult
 
@@ -66,6 +67,7 @@ fun LoginResultHandler(authViewModel: AuthViewModel) {
             var message = ""
             it.onSuccess { response ->
                 val user = response.data.user
+                moveScreen(navController, NavigationRoutes.JOIN)
                 message = "구글 데이터 전송 성공 [${user.name}/${user.email}]"
                 Log.d("GOOGLE LOGIN SUCCESS", "${response.data}")
             }.onFailure { error ->
@@ -75,11 +77,4 @@ fun LoginResultHandler(authViewModel: AuthViewModel) {
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
     }
-}
-
-
-@Preview
-@Composable
-fun LoginPreview(){
-    LoginScreen()
 }

@@ -13,22 +13,28 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    @Provides
-    fun provideUserService(): UserApiService {
 
-        val logging = HttpLoggingInterceptor().apply {
+    private const val baseUrl = "http://api.rentit.o-r.kr:8080/"
+
+    @Provides
+    fun provideLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
 
-        val client = OkHttpClient.Builder()
-            .addInterceptor(logging)
+    @Provides
+    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor)
             .build()
 
-        return Retrofit.Builder()
-            .baseUrl("http://api.rentit.o-r.kr:8080/")
+    @Provides
+    fun provideRetrofit(
+        client: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(UserApiService::class.java)
-    }
 }
