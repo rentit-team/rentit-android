@@ -15,7 +15,14 @@
     <string name="screen_join_title">회원가입</string>
     <string name="screen_join_btn_text">RentIt 시작하기</string>
     <string name="screen_join_headline">에서 사용할\n닉네임을 정해주세요.</string>
-    <string name="screen_join_button_text">RentIt 시작하기</string>
+
+    <string name="product_list_item_thumbnail_img_placeholder_description">임시 이미지</string>
+
+    <string name="screen_home_logo_img_placeholder_description">렌팃 로고</string>
+    <string name="screen_home_search_img_placeholder_description">검색</string>
+
+    <string name="screen_home_label_btn_filter_rent_possibility">대여 가능</string>
+    <string name="screen_home_label_btn_filter_category">카테고리</string>
 
 
 </resources>

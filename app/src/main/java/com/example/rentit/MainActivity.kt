@@ -63,7 +63,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                LoginNavHost()
+                //LoginNavHost()
+                MainView(rememberNavController())
             }
         }
 
@@ -91,7 +92,7 @@ fun TabNavHost(navController: NavHostController, paddingValues: PaddingValues) {
     // NavHost - NavGraph의 현재 대상을 표시하는 컨테이너 역할의 Composable
     // TopBar, BottomBar 등에 UI가 가려지지 않도록 padding으로 안전한 영역 확보
     NavHost(navController = navController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
-        composable(BottomNavItem.Home.screenRoute) { HomeScreen("HomeScreen") }
+        composable(BottomNavItem.Home.screenRoute) { HomeScreen() }
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen") }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen") }
     }
@@ -136,6 +137,6 @@ fun MainView(navController: NavHostController) {
 @Composable
 fun MainPreview() {
     RentItTheme {
-        LoginNavHost()
+        MainView(rememberNavController())
     }
 }
