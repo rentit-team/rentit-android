@@ -34,49 +34,47 @@ import com.example.rentit.feature.home.component.ProductListItem
 
 @Composable
 fun HomeScreen() {
-    RentItTheme {
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .screenHorizontalPadding()
-                    .padding(top = 30.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    modifier = Modifier.width(70.dp),
-                    painter = painterResource(id = R.drawable.logo_app),
-                    contentDescription = stringResource(id = R.string.screen_home_logo_img_placeholder_description)
-                )
-                IconButton(
-                    modifier = Modifier.width(18.dp),
-                    content = {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_search),
-                            contentDescription = stringResource(id = R.string.screen_home_search_img_placeholder_description),
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .screenHorizontalPadding()
+                .padding(top = 30.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier.width(70.dp),
+                painter = painterResource(id = R.drawable.logo_app),
+                contentDescription = stringResource(id = R.string.screen_home_logo_img_placeholder_description)
+            )
+            IconButton(
+                modifier = Modifier.width(18.dp),
+                content = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_search),
+                        contentDescription = stringResource(id = R.string.screen_home_search_img_placeholder_description),
                     )},
-                    onClick = {},
-                )
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .screenHorizontalPadding()
-                    .padding(vertical = 13.dp),
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CommonLabelButton(onClick = { /*TODO*/ }, text = stringResource(id = R.string.screen_home_label_btn_filter_rent_possibility))
-                Spacer(modifier = Modifier.width(9.dp))
-                CategoryFilterButton()
-            }
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                this.items(10) {
-                    ProductListItem()
-                }
+                onClick = {},
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .screenHorizontalPadding()
+                .padding(vertical = 13.dp),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            CommonLabelButton(onClick = { /*TODO*/ }, text = stringResource(id = R.string.screen_home_label_btn_filter_rent_possibility))
+            Spacer(modifier = Modifier.width(9.dp))
+            CategoryFilterButton()
+        }
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            this.items(10) {
+                ProductListItem()
             }
         }
     }
@@ -110,5 +108,7 @@ fun CategoryFilterButton() {
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    RentItTheme {
+        HomeScreen()
+    }
 }

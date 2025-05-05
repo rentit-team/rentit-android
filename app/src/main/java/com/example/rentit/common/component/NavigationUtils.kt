@@ -1,5 +1,6 @@
 package com.example.rentit.common.component
 
+import android.util.Log
 import androidx.navigation.NavHostController
 
 fun moveScreen(
@@ -9,11 +10,11 @@ fun moveScreen(
     isInclusive: Boolean = false,
     restoreStateEnabled: Boolean = false
 ) {
-    navController.navigate(route){
+    navController.navigate(route) {
         navController.graph.startDestinationRoute?.let {
             popUpTo(it) {
                 saveState = saveStateEnabled  // 그래프의 시작 지점까지 스택을 정리하면서 이동
-                inclusive = isInclusive    // 화면을 스택에서 제거
+                inclusive = isInclusive    // 특정(현재)화면까지 스택에서 제거
             }
         }
         launchSingleTop = true  // 같은 화면을 여러 번 쌓지 않도록

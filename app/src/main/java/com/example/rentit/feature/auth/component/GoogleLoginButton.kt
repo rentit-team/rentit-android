@@ -37,9 +37,10 @@ import com.example.rentit.data.user.model.GoogleSignInResult
 import com.example.rentit.feature.auth.AuthViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import java.net.URLEncoder
 
 @Composable
-fun GoogleLoginButton(onLoginSuccess: (String) -> Unit, onError: (String) -> Unit){
+fun GoogleLoginButton(onLoginSuccess: (String) -> Unit){
     val context = LocalContext.current
     val authViewModel: AuthViewModel = viewModel()
 
@@ -94,7 +95,8 @@ fun GoogleSignInStateHandler(viewModel:AuthViewModel, onGoogleSignInSuccess: (St
     LaunchedEffect(googleSignInState) {
         when (googleSignInState) {
             is GoogleSignInResult.Success -> {
-                val authCode = (googleSignInState as GoogleSignInResult.Success).authCode
+                var authCode = (googleSignInState as GoogleSignInResult.Success).authCode
+                authCode = URLEncoder.encode(authCode, "UTF-8")
                 Log.d("GoogleSignInResult", "성공: $authCode")
                 onGoogleSignInSuccess(authCode)
             }

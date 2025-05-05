@@ -63,8 +63,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                //LoginNavHost()
-                MainView(rememberNavController())
+                LoginNavHost()
             }
         }
 
@@ -78,33 +77,33 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginNavHost(navController: NavHostController = rememberNavController()){
-    NavHost(navController = navController, startDestination = NavigationRoutes.LOGIN){
-        composable(NavigationRoutes.LOGIN) { LoginScreen(navController) }
-        composable(NavigationRoutes.JOIN) { JoinScreen() }
-        composable(NavigationRoutes.MAIN) { MainView(navController) }
+fun LoginNavHost(){
+    val navHostController = rememberNavController()
+    NavHost(navController = navHostController, startDestination = NavigationRoutes.LOGIN){
+        composable(NavigationRoutes.LOGIN) { LoginScreen(navHostController) }
+        composable(NavigationRoutes.JOIN) { JoinScreen(navHostController) }
+        composable(NavigationRoutes.MAIN) { MainView() }
     }
 }
 
 @Composable
-fun TabNavHost(navController: NavHostController, paddingValues: PaddingValues) {
+fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValues) {
     // Create NavGraph - 이동할 Composable 대상을 매핑
     // NavHost - NavGraph의 현재 대상을 표시하는 컨테이너 역할의 Composable
     // TopBar, BottomBar 등에 UI가 가려지지 않도록 padding으로 안전한 영역 확보
-    NavHost(navController = navController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
+    NavHost(navController = navHostController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
         composable(BottomNavItem.Home.screenRoute) { HomeScreen() }
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen") }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen") }
     }
 }
 
-
 @Composable
-fun MainView(navController: NavHostController) {
-
+fun MainView() {
+    val navHostController = rememberNavController()
     Scaffold(bottomBar = {
         BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             navItems.forEach { item ->
                 BottomNavigationItem(
@@ -125,11 +124,11 @@ fun MainView(navController: NavHostController) {
                     selectedContentColor = PrimaryBlue500,
                     selected = currentRoute == item.screenRoute,
                     alwaysShowLabel = false,
-                    onClick = { moveScreen(navController, item.screenRoute, saveStateEnabled = true, restoreStateEnabled = true) },
+                    onClick = { moveScreen(navHostController, item.screenRoute, saveStateEnabled = false, restoreStateEnabled = true) },
                 )}
         }
     }){
-        TabNavHost(navController, it)
+        TabNavHost(navHostController, it)
     }
 }
 
@@ -137,6 +136,6 @@ fun MainView(navController: NavHostController) {
 @Composable
 fun MainPreview() {
     RentItTheme {
-        MainView(rememberNavController())
+        MainView()
     }
 }

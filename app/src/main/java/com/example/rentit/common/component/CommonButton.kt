@@ -15,7 +15,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
-fun CommonButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun CommonButton(text: String, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         modifier = modifier
@@ -37,6 +37,6 @@ fun CommonButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifie
 @Composable
 fun ButtonPreview(){
     RentItTheme {
-        CommonButton("Button", {})
+        CommonButton("Button") {}
     }
 }

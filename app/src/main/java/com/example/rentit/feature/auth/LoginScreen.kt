@@ -25,18 +25,11 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
-import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.auth.component.GoogleLoginButton
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
-    RentItTheme {
-        Login(navController)
-    }
-}
-
-@Composable
-fun Login(navController: NavHostController, authViewModel: AuthViewModel = hiltViewModel()){
+fun LoginScreen(navHostController: NavHostController) {
+    val authViewModel: AuthViewModel = hiltViewModel()
     Column(
         modifier = Modifier.fillMaxSize().background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -52,13 +45,13 @@ fun Login(navController: NavHostController, authViewModel: AuthViewModel = hiltV
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton({authCode -> authViewModel.onGoogleLogin(authCode)}, { errorMsg  -> Log.d("ErrorMsg", errorMsg) })
-        LoginResultHandler(navController, authViewModel)
+        GoogleLoginButton { authCode -> authViewModel.onGoogleLogin(authCode) }
     }
+    LoginResultHandler(navHostController, authViewModel)
 }
 
 @Composable
-fun LoginResultHandler(navController: NavHostController, authViewModel: AuthViewModel) {
+fun LoginResultHandler(navHostController: NavHostController, authViewModel: AuthViewModel) {
     val context = LocalContext.current
     val googleLoginResult = authViewModel.googleLoginResult
 
@@ -67,7 +60,7 @@ fun LoginResultHandler(navController: NavHostController, authViewModel: AuthView
             var message = ""
             it.onSuccess { response ->
                 val user = response.data.user
-                moveScreen(navController, NavigationRoutes.JOIN)
+                moveScreen(navHostController, NavigationRoutes.JOIN)
                 message = "구글 데이터 전송 성공 [${user.name}/${user.email}]"
                 Log.d("GOOGLE LOGIN SUCCESS", "${response.data}")
             }.onFailure { error ->
