@@ -66,7 +66,7 @@ fun GoogleLoginButton(onLoginSuccess: (String) -> Unit, onError: (String) -> Uni
                 contentDescription = stringResource(id = R.string.screen_login_google_logo_description)
             )
             Text(
-                text = stringResource(id = R.string.screen_login_google_login_button_text),
+                text = stringResource(id = R.string.screen_login_google_login_btn_text),
                 style = PretendardTextStyle.body1_bold
             )
         }

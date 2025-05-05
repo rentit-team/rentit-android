@@ -10,10 +10,10 @@
     <string name="screen_login_app_logo_description">랜팃 로고</string>
     <string name="screen_login_google_logo_description">구글 로고</string>
     <string name="screen_login_label">중고 거래와 렌탈의 새로운 기준</string>
-    <string name="screen_login_google_login_button_text">Google 계정으로 로그인</string>
-
+    <string name="screen_login_google_login_btn_text">Google 계정으로 로그인</string>
 
     <string name="screen_join_title">회원가입</string>
+    <string name="screen_join_btn_text">RentIt 시작하기</string>
     <string name="screen_join_headline">에서 사용할\n닉네임을 정해주세요.</string>
     <string name="screen_join_button_text">RentIt 시작하기</string>
 

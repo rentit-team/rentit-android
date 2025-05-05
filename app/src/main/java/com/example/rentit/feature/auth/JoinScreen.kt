@@ -37,7 +37,7 @@ fun JoinScreen() {
                 headlinePrefix = stringResource(R.string.app_name),
                 headlineSuffix = stringResource(R.string.screen_join_headline),
                 placeholder = stringResource(R.string.app_name),
-                buttonText = stringResource(R.string.screen_join_button_text),
+                buttonText = stringResource(R.string.screen_join_btn_text),
                 onClick = {}
             )
         }
