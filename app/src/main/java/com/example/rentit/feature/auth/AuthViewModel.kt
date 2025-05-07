@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.GOOGLE_REDIRECT_URI
 import com.example.rentit.data.user.repository.UserRepository
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
+import com.example.rentit.data.user.dto.UserDto
 import com.example.rentit.data.user.model.GoogleSignInResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -24,6 +25,12 @@ class AuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     var googleLoginResult by mutableStateOf<Result<GoogleLoginResponseDto>?>(null)
+        private set
+    var signUpResult by mutableStateOf<Result<Unit>?>(null)
+        private set
+    var userData by mutableStateOf<UserDto?>(null)
+    var nickname by mutableStateOf("")
+        private set
 
     private val _googleSignInState = MutableStateFlow<GoogleSignInResult>(GoogleSignInResult.Idle)
     val googleSignInState: StateFlow<GoogleSignInResult> = _googleSignInState
@@ -49,6 +56,16 @@ class AuthViewModel @Inject constructor(
                 _googleSignInState.value = GoogleSignInResult.Failure("로그인 실패: ${e.message}")
             }
         }
+    }
+
+    fun onSignUp(name: String?, email: String, nickname: String, profileImageUrl: String? = null) {
+        viewModelScope.launch {
+            signUpResult = repository.signUp(name, email, nickname, profileImageUrl)
+        }
+    }
+
+    fun onNicknameChanged(newValue: String){
+        nickname = newValue
     }
 }
 

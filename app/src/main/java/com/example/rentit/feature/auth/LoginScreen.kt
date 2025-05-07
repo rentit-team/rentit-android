@@ -28,15 +28,18 @@ import com.example.rentit.common.component.moveScreen
 import com.example.rentit.feature.auth.component.GoogleLoginButton
 
 @Composable
-fun LoginScreen(navHostController: NavHostController) {
-    val authViewModel: AuthViewModel = hiltViewModel()
+fun LoginScreen(authViewModel: AuthViewModel, navHostController: NavHostController) {
     Column(
-        modifier = Modifier.fillMaxSize().background(Color.White),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            modifier = Modifier.width(140.dp).padding(bottom = 10.5.dp),
+            modifier = Modifier
+                .width(140.dp)
+                .padding(bottom = 10.5.dp),
             painter = painterResource(id = R.drawable.logo_app),
             contentDescription = stringResource(id = R.string.screen_login_app_logo_description)
         )
@@ -45,7 +48,7 @@ fun LoginScreen(navHostController: NavHostController) {
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton { authCode -> authViewModel.onGoogleLogin(authCode) }
+        GoogleLoginButton(authViewModel)
     }
     LoginResultHandler(navHostController, authViewModel)
 }
@@ -59,9 +62,14 @@ fun LoginResultHandler(navHostController: NavHostController, authViewModel: Auth
         googleLoginResult?.let {
             var message = ""
             it.onSuccess { response ->
-                val user = response.data.user
-                moveScreen(navHostController, NavigationRoutes.JOIN)
-                message = "구글 데이터 전송 성공 [${user.name}/${user.email}]"
+                val userData = response.data.user
+                authViewModel.userData = userData
+                if(response.data.isUserRegistered){
+                    moveScreen(navHostController, NavigationRoutes.MAIN, isInclusive = true)
+                } else {
+                    moveScreen(navHostController, NavigationRoutes.JOIN)
+                }
+                message = "구글 데이터 전송 성공 [${userData.name}/${userData.email}]"
                 Log.d("GOOGLE LOGIN SUCCESS", "${response.data}")
             }.onFailure { error ->
                 message = "구글 데이터 전송 실패: ${error.message}"

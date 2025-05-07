@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -21,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -57,17 +57,14 @@ val navItems = listOf(
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private lateinit var authViewModel: AuthViewModel
+    private val authViewModel: AuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                LoginNavHost()
+                LoginNavHost(authViewModel)
             }
         }
-
-        authViewModel = ViewModelProvider(this)[AuthViewModel::class.java]
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -77,11 +74,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginNavHost(){
+fun LoginNavHost(authViewModel: AuthViewModel){
     val navHostController = rememberNavController()
     NavHost(navController = navHostController, startDestination = NavigationRoutes.LOGIN){
-        composable(NavigationRoutes.LOGIN) { LoginScreen(navHostController) }
-        composable(NavigationRoutes.JOIN) { JoinScreen(navHostController) }
+        composable(NavigationRoutes.LOGIN) { LoginScreen(authViewModel, navHostController) }
+        composable(NavigationRoutes.JOIN) { JoinScreen(authViewModel, navHostController) }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
 }

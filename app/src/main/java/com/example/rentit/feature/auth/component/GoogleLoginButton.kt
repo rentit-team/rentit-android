@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rentit.R
 import com.example.rentit.common.GOOGLE_CLIENT_ID
 import com.example.rentit.common.theme.AppBlack
@@ -40,10 +39,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import java.net.URLEncoder
 
 @Composable
-fun GoogleLoginButton(onLoginSuccess: (String) -> Unit){
+fun GoogleLoginButton(authViewModel: AuthViewModel){
     val context = LocalContext.current
-    val authViewModel: AuthViewModel = viewModel()
-
     val launcher = googleSignInLauncher(authViewModel)
 
     OutlinedButton(
@@ -55,7 +52,7 @@ fun GoogleLoginButton(onLoginSuccess: (String) -> Unit){
         ),
         border = BorderStroke(2.dp, Gray200)
     ){
-        GoogleSignInStateHandler(authViewModel, onLoginSuccess)
+        GoogleSignInStateHandler(authViewModel)
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -89,8 +86,8 @@ fun googleSignInLauncher(authViewModel: AuthViewModel): ManagedActivityResultLau
 }
 
 @Composable
-fun GoogleSignInStateHandler(viewModel:AuthViewModel, onGoogleSignInSuccess: (String) -> Unit) {
-    val googleSignInState by viewModel.googleSignInState.collectAsState()
+fun GoogleSignInStateHandler(authViewModel: AuthViewModel) {
+    val googleSignInState by authViewModel.googleSignInState.collectAsState()
 
     LaunchedEffect(googleSignInState) {
         when (googleSignInState) {
@@ -98,7 +95,7 @@ fun GoogleSignInStateHandler(viewModel:AuthViewModel, onGoogleSignInSuccess: (St
                 var authCode = (googleSignInState as GoogleSignInResult.Success).authCode
                 authCode = URLEncoder.encode(authCode, "UTF-8")
                 Log.d("GoogleSignInResult", "성공: $authCode")
-                onGoogleSignInSuccess(authCode)
+                authViewModel.onGoogleLogin(authCode)
             }
 
             is GoogleSignInResult.Failure -> {
