@@ -2,8 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 네트워크 상태 확인 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
+        android:name=".RentItApp"
         android:allowBackup="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -13,28 +19,12 @@
         android:theme="@style/Theme.RentIt"
         tools:targetApi="31">
         <activity
-            android:name=".feature.chat.ChatListScreen"
-            android:exported="false"
-            android:label="@string/title_activity_chat_list_screen"
-            android:theme="@style/Theme.RentIt" />
-        <activity
-            android:name=".feature.home.HomeScreen"
-            android:exported="false"
-            android:label="@string/title_activity_home_screen"
-            android:theme="@style/Theme.RentIt" />
-        <activity
-            android:name=".feature.mypage.MyPageScreen"
-            android:exported="false"
-            android:label="@string/title_activity_home_screen"
-            android:theme="@style/Theme.RentIt" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.RentIt">
+            android:theme="@style/Theme.RentIt.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -19,7 +19,7 @@ val pretendardFamily = FontFamily(
     Font(R.font.pretendard_extra_bold, FontWeight.ExtraBold),
 )
 
-object pretendardTextStyle {
+object PretendardTextStyle {
 
     // Title - Bold, 28pt
     val title: TextStyle = TextStyle(
@@ -48,7 +48,6 @@ object pretendardTextStyle {
         fontFamily = pretendardFamily,
         fontWeight = FontWeight.SemiBold,
         fontSize = 20.sp,
-        lineHeight = 28.sp
     )
 
     // Subhead_2 - Regular, 20pt
@@ -104,14 +103,14 @@ object pretendardTextStyle {
 
 // Set of Material typography styles to start with
 val AppTypography = Typography(
-    displayLarge = pretendardTextStyle.title,           // 28pt Bold
-    headlineLarge = pretendardTextStyle.headline,       // 24pt SemiBold
-    headlineMedium = pretendardTextStyle.headline_bold, // 24pt Regular
-    titleLarge = pretendardTextStyle.subhead_bold,      // 20pt SemiBold
-    titleMedium = pretendardTextStyle.subhead,          // 20pt Regular
-    bodyLarge = pretendardTextStyle.body1_bold,         // 16pt SemiBold
-    bodyMedium = pretendardTextStyle.body1,             // 16pt Regular
-    labelLarge = pretendardTextStyle.body2_bold,        // 12pt SemiBold
-    labelMedium = pretendardTextStyle.body2,            // 12pt Regular
-    labelSmall = pretendardTextStyle.caption,           // 10pt Regular
+    displayLarge = PretendardTextStyle.title,           // 28pt Bold
+    headlineLarge = PretendardTextStyle.headline,       // 24pt SemiBold
+    headlineMedium = PretendardTextStyle.headline_bold, // 24pt Regular
+    titleLarge = PretendardTextStyle.subhead_bold,      // 20pt SemiBold
+    titleMedium = PretendardTextStyle.subhead,          // 20pt Regular
+    bodyLarge = PretendardTextStyle.body1_bold,         // 16pt SemiBold
+    bodyMedium = PretendardTextStyle.body1,             // 16pt Regular
+    labelLarge = PretendardTextStyle.body2_bold,        // 12pt SemiBold
+    labelMedium = PretendardTextStyle.body2,            // 12pt Regular
+    labelSmall = PretendardTextStyle.caption,           // 10pt Regular
 )
