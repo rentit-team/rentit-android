@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -57,9 +59,29 @@ dependencies {
     testImplementation(composeBom)
     androidTestImplementation(composeBom)
 
+    implementation("com.google.android.gms:play-services-auth:21.0.0")
+
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
+
+    // Google Play Service
+    val credentialVersion = "1.3.0-alpha01"
+    implementation("androidx.credentials:credentials:$credentialVersion")
+    implementation("androidx.credentials:credentials-play-services-auth:$credentialVersion")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     implementation("androidx.compose.material:material:1.7.8")
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+
+    // Retrofit2 통신
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 
     val navVersion = "2.8.9"
     implementation("androidx.navigation:navigation-compose:$navVersion")
@@ -84,4 +106,8 @@ dependencies {
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
     implementation("androidx.activity:activity-compose:1.9.1")
+}
+
+kapt {
+    correctErrorTypes = true
 }

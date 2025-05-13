@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <style name="Theme.RentIt" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.RentIt.Splash" parent="Theme.SplashScreen">
+        <!-- 배경색 설정 -->
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <!-- 아이콘 설정 -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_app_splash</item>
+        <!-- Splash 후 적용할 메인 테마 -->
+        <item name="postSplashScreenTheme">@style/Theme.RentIt</item>
+        <!-- 상단 바 제거 -->
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

@@ -1,8 +1,10 @@
 package com.example.rentit
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -26,12 +28,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.feature.auth.AuthViewModel
+import com.example.rentit.feature.auth.JoinScreen
+import com.example.rentit.feature.auth.LoginScreen
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
+import dagger.hilt.android.AndroidEntryPoint
 
 sealed class BottomNavItem(
     val title: Int, val icon: Int, val iconSelected: Int, val screenRoute: String
@@ -47,39 +54,53 @@ val navItems = listOf(
     BottomNavItem.MyPage
 )
 
-
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val authViewModel: AuthViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                MainView()
+                LoginNavHost(authViewModel)
             }
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        authViewModel.handleGoogleSignInResult(requestCode, resultCode, data)
     }
 }
 
 @Composable
-fun NavigationGraph(navController: NavHostController, paddingValues: PaddingValues) {
+fun LoginNavHost(authViewModel: AuthViewModel){
+    val navHostController = rememberNavController()
+    NavHost(navController = navHostController, startDestination = NavigationRoutes.LOGIN){
+        composable(NavigationRoutes.LOGIN) { LoginScreen(authViewModel, navHostController) }
+        composable(NavigationRoutes.JOIN) { JoinScreen(authViewModel, navHostController) }
+        composable(NavigationRoutes.MAIN) { MainView() }
+    }
+}
+
+@Composable
+fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValues) {
     // Create NavGraph - 이동할 Composable 대상을 매핑
     // NavHost - NavGraph의 현재 대상을 표시하는 컨테이너 역할의 Composable
     // TopBar, BottomBar 등에 UI가 가려지지 않도록 padding으로 안전한 영역 확보
-    NavHost(navController = navController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
-        composable(BottomNavItem.Home.screenRoute) { HomeScreen("HomeScreen") }
+    NavHost(navController = navHostController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
+        composable(BottomNavItem.Home.screenRoute) { HomeScreen() }
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen") }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen") }
     }
 }
 
-
 @Composable
 fun MainView() {
-    // NavController - 대상 간의 이동을 담당
-    val navController = rememberNavController()
-
+    val navHostController = rememberNavController()
     Scaffold(bottomBar = {
         BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
-            val navBackStackEntry by navController.currentBackStackEntryAsState()
+            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
             val currentRoute = navBackStackEntry?.destination?.route
             navItems.forEach { item ->
                 BottomNavigationItem(
@@ -100,17 +121,11 @@ fun MainView() {
                     selectedContentColor = PrimaryBlue500,
                     selected = currentRoute == item.screenRoute,
                     alwaysShowLabel = false,
-                    onClick = { navController.navigate(item.screenRoute){
-                        navController.graph.startDestinationRoute?.let {
-                            popUpTo(it) { saveState = true }    // 그래프의 시작 지점까지 스택을 정리하면서 이동
-                        }
-                        launchSingleTop = true  // 같은 화면을 여러 번 쌓지 않도록
-                        restoreState = true     // 이전에 방문한 화면이라면 저장된 상태 복원
-                    } },
+                    onClick = { moveScreen(navHostController, item.screenRoute, saveStateEnabled = false, restoreStateEnabled = true) },
                 )}
         }
     }){
-        NavigationGraph(navController, it)
+        TabNavHost(navHostController, it)
     }
 }
 
