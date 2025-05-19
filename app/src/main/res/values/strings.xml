@@ -25,5 +25,14 @@
     <string name="screen_home_label_btn_filter_rent_possibility">대여 가능</string>
     <string name="screen_home_label_btn_filter_category">카테고리</string>
 
+    <string name="screen_product_detail_img_placeholder_description">상품 임시 이미지</string>
+    <string name="screen_product_detail_img_description">상품 이미지</string>
+    <string name="screen_product_like_icon_description">상품 좋아요</string>
+    <string name="screen_product_share_icon_description">상품 공유하기</string>
+    <string name="screen_product_btn_check_detail_of_use">사용 내역 확인하기</string>
+    <string name="screen_product_btn_chatting">채팅하기</string>
+    <string name="screen_product_btn_reserve">예약하기</string>
+    <string name="screen_product_price_unit">원/일</string>
+
 
 </resources>

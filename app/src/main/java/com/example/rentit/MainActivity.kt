@@ -38,6 +38,7 @@ import com.example.rentit.feature.auth.LoginScreen
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
+import com.example.rentit.feature.product.ProductDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 sealed class BottomNavItem(
@@ -62,7 +63,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                LoginNavHost(authViewModel)
+                //LoginNavHost(authViewModel)
+                ProductDetailScreen()
             }
         }
     }
