@@ -1,5 +1,6 @@
 package com.example.rentit.feature.product
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,16 +24,24 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,8 +59,13 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen() {
+    val sheetState = rememberModalBottomSheetState()
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var showFullImage by remember { mutableStateOf(false) }
+
     val imgUrlList = listOf(
         "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg",
         "https://media.istockphoto.com/id/520700958/ko/%EC%82%AC%EC%A7%84/%EC%95%84%EB%A6%84%EB%8B%A4%EC%9A%B4-%EA%BD%83-%EB%B0%B0%EA%B2%BD%EA%B8%B0%EC%88%A0.jpg?s=612x612&w=0&k=20&c=gJx5-O9U1qXKZqKwv4KunrBae7RDNRcdse1nOdSk_0w="
@@ -61,31 +75,38 @@ fun ProductDetailScreen() {
         modifier = Modifier.fillMaxSize(),
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) },
         bottomBar = { PostBottomBar("가격") },
-        floatingActionButton = { UsageDetailButton {} }
+        floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(state = rememberScrollState())
-                .background(Color.White)
-        ) {
-            ImagePager(imgUrlList)
-            PostHeader("게시글 제목", "카테고리", "작성일")
-            Text(
-                modifier = Modifier
-                    .screenHorizontalPadding()
-                    .fillMaxWidth(),
-                text = LoremIpsum(20).values.first(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = Gray800
-            )
+        Box(Modifier
+            .padding(innerPadding)
+            .fillMaxSize()) {
+            Column(
+                modifier = Modifier.verticalScroll(state = rememberScrollState())
+                    .background(Color.White)
+            ) {
+                ImagePager(imgUrlList) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
+                PostHeader("게시글 제목", "카테고리", "작성일")
+                Text(
+                    modifier = Modifier
+                        .screenHorizontalPadding()
+                        .fillMaxWidth(),
+                    text = LoremIpsum(20).values.first(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Gray800
+                )
+                if(showBottomSheet) {
+                    ModalBottomSheet(onDismissRequest = { showBottomSheet = false }, sheetState = sheetState) {
+                        UsageDetailBottomDrawer()
+                    }
+                }
+            }
         }
     }
+    //if(showFullImage) FullImagePager(imgUrlList) { showFullImage = false }
 }
 
 @Composable
-fun ImagePager(imgUrlList: List<String>) {
+fun ImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
     if(imgUrlList.isNullOrEmpty()){
         Image(
             modifier = Modifier.height(290.dp),
@@ -100,9 +121,7 @@ fun ImagePager(imgUrlList: List<String>) {
             modifier = Modifier.fillMaxWidth()
         ) { page ->
             AsyncImage(
-                modifier = Modifier
-                    .height(290.dp)
-                    .clickable { },
+                modifier = Modifier.height(290.dp).clickable { onClick },
                 placeholder = painterResource(id = R.drawable.img_placeholder),
                 model = imgUrlList[page],
                 contentDescription = stringResource(id = R.string.screen_product_detail_img_description),
@@ -124,6 +143,34 @@ fun ImagePager(imgUrlList: List<String>) {
         }
     }
 }
+
+@Composable
+fun FullImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
+    val pagerState = rememberPagerState { imgUrlList.size }
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color(0, 0, 0, 180))) {
+        Image(
+            modifier = Modifier.align(Alignment.TopEnd).padding(20.dp).clickable { onClick },
+            painter = painterResource(id = R.drawable.ic_x),
+            contentDescription = "닫기",
+            colorFilter = ColorFilter.tint(Color.White),)
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxSize()
+        ) { page ->
+            AsyncImage(
+                modifier = Modifier
+                    .height(290.dp),
+                placeholder = painterResource(id = R.drawable.img_placeholder),
+                model = imgUrlList[page],
+                contentDescription = stringResource(id = R.string.screen_product_detail_img_description),
+                contentScale = ContentScale.FillWidth
+            )
+        }
+    }
+}
+
 
 @Composable
 fun PostHeader(title: String, category: String, creationDate: String) {
