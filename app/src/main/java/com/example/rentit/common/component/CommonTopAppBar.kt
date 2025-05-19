@@ -34,7 +34,7 @@ fun CommonTopAppBar(title: String = "", onClick: () -> Unit, modifier: Modifier 
             modifier = Modifier.align(Alignment.CenterStart)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_left),
+                painter = painterResource(id = R.drawable.ic_chevron_left),
                 contentDescription = stringResource(id = R.string.common_top_app_bar_back_icon_description),
                 tint = AppBlack
             )

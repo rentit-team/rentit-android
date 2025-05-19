@@ -34,5 +34,8 @@
     <string name="screen_product_btn_reserve">예약하기</string>
     <string name="screen_product_price_unit">원/일</string>
 
+    <string name="common_calendar_left_chevron_description">다음달로 이동</string>
+    <string name="common_calendar_right_chevron_description">이전달로 이동</string>
+
 
 </resources>

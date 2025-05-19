@@ -1,6 +1,8 @@
 package com.example.rentit.feature.product
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,10 +23,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
@@ -38,7 +40,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -59,10 +60,11 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen() {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
     var showFullImage by remember { mutableStateOf(false) }
 
@@ -151,7 +153,10 @@ fun FullImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
         .fillMaxSize()
         .background(color = Color(0, 0, 0, 180))) {
         Image(
-            modifier = Modifier.align(Alignment.TopEnd).padding(20.dp).clickable { onClick },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(20.dp)
+                .clickable { onClick },
             painter = painterResource(id = R.drawable.ic_x),
             contentDescription = "닫기",
             colorFilter = ColorFilter.tint(Color.White),)
@@ -250,7 +255,18 @@ fun UsageDetailButton(onClick: () -> Unit) {
             contentDescription = null
         )
     }*/
-    FloatingActionButton(
+    ExtendedFloatingActionButton(
+        containerColor = Color.White,
+        onClick = onClick,
+    ) {
+        Image(
+            modifier = Modifier.padding(end = 8.dp),
+            painter = painterResource(id = R.drawable.ic_calendar),
+            contentDescription = stringResource(id = R.string.screen_product_btn_check_detail_of_use)
+        )
+        Text(text = "대여 내역 확인")
+    }
+    /*FloatingActionButton(
         modifier = Modifier.shadow(0.dp, CircleShape, ambientColor = Gray400),
         backgroundColor = Color.White,
         onClick = onClick,
@@ -260,7 +276,7 @@ fun UsageDetailButton(onClick: () -> Unit) {
             painter = painterResource(id = R.drawable.ic_calendar),
             contentDescription = stringResource(id = R.string.screen_product_btn_check_detail_of_use)
         )
-    }
+    }*/
 }
 
 @Composable
@@ -282,6 +298,7 @@ fun MiniButton(isBgColorWhite: Boolean, text: String, onClick: () -> Unit) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun PreviewProductDetailScreen() {
