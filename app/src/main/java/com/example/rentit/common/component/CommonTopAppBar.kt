@@ -22,12 +22,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CommonTopAppBar(title: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun CommonTopAppBar(title: String = "", onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(modifier = modifier
         .fillMaxWidth()
-        .height(52.dp)
+        .height(60.dp)
         .background(Color.White)
-        .padding(top = 15.dp)
+        .padding(top = 5.dp)
     ){
         IconButton(
             onClick = onClick,
