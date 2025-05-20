@@ -15,10 +15,10 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
-fun CommonButton(text: String, containerColor: Color, contentColor: Color, onClick: () -> Unit) {
+fun CommonButton(text: String, containerColor: Color, contentColor: Color, modifier: Modifier = Modifier, onClick: () -> Unit) {
     Button(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(40.dp),
         colors = ButtonDefaults.buttonColors(
