@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rentit.common.component.CommonCalendar
+import com.example.rentit.common.component.calendar.CommonCalendar
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.product.component.UsageListItem
 import java.time.YearMonth
