@@ -70,7 +70,7 @@ fun JoinScreen(authViewModel: AuthViewModel, navHostController: NavHostControlle
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-            CommonButton(stringResource(R.string.screen_join_btn_text)) { signUp(authViewModel, navHostController) { isButtonClicked = true } }
+            CommonButton(stringResource(R.string.screen_join_btn_text), PrimaryBlue500, Color.White) { signUp(authViewModel, navHostController) { isButtonClicked = true } }
         }
     }
     SignUpResultHandler(authViewModel, navHostController)
