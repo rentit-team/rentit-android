@@ -37,5 +37,17 @@
     <string name="common_calendar_left_chevron_description">다음달로 이동</string>
     <string name="common_calendar_right_chevron_description">이전달로 이동</string>
 
+    <string name="screen_booking_request_app_bar_title">예약 기간을 설정해주세요.</string>
+    <string name="screen_booking_request_label_total_rental_fee">총 대여 비용</string>
+    <string name="screen_booking_request_label_deposit">보증금</string>
+    <string name="screen_booking_request_label_total_fee">합계</string>
+    <string name="screen_booking_request_btn_booking_request">예약 요청</string>
+
+    <string name="screen_request_confirm_icon_check_description">확인 아이콘</string>
+    <string name="screen_request_confirm_title">요청이 전달되었어요!</string>
+    <string name="screen_request_confirm_booking_period">예약 기간</string>
+    <string name="screen_request_confirm_total_price">총 금액</string>
+    <string name="screen_request_confirm_btn_complete">완료</string>
+
 
 </resources>

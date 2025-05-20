@@ -1,10 +1,12 @@
 package com.example.rentit
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -38,6 +40,7 @@ import com.example.rentit.feature.auth.LoginScreen
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
+import com.example.rentit.feature.product.BookingRequestScreen
 import com.example.rentit.feature.product.ProductDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -59,12 +62,13 @@ val navItems = listOf(
 class MainActivity : ComponentActivity() {
 
     private val authViewModel: AuthViewModel by viewModels()
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
                 //LoginNavHost(authViewModel)
-                ProductDetailScreen()
+                BookingRequestScreen()
             }
         }
     }

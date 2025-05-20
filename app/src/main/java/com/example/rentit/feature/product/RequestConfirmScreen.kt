@@ -1,0 +1,78 @@
+package com.example.rentit.feature.product
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.rentit.R
+import com.example.rentit.common.component.CommonButton
+import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.Gray100
+import com.example.rentit.common.theme.Gray200
+import com.example.rentit.common.theme.Gray800
+import com.example.rentit.common.theme.PrimaryBlue500
+import com.example.rentit.common.theme.RentItTheme
+
+@Composable
+fun RequestConfirmationScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .screenHorizontalPadding()
+            .padding(bottom = 100.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(painter = painterResource(id = R.drawable.ic_check), contentDescription = stringResource(
+            id = R.string.screen_request_confirm_icon_check_description), tint = PrimaryBlue500 )
+        Text(modifier = Modifier.padding(vertical = 34.dp), text = stringResource(
+            id = R.string.screen_request_confirm_title), style = MaterialTheme.typography.headlineLarge)
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = stringResource(
+                id = R.string.screen_request_confirm_booking_period), style = MaterialTheme.typography.bodyLarge)
+            Text(text = "시작일 ~ 종료일 · 기간 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
+        }
+        Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Gray100))
+        Row(modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(text = stringResource(
+                id = R.string.screen_request_confirm_total_price), style = MaterialTheme.typography.bodyLarge)
+            Text(text = "가격 원",
+                style = MaterialTheme.typography.bodyLarge,
+                color = PrimaryBlue500)
+        }
+        CommonButton(text = "완료", containerColor = Gray200, contentColor = AppBlack, modifier = Modifier.padding(top = 52.dp)) {
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewRequestConfirmationScreen() {
+    RentItTheme {
+        RequestConfirmationScreen()
+    }
+}
