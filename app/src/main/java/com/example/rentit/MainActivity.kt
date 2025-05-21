@@ -17,7 +17,6 @@ import com.example.rentit.feature.MainView
 import com.example.rentit.feature.auth.AuthViewModel
 import com.example.rentit.feature.auth.JoinScreen
 import com.example.rentit.feature.auth.LoginScreen
-import com.example.rentit.feature.product.BookingRequestScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -29,8 +28,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                //LoginNavHost(authViewModel)
-                BookingRequestScreen()
+                LoginNavHost(authViewModel)
+                //MainView()
             }
         }
     }
@@ -41,6 +40,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LoginNavHost(authViewModel: AuthViewModel){
     val navHostController = rememberNavController()

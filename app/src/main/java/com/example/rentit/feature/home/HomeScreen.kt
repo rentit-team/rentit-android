@@ -25,16 +25,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonLabelButton
+import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.home.component.ProductListItem
 
 @Composable
-fun HomeScreen() {
-    Column {
+fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -74,7 +78,7 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxSize(),
         ) {
             this.items(10) {
-                ProductListItem()
+                ProductListItem { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL, saveStateEnabled = true, restoreStateEnabled = true) }
             }
         }
     }
@@ -109,6 +113,6 @@ fun CategoryFilterButton() {
 @Composable
 fun HomeScreenPreview() {
     RentItTheme {
-        HomeScreen()
+        HomeScreen(rememberNavController())
     }
 }

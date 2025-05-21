@@ -32,12 +32,11 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CommonCalendar(yearMonth: YearMonth, disabledDates: List<String> = listOf("2025-04-03", "2025-04-28", "2025-05-01", "2025-05-02"), modifier: Modifier = Modifier) {
+fun CommonCalendar(yearMonth: YearMonth, disabledDates: List<String> = listOf("2025-04-03", "2025-04-28", "2025-05-01", "2025-05-03"), modifier: Modifier = Modifier) {
     var yearMonth = remember { mutableStateOf(yearMonth) }
     val calModifier = Modifier
         .height(48.dp)
         .fillMaxWidth()
-        .padding(horizontal = 12.dp)
 
     fun changeMonth(monthsToAdd: Long) { yearMonth.value = yearMonth.value.plusMonths(monthsToAdd) }
 

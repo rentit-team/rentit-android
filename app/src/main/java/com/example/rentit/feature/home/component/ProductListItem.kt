@@ -1,6 +1,7 @@
 package com.example.rentit.feature.home.component
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +28,7 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
 
 @Composable
-fun ProductListItem() {
+fun ProductListItem(onClick: () -> Unit) {
     Box(
         modifier = Modifier
         .fillMaxWidth()
@@ -38,7 +39,7 @@ fun ProductListItem() {
                 end = Offset(size.width, 0f),
                 strokeWidth = 1.dp.toPx()
             )
-        })
+        }.clickable { onClick() })
     {
         Row(
             modifier = Modifier
@@ -105,6 +106,6 @@ fun ProductListItem() {
 @Composable
 fun ProductListItemPreview() {
     RentItTheme {
-        ProductListItem()
+        ProductListItem {}
     }
 }

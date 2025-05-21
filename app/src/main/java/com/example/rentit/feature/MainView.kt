@@ -1,5 +1,7 @@
 package com.example.rentit.feature
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -31,6 +33,9 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
+import com.example.rentit.feature.product.BookingRequestScreen
+import com.example.rentit.feature.product.ProductDetailScreen
+import com.example.rentit.feature.product.RequestConfirmationScreen
 
 sealed class BottomNavItem(
     val title: Int, val icon: Int, val iconSelected: Int, val screenRoute: String
@@ -46,52 +51,97 @@ val navItems = listOf(
     BottomNavItem.MyPage
 )
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainView() {
     val navHostController = rememberNavController()
-    Scaffold(bottomBar = {
-        BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
-            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry?.destination?.route
-            navItems.forEach { item ->
-                BottomNavigationItem(
-                    modifier = Modifier.fillMaxHeight(),
-                    icon = {
-                        val icon = if(currentRoute == item.screenRoute) item.iconSelected else item.icon
-                        Icon(
-                            painter = painterResource(id = icon),
-                            contentDescription = stringResource(
-                                id = item.title
-                            ),
-                            modifier = Modifier
-                                .width(28.dp)
-                                .height(28.dp)
-                        )
-                    },
-                    unselectedContentColor = Gray400,
-                    selectedContentColor = PrimaryBlue500,
-                    selected = currentRoute == item.screenRoute,
-                    alwaysShowLabel = false,
-                    onClick = { moveScreen(navHostController, item.screenRoute, saveStateEnabled = false, restoreStateEnabled = true) },
-                )}
+    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
+    //val isMainView = currentRoute in navItems.map { it.screenRoute }
+    //if(isMainView) {
+        Scaffold(bottomBar = {
+            BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
+                navItems.forEach { item ->
+                    BottomNavigationItem(
+                        modifier = Modifier.fillMaxHeight(),
+                        icon = {
+                            val icon =
+                                if (currentRoute == item.screenRoute) item.iconSelected else item.icon
+                            Icon(
+                                painter = painterResource(id = icon),
+                                contentDescription = stringResource(
+                                    id = item.title
+                                ),
+                                modifier = Modifier
+                                    .width(28.dp)
+                                    .height(28.dp)
+                            )
+                        },
+                        unselectedContentColor = Gray400,
+                        selectedContentColor = PrimaryBlue500,
+                        selected = currentRoute == item.screenRoute,
+                        alwaysShowLabel = false,
+                        onClick = {
+                            moveScreen(
+                                navHostController,
+                                item.screenRoute,
+                                restoreStateEnabled = true
+                            )
+                        },
+                    )
+                }
+            }
+        }) {
+            TabNavHost(navHostController, it)
+            /*NavHost(
+                navController = navHostController,
+                startDestination = BottomNavItem.Home.screenRoute
+            ) {
+                tabNavGraph(navHostController, it)
+                standaloneNavGraph(navHostController)
+            }*/
         }
-    }){
-        TabNavHost(navHostController, it)
-    }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValues) {
     // Create NavGraph - 이동할 Composable 대상을 매핑
     // NavHost - NavGraph의 현재 대상을 표시하는 컨테이너 역할의 Composable
     // TopBar, BottomBar 등에 UI가 가려지지 않도록 padding으로 안전한 영역 확보
     NavHost(navController = navHostController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
-        composable(BottomNavItem.Home.screenRoute) { HomeScreen() }
+        composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController) }
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen") }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen") }
+        composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL) { ProductDetailNavHost() }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ProductDetailNavHost() {
+    val navHostController: NavHostController = rememberNavController()
+    NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
+        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController) }
+        composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController) }
+        composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController) }
+    }
+}
+/*
+fun NavGraphBuilder.tabNavGraph(navHostController: NavHostController, paddingValues: PaddingValues ){
+    composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController, Modifier.padding(paddingValues)) }
+    composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen", Modifier.padding(paddingValues)) }
+    composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen", Modifier.padding(paddingValues)) }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun NavGraphBuilder.standaloneNavGraph(navHostController: NavHostController){
+    composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController) }
+    composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController) }
+    composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController) }
+}*/
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainView() {

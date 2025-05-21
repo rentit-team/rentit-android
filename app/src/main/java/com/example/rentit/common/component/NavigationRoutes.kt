@@ -7,4 +7,8 @@ object NavigationRoutes {
     const val LOGIN = "LOGIN"
     const val JOIN = "JOIN"
     const val MAIN = "MAIN"
+    const val NAVHOSTPRODUCTDETAIL = "NAVHOSTPRODUCTDETAIL"
+    const val PRODUCTDETAIL = "PRODUCTDETAIL"
+    const val BOOKINGREQUEST = "BOOKINGREQUEST"
+    const val REQUESTCONFIRM = "REQUESTCONFIRM"
 }

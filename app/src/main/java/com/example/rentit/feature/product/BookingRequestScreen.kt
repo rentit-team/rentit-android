@@ -23,10 +23,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.calendar.CommonCalendar
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray300
@@ -37,7 +41,7 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BookingRequestScreen() {
+fun BookingRequestScreen(navHostController: NavHostController) {
 
     Scaffold(
         topBar = { CommonTopAppBar(title = stringResource(
@@ -47,42 +51,45 @@ fun BookingRequestScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-                .padding(bottom = 64.dp)
-                .screenHorizontalPadding(),
+                .padding(bottom = 64.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             CommonCalendar(yearMonth = YearMonth.now(), modifier = Modifier.weight(1F).padding(top = 30.dp))
-            Text(modifier = Modifier.fillMaxWidth().padding(bottom = 26.dp),
-                text = "시작일 ~ 종료일 · 기간 일",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Gray800)
-            LabelValueRow(Modifier.padding(bottom = 10.dp)) {
-                Text(text = stringResource(
-                    id = R.string.screen_booking_request_label_total_rental_fee), style = MaterialTheme.typography.bodyMedium)
-                Text(text = "가격 원", style = MaterialTheme.typography.bodyMedium, color = Gray800)
-            }
-            LabelValueRow(Modifier.padding(bottom = 14.dp)) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(
-                        id = R.string.screen_booking_request_label_deposit), style = MaterialTheme.typography.bodyMedium)
-                    Icon(modifier = Modifier.padding(start = 5.dp), painter = painterResource(id = R.drawable.ic_info), contentDescription = "", tint = Gray300 )
-                }
-                Text(text = "가격 원",
+            Column(Modifier.screenHorizontalPadding()) {
+                Text(modifier = Modifier.fillMaxWidth().padding(bottom = 26.dp),
+                    text = "시작일 ~ 종료일 · 기간 일",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = PrimaryBlue500
-                )
+                    color = Gray800)
+                LabelValueRow(Modifier.padding(bottom = 10.dp)) {
+                    Text(text = stringResource(
+                        id = R.string.screen_booking_request_label_total_rental_fee), style = MaterialTheme.typography.bodyMedium)
+                    Text(text = "가격 원", style = MaterialTheme.typography.bodyMedium, color = Gray800)
+                }
+                LabelValueRow(Modifier.padding(bottom = 14.dp)) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = stringResource(
+                            id = R.string.screen_booking_request_label_deposit), style = MaterialTheme.typography.bodyMedium)
+                        Icon(modifier = Modifier.padding(start = 5.dp), painter = painterResource(id = R.drawable.ic_info), contentDescription = "", tint = Gray300 )
+                    }
+                    Text(text = "가격 원",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = PrimaryBlue500
+                    )
+                }
+                Box(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Gray100))
+                LabelValueRow(Modifier.padding(top = 14.dp)) {
+                    Text(text = stringResource(
+                        id = R.string.screen_booking_request_label_total_fee), style = MaterialTheme.typography.bodyLarge)
+                    Text(text = "가격 원", style = MaterialTheme.typography.bodyLarge, color = PrimaryBlue500)
+                }
+                CommonButton(text = stringResource(id = R.string.screen_booking_request_btn_booking_request),
+                    containerColor = PrimaryBlue500, contentColor = Color.White, modifier = Modifier.padding(top = 21.dp)) {
+                    moveScreen(navHostController, NavigationRoutes.BOOKINGREQUEST)
+                }
             }
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(Gray100))
-            LabelValueRow(Modifier.padding(top = 14.dp)) {
-                Text(text = stringResource(
-                    id = R.string.screen_booking_request_label_total_fee), style = MaterialTheme.typography.bodyLarge)
-                Text(text = "가격 원", style = MaterialTheme.typography.bodyLarge, color = PrimaryBlue500)
-            }
-            CommonButton(text = stringResource(id = R.string.screen_booking_request_btn_booking_request),
-                containerColor = PrimaryBlue500, contentColor = Color.White, modifier = Modifier.padding(top = 21.dp)) {}
         }
     }
 }
@@ -100,6 +107,6 @@ fun LabelValueRow(modifier: Modifier, content: @Composable () -> Unit) {
 @Composable
 fun PreviewBookingRequestScreen() {
     RentItTheme {
-        BookingRequestScreen()
+        BookingRequestScreen(rememberNavController())
     }
 }

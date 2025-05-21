@@ -19,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -30,7 +32,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
-fun RequestConfirmationScreen() {
+fun RequestConfirmationScreen(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +54,10 @@ fun RequestConfirmationScreen() {
                 id = R.string.screen_request_confirm_booking_period), style = MaterialTheme.typography.bodyLarge)
             Text(text = "시작일 ~ 종료일 · 기간 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
-        Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(Gray100))
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .height(1.dp)
+            .background(Gray100))
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp),
@@ -73,6 +78,6 @@ fun RequestConfirmationScreen() {
 @Composable
 fun PreviewRequestConfirmationScreen() {
     RentItTheme {
-        RequestConfirmationScreen()
+        RequestConfirmationScreen(rememberNavController())
     }
 }

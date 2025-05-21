@@ -49,9 +49,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
@@ -63,7 +67,7 @@ import com.example.rentit.common.theme.RentItTheme
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailScreen() {
+fun ProductDetailScreen(navHostController: NavHostController) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
     var showFullImage by remember { mutableStateOf(false) }
@@ -76,7 +80,7 @@ fun ProductDetailScreen() {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) },
-        bottomBar = { PostBottomBar("가격") },
+        bottomBar = { PostBottomBar(navHostController, "가격") },
         floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
         Box(Modifier
@@ -210,7 +214,7 @@ fun PostHeader(title: String, category: String, creationDate: String) {
 }
 
 @Composable
-fun PostBottomBar(price: String) {
+fun PostBottomBar(navHostController: NavHostController, price: String) {
     // Shadow for bottom bar
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -231,7 +235,7 @@ fun PostBottomBar(price: String) {
             style = MaterialTheme.typography.bodyLarge
         )
         MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
-        MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) {}
+        MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.BOOKINGREQUEST)  }
     }
 }
 
@@ -264,7 +268,7 @@ fun UsageDetailButton(onClick: () -> Unit) {
             painter = painterResource(id = R.drawable.ic_calendar),
             contentDescription = stringResource(id = R.string.screen_product_btn_check_detail_of_use)
         )
-        Text(text = "대여 내역 확인")
+        Text(text = stringResource(id = R.string.screen_product_btn_check_detail_of_use))
     }
     /*FloatingActionButton(
         modifier = Modifier.shadow(0.dp, CircleShape, ambientColor = Gray400),
@@ -303,6 +307,6 @@ fun MiniButton(isBgColorWhite: Boolean, text: String, onClick: () -> Unit) {
 @Composable
 fun PreviewProductDetailScreen() {
     RentItTheme {
-        ProductDetailScreen()
+        ProductDetailScreen(rememberNavController())
     }
 }
