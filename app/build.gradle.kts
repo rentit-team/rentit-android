@@ -59,6 +59,8 @@ dependencies {
     testImplementation(composeBom)
     androidTestImplementation(composeBom)
 
+    implementation("androidx.security:security-crypto:1.1.0-alpha03")
+
     implementation("com.google.android.gms:play-services-auth:21.0.0")
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")

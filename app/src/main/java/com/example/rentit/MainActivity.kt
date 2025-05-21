@@ -12,6 +12,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.MainView
 import com.example.rentit.feature.auth.AuthViewModel
@@ -28,8 +29,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                LoginNavHost(authViewModel)
-                //MainView()
+                val accessToken: String? = getToken(context = applicationContext)
+                if(accessToken.isNullOrEmpty()) {
+                    LoginNavHost(authViewModel)
+                } else {
+                    MainView()
+                }
             }
         }
     }
