@@ -1,5 +1,7 @@
 package com.example.rentit.feature.home.component
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,9 +31,14 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
 import com.example.rentit.data.product.dto.ProductDto
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
+    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
     Box(
         modifier = Modifier
         .fillMaxWidth()
@@ -98,7 +105,7 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = productInfo.createdAt,
+                        text = "${localDateTime?.monthValue}.${localDateTime?.dayOfMonth}",
                         style = MaterialTheme.typography.labelMedium,
                         color = Gray400
                     )

@@ -33,6 +33,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +51,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -63,14 +66,29 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailScreen(navHostController: NavHostController) {
+fun ProductDetailScreen(productId: Int?, navHostController: NavHostController) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
     var showFullImage by remember { mutableStateOf(false) }
+
+    val productViewModel: ProductViewModel = hiltViewModel()
+    val productDetailResult by productViewModel.productDetail.collectAsState()
+
+    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+
+    LaunchedEffect(Unit) {
+        if (productId != null) {
+            productViewModel.getProductDetail(productId)
+        }
+    }
+
+    val productDetail = productDetailResult?.getOrNull()?.product
 
     val imgUrlList = listOf(
         "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg",
@@ -80,7 +98,7 @@ fun ProductDetailScreen(navHostController: NavHostController) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) },
-        bottomBar = { PostBottomBar(navHostController, "가격") },
+        bottomBar = { PostBottomBar(navHostController, productDetail?.price.toString() ?: "가격") },
         floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
         Box(Modifier
@@ -91,12 +109,12 @@ fun ProductDetailScreen(navHostController: NavHostController) {
                     .background(Color.White)
             ) {
                 ImagePager(imgUrlList) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
-                PostHeader("게시글 제목", "카테고리", "작성일")
+                PostHeader(productDetail?.title ?: "제목" , "카테고리", "${productDetail?.createdAt?.substring(0, 10)}" ?: "생성일")
                 Text(
                     modifier = Modifier
                         .screenHorizontalPadding()
                         .fillMaxWidth(),
-                    text = LoremIpsum(20).values.first(),
+                    text = productDetail?.description ?: LoremIpsum(2).values.first(),
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray800
                 )
@@ -307,6 +325,6 @@ fun MiniButton(isBgColorWhite: Boolean, text: String, onClick: () -> Unit) {
 @Composable
 fun PreviewProductDetailScreen() {
     RentItTheme {
-        ProductDetailScreen(rememberNavController())
+        ProductDetailScreen(1, rememberNavController())
     }
 }

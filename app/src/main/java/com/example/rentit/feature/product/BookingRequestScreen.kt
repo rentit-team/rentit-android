@@ -87,7 +87,7 @@ fun BookingRequestScreen(navHostController: NavHostController) {
                 }
                 CommonButton(text = stringResource(id = R.string.screen_booking_request_btn_booking_request),
                     containerColor = PrimaryBlue500, contentColor = Color.White, modifier = Modifier.padding(top = 21.dp)) {
-                    moveScreen(navHostController, NavigationRoutes.BOOKINGREQUEST)
+                    moveScreen(navHostController, NavigationRoutes.REQUESTCONFIRM)
                 }
             }
         }

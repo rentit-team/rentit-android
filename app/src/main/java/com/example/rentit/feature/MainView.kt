@@ -20,10 +20,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.rentit.R
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
@@ -57,50 +59,50 @@ fun MainView() {
     val navHostController = rememberNavController()
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    //val isMainView = currentRoute in navItems.map { it.screenRoute }
-    //if(isMainView) {
-        Scaffold(bottomBar = {
-            BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
-                navItems.forEach { item ->
-                    BottomNavigationItem(
-                        modifier = Modifier.fillMaxHeight(),
-                        icon = {
-                            val icon =
-                                if (currentRoute == item.screenRoute) item.iconSelected else item.icon
-                            Icon(
-                                painter = painterResource(id = icon),
-                                contentDescription = stringResource(
-                                    id = item.title
-                                ),
-                                modifier = Modifier
-                                    .width(28.dp)
-                                    .height(28.dp)
-                            )
-                        },
-                        unselectedContentColor = Gray400,
-                        selectedContentColor = PrimaryBlue500,
-                        selected = currentRoute == item.screenRoute,
-                        alwaysShowLabel = false,
-                        onClick = {
-                            moveScreen(
-                                navHostController,
-                                item.screenRoute,
-                                restoreStateEnabled = true
-                            )
-                        },
-                    )
-                }
+    val showBottomBar = currentRoute in navItems.map { it.screenRoute }
+    Scaffold(bottomBar = { if(showBottomBar) {
+        BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
+            navItems.forEach { item ->
+                BottomNavigationItem(
+                    modifier = Modifier.fillMaxHeight(),
+                    icon = {
+                        val icon =
+                            if (currentRoute == item.screenRoute) item.iconSelected else item.icon
+                        Icon(
+                            painter = painterResource(id = icon),
+                            contentDescription = stringResource(
+                                id = item.title
+                            ),
+                            modifier = Modifier
+                                .width(28.dp)
+                                .height(28.dp)
+                        )
+                    },
+                    unselectedContentColor = Gray400,
+                    selectedContentColor = PrimaryBlue500,
+                    selected = currentRoute == item.screenRoute,
+                    alwaysShowLabel = false,
+                    onClick = {
+                        moveScreen(
+                            navHostController,
+                            item.screenRoute,
+                            restoreStateEnabled = true
+                        )
+                    },
+                )
             }
-        }) {
-            TabNavHost(navHostController, it)
-            /*NavHost(
-                navController = navHostController,
-                startDestination = BottomNavItem.Home.screenRoute
-            ) {
-                tabNavGraph(navHostController, it)
-                standaloneNavGraph(navHostController)
-            }*/
         }
+    }
+    }) {
+        TabNavHost(navHostController, it)
+        /*NavHost(
+            navController = navHostController,
+            startDestination = BottomNavItem.Home.screenRoute
+        ) {
+            tabNavGraph(navHostController, it)
+            standaloneNavGraph(navHostController)
+        }*/
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -113,16 +115,18 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
         composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController) }
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen") }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen") }
-        composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL) { ProductDetailNavHost() }
+        composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getInt("productId")
+            ProductDetailNavHost(productId) }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProductDetailNavHost() {
+fun ProductDetailNavHost(productId: Int?) {
     val navHostController: NavHostController = rememberNavController()
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
-        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController) }
+        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(productId, navHostController) }
         composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController) }
         composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController) }
     }

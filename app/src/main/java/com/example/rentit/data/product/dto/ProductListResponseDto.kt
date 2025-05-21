@@ -14,8 +14,8 @@ data class ProductListResponseDto(
 )
 
 data class ProductDto(
-    @SerializedName("productId")
-    val productId: Int,
+    @SerializedName("id")
+    val id: Int,
 
     @SerializedName("title")
     val title: String,

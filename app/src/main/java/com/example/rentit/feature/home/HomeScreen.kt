@@ -1,5 +1,7 @@
 package com.example.rentit.feature.home
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +43,7 @@ import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.home.component.ProductListItem
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifier) {
     val homeViewModel: HomeViewModel = hiltViewModel()
@@ -92,7 +95,7 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
             modifier = Modifier.fillMaxSize(),
         ) {
             items(productList) {
-                ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL, saveStateEnabled = true, restoreStateEnabled = true) }
+                ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/${it.id}", saveStateEnabled = true, restoreStateEnabled = true) }
             }
         }
     }
