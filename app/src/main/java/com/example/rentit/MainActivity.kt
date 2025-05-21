@@ -29,6 +29,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -62,7 +63,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                LoginNavHost(authViewModel)
+                val accessToken: String? = getToken(context = applicationContext)
+                if(accessToken.isNullOrEmpty()) {
+                    LoginNavHost(authViewModel)
+                } else {
+                    MainView()
+                }
             }
         }
     }

@@ -101,10 +101,11 @@ fun SignUpResultHandler(authViewModel: AuthViewModel, navHostController: NavHost
         signUpResult?.let {
             var message = ""
             it.onSuccess { response ->
-                moveScreen(navHostController, NavigationRoutes.MAIN)
+                moveScreen(navHostController, NavigationRoutes.LOGIN)
                 message = "회원가입 성공"
                 Log.d("SIGN UP SUCCESS", "$response")
             }.onFailure {error ->
+                moveScreen(navHostController, NavigationRoutes.LOGIN)
                 message = "회원가입 실패: ${error.message}"
                 Log.d("SIGN UP FAILED", "${error.message}")
             }
