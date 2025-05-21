@@ -20,11 +20,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.storage.saveToken
 import com.example.rentit.feature.auth.component.GoogleLoginButton
 
 @Composable
@@ -66,6 +66,7 @@ fun LoginResultHandler(navHostController: NavHostController, authViewModel: Auth
                 authViewModel.userData = userData
                 if(response.data.isUserRegistered){
                     moveScreen(navHostController, NavigationRoutes.MAIN, isInclusive = true)
+                    saveToken(context, response.data.accessToken.token)
                 } else {
                     moveScreen(navHostController, NavigationRoutes.JOIN)
                 }
