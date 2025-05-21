@@ -1,14 +1,18 @@
 package com.example.rentit.common.di
 
-import com.example.rentit.data.user.remote.UserApiService
+import android.content.Context
+import android.util.Log
+import com.example.rentit.common.storage.getToken
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,9 +27,15 @@ object NetworkModule {
         }
 
     @Provides
-    fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun provideOkHttpClient(tokenProvider: TokenProvider, loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
+            .addInterceptor {
+                val request = it.request().newBuilder()
+                    .addHeader("Authorization", "Bearer ${tokenProvider.getAccessToken()}")
+                    .build()
+                it.proceed(request)
+            }
             .build()
 
     @Provides
@@ -37,4 +47,14 @@ object NetworkModule {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+}
+
+
+class TokenProvider @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+    fun getAccessToken(): String {
+        Log.d("TOKEN", "${getToken(context)}")
+        return getToken(context) ?: ""
+    }
 }

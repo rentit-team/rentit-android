@@ -13,18 +13,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
@@ -38,6 +43,15 @@ import com.example.rentit.feature.home.component.ProductListItem
 
 @Composable
 fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifier) {
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val productListResult by homeViewModel.productList.collectAsState()
+
+    LaunchedEffect(Unit) {
+        homeViewModel.getProductList()
+    }
+
+    val productList = productListResult?.getOrNull()?.products ?: emptyList()
+
     Column(modifier = modifier) {
         Row(
             modifier = Modifier
@@ -77,8 +91,8 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
         ) {
-            this.items(10) {
-                ProductListItem { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL, saveStateEnabled = true, restoreStateEnabled = true) }
+            items(productList) {
+                ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL, saveStateEnabled = true, restoreStateEnabled = true) }
             }
         }
     }

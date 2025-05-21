@@ -1,6 +1,5 @@
 package com.example.rentit.feature.home.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -16,19 +15,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
+import com.example.rentit.data.product.dto.ProductDto
 
 @Composable
-fun ProductListItem(onClick: () -> Unit) {
+fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
     Box(
         modifier = Modifier
         .fillMaxWidth()
@@ -47,12 +50,18 @@ fun ProductListItem(onClick: () -> Unit) {
                 .padding(vertical = 22.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .width(100.dp),
-                painter = painterResource(id = R.drawable.img_thumbnail_placeholder),
-                contentDescription = stringResource(id = R.string.product_list_item_thumbnail_img_placeholder_description
-                ))
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(productInfo.thumbnailUrl)
+                    .error(R.drawable.img_thumbnail_placeholder)
+                    .placeholder(R.drawable.img_thumbnail_placeholder)
+                    .fallback(R.drawable.img_thumbnail_placeholder)
+                    .build(),
+                contentDescription = stringResource(id = R.string.product_list_item_thumbnail_img_placeholder_description),
+                contentScale = ContentScale.Fit
+            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -63,9 +72,9 @@ fun ProductListItem(onClick: () -> Unit) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "게시글 제목", style = MaterialTheme.typography.bodyLarge)
+                    Text(text = productInfo.title, style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        text = "대여 상태",
+                        text = productInfo.status,
                         style = MaterialTheme.typography.labelMedium,
                         color = SecondaryYellow
                     )
@@ -83,19 +92,19 @@ fun ProductListItem(onClick: () -> Unit) {
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = "최소 대여 기간",
+                        text = "0일 이상",
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = "작성일",
+                        text = productInfo.createdAt,
                         style = MaterialTheme.typography.labelMedium,
                         color = Gray400
                     )
                 }
 
-                Text(text = "가격(원)/일", style = MaterialTheme.typography.bodyLarge)
+                Text(text = productInfo.price.toString() + "원/일", style = MaterialTheme.typography.bodyLarge)
             }
         }
     }
@@ -106,6 +115,6 @@ fun ProductListItem(onClick: () -> Unit) {
 @Composable
 fun ProductListItemPreview() {
     RentItTheme {
-        ProductListItem {}
+        //ProductListItem {}
     }
 }
