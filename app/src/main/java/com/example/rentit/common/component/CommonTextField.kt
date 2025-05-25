@@ -3,7 +3,6 @@ package com.example.rentit.common.component
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -27,6 +26,10 @@ fun CommonTextField(
     value: String = "",
     onValueChange: (String) -> Unit,
     placeholder: String,
+    minLines: Int = 1,
+    maxLines: Int = 1,
+    isSingleLine: Boolean = true,
+    imeAction: ImeAction = ImeAction.Done,
     modifier: Modifier = Modifier
 ) {
     BasicTextField(
@@ -34,20 +37,22 @@ fun CommonTextField(
         onValueChange = onValueChange,
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp)
             .clip(RoundedCornerShape(20.dp)),  // 20dp 반경을 가진 둥근 모서리
         textStyle = MaterialTheme.typography.bodyMedium,  // 텍스트 스타일
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done  // 키보드 오른쪽 하단 버튼 설정
+            imeAction = imeAction  // 키보드 오른쪽 하단 버튼 설정
         ),
+        minLines = minLines,
+        maxLines = maxLines,
+        singleLine = isSingleLine,
         decorationBox = { innerTextField ->
             // 텍스트 필드 테두리와 배경 설정
             Box(
                 modifier = Modifier
                     .border(1.dp, Gray200, RoundedCornerShape(20.dp))
-                    .padding(20.dp, 0.dp),
-                contentAlignment = Alignment.CenterStart
+                    .padding(20.dp, 12.dp),
+                contentAlignment = Alignment.TopStart
             ) {
                 if (value.isEmpty()) {
                     Text(

@@ -49,5 +49,13 @@
     <string name="screen_request_confirm_total_price">총 금액</string>
     <string name="screen_request_confirm_btn_complete">완료</string>
 
+    <string name="screen_product_create_title_label">제목</string>
+    <string name="screen_product_create_title_placeholder">게시글 제목</string>
+    <string name="screen_product_create_content_label">자세한 설명</string>
+    <string name="screen_product_create_content_placeholder">제품에 대한 자세한 설명을 입력해주세요.\nex. 제품 상태, 주의할 점 등</string>
+    <string name="screen_product_create_category_label">카테고리</string>
+    <string name="screen_product_create_rental_period_label">대여 가능 기간</string>
+    <string name="screen_product_create_price_label">가격</string>
+
 
 </resources>
