@@ -1,6 +1,5 @@
 package com.example.rentit.feature.product.component
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
@@ -28,7 +28,7 @@ fun RemovableTagButton(text: String, modifier: Modifier = Modifier, onRemoveClic
         modifier = modifier
             .height(40.dp)
             .clip(RoundedCornerShape(25.dp))
-            .border(1.dp, PrimaryBlue500, RoundedCornerShape(25.dp))
+            .basicRoundedGrayBorder(color = PrimaryBlue500)
             .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {

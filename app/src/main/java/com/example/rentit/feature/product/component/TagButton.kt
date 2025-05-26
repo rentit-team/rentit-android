@@ -1,6 +1,5 @@
 package com.example.rentit.feature.product.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -22,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -41,7 +41,7 @@ fun TagButton(
             onClick()
         },
         shape = RoundedCornerShape(25.dp),
-        border = BorderStroke(1.dp, if (isSelected) PrimaryBlue500 else Gray200),
+        border = CommonBorders.basicBorder(color = if(isSelected) PrimaryBlue500 else Gray200),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(

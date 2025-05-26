@@ -1,6 +1,5 @@
 package com.example.rentit.common.component
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -64,7 +63,7 @@ fun CommonTextField(
             // 텍스트 필드 테두리와 배경 설정
             Box(
                 modifier = Modifier
-                    .border(1.dp, borderColor, RoundedCornerShape(20.dp))
+                    .basicRoundedGrayBorder(color = borderColor)
                     .padding(20.dp, 12.dp),
                 contentAlignment = placeholderAlignment
             ) {

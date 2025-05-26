@@ -2,7 +2,6 @@ package com.example.rentit.feature.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,11 +34,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
+import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonLabelButton
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.home.component.ProductListItem
 
@@ -107,7 +106,7 @@ fun CategoryFilterButton() {
         modifier = Modifier.height(26.dp),
         onClick = { },
         shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(1.dp, Gray200),
+        border = CommonBorders.basicBorder(),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(
@@ -126,6 +125,7 @@ fun CategoryFilterButton() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
