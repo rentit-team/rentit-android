@@ -1,16 +1,31 @@
 package com.example.rentit.feature.product
 
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
+import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -29,6 +44,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -38,11 +56,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.example.rentit.R
+import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
+import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -58,6 +81,7 @@ fun ProductCreateScreen() {
     var showTagDrawer by remember { mutableStateOf(false) }
     val productViewModel: ProductViewModel = hiltViewModel()
     val selectedCategoryList by productViewModel.categoryTagList.collectAsStateWithLifecycle()
+    val selectedImgUriList by productViewModel.selectedImgUriList.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) }
@@ -69,7 +93,14 @@ fun ProductCreateScreen() {
                 .screenHorizontalPadding()
                 .verticalScroll(state = rememberScrollState())
         ) {
-            LabeledContent(stringResource(id = R.string.screen_product_create_title_label)){
+            LabeledContent(stringResource(id = R.string.screen_product_create_image_label)) {
+                ImageSelectSection(
+                    selectedImgUriList = selectedImgUriList,
+                    onUpdateImageList = productViewModel::updateImageUriList,
+                    onImageRemoveClick = productViewModel::removeImageUri
+                )
+            }
+            LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
                 CommonTextField(
                     value = titleText,
                     onValueChange = { value -> titleText = value },
@@ -88,7 +119,7 @@ fun ProductCreateScreen() {
                 )
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_category_label)) {
-                categoryTagSection(
+                CategoryTagSection(
                     selectedCategoryList,
                     onRemoveCategory = productViewModel::removeSelectedCategory,
                     onAddCategory = { showTagDrawer = true }
@@ -99,6 +130,14 @@ fun ProductCreateScreen() {
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_price_label)){
                 PriceInputSection()
+            }
+            CommonButton(
+                text = stringResource(id = R.string.screen_product_create_complete_btn_text),
+                containerColor = PrimaryBlue500,
+                contentColor = Color.White,
+                modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
+            ) {
+
             }
         }
         if(showTagDrawer) {
@@ -121,9 +160,94 @@ fun LabeledContent(title: String, content: @Composable () -> Unit) {
             style = MaterialTheme.typography.bodyLarge)
         content()
 }
+
+@Composable
+fun ImageSelectSection(
+    selectedImgUriList: List<Uri>,
+    onUpdateImageList: (List<Uri>) -> Unit,
+    onImageRemoveClick: (Uri) -> Unit
+) {
+    val pickMultipleImage = PickMultipleImage(onUpdateImageList)
+    val boxModifier = Modifier
+        .width(160.dp)
+        .height(120.dp)
+        .padding(end = 12.dp)
+        .basicRoundedGrayBorder()
+    Row(Modifier.horizontalScroll(state = rememberScrollState())) {
+        selectedImgUriList.forEach { uri ->
+            Box(modifier = boxModifier.clip(RoundedCornerShape(20.dp))) {
+                AsyncImage(
+                    modifier = Modifier.fillMaxWidth(),
+                    model = uri,
+                    contentDescription = stringResource(id = R.string.screen_product_create_selected_image_description),
+                    contentScale = ContentScale.Crop
+                )
+                IconButton(
+                    modifier = Modifier
+                        .padding(10.dp)
+                        .align(Alignment.TopEnd)
+                        .clip(CircleShape)
+                        .size(20.dp)
+                        .background(Color(255, 255, 255, 160)),
+                    onClick = { onImageRemoveClick(uri) }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(8.dp),
+                        painter = painterResource(id = R.drawable.ic_x_bold),
+                        tint = AppBlack,
+                        contentDescription = stringResource(id = R.string.screen_product_create_category_add_text)
+                    )
+                }
+            }
+        }
+        Box(modifier = boxModifier.clickable {
+            pickMultipleImage.launch(
+                PickVisualMediaRequest(
+                    PickVisualMedia.ImageOnly
+                )
+            )
+        }) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp, vertical = 18.dp),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Image(
+                    modifier = Modifier.size(32.dp),
+                    painter = painterResource(id = R.drawable.img_image),
+                    contentDescription = ""
+                )
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(id = R.string.screen_product_create_add_image_text),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Gray400,
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun PickMultipleImage(onUpdateImageList: (List<Uri>) -> Unit): ManagedActivityResultLauncher<PickVisualMediaRequest, List<Uri>> {
+    return rememberLauncherForActivityResult(
+        PickMultipleVisualMedia()
+    ) { uris ->
+        if (uris.isNotEmpty()) {
+            Log.d("PhotoPicker", "Number of item selected: ${uris.size}")
+            uris.forEach { uri ->
+                Log.d("PhotoPicker", "Selected: $uri")
+            }
+            onUpdateImageList(uris)
+        }
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun categoryTagSection(
+fun CategoryTagSection(
     selectedCategoryList: List<Category>,
     onRemoveCategory: (Category) -> Unit,
     onAddCategory: () -> Unit) {

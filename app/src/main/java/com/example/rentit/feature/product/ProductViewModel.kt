@@ -1,5 +1,6 @@
 package com.example.rentit.feature.product
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.data.product.dto.Category
@@ -35,6 +36,9 @@ class ProductViewModel @Inject constructor(
     private val _categoryTagList =  MutableStateFlow<List<Category>>(emptyList())
     val categoryTagList: StateFlow<List<Category>> = _categoryTagList
 
+    private val _selectedImgUriList =  MutableStateFlow<List<Uri>>(emptyList())
+    val selectedImgUriList: StateFlow<List<Uri>> = _selectedImgUriList
+
     fun getProductDetail(productId: Int) {
         viewModelScope.launch {
             _productDetail.value = repository.getProductDetail(productId)
@@ -53,5 +57,13 @@ class ProductViewModel @Inject constructor(
         if(_categoryTagList.value.contains(category)){
             _categoryTagList.value = _categoryTagList.value - category
         }
+    }
+
+    fun updateImageUriList(uriList: List<Uri>) {
+        _selectedImgUriList.value = uriList
+    }
+
+    fun removeImageUri(uri: Uri){
+        _selectedImgUriList.value = _selectedImgUriList.value - uri
     }
 }
