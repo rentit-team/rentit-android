@@ -27,6 +27,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
+import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.calendar.CommonCalendar
@@ -76,10 +77,7 @@ fun BookingRequestScreen(navHostController: NavHostController) {
                         color = PrimaryBlue500
                     )
                 }
-                Box(modifier = Modifier
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Gray100))
+                CommonDivider()
                 LabelValueRow(Modifier.padding(top = 14.dp)) {
                     Text(text = stringResource(
                         id = R.string.screen_booking_request_label_total_fee), style = MaterialTheme.typography.bodyLarge)

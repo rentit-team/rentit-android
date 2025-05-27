@@ -23,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
+import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
@@ -54,10 +55,7 @@ fun RequestConfirmationScreen(navHostController: NavHostController) {
                 id = R.string.screen_request_confirm_booking_period), style = MaterialTheme.typography.bodyLarge)
             Text(text = "시작일 ~ 종료일 · 기간 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .background(Gray100))
+        CommonDivider()
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp),
