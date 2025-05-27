@@ -20,7 +20,7 @@ fun CommonButton(text: String, containerColor: Color, contentColor: Color, modif
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .height(40.dp),
+            .height(48.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = containerColor,
             contentColor = contentColor
