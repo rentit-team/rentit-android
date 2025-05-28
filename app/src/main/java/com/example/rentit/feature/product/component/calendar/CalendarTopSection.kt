@@ -1,9 +1,11 @@
-package com.example.rentit.common.component.calendar
+package com.example.rentit.feature.product.component.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import java.time.YearMonth
@@ -38,12 +41,14 @@ fun CalendarHeader(yearMonth: YearMonth, leftChevronOnClick: () -> Unit, rightCh
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DayOfWeek(modifier: Modifier) {
-    Row(modifier = modifier,
+fun DayOfWeek(cellWidth: Dp) {
+    Row(modifier = Modifier
+        .height(cellWidth)
+        .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
         java.time.DayOfWeek.entries.forEach {
-            Text(modifier = Modifier.width(48.dp), text = it.name.take(1), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
+            Text(modifier = Modifier.width(cellWidth), text = it.name.take(1), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
         }
     }
 }

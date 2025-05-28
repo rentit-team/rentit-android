@@ -2,14 +2,11 @@ package com.example.rentit.feature.product
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,15 +26,12 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.NavigationRoutes
-import com.example.rentit.common.component.calendar.CommonCalendar
-import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.feature.product.component.calendar.DateRangePicker
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -52,15 +46,11 @@ fun BookingRequestScreen(navHostController: NavHostController) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(it)
-                .padding(bottom = 64.dp),
+                .padding(bottom = 48.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            CommonCalendar(yearMonth = YearMonth.now(), modifier = Modifier.weight(1F).padding(top = 30.dp))
+            DateRangePicker(yearMonth = YearMonth.now(), modifier = Modifier.weight(1F).padding(top = 24.dp))
             Column(Modifier.screenHorizontalPadding()) {
-                Text(modifier = Modifier.fillMaxWidth().padding(bottom = 26.dp),
-                    text = "시작일 ~ 종료일 · 기간 일",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Gray800)
                 LabelValueRow(Modifier.padding(bottom = 10.dp)) {
                     Text(text = stringResource(
                         id = R.string.screen_booking_request_label_total_rental_fee), style = MaterialTheme.typography.bodyMedium)
@@ -85,7 +75,7 @@ fun BookingRequestScreen(navHostController: NavHostController) {
                 }
                 CommonButton(text = stringResource(id = R.string.screen_booking_request_btn_booking_request),
                     containerColor = PrimaryBlue500, contentColor = Color.White, modifier = Modifier.padding(top = 21.dp)) {
-                    moveScreen(navHostController, NavigationRoutes.REQUESTCONFIRM)
+                    //moveScreen(navHostController, NavigationRoutes.REQUESTCONFIRM)
                 }
             }
         }

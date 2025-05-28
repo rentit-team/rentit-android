@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rentit.common.component.calendar.CommonCalendar
+import com.example.rentit.feature.product.component.calendar.ReadOnlyCalender
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.product.component.UsageListItem
 import java.time.YearMonth
@@ -19,7 +19,7 @@ import java.time.YearMonth
 @Composable
 fun UsageDetailBottomDrawer() {
     Column(modifier = Modifier.fillMaxHeight(0.85f)) {
-        CommonCalendar(yearMonth = YearMonth.now())
+        ReadOnlyCalender(yearMonth = YearMonth.now())
         LazyColumn(modifier = Modifier.padding(bottom = 25.dp)) {
             this.items(1) {
                 UsageListItem()
