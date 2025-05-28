@@ -17,9 +17,9 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UsageDetailBottomDrawer() {
+fun UsageDetailBottomDrawer(reservedDateList: List<String>) {
     Column(modifier = Modifier.fillMaxHeight(0.85f)) {
-        ReadOnlyCalender(yearMonth = YearMonth.now())
+        ReadOnlyCalender(yearMonth = YearMonth.now(), reservedDateList)
         LazyColumn(modifier = Modifier.padding(bottom = 25.dp)) {
             this.items(1) {
                 UsageListItem()
@@ -34,6 +34,6 @@ fun UsageDetailBottomDrawer() {
 @Composable
 fun PreviewUsageDetailBottomDrawer() {
     RentItTheme {
-        UsageDetailBottomDrawer()
+        UsageDetailBottomDrawer(emptyList())
     }
 }

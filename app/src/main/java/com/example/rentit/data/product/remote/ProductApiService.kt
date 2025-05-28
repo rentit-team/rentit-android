@@ -1,6 +1,7 @@
 package com.example.rentit.data.product.remote
 
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
+import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,4 +16,8 @@ interface ProductApiService {
     @GET("api/v1/products/{productId}")
     @Headers("Content-Type: application/json")
     suspend fun getProductDetail(@Path("productId") productId: Int): Response<ProductDetailResponseDto>
+
+    @GET("api/v1/products/{productId}/reservations/dates")
+    @Headers("Content-Type: application/json")
+    suspend fun getReservedDates(@Path("productId") productId: Int): Response<ProductReservedDatesResponseDto>
 }

@@ -34,7 +34,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +51,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -66,8 +66,6 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,13 +76,13 @@ fun ProductDetailScreen(productId: Int?, navHostController: NavHostController) {
     var showFullImage by remember { mutableStateOf(false) }
 
     val productViewModel: ProductViewModel = hiltViewModel()
-    val productDetailResult by productViewModel.productDetail.collectAsState()
-
-    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    val productDetailResult by productViewModel.productDetail.collectAsStateWithLifecycle()
+    val reservedDateList by productViewModel.reservedDateList.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         if (productId != null) {
             productViewModel.getProductDetail(productId)
+            productViewModel.getReservedDates(productId)
         }
     }
 
@@ -120,7 +118,7 @@ fun ProductDetailScreen(productId: Int?, navHostController: NavHostController) {
                 )
                 if(showBottomSheet) {
                     ModalBottomSheet(onDismissRequest = { showBottomSheet = false }, sheetState = sheetState) {
-                        UsageDetailBottomDrawer()
+                        UsageDetailBottomDrawer(reservedDateList)
                     }
                 }
             }

@@ -39,6 +39,9 @@ class ProductViewModel @Inject constructor(
     private val _selectedImgUriList =  MutableStateFlow<List<Uri>>(emptyList())
     val selectedImgUriList: StateFlow<List<Uri>> = _selectedImgUriList
 
+    private val _reservedDateList =  MutableStateFlow<List<String>>(emptyList())
+    val reservedDateList: StateFlow<List<String>> = _reservedDateList
+
     fun getProductDetail(productId: Int) {
         viewModelScope.launch {
             _productDetail.value = repository.getProductDetail(productId)
@@ -65,5 +68,13 @@ class ProductViewModel @Inject constructor(
 
     fun removeImageUri(uri: Uri){
         _selectedImgUriList.value = _selectedImgUriList.value - uri
+    }
+
+    fun getReservedDates(productId: Int) {
+        viewModelScope.launch {
+            repository.getReservedDates(productId).onSuccess {
+                _reservedDateList.value = it.disabledDates
+            }
+        }
     }
 }
