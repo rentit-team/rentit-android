@@ -1,5 +1,7 @@
 package com.example.rentit.data.product.remote
 
+import com.example.rentit.data.product.dto.BookingRequestDto
+import com.example.rentit.data.product.dto.BookingResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
@@ -17,6 +19,9 @@ class ProductRemoteDataSource @Inject constructor(
     }
     suspend fun getReservedDates(productId: Int): Response<ProductReservedDatesResponseDto> {
         return productApiService.getReservedDates(productId)
+    }
+    suspend fun postBooking(productId: Int, request: BookingRequestDto): Response<BookingResponseDto> {
+        return productApiService.postBooking(productId, request)
     }
 
 }

@@ -33,7 +33,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,7 +47,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -70,23 +68,17 @@ import com.example.rentit.common.theme.RentItTheme
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailScreen(productId: Int?, navHostController: NavHostController) {
+fun ProductDetailScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
     var showFullImage by remember { mutableStateOf(false) }
 
-    val productViewModel: ProductViewModel = hiltViewModel()
     val productDetailResult by productViewModel.productDetail.collectAsStateWithLifecycle()
     val reservedDateList by productViewModel.reservedDateList.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        if (productId != null) {
-            productViewModel.getProductDetail(productId)
-            productViewModel.getReservedDates(productId)
-        }
-    }
-
     val productDetail = productDetailResult?.getOrNull()?.product
+
+    /* productDetail 로딩 실패 시 UI 필요 */
 
     val imgUrlList = listOf(
         "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg",
@@ -107,12 +99,12 @@ fun ProductDetailScreen(productId: Int?, navHostController: NavHostController) {
                     .background(Color.White)
             ) {
                 ImagePager(imgUrlList) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
-                PostHeader(productDetail?.title ?: "제목" , "카테고리", "${productDetail?.createdAt?.substring(0, 10)}" ?: "생성일")
+                PostHeader(productDetail?.title ?: "" , "카테고리", "${productDetail?.createdAt?.substring(0, 10)}" ?: "생성일")
                 Text(
                     modifier = Modifier
                         .screenHorizontalPadding()
                         .fillMaxWidth(),
-                    text = productDetail?.description ?: LoremIpsum(2).values.first(),
+                    text = productDetail?.description ?: "",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray800
                 )
@@ -323,6 +315,6 @@ fun MiniButton(isBgColorWhite: Boolean, text: String, onClick: () -> Unit) {
 @Composable
 fun PreviewProductDetailScreen() {
     RentItTheme {
-        ProductDetailScreen(1, rememberNavController())
+        ProductDetailScreen(rememberNavController(), hiltViewModel())
     }
 }

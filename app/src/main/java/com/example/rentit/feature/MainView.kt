@@ -12,6 +12,7 @@ import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -19,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -37,6 +39,7 @@ import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
 import com.example.rentit.feature.product.BookingRequestScreen
 import com.example.rentit.feature.product.ProductDetailScreen
+import com.example.rentit.feature.product.ProductViewModel
 import com.example.rentit.feature.product.RequestConfirmationScreen
 
 sealed class BottomNavItem(
@@ -125,10 +128,19 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
 @Composable
 fun ProductDetailNavHost(productId: Int?) {
     val navHostController: NavHostController = rememberNavController()
+    val productViewModel: ProductViewModel = hiltViewModel()
+
+    LaunchedEffect(productId) {
+        if (productId != null) {
+            productViewModel.setProductId(productId)
+        }
+    }
+
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
-        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(productId, navHostController) }
-        composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController) }
-        composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController) }
+        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.MAIN) { MainView() }
     }
 }
 /*
