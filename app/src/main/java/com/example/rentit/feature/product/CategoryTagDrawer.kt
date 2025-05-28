@@ -7,21 +7,25 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.product.dto.Category
+import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.feature.product.component.TagButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoryTagDrawer(
-    categoryList: List<Category>,
-    selectedCategoryList: List<Category>,
-    onTagButtonClick: (Category) -> Unit
+    selectedCategoryList: List<CategoryDto>,
+    onTagButtonClick: (CategoryDto) -> Unit
 ) {
+    val createPostViewModel: CreatePostViewModel = hiltViewModel()
+    val categoryList by createPostViewModel.categoryList.collectAsStateWithLifecycle()
 
     val parentCatList = categoryList.filter { it.isParent }
     Column(
@@ -54,6 +58,6 @@ fun CategoryTagDrawer(
 @Composable
 fun PreviewCategoryTagDrawer() {
     RentItTheme {
-        CategoryTagDrawer(categoryList = emptyList(), selectedCategoryList = emptyList()){}
+        CategoryTagDrawer(selectedCategoryList = emptyList()){}
     }
 }

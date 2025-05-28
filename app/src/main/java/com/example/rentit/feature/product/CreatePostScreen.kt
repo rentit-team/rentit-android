@@ -69,19 +69,26 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.product.dto.Category
+import com.example.rentit.data.product.dto.CategoryDto
+import com.example.rentit.data.product.dto.CreatePostRequestDto
+import com.example.rentit.data.product.dto.PeriodDto
 import com.example.rentit.feature.product.component.RemovableTagButton
 import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductCreateScreen() {
+fun CreatePostScreen() {
     var titleText by remember { mutableStateOf("") }
     var contentText by remember { mutableStateOf("") }
     var showTagDrawer by remember { mutableStateOf(false) }
-    val productViewModel: ProductViewModel = hiltViewModel()
-    val selectedCategoryList by productViewModel.categoryTagList.collectAsStateWithLifecycle()
-    val selectedImgUriList by productViewModel.selectedImgUriList.collectAsStateWithLifecycle()
+    var periodSliderPosition by remember { mutableStateOf(3F..15F) }
+    var price by remember { mutableIntStateOf(0) }
+    var priceValue by remember { mutableStateOf("") }
+    val createPostViewModel: CreatePostViewModel = hiltViewModel()
+    val selectedCategoryList by createPostViewModel.categoryTagList.collectAsStateWithLifecycle()
+    val selectedImgUriList by createPostViewModel.selectedImgUriList.collectAsStateWithLifecycle()
+
+    val priceLimit = 5000000
 
     Scaffold(
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) }
@@ -96,8 +103,8 @@ fun ProductCreateScreen() {
             LabeledContent(stringResource(id = R.string.screen_product_create_image_label)) {
                 ImageSelectSection(
                     selectedImgUriList = selectedImgUriList,
-                    onUpdateImageList = productViewModel::updateImageUriList,
-                    onImageRemoveClick = productViewModel::removeImageUri
+                    onUpdateImageList = createPostViewModel::updateImageUriList,
+                    onImageRemoveClick = createPostViewModel::removeImageUri
                 )
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
@@ -121,15 +128,29 @@ fun ProductCreateScreen() {
             LabeledContent(stringResource(id = R.string.screen_product_create_category_label)) {
                 CategoryTagSection(
                     selectedCategoryList,
-                    onRemoveCategory = productViewModel::removeSelectedCategory,
+                    onRemoveCategory = createPostViewModel::removeSelectedCategory,
                     onAddCategory = { showTagDrawer = true }
                 )
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_rental_period_label)){
-                PriceRangeSlider()
+                RentalPeriodSlider(periodSliderPosition) { pos -> periodSliderPosition = pos }
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_price_label)){
-                PriceInputSection()
+                PriceInputSection(priceValue) {value ->
+                    val value = value.replace(",", "")
+                    val df = DecimalFormat("#,###,###")
+                    if (value.isNotEmpty()) {
+                        price = value.toInt()
+                        if (price > priceLimit) {
+                            price = priceLimit
+                        }
+                        priceValue = df.format(price)
+                    } else {
+                        price = 0
+                        priceValue = ""
+
+                    }
+                }
             }
             CommonButton(
                 text = stringResource(id = R.string.screen_product_create_complete_btn_text),
@@ -137,15 +158,18 @@ fun ProductCreateScreen() {
                 contentColor = Color.White,
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
             ) {
-
+                val period = PeriodDto("daily", periodSliderPosition.start.toInt(), periodSliderPosition.endInclusive.toInt())
+                val selectedCategoryIdList = selectedCategoryList.map { cat -> cat.id }
+                val requestBody = CreatePostRequestDto(titleText, contentText, selectedCategoryIdList, period, price.toDouble(), null)
+                val thumbnailImg = if(selectedImgUriList.isNotEmpty()) selectedImgUriList[0] else null
+                createPostViewModel.createPost(requestBody, thumbnailImg)
             }
         }
         if(showTagDrawer) {
             ModalBottomSheet(onDismissRequest = { showTagDrawer = false }) {
                 CategoryTagDrawer(
-                    categoryList = productViewModel.sampleCategoryList,
                     selectedCategoryList = selectedCategoryList,
-                    onTagButtonClick = productViewModel::handleCategoryClick
+                    onTagButtonClick = createPostViewModel::handleCategoryClick
                 )
             }
         }
@@ -248,8 +272,8 @@ fun PickMultipleImage(onUpdateImageList: (List<Uri>) -> Unit): ManagedActivityRe
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoryTagSection(
-    selectedCategoryList: List<Category>,
-    onRemoveCategory: (Category) -> Unit,
+    selectedCategoryList: List<CategoryDto>,
+    onRemoveCategory: (CategoryDto) -> Unit,
     onAddCategory: () -> Unit) {
     FlowRow(
         modifier = Modifier.padding(bottom = 10.dp),
@@ -281,8 +305,7 @@ fun AddCategoryButton(onClick: () -> Unit) {
     }
 }
 @Composable
-fun PriceRangeSlider() {
-    var sliderPosition by remember { mutableStateOf(3F..15F) }
+fun RentalPeriodSlider(sliderPosition: ClosedFloatingPointRange<Float>, onValueChange: (ClosedFloatingPointRange<Float>) -> Unit) {
     Column {
         Text(
             text = stringResource(
@@ -294,7 +317,7 @@ fun PriceRangeSlider() {
         RangeSlider(
             value = sliderPosition,
             steps = 30,
-            onValueChange = { sliderPosition = it },
+            onValueChange = { onValueChange(it) },
             valueRange = 1F..30F,
             onValueChangeFinished = {},
             colors = SliderDefaults.colors(
@@ -313,27 +336,11 @@ fun PriceRangeSlider() {
     }
 }
 @Composable
-fun PriceInputSection() {
-    val priceLimit = 5000000
-    var price by remember { mutableIntStateOf(0) }
-    var priceValue by remember { mutableStateOf("") }
-
+fun PriceInputSection(priceValue: String, onValueChange: (String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         CommonTextField(
             value = priceValue,
-            onValueChange = {
-                val value = it.replace(",", "")
-                val df = DecimalFormat("#,###,###")
-                if(value.isNotEmpty()){
-                    price = value.toInt()
-                    if(price > priceLimit){
-                        price = priceLimit
-                    }
-                    priceValue = df.format(price)
-                } else {
-                    price = 0
-                    priceValue = ""
-                }},
+            onValueChange = onValueChange,
             placeholder = "0",
             keyboardType = KeyboardType.Number,
             textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.End),
@@ -349,10 +356,11 @@ fun PriceInputSection() {
     }
 }
 
+
 @Preview
 @Composable
 fun PreviewProductCreateScreen() {
     RentItTheme {
-        ProductCreateScreen()
+        CreatePostScreen()
     }
 }

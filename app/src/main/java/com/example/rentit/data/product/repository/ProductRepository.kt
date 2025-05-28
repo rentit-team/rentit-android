@@ -2,10 +2,14 @@ package com.example.rentit.data.product.repository
 
 import com.example.rentit.data.product.dto.BookingRequestDto
 import com.example.rentit.data.product.dto.BookingResponseDto
+import com.example.rentit.data.product.dto.CategoryListResponseDto
+import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.remote.ProductRemoteDataSource
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import javax.inject.Inject
 
 class ProductRepository @Inject constructor(
@@ -101,6 +105,54 @@ class ProductRepository @Inject constructor(
                 // 이미 동일 기간의 예약이 1건 이상 존재하는 경우
                 409 -> {
                     Result.failure(Exception("선택하신 날짜는 이미 예약되었어요"))
+                }
+                500 -> {
+                    Result.failure(Exception("Server error"))
+                }
+                else -> {
+                    Result.failure(Exception("Unexpected error"))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getCategories(): Result<CategoryListResponseDto> {
+        return try {
+            val response = productRemoteDataSource.getCategories()
+            when(response.code()) {
+                200 -> {
+                    val body = response.body()
+                    if(body != null) {
+                        Result.success(body)
+                    } else {
+                        Result.failure(Exception("Empty response body"))
+                    }
+                }
+                500 -> {
+                    Result.failure(Exception("Server error"))
+                }
+                else -> {
+                    Result.failure(Exception("Unexpected error"))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto> {
+        return try {
+            val response = productRemoteDataSource.createPost(payLoad, thumbnailImg)
+            when(response.code()) {
+                200 -> {
+                    val body = response.body()
+                    if(body != null) {
+                        Result.success(body)
+                    } else {
+                        Result.failure(Exception("Empty response body"))
+                    }
                 }
                 500 -> {
                     Result.failure(Exception("Server error"))
