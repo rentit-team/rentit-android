@@ -2,6 +2,7 @@ package com.example.rentit.feature
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -38,6 +40,8 @@ import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
 import com.example.rentit.feature.product.BookingRequestScreen
+import com.example.rentit.feature.product.CreatePostScreen
+import com.example.rentit.feature.product.CreatePostViewModel
 import com.example.rentit.feature.product.ProductDetailScreen
 import com.example.rentit.feature.product.ProductViewModel
 import com.example.rentit.feature.product.RequestConfirmationScreen
@@ -63,7 +67,7 @@ fun MainView() {
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val showBottomBar = currentRoute in navItems.map { it.screenRoute }
-    Scaffold(bottomBar = { if(showBottomBar) {
+    Scaffold(bottomBar = { if (showBottomBar) {
         BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
             navItems.forEach { item ->
                 BottomNavigationItem(
@@ -96,7 +100,10 @@ fun MainView() {
             }
         }
     }
-    }) {
+    },
+        floatingActionButton = { if(currentRoute == NavigationRoutes.HOME) createPostFloatingButton {
+            moveScreen(navHostController, NavigationRoutes.CREATEPOST)
+        } }) {
         TabNavHost(navHostController, it)
         /*NavHost(
             navController = navHostController,
@@ -121,6 +128,7 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
         composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
             ProductDetailNavHost(productId) }
+        composable(NavigationRoutes.CREATEPOST) { CreatePostNavHost() }
     }
 }
 
@@ -141,6 +149,30 @@ fun ProductDetailNavHost(productId: Int?) {
         composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.MAIN) { MainView() }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun CreatePostNavHost() {
+    val navHostController: NavHostController = rememberNavController()
+    NavHost(navController =  navHostController, startDestination = NavigationRoutes.CREATEPOST){
+        composable(NavigationRoutes.CREATEPOST) { CreatePostScreen(navHostController) }
+        composable(NavigationRoutes.MAIN) { MainView() }
+    }
+}
+
+@Composable
+fun createPostFloatingButton(onClick: () -> Unit) {
+    FloatingActionButton(
+        backgroundColor = PrimaryBlue500,
+        onClick = onClick,
+    ) {
+        Image(
+            modifier = Modifier.padding(14.dp),
+            painter = painterResource(id = R.drawable.ic_write),
+            contentDescription = "상품 등록하기"
+        )
     }
 }
 /*

@@ -37,6 +37,7 @@ import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -56,12 +57,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.basicRoundedGrayBorder
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
@@ -77,7 +82,7 @@ import java.text.DecimalFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreatePostScreen() {
+fun CreatePostScreen(navHostController: NavHostController) {
     var titleText by remember { mutableStateOf("") }
     var contentText by remember { mutableStateOf("") }
     var showTagDrawer by remember { mutableStateOf(false) }
@@ -173,6 +178,9 @@ fun CreatePostScreen() {
                 )
             }
         }
+    }
+    CreatePostResultHandler(createPostViewModel) {
+        moveScreen(navHostController, NavigationRoutes.MAIN)
     }
 }
 
@@ -356,11 +364,22 @@ fun PriceInputSection(priceValue: String, onValueChange: (String) -> Unit) {
     }
 }
 
+@Composable
+fun CreatePostResultHandler(createPostViewModel: CreatePostViewModel, onCreatePostSuccess: () -> Unit){
+    val createPostResult by createPostViewModel.createPostResult.collectAsStateWithLifecycle()
+    LaunchedEffect(createPostResult) {
+        createPostResult?.onSuccess {
+            onCreatePostSuccess()
+        }?.onFailure {
+            /* 게시글 생성 실패 시 */
+        }
+    }
+}
 
 @Preview
 @Composable
 fun PreviewProductCreateScreen() {
     RentItTheme {
-        CreatePostScreen()
+        CreatePostScreen(rememberNavController())
     }
 }
