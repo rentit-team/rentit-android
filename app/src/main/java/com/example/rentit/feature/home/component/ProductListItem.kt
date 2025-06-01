@@ -119,8 +119,8 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
                         color = Gray400
                     )
                 }
-                val formatter = NumberFormat.getNumberInstance()
-                Text(text = formatter.format(productInfo.price) + "원/일", style = MaterialTheme.typography.bodyLarge)
+                val numFormatter = NumberFormat.getNumberInstance()
+                Text(text = numFormatter.format(productInfo.price) + "원/일", style = MaterialTheme.typography.bodyLarge)
             }
         }
     }

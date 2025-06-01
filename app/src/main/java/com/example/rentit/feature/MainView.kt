@@ -41,7 +41,6 @@ import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
 import com.example.rentit.feature.product.BookingRequestScreen
 import com.example.rentit.feature.product.CreatePostScreen
-import com.example.rentit.feature.product.CreatePostViewModel
 import com.example.rentit.feature.product.ProductDetailScreen
 import com.example.rentit.feature.product.ProductViewModel
 import com.example.rentit.feature.product.RequestConfirmationScreen
@@ -101,17 +100,10 @@ fun MainView() {
         }
     }
     },
-        floatingActionButton = { if(currentRoute == NavigationRoutes.HOME) createPostFloatingButton {
+        floatingActionButton = { if(currentRoute == NavigationRoutes.HOME) CreatePostFloatingButton {
             moveScreen(navHostController, NavigationRoutes.CREATEPOST)
         } }) {
         TabNavHost(navHostController, it)
-        /*NavHost(
-            navController = navHostController,
-            startDestination = BottomNavItem.Home.screenRoute
-        ) {
-            tabNavGraph(navHostController, it)
-            standaloneNavGraph(navHostController)
-        }*/
     }
 }
 
@@ -163,7 +155,7 @@ fun CreatePostNavHost() {
 }
 
 @Composable
-fun createPostFloatingButton(onClick: () -> Unit) {
+fun CreatePostFloatingButton(onClick: () -> Unit) {
     FloatingActionButton(
         backgroundColor = PrimaryBlue500,
         onClick = onClick,
@@ -175,19 +167,6 @@ fun createPostFloatingButton(onClick: () -> Unit) {
         )
     }
 }
-/*
-fun NavGraphBuilder.tabNavGraph(navHostController: NavHostController, paddingValues: PaddingValues ){
-    composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController, Modifier.padding(paddingValues)) }
-    composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen", Modifier.padding(paddingValues)) }
-    composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen", Modifier.padding(paddingValues)) }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-fun NavGraphBuilder.standaloneNavGraph(navHostController: NavHostController){
-    composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController) }
-    composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController) }
-    composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController) }
-}*/
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)

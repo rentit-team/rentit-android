@@ -102,7 +102,9 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
                     .background(Color.White)
             ) {
                 ImagePager(imgUrlList) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
-                PostHeader(productDetail?.title ?: "" , "카테고리", "${productDetail?.createdAt?.substring(0, 10)}" ?: "생성일")
+                PostHeader(productDetail?.title ?: "" , "카테고리",
+                    "${productDetail?.createdAt?.substring(0, 10)}"
+                )
                 Text(
                     modifier = Modifier
                         .screenHorizontalPadding()
@@ -124,7 +126,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
 
 @Composable
 fun ImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
-    if(imgUrlList.isNullOrEmpty()){
+    if(imgUrlList.isEmpty()){
         Image(
             modifier = Modifier.height(290.dp),
             painter = painterResource(id = R.drawable.img_placeholder),
@@ -261,24 +263,6 @@ fun PostBottomBar(navHostController: NavHostController, price: Int) {
 
 @Composable
 fun UsageDetailButton(onClick: () -> Unit) {
-    /*Row(
-        modifier = Modifier
-            .screenHorizontalPadding()
-            .padding(vertical = 24.dp)
-            .align(Alignment.CenterHorizontally)
-    ) {
-        Text(
-            text = stringResource(id = R.string.screen_product_btn_check_detail_of_use),
-            style = MaterialTheme.typography.bodyMedium,
-            color = Gray400
-        )
-        Image(
-            modifier = Modifier.padding(start = 6.dp),
-            painter = painterResource(id = R.drawable.ic_chevron_right),
-            colorFilter = ColorFilter.tint(Gray400),
-            contentDescription = null
-        )
-    }*/
     ExtendedFloatingActionButton(
         containerColor = Color.White,
         onClick = onClick,
@@ -290,17 +274,6 @@ fun UsageDetailButton(onClick: () -> Unit) {
         )
         Text(text = stringResource(id = R.string.screen_product_btn_check_detail_of_use))
     }
-    /*FloatingActionButton(
-        modifier = Modifier.shadow(0.dp, CircleShape, ambientColor = Gray400),
-        backgroundColor = Color.White,
-        onClick = onClick,
-    ) {
-        Image(
-            modifier = Modifier.padding(14.dp),
-            painter = painterResource(id = R.drawable.ic_calendar),
-            contentDescription = stringResource(id = R.string.screen_product_btn_check_detail_of_use)
-        )
-    }*/
 }
 
 @Composable
