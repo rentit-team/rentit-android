@@ -20,6 +20,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray200
@@ -29,7 +30,7 @@ import com.example.rentit.common.theme.RentItTheme
 
 @Composable
 fun CommonTextField(
-    value: String,
+    value: TextFieldValue,
     onValueChange: (String) -> Unit,
     placeholder: String = "",
     minLines: Int = 1,
@@ -44,7 +45,7 @@ fun CommonTextField(
     var borderColor by remember { mutableStateOf(Gray200) }
 
     BasicTextField(
-        value = value,
+        value = value.text,
         onValueChange = onValueChange,
         modifier = modifier
             .clip(RoundedCornerShape(20.dp))  // 20dp 반경을 가진 둥근 모서리
@@ -67,7 +68,7 @@ fun CommonTextField(
                     .padding(20.dp, 12.dp),
                 contentAlignment = placeholderAlignment
             ) {
-                if (value.isEmpty()) {
+                if (value.text.isEmpty()) {
                     Text(
                         text = placeholder,
                         style = MaterialTheme.typography.bodyMedium,
@@ -85,7 +86,7 @@ fun CommonTextField(
 fun PreviewBaseTextField() {
     RentItTheme {
         CommonTextField(
-            value = "",
+            value = TextFieldValue(""),
             onValueChange = { },
             placeholder = "Place Holder",
         )

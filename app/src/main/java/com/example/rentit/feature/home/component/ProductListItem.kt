@@ -31,6 +31,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
 import com.example.rentit.data.product.dto.ProductDto
+import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -39,6 +40,7 @@ import java.time.format.DateTimeFormatter
 fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
     val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
+    val period = productInfo.period
     Box(
         modifier = Modifier
         .fillMaxWidth()
@@ -99,7 +101,14 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = "0일 이상",
+                        text = if(period != null) {
+                                if(period.min != null && period.max != null) "${productInfo.period.min}일 이상 ~ ${productInfo.period.max}일 이하"
+                                    else if(period.min != null) "${productInfo.period.min}일 이상"
+                                    else if(period.max != null) "${productInfo.period.max}일 이하"
+                                    else "0일 이상"
+                        } else {
+                            "0일 이상"
+                        },
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -110,8 +119,8 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
                         color = Gray400
                     )
                 }
-
-                Text(text = productInfo.price.toString() + "원/일", style = MaterialTheme.typography.bodyLarge)
+                val formatter = NumberFormat.getNumberInstance()
+                Text(text = formatter.format(productInfo.price) + "원/일", style = MaterialTheme.typography.bodyLarge)
             }
         }
     }

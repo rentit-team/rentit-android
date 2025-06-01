@@ -50,8 +50,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -78,7 +80,7 @@ import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
 import com.example.rentit.feature.product.component.RemovableTagButton
-import java.text.DecimalFormat
+import java.text.NumberFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +90,7 @@ fun CreatePostScreen(navHostController: NavHostController) {
     var showTagDrawer by remember { mutableStateOf(false) }
     var periodSliderPosition by remember { mutableStateOf(3F..15F) }
     var price by remember { mutableIntStateOf(0) }
-    var priceValue by remember { mutableStateOf("") }
+    var priceInput by remember { mutableStateOf(TextFieldValue()) }
     val createPostViewModel: CreatePostViewModel = hiltViewModel()
     val selectedCategoryList by createPostViewModel.categoryTagList.collectAsStateWithLifecycle()
     val selectedImgUriList by createPostViewModel.selectedImgUriList.collectAsStateWithLifecycle()
@@ -114,13 +116,13 @@ fun CreatePostScreen(navHostController: NavHostController) {
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
                 CommonTextField(
-                    value = titleText,
+                    value = TextFieldValue(titleText),
                     onValueChange = { value -> titleText = value },
                     placeholder = stringResource(id = R.string.screen_product_create_title_placeholder))
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_content_label)){
                 CommonTextField(
-                    value = contentText,
+                    value = TextFieldValue(contentText),
                     onValueChange = { value -> contentText = value },
                     placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
                     minLines = 4,
@@ -141,19 +143,20 @@ fun CreatePostScreen(navHostController: NavHostController) {
                 RentalPeriodSlider(periodSliderPosition) { pos -> periodSliderPosition = pos }
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_price_label)){
-                PriceInputSection(priceValue) {value ->
-                    val value = value.replace(",", "")
-                    val df = DecimalFormat("#,###,###")
+                PriceInputSection(priceInput) { value ->
+                    val formatter = NumberFormat.getNumberInstance()
                     if (value.isNotEmpty()) {
-                        price = value.toInt()
+                        price = formatter.parse(value)?.toInt() ?: 0
                         if (price > priceLimit) {
                             price = priceLimit
                         }
-                        priceValue = df.format(price)
+                        val formattedPrice = formatter.format(price)
+                        priceInput = TextFieldValue(
+                            text = formattedPrice,
+                            selection = TextRange(formattedPrice.length))
                     } else {
                         price = 0
-                        priceValue = ""
-
+                        priceInput = TextFieldValue("")
                     }
                 }
             }
@@ -344,10 +347,10 @@ fun RentalPeriodSlider(sliderPosition: ClosedFloatingPointRange<Float>, onValueC
     }
 }
 @Composable
-fun PriceInputSection(priceValue: String, onValueChange: (String) -> Unit) {
+fun PriceInputSection(priceInput: TextFieldValue, onValueChange: (String) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         CommonTextField(
-            value = priceValue,
+            value = priceInput,
             onValueChange = onValueChange,
             placeholder = "0",
             keyboardType = KeyboardType.Number,

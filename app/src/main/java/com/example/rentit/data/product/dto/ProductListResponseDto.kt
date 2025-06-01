@@ -33,7 +33,7 @@ data class ProductDto(
     val region: String?,
 
     @SerializedName("period")
-    val period: PeriodDto,
+    val period: PeriodDto?,
 
     @SerializedName("owner")
     val owner: OwnerDto,

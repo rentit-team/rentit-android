@@ -22,6 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -60,7 +61,7 @@ fun JoinScreen(authViewModel: AuthViewModel, navHostController: NavHostControlle
         ) {
             Spacer(modifier = Modifier.weight(0.5f))
             HighlightedHeadline()
-            CommonTextField(value = nickname, onValueChange = { authViewModel.onNicknameChanged(it) }, placeholder = stringResource(R.string.app_name))
+            CommonTextField(value = TextFieldValue(nickname), onValueChange = { authViewModel.onNicknameChanged(it) }, placeholder = stringResource(R.string.app_name))
             if(nickname.isBlank() && isButtonClicked){
                 Text(
                     modifier = Modifier.padding(top = 6.dp, start = 6.dp),

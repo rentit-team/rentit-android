@@ -64,6 +64,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import java.text.NumberFormat
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,14 +89,16 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) },
-        bottomBar = { PostBottomBar(navHostController, productDetail?.price.toString() ?: "가격") },
+        bottomBar = { PostBottomBar(navHostController, productDetail?.price ?: 0) },
         floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
-        Box(Modifier
-            .padding(innerPadding)
-            .fillMaxSize()) {
+        Box(
+            Modifier
+                .padding(innerPadding)
+                .fillMaxSize()) {
             Column(
-                modifier = Modifier.verticalScroll(state = rememberScrollState())
+                modifier = Modifier
+                    .verticalScroll(state = rememberScrollState())
                     .background(Color.White)
             ) {
                 ImagePager(imgUrlList) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
@@ -135,7 +138,9 @@ fun ImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
             modifier = Modifier.fillMaxWidth()
         ) { page ->
             AsyncImage(
-                modifier = Modifier.height(290.dp).clickable { onClick },
+                modifier = Modifier
+                    .height(290.dp)
+                    .clickable { onClick },
                 placeholder = painterResource(id = R.drawable.img_placeholder),
                 model = imgUrlList[page],
                 contentDescription = stringResource(id = R.string.screen_product_detail_img_description),
@@ -143,12 +148,16 @@ fun ImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
             )
         }
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 13.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 13.dp),
             horizontalArrangement = Arrangement.Center
         ) {
             repeat(pagerState.pageCount) { iteration ->
                 val color = if(pagerState.currentPage == iteration) Gray400 else Gray200
-                Box(Modifier.padding(3.dp)
+                Box(
+                    Modifier
+                        .padding(3.dp)
                         .clip(CircleShape)
                         .background(color)
                         .size(5.dp)
@@ -191,7 +200,9 @@ fun FullImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
 
 @Composable
 fun PostHeader(title: String, category: String, creationDate: String) {
-    Row(Modifier.fillMaxWidth()
+    Row(
+        Modifier
+            .fillMaxWidth()
             .screenHorizontalPadding()
             .padding(top = 16.dp, bottom = 13.dp),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -222,7 +233,8 @@ fun PostHeader(title: String, category: String, creationDate: String) {
 }
 
 @Composable
-fun PostBottomBar(navHostController: NavHostController, price: String) {
+fun PostBottomBar(navHostController: NavHostController, price: Int) {
+    val formattedPrice = NumberFormat.getNumberInstance().format(price)
     // Shadow for bottom bar
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -235,12 +247,12 @@ fun PostBottomBar(navHostController: NavHostController, price: String) {
     Row(modifier = Modifier
         .fillMaxWidth()
         .screenHorizontalPadding()
-        .padding(vertical = 20.dp),
+        .padding(vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Text(
             modifier = Modifier.weight(1F),
-            text = "$price " + stringResource(id = R.string.screen_product_price_unit),
-            style = MaterialTheme.typography.bodyLarge
+            text = "$formattedPrice " + stringResource(id = R.string.screen_product_price_unit),
+            style = MaterialTheme.typography.titleLarge
         )
         MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
         MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.BOOKINGREQUEST)  }
@@ -295,9 +307,11 @@ fun UsageDetailButton(onClick: () -> Unit) {
 fun MiniButton(isBgColorWhite: Boolean, text: String, onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
-        modifier = Modifier.height(34.dp).padding(start = 9.dp),
-        border = if(isBgColorWhite) BorderStroke(2.dp, Gray100) else null,
-        contentPadding = PaddingValues(vertical = 0.dp, horizontal = 12.dp),
+        modifier = Modifier
+            .height(38.dp)
+            .padding(start = 9.dp),
+        border = if(isBgColorWhite) BorderStroke(1.dp, Gray200) else null,
+        contentPadding = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if(isBgColorWhite) Color.White else PrimaryBlue500
         ),
