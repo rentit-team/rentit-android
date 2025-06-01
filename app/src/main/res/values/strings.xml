@@ -25,5 +25,46 @@
     <string name="screen_home_label_btn_filter_rent_possibility">대여 가능</string>
     <string name="screen_home_label_btn_filter_category">카테고리</string>
 
+    <string name="screen_product_detail_img_placeholder_description">상품 임시 이미지</string>
+    <string name="screen_product_detail_img_description">상품 이미지</string>
+    <string name="screen_product_like_icon_description">상품 좋아요</string>
+    <string name="screen_product_share_icon_description">상품 공유하기</string>
+    <string name="screen_product_btn_check_detail_of_use">대여 내역 확인</string>
+    <string name="screen_product_btn_chatting">채팅하기</string>
+    <string name="screen_product_btn_reserve">예약하기</string>
+    <string name="screen_product_price_unit">원/일</string>
+
+    <string name="common_calendar_left_chevron_description">다음달로 이동</string>
+    <string name="common_calendar_right_chevron_description">이전달로 이동</string>
+
+    <string name="screen_booking_request_app_bar_title">예약 기간을 설정해주세요.</string>
+    <string name="screen_booking_request_label_total_rental_fee">총 대여 비용</string>
+    <string name="screen_booking_request_label_deposit">보증금</string>
+    <string name="screen_booking_request_label_total_fee">합계</string>
+    <string name="screen_booking_request_btn_booking_request">예약 요청</string>
+
+    <string name="screen_request_confirm_icon_check_description">확인 아이콘</string>
+    <string name="screen_request_confirm_title">요청이 전달되었어요!</string>
+    <string name="screen_request_confirm_booking_period">예약 기간</string>
+    <string name="screen_request_confirm_total_price">총 금액</string>
+    <string name="screen_request_confirm_btn_complete">완료</string>
+
+    <string name="screen_product_create_image_label">이미지</string>
+    <string name="screen_product_create_add_image_text">+ 이미지 추가</string>
+    <string name="screen_product_create_selected_image_description">선택된 이미지</string>
+    <string name="screen_product_create_title_label">제목</string>
+    <string name="screen_product_create_title_placeholder">게시글 제목</string>
+    <string name="screen_product_create_content_label">자세한 설명</string>
+    <string name="screen_product_create_content_placeholder">제품에 대한 자세한 설명을 입력해주세요.\nex. 제품 상태, 주의할 점 등</string>
+    <string name="screen_product_create_category_label">카테고리</string>
+    <string name="screen_product_create_category_add_text">추가</string>
+    <string name="screen_product_create_rental_period_label">대여 가능 기간</string>
+    <string name="screen_product_create_rental_period_text">최소 %d일 ~ 최대 %d일</string>
+    <string name="screen_product_create_price_label">가격</string>
+    <string name="screen_product_create_price_unit">원/일</string>
+    <string name="screen_product_create_complete_btn_text">등록하기</string>
+
+    <string name="common_tag_btn_icon_check_description">선택된 태그</string>
+    <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
 
 </resources>

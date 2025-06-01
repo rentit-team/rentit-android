@@ -7,7 +7,6 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
@@ -29,8 +28,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.GOOGLE_CLIENT_ID
+import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.theme.AppBlack
-import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.data.user.model.GoogleSignInResult
 import com.example.rentit.feature.auth.AuthViewModel
@@ -50,7 +49,7 @@ fun GoogleLoginButton(authViewModel: AuthViewModel){
             containerColor = Color.Transparent,
             contentColor = AppBlack
         ),
-        border = BorderStroke(2.dp, Gray200)
+        border = CommonBorders.mediumBorder()
     ){
         GoogleSignInStateHandler(authViewModel)
         Row(

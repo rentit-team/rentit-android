@@ -1,9 +1,7 @@
 package com.example.rentit.common.component
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -11,45 +9,66 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
+import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
 fun CommonTextField(
-    value: String = "",
+    value: TextFieldValue,
     onValueChange: (String) -> Unit,
-    placeholder: String,
-    modifier: Modifier = Modifier
+    placeholder: String = "",
+    minLines: Int = 1,
+    maxLines: Int = 1,
+    isSingleLine: Boolean = true,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    imeAction: ImeAction = ImeAction.Done,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    placeholderAlignment: Alignment = Alignment.CenterStart,
+    modifier: Modifier = Modifier.fillMaxWidth(),
 ) {
+    var borderColor by remember { mutableStateOf(Gray200) }
+
     BasicTextField(
-        value = value,
+        value = value.text,
         onValueChange = onValueChange,
         modifier = modifier
-            .fillMaxWidth()
-            .height(40.dp)
-            .clip(RoundedCornerShape(20.dp)),  // 20dp 반경을 가진 둥근 모서리
-        textStyle = MaterialTheme.typography.bodyMedium,  // 텍스트 스타일
+            .clip(RoundedCornerShape(20.dp))  // 20dp 반경을 가진 둥근 모서리
+            .onFocusChanged {
+                borderColor = if(it.isFocused) PrimaryBlue500 else Gray200
+            },
+        textStyle = textStyle,  // 텍스트 스타일
         keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Text,
-            imeAction = ImeAction.Done  // 키보드 오른쪽 하단 버튼 설정
+            keyboardType = keyboardType,
+            imeAction = imeAction  // 키보드 오른쪽 하단 버튼 설정
         ),
+        minLines = minLines,
+        maxLines = maxLines,
+        singleLine = isSingleLine,
         decorationBox = { innerTextField ->
             // 텍스트 필드 테두리와 배경 설정
             Box(
                 modifier = Modifier
-                    .border(1.dp, Gray200, RoundedCornerShape(20.dp))
-                    .padding(20.dp, 0.dp),
-                contentAlignment = Alignment.CenterStart
+                    .basicRoundedGrayBorder(color = borderColor)
+                    .padding(20.dp, 12.dp),
+                contentAlignment = placeholderAlignment
             ) {
-                if (value.isEmpty()) {
+                if (value.text.isEmpty()) {
                     Text(
                         text = placeholder,
                         style = MaterialTheme.typography.bodyMedium,
@@ -67,6 +86,7 @@ fun CommonTextField(
 fun PreviewBaseTextField() {
     RentItTheme {
         CommonTextField(
+            value = TextFieldValue(""),
             onValueChange = { },
             placeholder = "Place Holder",
         )

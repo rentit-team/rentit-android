@@ -104,8 +104,8 @@ object PretendardTextStyle {
 // Set of Material typography styles to start with
 val AppTypography = Typography(
     displayLarge = PretendardTextStyle.title,           // 28pt Bold
-    headlineLarge = PretendardTextStyle.headline,       // 24pt SemiBold
-    headlineMedium = PretendardTextStyle.headline_bold, // 24pt Regular
+    headlineLarge = PretendardTextStyle.headline_bold,       // 24pt SemiBold
+    headlineMedium = PretendardTextStyle.headline, // 24pt Regular
     titleLarge = PretendardTextStyle.subhead_bold,      // 20pt SemiBold
     titleMedium = PretendardTextStyle.subhead,          // 20pt Regular
     bodyLarge = PretendardTextStyle.body1_bold,         // 16pt SemiBold
