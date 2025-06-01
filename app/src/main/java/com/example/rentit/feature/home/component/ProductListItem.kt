@@ -2,23 +2,28 @@ package com.example.rentit.feature.home.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +33,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
+import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
 import com.example.rentit.data.product.dto.ProductDto
@@ -37,21 +43,23 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
+fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onClick: () -> Unit) {
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
     val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
     val period = productInfo.period
     Box(
         modifier = Modifier
-        .fillMaxWidth()
-        .drawBehind {
-            drawLine(
-                color = Gray200,
-                start = Offset(0f, 0f),
-                end = Offset(size.width, 0f),
-                strokeWidth = 1.dp.toPx()
-            )
-        }.clickable { onClick() })
+            .fillMaxWidth()
+            .drawBehind {
+                drawLine(
+                    color = Gray200,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = 1.dp.toPx()
+                )
+            }
+            .background(Color.White)
+            .clickable { onClick() })
     {
         Row(
             modifier = Modifier
@@ -120,7 +128,32 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
                     )
                 }
                 val numFormatter = NumberFormat.getNumberInstance()
-                Text(text = numFormatter.format(productInfo.price) + "원/일", style = MaterialTheme.typography.bodyLarge)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = numFormatter.format(productInfo.price) + "원/일",
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    if(isMyProduct){
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                modifier = Modifier.padding(end = 6.dp),
+                                text = "요청 2건",
+                                style = MaterialTheme.typography.labelLarge,
+                                color = PrimaryBlue500
+                            )
+                            Icon(
+                                modifier = Modifier.height(10.dp),
+                                painter = painterResource(id = R.drawable.ic_chevron_right),
+                                contentDescription = "",
+                                tint = PrimaryBlue500
+                            )
+                        }
+                    }
+                }
             }
         }
     }

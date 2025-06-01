@@ -67,4 +67,19 @@
     <string name="common_tag_btn_icon_check_description">선택된 태그</string>
     <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
 
+    <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
+    <string name="screen_mypage_btn_new">NEW</string>
+    <string name="screen_mypage_info_text_start">내가 대여한 %s의 반납일이</string>
+    <string name="screen_mypage_info_text_end">남았어요!</string>
+    <string name="screen_mypage_check_usage_history">사용 내역 확인하기</string>
+    <string name="screen_mypage_tab_title_my_product">내 물건</string>
+    <string name="screen_mypage_tab_title_on_rent">대여 중</string>
+    <string name="screen_mypage_text_tab_list_empty">게시글이 없어요</string>
+
+    <string name="content_description_for_ic_chevron_right">오른쪽 꺽쇠 아이콘</string>
+    <string name="content_description_for_ic_bell">알림 아이콘</string>
+    <string name="content_description_for_ic_setting">설정 아이콘</string>
+    <string name="content_description_for_img_profile_placeholder">프로필 임시 이미지</string>
+    <string name="content_description_for_img_empty_box">빈 박스 이미지</string>
+
 </resources>

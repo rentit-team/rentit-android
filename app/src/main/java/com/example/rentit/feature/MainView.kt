@@ -38,7 +38,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.home.HomeScreen
-import com.example.rentit.feature.mypage.MyPageScreen
+import com.example.rentit.feature.user.MyPageScreen
 import com.example.rentit.feature.product.BookingRequestScreen
 import com.example.rentit.feature.product.CreatePostScreen
 import com.example.rentit.feature.product.ProductDetailScreen
@@ -116,7 +116,7 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
     NavHost(navController = navHostController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
         composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController) }
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen") }
-        composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen("MyPageScreen") }
+        composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen() }
         composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
             ProductDetailNavHost(productId) }
