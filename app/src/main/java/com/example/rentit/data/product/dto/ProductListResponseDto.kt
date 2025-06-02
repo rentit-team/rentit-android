@@ -14,8 +14,8 @@ data class ProductListResponseDto(
 )
 
 data class ProductDto(
-    @SerializedName("id")
-    val id: Int,
+    @SerializedName("productId")
+    val productId: Int,
 
     @SerializedName("title")
     val title: String,
@@ -26,8 +26,8 @@ data class ProductDto(
     @SerializedName("price")
     val price: Int,
 
-    @SerializedName("thumbnailUrl")
-    val thumbnailUrl: String?,
+    @SerializedName("thumbnailImgUrl")
+    val thumbnailImgUrl: String?,
 
     @SerializedName("region")
     val region: String?,
@@ -37,6 +37,9 @@ data class ProductDto(
 
     @SerializedName("owner")
     val owner: OwnerDto,
+
+    @SerializedName("categories")
+    val categories: List<String>,
 
     @SerializedName("status")
     val status: String,

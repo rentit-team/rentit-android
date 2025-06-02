@@ -9,12 +9,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.ContentScale
@@ -41,6 +43,9 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
     val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
     val period = productInfo.period
+
+    val categoryText = productInfo?.categories?.joinToString("·") ?: ""
+
     Box(
         modifier = Modifier
         .fillMaxWidth()
@@ -60,16 +65,15 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                modifier = Modifier
-                    .width(100.dp),
+                modifier = Modifier.size(100.dp).clip(RoundedCornerShape(20.dp)),
                 model = ImageRequest.Builder(LocalContext.current)
-                    .data(productInfo.thumbnailUrl)
+                    .data(productInfo.thumbnailImgUrl)
                     .error(R.drawable.img_thumbnail_placeholder)
                     .placeholder(R.drawable.img_thumbnail_placeholder)
                     .fallback(R.drawable.img_thumbnail_placeholder)
                     .build(),
                 contentDescription = stringResource(id = R.string.product_list_item_thumbnail_img_placeholder_description),
-                contentScale = ContentScale.Fit
+                contentScale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier
@@ -102,7 +106,7 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
                         text = if(period != null) {
-                                if(period.min != null && period.max != null) "${productInfo.period.min}일 이상 ~ ${productInfo.period.max}일 이하"
+                                if(period.min != null && period.max != null) "${productInfo.period.min}일 ~ ${productInfo.period.max}일"
                                     else if(period.min != null) "${productInfo.period.min}일 이상"
                                     else if(period.max != null) "${productInfo.period.max}일 이하"
                                     else "0일 이상"

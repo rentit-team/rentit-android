@@ -94,7 +94,7 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
             modifier = Modifier.fillMaxSize(),
         ) {
             items(productList) {
-                ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/${it.id}", saveStateEnabled = true, restoreStateEnabled = true) }
+                ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/${it.productId}", saveStateEnabled = true, restoreStateEnabled = true) }
             }
         }
     }
