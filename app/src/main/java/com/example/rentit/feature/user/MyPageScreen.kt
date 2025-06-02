@@ -15,12 +15,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +41,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
@@ -56,10 +60,16 @@ import com.example.rentit.feature.home.component.ProductListItem
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen() {
-    val myProductList = emptyList<ProductDto>()
     val onRentList = emptyList<ProductDto>()
+    val userViewModel: UserViewModel = hiltViewModel()
 
     var isFirstTabSelected by remember { mutableStateOf(true) }
+
+    LaunchedEffect(Unit) {
+        userViewModel.getCategoryList()
+    }
+
+    val myProductList by userViewModel.myProductList.collectAsStateWithLifecycle()
 
     Column {
         Column(
@@ -72,10 +82,12 @@ fun MyPageScreen() {
             InfoBox()
         }
         TabbedListSection(
-            isFirstTabSelected, myProductList, onRentList
-        ) {
-            isFirstTabSelected = !isFirstTabSelected
-        }
+            isFirstTabSelected = isFirstTabSelected,
+            myProductList = myProductList,
+            onRentList = onRentList,
+            onTabActive = { isFirstTabSelected = !isFirstTabSelected },
+            onItemClick = { }
+        )
     }
 }
 
@@ -210,6 +222,7 @@ fun TabbedListSection(
     myProductList: List<ProductDto>,
     onRentList: List<ProductDto>,
     onTabActive: () -> Unit,
+    onItemClick: (Int) -> Unit,
 ) {
     Row {
         TabTitle(
@@ -234,8 +247,8 @@ fun TabbedListSection(
     ) {
         val list = if (isFirstTabSelected) myProductList else onRentList
         if (list.isNotEmpty()) {
-            items(list.size) {
-                ProductListItem(list[it], true) { }
+            items(list) {
+                ProductListItem(it, true) { onItemClick(it.productId) }
             }
         } else {
             item {
