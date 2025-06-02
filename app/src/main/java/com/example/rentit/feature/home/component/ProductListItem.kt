@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
+import com.example.rentit.common.component.basicListItemTopDivider
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
@@ -55,14 +56,7 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .drawBehind {
-                drawLine(
-                    color = Gray200,
-                    start = Offset(0f, 0f),
-                    end = Offset(size.width, 0f),
-                    strokeWidth = 1.dp.toPx()
-                )
-            }
+            .basicListItemTopDivider()
             .background(Color.White)
             .clickable { onClick() })
     {

@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product.component.calendar
+package com.example.rentit.common.component.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -122,7 +122,7 @@ fun CalendarDate(
                             Text(
                                 text = date?.dayOfMonth?.toString() ?: "",
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = if (isPastDate && !isDisabled) Gray300
+                                color = if (isPastDate) Gray300
                                 else if (isDisabled || isStartDay || isEndDay) Color.White
                                 else AppBlack
 
