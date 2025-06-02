@@ -81,10 +81,10 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
 
     /* productDetail 로딩 실패 시 UI 필요 */
 
-    val imgUrlList = listOf(
+    /*val imgUrlList = listOf(
         "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg",
         "https://media.istockphoto.com/id/520700958/ko/%EC%82%AC%EC%A7%84/%EC%95%84%EB%A6%84%EB%8B%A4%EC%9A%B4-%EA%BD%83-%EB%B0%B0%EA%B2%BD%EA%B8%B0%EC%88%A0.jpg?s=612x612&w=0&k=20&c=gJx5-O9U1qXKZqKwv4KunrBae7RDNRcdse1nOdSk_0w="
-        )
+        )*/
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -99,9 +99,8 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
             Column(
                 modifier = Modifier
                     .verticalScroll(state = rememberScrollState())
-                    .background(Color.White)
             ) {
-                ImagePager(imgUrlList) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
+                ImagePager(listOf(productDetail?.thumbnailImgUrl)) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
                 PostHeader(productDetail?.title ?: "" , "카테고리",
                     "${productDetail?.createdAt?.substring(0, 10)}"
                 )
@@ -125,7 +124,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
 }
 
 @Composable
-fun ImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
+fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
     if(imgUrlList.isEmpty()){
         Image(
             modifier = Modifier.height(290.dp),
@@ -144,6 +143,7 @@ fun ImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
                     .height(290.dp)
                     .clickable { onClick },
                 placeholder = painterResource(id = R.drawable.img_placeholder),
+                error = painterResource(id = R.drawable.img_placeholder),
                 model = imgUrlList[page],
                 contentDescription = stringResource(id = R.string.screen_product_detail_img_description),
                 contentScale = ContentScale.Crop
@@ -206,13 +206,13 @@ fun PostHeader(title: String, category: String, creationDate: String) {
         Modifier
             .fillMaxWidth()
             .screenHorizontalPadding()
-            .padding(top = 16.dp, bottom = 13.dp),
+            .padding(top = 16.dp, bottom = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
             Text(text = title, style = MaterialTheme.typography.bodyLarge)
             Text(
-                modifier = Modifier.padding(top = 3.dp),
+                modifier = Modifier.padding(top = 5.dp),
                 text = "$category · $creationDate",
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
