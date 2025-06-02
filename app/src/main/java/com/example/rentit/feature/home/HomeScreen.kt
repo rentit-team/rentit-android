@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -35,7 +34,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonBorders
-import com.example.rentit.common.component.CommonLabelButton
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -86,9 +84,14 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CommonLabelButton(onClick = { /*TODO*/ }, text = stringResource(id = R.string.screen_home_label_btn_filter_rent_possibility))
-            Spacer(modifier = Modifier.width(9.dp))
-            CategoryFilterButton()
+            FilterButton(stringResource(id = R.string.screen_home_label_btn_filter_rent_possibility), Modifier.padding(end = 9.dp))
+            FilterButton(stringResource(id = R.string.screen_home_label_btn_filter_category)) {
+                Image(
+                    modifier = Modifier.padding(start = 4.dp),
+                    painter = painterResource(id = R.drawable.ic_chevron_down),
+                    contentDescription = stringResource(id = R.string.screen_home_label_btn_filter_category)
+                )
+            }
         }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -101,26 +104,22 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
 }
 
 @Composable
-fun CategoryFilterButton() {
+fun FilterButton(title: String, modifier: Modifier = Modifier, iconContent: @Composable () -> Unit = {}) {
     OutlinedButton(
-        modifier = Modifier.height(26.dp),
+        modifier = modifier.height(30.dp),
         onClick = { },
         shape = RoundedCornerShape(20.dp),
         border = CommonBorders.basicBorder(),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 10.dp),
+            modifier = Modifier.padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(id = R.string.screen_home_label_btn_filter_category),
-                style = MaterialTheme.typography.labelMedium)
-            Image(
-                painter = painterResource(id = R.drawable.ic_chevron_down),
-                contentDescription = stringResource(id = R.string.screen_home_label_btn_filter_category)
-            )
+                text = title,
+                style = MaterialTheme.typography.labelLarge)
+            iconContent()
         }
     }
 }

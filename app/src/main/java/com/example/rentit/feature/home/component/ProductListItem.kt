@@ -93,7 +93,7 @@ fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
                     )
                 }
                 Text(
-                    modifier = Modifier.padding(bottom = 18.dp),
+                    modifier = Modifier.padding(top = 4.dp, bottom = 18.dp),
                     text = "카테고리",
                     style = MaterialTheme.typography.labelMedium,
                     color = Gray400
