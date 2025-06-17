@@ -21,7 +21,7 @@ import java.time.YearMonth
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestCheckCalendar(requestPeriodList: List<RequestPeriodDto>) {
-    var yearMonth = remember { mutableStateOf(YearMonth.now()) }
+    val yearMonth = remember { mutableStateOf(YearMonth.now()) }
     val cellWidth = 48.dp
 
     fun changeMonth(monthsToAdd: Long) { yearMonth.value = yearMonth.value.plusMonths(monthsToAdd) }

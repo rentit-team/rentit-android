@@ -58,7 +58,7 @@ fun CalendarDate(
         YearMonth.now().year == yearMonth.year && YearMonth.now().month == yearMonth.month
 
     val disabledLocalDates = disabledDates.map { LocalDate.parse(it) }
-    var disabledDatesInMonth = Array(32) { false }
+    val disabledDatesInMonth = Array(32) { false }
     disabledLocalDates.forEach {
         disabledDatesInMonth[it.dayOfMonth] =
             yearMonth.year == it.year && yearMonth.month == it.month

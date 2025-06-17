@@ -1,6 +1,5 @@
 package com.example.rentit.feature.user
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.data.product.dto.ProductDto
