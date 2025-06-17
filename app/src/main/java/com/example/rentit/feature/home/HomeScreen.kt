@@ -1,40 +1,58 @@
 package com.example.rentit.feature.home
 
-import androidx.compose.foundation.BorderStroke
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonLabelButton
+import com.example.rentit.common.component.CommonBorders
+import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.home.component.ProductListItem
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeScreen() {
-    Column {
+fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifier) {
+    val homeViewModel: HomeViewModel = hiltViewModel()
+    val productListResult by homeViewModel.productList.collectAsState()
+
+    LaunchedEffect(Unit) {
+        homeViewModel.getProductList()
+    }
+
+    val productList = productListResult?.getOrNull()?.products ?: emptyList()
+
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -66,49 +84,51 @@ fun HomeScreen() {
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CommonLabelButton(onClick = { /*TODO*/ }, text = stringResource(id = R.string.screen_home_label_btn_filter_rent_possibility))
-            Spacer(modifier = Modifier.width(9.dp))
-            CategoryFilterButton()
+            FilterButton(stringResource(id = R.string.screen_home_label_btn_filter_rent_possibility), Modifier.padding(end = 9.dp))
+            FilterButton(stringResource(id = R.string.screen_home_label_btn_filter_category)) {
+                Image(
+                    modifier = Modifier.padding(start = 4.dp),
+                    painter = painterResource(id = R.drawable.ic_chevron_down),
+                    contentDescription = stringResource(id = R.string.screen_home_label_btn_filter_category)
+                )
+            }
         }
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
         ) {
-            this.items(10) {
-                ProductListItem()
+            items(productList) {
+                ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/${it.productId}", saveStateEnabled = true, restoreStateEnabled = true) }
             }
         }
     }
 }
 
 @Composable
-fun CategoryFilterButton() {
+fun FilterButton(title: String, modifier: Modifier = Modifier, iconContent: @Composable () -> Unit = {}) {
     OutlinedButton(
-        modifier = Modifier.height(26.dp),
+        modifier = modifier.height(30.dp),
         onClick = { },
         shape = RoundedCornerShape(20.dp),
-        border = BorderStroke(1.dp, Gray200),
+        border = CommonBorders.basicBorder(),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 10.dp),
+            modifier = Modifier.padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.padding(end = 4.dp),
-                text = stringResource(id = R.string.screen_home_label_btn_filter_category),
-                style = MaterialTheme.typography.labelMedium)
-            Image(
-                painter = painterResource(id = R.drawable.ic_chevron_down),
-                contentDescription = stringResource(id = R.string.screen_home_label_btn_filter_category)
-            )
+                text = title,
+                style = MaterialTheme.typography.labelLarge)
+            iconContent()
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     RentItTheme {
-        HomeScreen()
+        HomeScreen(rememberNavController())
     }
 }

@@ -6,5 +6,5 @@ import androidx.compose.ui.unit.dp
 
 // 화면 기본 수평 여백을 적용하는 Modifier
 fun Modifier.screenHorizontalPadding(): Modifier {
-    return this.then(Modifier.padding(horizontal = 25.dp))
+    return this.then(Modifier.padding(horizontal = 30.dp))
 }

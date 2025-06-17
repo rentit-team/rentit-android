@@ -88,6 +88,8 @@ dependencies {
     val navVersion = "2.8.9"
     implementation("androidx.navigation:navigation-compose:$navVersion")
 
+    implementation("io.coil-kt:coil-compose:2.4.0")
+
     // Specify Compose library dependencies without a version definition
     implementation("androidx.compose.foundation:foundation")
     testImplementation("androidx.compose.ui:ui-test-junit4")

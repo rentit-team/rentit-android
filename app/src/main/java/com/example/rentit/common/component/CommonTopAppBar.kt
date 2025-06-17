@@ -22,19 +22,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CommonTopAppBar(title: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun CommonTopAppBar(title: String = "", onClick: () -> Unit, modifier: Modifier = Modifier) {
     Box(modifier = modifier
         .fillMaxWidth()
-        .height(52.dp)
+        .height(60.dp)
         .background(Color.White)
-        .padding(top = 15.dp)
+        .padding(top = 5.dp)
     ){
         IconButton(
             onClick = onClick,
             modifier = Modifier.align(Alignment.CenterStart)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_arrow_left),
+                painter = painterResource(id = R.drawable.ic_chevron_left),
                 contentDescription = stringResource(id = R.string.common_top_app_bar_back_icon_description),
                 tint = AppBlack
             )

@@ -1,33 +1,51 @@
 package com.example.rentit.feature.home.component
 
-import androidx.compose.foundation.Image
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
+import com.example.rentit.data.product.dto.ProductDto
+import java.text.NumberFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProductListItem() {
+fun ProductListItem(productInfo: ProductDto, onClick: () -> Unit) {
+    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
+    val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
+    val period = productInfo.period
+
+    val categoryText = productInfo?.categories?.joinToString("·") ?: ""
+
     Box(
         modifier = Modifier
         .fillMaxWidth()
@@ -38,7 +56,7 @@ fun ProductListItem() {
                 end = Offset(size.width, 0f),
                 strokeWidth = 1.dp.toPx()
             )
-        })
+        }.clickable { onClick() })
     {
         Row(
             modifier = Modifier
@@ -46,12 +64,17 @@ fun ProductListItem() {
                 .padding(vertical = 22.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                modifier = Modifier
-                    .width(100.dp),
-                painter = painterResource(id = R.drawable.img_thumbnail_placeholder),
-                contentDescription = stringResource(id = R.string.product_list_item_thumbnail_img_placeholder_description
-                ))
+            AsyncImage(
+                modifier = Modifier.size(100.dp).clip(RoundedCornerShape(20.dp)),
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(productInfo.thumbnailImgUrl)
+                    .error(R.drawable.img_thumbnail_placeholder)
+                    .placeholder(R.drawable.img_thumbnail_placeholder)
+                    .fallback(R.drawable.img_thumbnail_placeholder)
+                    .build(),
+                contentDescription = stringResource(id = R.string.product_list_item_thumbnail_img_placeholder_description),
+                contentScale = ContentScale.Crop
+            )
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -62,15 +85,15 @@ fun ProductListItem() {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "게시글 제목", style = MaterialTheme.typography.bodyLarge)
+                    Text(text = productInfo.title, style = MaterialTheme.typography.bodyLarge)
                     Text(
-                        text = "대여 상태",
+                        text = productInfo.status,
                         style = MaterialTheme.typography.labelMedium,
                         color = SecondaryYellow
                     )
                 }
                 Text(
-                    modifier = Modifier.padding(bottom = 18.dp),
+                    modifier = Modifier.padding(top = 4.dp, bottom = 18.dp),
                     text = "카테고리",
                     style = MaterialTheme.typography.labelMedium,
                     color = Gray400
@@ -82,19 +105,26 @@ fun ProductListItem() {
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = "최소 대여 기간",
+                        text = if(period != null) {
+                                if(period.min != null && period.max != null) "${productInfo.period.min}일 ~ ${productInfo.period.max}일"
+                                    else if(period.min != null) "${productInfo.period.min}일 이상"
+                                    else if(period.max != null) "${productInfo.period.max}일 이하"
+                                    else "0일 이상"
+                        } else {
+                            "0일 이상"
+                        },
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = "작성일",
+                        text = "${localDateTime?.monthValue}.${localDateTime?.dayOfMonth}",
                         style = MaterialTheme.typography.labelMedium,
                         color = Gray400
                     )
                 }
-
-                Text(text = "가격(원)/일", style = MaterialTheme.typography.bodyLarge)
+                val numFormatter = NumberFormat.getNumberInstance()
+                Text(text = numFormatter.format(productInfo.price) + "원/일", style = MaterialTheme.typography.bodyLarge)
             }
         }
     }
@@ -105,6 +135,6 @@ fun ProductListItem() {
 @Composable
 fun ProductListItemPreview() {
     RentItTheme {
-        ProductListItem()
+        //ProductListItem {}
     }
 }
