@@ -1,8 +1,8 @@
 ---
-name: Feature Implementation Issue Template
-about: For planning and tracking new feature implementations.
+name: Feature
+about: New feature
 title: "[Feature] <Feature Name> Implementation"
-labels: ''
+labels: feature
 assignees: ''
 
 ---
@@ -11,7 +11,6 @@ assignees: ''
 - 
 
 ## ✅ Tasks
-- [] To-do
+- [ ] To-do
 
 ## 📎 References
--
