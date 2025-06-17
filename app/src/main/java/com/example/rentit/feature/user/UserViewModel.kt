@@ -1,5 +1,6 @@
 package com.example.rentit.feature.user
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.data.product.dto.ProductDto
@@ -18,7 +19,7 @@ class UserViewModel @Inject constructor(
     private val _myProductList = MutableStateFlow<List<ProductDto>>(emptyList())
     val myProductList: StateFlow<List<ProductDto>> = _myProductList
 
-    fun getCategoryList() {
+    fun getMyProductList() {
         viewModelScope.launch {
             repository.getMyProductList().onSuccess {
                 _myProductList.value = it.myProducts

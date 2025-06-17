@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
@@ -20,25 +21,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
+import com.example.rentit.common.component.ProductStatus.getKorProductStatus
 import com.example.rentit.common.component.basicListItemTopDivider
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.theme.SecondaryYellow
 import com.example.rentit.data.product.dto.ProductDto
 import java.text.NumberFormat
 import java.time.LocalDateTime
@@ -51,7 +50,7 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
     val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
     val period = productInfo.period
 
-    val categoryText = productInfo?.categories?.joinToString("·") ?: ""
+    val categoryText = productInfo.categories.joinToString("·") ?: ""
 
     Box(
         modifier = Modifier
@@ -67,7 +66,9 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                modifier = Modifier.size(100.dp).clip(RoundedCornerShape(20.dp)),
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(20.dp)),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(productInfo.thumbnailImgUrl)
                     .error(R.drawable.img_thumbnail_placeholder)
@@ -87,12 +88,14 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = productInfo.title, style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        text = productInfo.status,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = SecondaryYellow
-                    )
+                    Text(modifier = Modifier.width(160.dp), maxLines = 1, text = productInfo.title, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
+                    getKorProductStatus(productInfo.status)?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.labelMedium,
+                            color = PrimaryBlue500
+                        )
+                    }
                 }
                 Text(
                     modifier = Modifier.padding(top = 4.dp, bottom = 18.dp),
@@ -107,13 +110,17 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = if(period != null) {
-                                if(period.min != null && period.max != null) "${productInfo.period.min}일 ~ ${productInfo.period.max}일"
-                                    else if(period.min != null) "${productInfo.period.min}일 이상"
-                                    else if(period.max != null) "${productInfo.period.max}일 이하"
-                                    else "0일 이상"
+                        text = if (period != null) {
+                            if (period.min != null && period.max != null) stringResource(
+                                R.string.product_list_item_period_text_more_and_less_than_day,
+                                productInfo.period.min.toString(),
+                                productInfo.period.max.toString()
+                            )
+                            else if (period.min != null) stringResource(R.string.product_list_item_period_text_more_than_day, productInfo.period.min.toString())
+                            else if (period.max != null) stringResource(R.string.product_list_item_period_text_less_than_day, productInfo.period.max.toString())
+                            else stringResource(R.string.product_list_item_period_text_more_than_zero)
                         } else {
-                            "0일 이상"
+                            stringResource(R.string.product_list_item_period_text_more_than_zero)
                         },
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
@@ -132,14 +139,14 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = numFormatter.format(productInfo.price) + "원/일",
+                        text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     if(isMyProduct){
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 modifier = Modifier.padding(end = 6.dp),
-                                text = "요청 2건",
+                                text = stringResource(R.string.product_list_item_period_btn_check_request),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = PrimaryBlue500
                             )

@@ -14,26 +14,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.basicListItemTopDivider
-import com.example.rentit.common.theme.Gray200
+import com.example.rentit.common.component.getKorDayOfWeek
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.user.dto.RequestInfoDto
+import com.example.rentit.data.product.dto.RequestInfoDto
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestHistoryListItem(requestInfo: RequestInfoDto) {
+    val formatter = DateTimeFormatter.ofPattern("yy.MM.dd")
 
+    val requestedAt = LocalDateTime.parse(requestInfo.requestedAt).toLocalDate()
     val startDate = LocalDate.parse(requestInfo.startDate)
     val endDate = LocalDate.parse(requestInfo.endDate)
     val period = ChronoUnit.DAYS.between(startDate, endDate).toInt() + 1
@@ -41,17 +43,17 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 23.dp, horizontal = 25.dp)
             .basicListItemTopDivider()
+            .padding(vertical = 26.dp, horizontal = 30.dp)
     ) {
-        Row(modifier = Modifier.padding(bottom = 10.dp), verticalAlignment = Alignment.Bottom) {
+        Row(modifier = Modifier.padding(bottom = 12.dp), verticalAlignment = Alignment.Bottom) {
             Text(
                 modifier = Modifier.padding(end = 8.dp),
                 text = requestInfo.renterNickName,
                 style = MaterialTheme.typography.labelMedium
             )
             Text(
-                text = requestInfo.requestedAt,
+                text = "${requestedAt.format(formatter)} ${getKorDayOfWeek(requestedAt.dayOfWeek.toString())}",
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
             )
@@ -64,13 +66,13 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto) {
             Text(
                 text = stringResource(
                     id = R.string.request_history_list_item_period,
-                    requestInfo.startDate,
-                    startDate.dayOfWeek,
-                    requestInfo.endDate,
-                    endDate.dayOfWeek,
+                    startDate.format(formatter),
+                    getKorDayOfWeek(startDate.dayOfWeek.toString()),
+                    endDate.format(formatter),
+                    getKorDayOfWeek(endDate.dayOfWeek.toString()),
                     period
                 ),
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyLarge
             )
             Row(
                 modifier = Modifier.padding(start = 20.dp),

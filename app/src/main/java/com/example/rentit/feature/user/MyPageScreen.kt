@@ -43,10 +43,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
+import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.basicRoundedGrayBorder
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
@@ -59,14 +63,14 @@ import com.example.rentit.feature.home.component.ProductListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MyPageScreen() {
+fun MyPageScreen(navHostController: NavHostController) {
     val onRentList = emptyList<ProductDto>()
     val userViewModel: UserViewModel = hiltViewModel()
 
     var isFirstTabSelected by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        userViewModel.getCategoryList()
+        userViewModel.getMyProductList()
     }
 
     val myProductList by userViewModel.myProductList.collectAsStateWithLifecycle()
@@ -86,7 +90,7 @@ fun MyPageScreen() {
             myProductList = myProductList,
             onRentList = onRentList,
             onTabActive = { isFirstTabSelected = !isFirstTabSelected },
-            onItemClick = { }
+            onItemClick = { id -> moveScreen(navHostController, NavigationRoutes.NAVHOSTMYPRODUCTDETAIL + "/$id", saveStateEnabled = true, restoreStateEnabled = true) }
         )
     }
 }
@@ -301,6 +305,6 @@ fun TabTitle(title: String, isTabSelected: Boolean, modifier: Modifier, onClick:
 @Composable
 fun PreviewMyPageScreen() {
     RentItTheme {
-        MyPageScreen()
+        MyPageScreen(rememberNavController())
     }
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.data.product.dto.BookingRequestDto
 import com.example.rentit.data.product.dto.BookingResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
+import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,6 +18,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
@@ -25,6 +28,37 @@ class ProductViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val repository: ProductRepository
 ) : ViewModel() {
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss") // requestedAt 형식을 위한 포맷터
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val sampleReservationsList = listOf(
+        RequestInfoDto(
+            reservationId = 1001,
+            renterNickName = "눈송",
+            startDate = "2025-06-15",
+            endDate = "2025-06-17",
+            status = "PENDING",
+            requestedAt = LocalDateTime.of(2025, 3, 20, 14, 0, 0).format(formatter)
+        ),
+        RequestInfoDto(
+            reservationId = 1002,
+            renterNickName = "눈송",
+            startDate = "2025-07-01",
+            endDate = "2025-07-05",
+            status = "PENDING",
+            requestedAt = LocalDateTime.of(2025, 4, 10, 10, 30, 0).format(formatter)
+        ),
+        RequestInfoDto(
+            reservationId = 1003,
+            renterNickName = "눈송",
+            startDate = "2025-06-10",
+            endDate = "2025-06-12",
+            status = "PENDING",
+            requestedAt = LocalDateTime.of(2025, 4, 25, 16, 15, 0).format(formatter)
+        ),
+    )
 
     private val _productId = savedStateHandle.getStateFlow("productId", -1)
     val productId: StateFlow<Int> = _productId
@@ -58,6 +92,10 @@ class ProductViewModel @Inject constructor(
 
     private val _bookingResult =  MutableStateFlow<Result<BookingResponseDto>?>(null)
     val bookingResult: StateFlow<Result<BookingResponseDto>?> = _bookingResult
+
+    private val _requestList =  MutableStateFlow<List<RequestInfoDto>>(emptyList())
+    val requestList: StateFlow<List<RequestInfoDto>> = _requestList
+
 
     init {
         viewModelScope.launch {
@@ -104,6 +142,14 @@ class ProductViewModel @Inject constructor(
         val request = BookingRequestDto(startDate.toString(), endDate.toString())
         viewModelScope.launch {
             _bookingResult.value = repository.postBooking(productId, request)
+        }
+    }
+
+    fun getProductRequestList(productId: Int){
+        viewModelScope.launch {
+            repository.getProductRequestList(productId).onSuccess {
+                _requestList.value = it.reservations
+            }
         }
     }
 }

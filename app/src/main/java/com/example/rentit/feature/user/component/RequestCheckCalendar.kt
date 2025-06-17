@@ -15,11 +15,12 @@ import com.example.rentit.common.component.calendar.CalendarDate
 import com.example.rentit.common.component.calendar.CalendarHeader
 import com.example.rentit.common.component.calendar.DayOfWeek
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.data.product.dto.RequestPeriodDto
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestCheckCalendar() {
+fun RequestCheckCalendar(requestPeriodList: List<RequestPeriodDto>) {
     var yearMonth = remember { mutableStateOf(YearMonth.now()) }
     val cellWidth = 48.dp
 
@@ -28,7 +29,13 @@ fun RequestCheckCalendar() {
     Column(modifier = Modifier.padding(bottom = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         CalendarHeader(yearMonth.value, { changeMonth(-1) }, { changeMonth(1) })
         DayOfWeek(cellWidth)
-        CalendarDate(yearMonth = yearMonth.value, disabledDates = emptyList(), cellWidth = cellWidth)
+        CalendarDate(
+            yearMonth = yearMonth.value,
+            disabledDates = emptyList(),
+            cellWidth = cellWidth,
+            isPastDateDisabled = true,
+            requestPeriodList = requestPeriodList
+        )
     }
 }
 
@@ -37,6 +44,6 @@ fun RequestCheckCalendar() {
 @Composable
 fun PreviewRequestCheckCalendar() {
     RentItTheme {
-        RequestCheckCalendar()
+        RequestCheckCalendar(emptyList())
     }
 }
