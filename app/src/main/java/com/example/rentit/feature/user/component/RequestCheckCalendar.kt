@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product.component.calendar
+package com.example.rentit.feature.user.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -15,28 +15,35 @@ import com.example.rentit.common.component.calendar.CalendarDate
 import com.example.rentit.common.component.calendar.CalendarHeader
 import com.example.rentit.common.component.calendar.DayOfWeek
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.data.product.dto.RequestPeriodDto
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ReadOnlyCalender(yearMonth: YearMonth, disabledDates: List<String> = listOf("2025-04-03", "2025-04-28", "2025-05-01", "2025-05-03"), modifier: Modifier = Modifier) {
-    var yearMonth = remember { mutableStateOf(yearMonth) }
+fun RequestCheckCalendar(requestPeriodList: List<RequestPeriodDto>) {
+    val yearMonth = remember { mutableStateOf(YearMonth.now()) }
     val cellWidth = 48.dp
 
     fun changeMonth(monthsToAdd: Long) { yearMonth.value = yearMonth.value.plusMonths(monthsToAdd) }
 
-    Column(modifier = modifier.padding(bottom = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.padding(bottom = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         CalendarHeader(yearMonth.value, { changeMonth(-1) }, { changeMonth(1) })
         DayOfWeek(cellWidth)
-        CalendarDate(yearMonth = yearMonth.value, disabledDates = disabledDates, cellWidth = cellWidth)
+        CalendarDate(
+            yearMonth = yearMonth.value,
+            disabledDates = emptyList(),
+            cellWidth = cellWidth,
+            isPastDateDisabled = true,
+            requestPeriodList = requestPeriodList
+        )
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewReadOnlyCalender() {
+fun PreviewRequestCheckCalendar() {
     RentItTheme {
-        ReadOnlyCalender(YearMonth.now())
+        RequestCheckCalendar(emptyList())
     }
 }

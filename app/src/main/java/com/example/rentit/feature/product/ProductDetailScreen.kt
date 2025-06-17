@@ -33,6 +33,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -69,15 +70,24 @@ import java.text.NumberFormat
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
+fun ProductDetailScreen(navHostController: NavHostController, productViewModel: ProductViewModel, isMyProduct: Boolean = false) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
     var showFullImage by remember { mutableStateOf(false) }
 
+    val productId by productViewModel.productId.collectAsStateWithLifecycle()
     val productDetailResult by productViewModel.productDetail.collectAsStateWithLifecycle()
     val reservedDateList by productViewModel.reservedDateList.collectAsStateWithLifecycle()
 
+    val sampleRequestHistory = productViewModel.sampleReservationsList
+
     val productDetail = productDetailResult?.getOrNull()?.product
+    
+    if(isMyProduct && productId > -1) {
+        LaunchedEffect(Unit) {
+            productViewModel.getProductRequestList(productId)
+        }
+    }
 
     /* productDetail 로딩 실패 시 UI 필요 */
 
@@ -89,7 +99,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) },
-        bottomBar = { PostBottomBar(navHostController, productDetail?.price ?: 0) },
+        bottomBar = { PostBottomBar(navHostController, productDetail?.price ?: 0, isMyProduct, sampleRequestHistory.size) },
         floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
         Box(
@@ -235,7 +245,7 @@ fun PostHeader(title: String, category: String, creationDate: String) {
 }
 
 @Composable
-fun PostBottomBar(navHostController: NavHostController, price: Int) {
+fun PostBottomBar(navHostController: NavHostController, price: Int, isMyProduct: Boolean, requestCount: Int) {
     val formattedPrice = NumberFormat.getNumberInstance().format(price)
     // Shadow for bottom bar
     Box(modifier = Modifier
@@ -253,11 +263,15 @@ fun PostBottomBar(navHostController: NavHostController, price: Int) {
         verticalAlignment = Alignment.CenterVertically) {
         Text(
             modifier = Modifier.weight(1F),
-            text = "$formattedPrice " + stringResource(id = R.string.screen_product_price_unit),
+            text = "$formattedPrice " + stringResource(id = R.string.common_price_unit),
             style = MaterialTheme.typography.titleLarge
         )
-        MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
-        MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.BOOKINGREQUEST)  }
+        if(isMyProduct) {
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { moveScreen(navHostController, NavigationRoutes.REQUESTHISTORY) }
+        } else {
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
+            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.BOOKINGREQUEST)  }
+        }
     }
 }
 

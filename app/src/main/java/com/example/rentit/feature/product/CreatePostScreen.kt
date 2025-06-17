@@ -359,7 +359,7 @@ fun PriceInputSection(priceInput: TextFieldValue, onValueChange: (String) -> Uni
             modifier = Modifier.width(140.dp)
         )
         Text(
-            text = stringResource(id = R.string.screen_product_create_price_unit),
+            text = stringResource(id = R.string.common_price_unit),
             modifier = Modifier.padding(start = 10.dp),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray800

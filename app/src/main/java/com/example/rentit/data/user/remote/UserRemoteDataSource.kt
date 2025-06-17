@@ -2,6 +2,7 @@ package com.example.rentit.data.user.remote
 
 import com.example.rentit.data.user.dto.GoogleLoginRequestDto
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
+import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.SignUpRequestDto
 import retrofit2.Response
 import javax.inject.Inject
@@ -17,5 +18,9 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun signUp(name: String?, email: String, nickname: String, profileImageUrl: String?): Response<Unit> {
         val request = SignUpRequestDto(name, email, nickname, profileImageUrl)
         return userApiService.signUp(request)
+    }
+
+    suspend fun getMyProductList(): Response<MyProductListResponseDto> {
+        return userApiService.getMyProductList()
     }
 }

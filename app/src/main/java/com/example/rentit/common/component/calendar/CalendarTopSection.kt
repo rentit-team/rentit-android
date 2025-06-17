@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product.component.calendar
+package com.example.rentit.common.component.calendar
 
 import android.os.Build
 import androidx.annotation.RequiresApi

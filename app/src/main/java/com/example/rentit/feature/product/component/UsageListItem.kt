@@ -1,5 +1,7 @@
 package com.example.rentit.feature.product.component
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,15 +15,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.rentit.R
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UsageListItem() {
+fun UsageListItem(
+    periodCnt: Int = 0,
+    startDate: LocalDate = LocalDate.now(),
+    endDate: LocalDate = LocalDate.now(),
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -45,11 +55,11 @@ fun UsageListItem() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "지역",
+                    text = stringResource(R.string.usage_list_item_title_rent_booking),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
-                    text = "대여/예약 기간",
+                    text = stringResource(R.string.usage_list_item_text_rent_period_count, periodCnt),
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary
                 )
@@ -57,7 +67,7 @@ fun UsageListItem() {
 
             Text(
                 modifier = Modifier.padding(top = 6.dp),
-                text = "기간 ~ 기간",
+                text = stringResource(R.string.usage_list_item_text_rent_period, startDate.toString(), endDate.toString()),
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
             )
@@ -65,6 +75,7 @@ fun UsageListItem() {
     }
 
 }
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PreviewUsageListItem() {
