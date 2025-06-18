@@ -1,6 +1,5 @@
 package com.example.rentit
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -37,11 +36,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        authViewModel.handleGoogleSignInResult(requestCode, resultCode, data)
     }
 }
 
