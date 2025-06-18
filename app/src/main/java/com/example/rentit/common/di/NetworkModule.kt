@@ -1,7 +1,6 @@
 package com.example.rentit.common.di
 
 import android.content.Context
-import android.util.Log
 import com.example.rentit.common.storage.getToken
 import dagger.Module
 import dagger.Provides
@@ -12,13 +11,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Inject
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val baseUrl = "http://api.rentit.o-r.kr:8080/"
+    private const val BASE_URL = "http://api.rentit.o-r.kr:8080/"
 
     @Provides
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
@@ -27,12 +25,12 @@ object NetworkModule {
         }
 
     @Provides
-    fun provideOkHttpClient(tokenProvider: TokenProvider, loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun provideOkHttpClient(@ApplicationContext context: Context, loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor {
                 val request = it.request().newBuilder()
-                    .addHeader("Authorization", "Bearer ${tokenProvider.getAccessToken()}")
+                    .addHeader("Authorization", "Bearer ${getToken(context)}")
                     .build()
                 it.proceed(request)
             }
@@ -43,18 +41,8 @@ object NetworkModule {
         client: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-}
-
-
-class TokenProvider @Inject constructor(
-    @ApplicationContext private val context: Context
-) {
-    fun getAccessToken(): String {
-        Log.d("TOKEN", "${getToken(context)}")
-        return getToken(context) ?: ""
-    }
 }
