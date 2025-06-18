@@ -113,11 +113,11 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                         text = if (period != null) {
                             if (period.min != null && period.max != null) stringResource(
                                 R.string.product_list_item_period_text_more_and_less_than_day,
-                                productInfo.period.min.toString(),
-                                productInfo.period.max.toString()
+                                productInfo.period.min!!.toInt(),
+                                productInfo.period.max!!.toInt()
                             )
-                            else if (period.min != null) stringResource(R.string.product_list_item_period_text_more_than_day, productInfo.period.min.toString())
-                            else if (period.max != null) stringResource(R.string.product_list_item_period_text_less_than_day, productInfo.period.max.toString())
+                            else if (period.min != null) stringResource(R.string.product_list_item_period_text_more_than_day, productInfo.period.min!!.toInt())
+                            else if (period.max != null) stringResource(R.string.product_list_item_period_text_less_than_day, productInfo.period.max!!.toInt())
                             else stringResource(R.string.product_list_item_period_text_more_than_zero)
                         } else {
                             stringResource(R.string.product_list_item_period_text_more_than_zero)
