@@ -161,7 +161,7 @@ fun MyProductDetailNavHost(productId: Int?) {
     }
 
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
-        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel, true) }
+        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
