@@ -45,6 +45,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,6 +60,7 @@ import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
@@ -70,7 +72,7 @@ import java.text.NumberFormat
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailScreen(navHostController: NavHostController, productViewModel: ProductViewModel, isMyProduct: Boolean = false) {
+fun ProductDetailScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
     var showFullImage by remember { mutableStateOf(false) }
@@ -82,8 +84,12 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
     val sampleRequestHistory = productViewModel.sampleReservationsList
 
     val productDetail = productDetailResult?.getOrNull()?.product
-    
-    if(isMyProduct && productId > -1) {
+    val ownerId = productDetail?.owner?.userId ?: -1
+
+    val myId = getMyIdFromPrefs(LocalContext.current).toInt()
+    val isMyProduct = ownerId > -1 && myId == ownerId
+
+    if(isMyProduct) {
         LaunchedEffect(Unit) {
             productViewModel.getProductRequestList(productId)
         }

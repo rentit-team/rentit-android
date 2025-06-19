@@ -2,6 +2,7 @@ package com.example.rentit.data.user.remote
 
 import com.example.rentit.data.user.dto.GoogleLoginRequestDto
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
+import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.SignUpRequestDto
 import retrofit2.Response
@@ -18,6 +19,10 @@ interface UserApiService {
     @POST("api/v1/users/signup")
     @Headers("Content-Type: application/json")
     suspend fun signUp(@Body request: SignUpRequestDto): Response<Unit>
+
+    @GET("api/v1/users/me")
+    @Headers("Content-Type: application/json")
+    suspend fun getMyInfo(): Response<MyInfoResponseDto>
 
     @GET("api/v1/users/products")
     @Headers("Content-Type: application/json")
