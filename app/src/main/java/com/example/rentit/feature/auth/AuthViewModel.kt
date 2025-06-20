@@ -58,7 +58,7 @@ class AuthViewModel @Inject constructor(
         }
     }
 
-    fun onSignUp(name: String?, email: String, nickname: String, profileImageUrl: String? = null) {
+    fun onSignUp(name: String = "", email: String, nickname: String, profileImageUrl: String = "") {
         viewModelScope.launch {
             signUpResult = repository.signUp(name, email, nickname, profileImageUrl)
         }
