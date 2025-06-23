@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class SignUpRequestDto(
     @SerializedName("name")
-    val name: String?,
+    val name: String,
 
     @SerializedName("email")
     val email: String,
@@ -13,5 +13,5 @@ data class SignUpRequestDto(
     val nickname: String,
 
     @SerializedName("profileImgUrl")
-    val profileImgUrl: String?,
+    val profileImgUrl: String,
 )

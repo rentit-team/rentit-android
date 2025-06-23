@@ -16,7 +16,7 @@ class UserRemoteDataSource @Inject constructor(
         return userApiService.googleLogin(request)
     }
 
-    suspend fun signUp(name: String?, email: String, nickname: String, profileImageUrl: String?): Response<Unit> {
+    suspend fun signUp(name: String, email: String, nickname: String, profileImageUrl: String): Response<Unit> {
         val request = SignUpRequestDto(name, email, nickname, profileImageUrl)
         return userApiService.signUp(request)
     }

@@ -37,7 +37,7 @@ class UserRepository @Inject constructor(
         }
     }
 
-    suspend fun signUp(name: String?, email: String, nickname: String, profileImageUrl: String?): Result<Unit> {
+    suspend fun signUp(name: String, email: String, nickname: String, profileImageUrl: String): Result<Unit> {
         return try {
             val response = remoteDataSource.signUp(name, email, nickname, profileImageUrl)
             when(response.code()) {
