@@ -7,6 +7,9 @@
 
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_price_unit">원/일</string>
+    <string name="common_list_item_thumbnail_img_placeholder_description">임시 이미지</string>
+    <string name="common_tag_btn_icon_check_description">선택된 태그</string>
+    <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
 
     <string name="screen_login_app_logo_description">랜팃 로고</string>
     <string name="screen_login_google_logo_description">구글 로고</string>
@@ -18,7 +21,6 @@
     <string name="screen_join_headline">에서 사용할\n닉네임을 정해주세요.</string>
     <string name="screen_join_nickname_empty_notification">닉네임을 1자 이상 입력해 주세요.</string>
 
-    <string name="product_list_item_thumbnail_img_placeholder_description">임시 이미지</string>
     <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
     <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
     <string name="product_list_item_period_text_less_than_day">%d일 이하</string>
@@ -67,11 +69,9 @@
     <string name="screen_product_create_rental_period_label">대여 가능 기간</string>
     <string name="screen_product_create_rental_period_text">최소 %d일 ~ 최대 %d일</string>
     <string name="screen_product_create_price_label">가격</string>
-
     <string name="screen_product_create_complete_btn_text">등록하기</string>
-
-    <string name="common_tag_btn_icon_check_description">선택된 태그</string>
-    <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
+    
+    <string name="screen_chat_list_btn_up_to_date_order">최신순</string>
 
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
