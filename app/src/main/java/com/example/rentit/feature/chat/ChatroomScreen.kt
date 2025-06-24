@@ -75,6 +75,7 @@ fun ChatroomScreen() {
 
     var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val scrollState = rememberScrollState()
+    var showAcceptDialog by remember { mutableStateOf(false) }
 
     val isCursorAtEnd = textFieldValue.selection.max == textFieldValue.text.length
 
@@ -91,8 +92,8 @@ fun ChatroomScreen() {
             ProductInfo()
             sampleData.chatRoom.statusHistory.lastOrNull()?.let { statusInfo ->
                 RequestInfo(statusInfo)
-                if(BookingStatus.isPending(statusInfo.status)){
-                    BookingActions()
+                if (BookingStatus.isPending(statusInfo.status)) {
+                    BookingActions(onAcceptAction = { showAcceptDialog = true })
                 }
             }
         }
@@ -101,6 +102,12 @@ fun ChatroomScreen() {
             textFieldValue = textFieldValue,
             scrollState = scrollState,
             onValueChange = { textFieldValue = it }
+        )
+    }
+    if (showAcceptDialog) {
+        RequestAcceptDialog(
+            onDismissRequest = { showAcceptDialog = false },
+            onAcceptRequest = { }
         )
     }
 }
@@ -203,7 +210,7 @@ private fun RequestInfo(statusInfo: StatusHistoryDto) {
 
 // 거절하기 / 수락하기 버튼
 @Composable
-private fun BookingActions(acceptAction: () -> Unit = {}, rejectAction: () -> Unit = {}) {
+private fun BookingActions(onAcceptAction: () -> Unit = {}, onRejectAction: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -214,12 +221,12 @@ private fun BookingActions(acceptAction: () -> Unit = {}, rejectAction: () -> Un
             modifier = Modifier.weight(1F),
             text = stringResource(R.string.screen_chatroom_request_action_btn_reject),
             textColor = Gray400,
-        ) { acceptAction() }
+        ) { onRejectAction() }
         ActionButton(
             modifier = Modifier.weight(1F),
             text = stringResource(R.string.screen_chatroom_request_action_btn_accept),
             textColor = PrimaryBlue500,
-        ) { rejectAction() }
+        ) { onAcceptAction() }
     }
 }
 

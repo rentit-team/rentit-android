@@ -78,6 +78,12 @@
     <string name="screen_chatroom_request_action_btn_accept">수락하기</string>
     <string name="screen_chatroom_input_placeholder">메세지를 입력하세요</string>
 
+    <string name="modal_chatroom_accept_request_title">요청을 수락할까요?</string>
+    <string name="modal_chatroom_accept_request_label_rental_period">대여 기간</string>
+    <string name="modal_chatroom_accept_request_label_total_price">총 금액</string>
+    <string name="modal_chatroom_accept_request_btn_accept">수락</string>
+    <string name="modal_chatroom_accept_request_btn_cancel">취소</string>
+
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
     <string name="screen_mypage_info_text_start">내가 대여한 %s의 반납일이</string>
