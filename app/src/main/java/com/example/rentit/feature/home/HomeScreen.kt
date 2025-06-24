@@ -5,20 +5,14 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
-import androidx.compose.material.Text
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,7 +27,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonBorders
+import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -99,27 +93,6 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
             items(productList) {
                 ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/${it.productId}", saveStateEnabled = true, restoreStateEnabled = true) }
             }
-        }
-    }
-}
-
-@Composable
-fun FilterButton(title: String, modifier: Modifier = Modifier, iconContent: @Composable () -> Unit = {}) {
-    OutlinedButton(
-        modifier = modifier.height(30.dp),
-        onClick = { },
-        shape = RoundedCornerShape(20.dp),
-        border = CommonBorders.basicBorder(),
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.labelLarge)
-            iconContent()
         }
     }
 }

@@ -7,6 +7,9 @@
 
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_price_unit">원/일</string>
+    <string name="common_list_item_thumbnail_img_placeholder_description">임시 이미지</string>
+    <string name="common_tag_btn_icon_check_description">선택된 태그</string>
+    <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
 
     <string name="screen_login_app_logo_description">랜팃 로고</string>
     <string name="screen_login_google_logo_description">구글 로고</string>
@@ -18,7 +21,6 @@
     <string name="screen_join_headline">에서 사용할\n닉네임을 정해주세요.</string>
     <string name="screen_join_nickname_empty_notification">닉네임을 1자 이상 입력해 주세요.</string>
 
-    <string name="product_list_item_thumbnail_img_placeholder_description">임시 이미지</string>
     <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
     <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
     <string name="product_list_item_period_text_less_than_day">%d일 이하</string>
@@ -49,7 +51,6 @@
     <string name="screen_booking_request_label_total_fee">합계</string>
     <string name="screen_booking_request_btn_booking_request">예약 요청</string>
 
-    <string name="screen_request_confirm_icon_check_description">확인 아이콘</string>
     <string name="screen_request_confirm_title">요청이 전달되었어요!</string>
     <string name="screen_request_confirm_booking_period">예약 기간</string>
     <string name="screen_request_confirm_total_price">총 금액</string>
@@ -67,11 +68,23 @@
     <string name="screen_product_create_rental_period_label">대여 가능 기간</string>
     <string name="screen_product_create_rental_period_text">최소 %d일 ~ 최대 %d일</string>
     <string name="screen_product_create_price_label">가격</string>
-
     <string name="screen_product_create_complete_btn_text">등록하기</string>
+    
+    <string name="screen_chat_list_btn_up_to_date_order">최신순</string>
 
-    <string name="common_tag_btn_icon_check_description">선택된 태그</string>
-    <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
+    <string name="screen_chatroom_request_info_label">보낸 요청</string>
+    <string name="screen_chatroom_request_action_btn_reject">거절하기</string>
+    <string name="screen_chatroom_request_action_btn_accept">수락하기</string>
+    <string name="screen_chatroom_input_placeholder">메세지를 입력하세요</string>
+
+    <string name="modal_chatroom_accept_request_title">요청을 수락할까요?</string>
+    <string name="modal_chatroom_accept_request_label_rental_period">대여 기간</string>
+    <string name="modal_chatroom_accept_request_label_total_price">총 금액</string>
+    <string name="modal_chatroom_accept_request_btn_accept">수락</string>
+    <string name="modal_chatroom_accept_request_btn_cancel">취소</string>
+
+    <string name="screen_accept_confirm_title">요청이 수락되었어요!</string>
+    <string name="screen_accept_confirm_btn_complete">완료</string>
 
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
@@ -92,7 +105,9 @@
     <string name="content_description_for_ic_chevron_right">오른쪽 꺽쇠 아이콘</string>
     <string name="content_description_for_ic_bell">알림 아이콘</string>
     <string name="content_description_for_ic_setting">설정 아이콘</string>
+    <string name="content_description_for_ic_send">전송 아이콘</string>
     <string name="content_description_for_img_profile_placeholder">프로필 임시 이미지</string>
     <string name="content_description_for_img_empty_box">빈 박스 이미지</string>
+    <string name="content_description_for_ic_check">확인 아이콘</string>
 
 </resources>

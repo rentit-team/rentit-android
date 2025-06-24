@@ -75,7 +75,7 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                     .placeholder(R.drawable.img_thumbnail_placeholder)
                     .fallback(R.drawable.img_thumbnail_placeholder)
                     .build(),
-                contentDescription = stringResource(id = R.string.product_list_item_thumbnail_img_placeholder_description),
+                contentDescription = stringResource(id = R.string.common_list_item_thumbnail_img_placeholder_description),
                 contentScale = ContentScale.Crop
             )
             Column(

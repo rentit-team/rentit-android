@@ -116,7 +116,7 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
     // TopBar, BottomBar 등에 UI가 가려지지 않도록 padding으로 안전한 영역 확보
     NavHost(navController = navHostController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
         composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController) }
-        composable(BottomNavItem.Chat.screenRoute) { ChatListScreen("ChatListScreen") }
+        composable(BottomNavItem.Chat.screenRoute) { ChatListScreen() }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen(navHostController) }
         composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")

@@ -53,7 +53,7 @@ fun RequestConfirmationScreen(navHostController: NavHostController, productViewM
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(painter = painterResource(id = R.drawable.ic_check_circle), contentDescription = stringResource(
-            id = R.string.screen_request_confirm_icon_check_description), tint = PrimaryBlue500 )
+            id = R.string.content_description_for_ic_check), tint = PrimaryBlue500 )
         Text(modifier = Modifier.padding(vertical = 34.dp), text = stringResource(
             id = R.string.screen_request_confirm_title), style = MaterialTheme.typography.headlineLarge)
         Row(modifier = Modifier
