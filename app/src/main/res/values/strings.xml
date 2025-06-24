@@ -51,7 +51,6 @@
     <string name="screen_booking_request_label_total_fee">합계</string>
     <string name="screen_booking_request_btn_booking_request">예약 요청</string>
 
-    <string name="screen_request_confirm_icon_check_description">확인 아이콘</string>
     <string name="screen_request_confirm_title">요청이 전달되었어요!</string>
     <string name="screen_request_confirm_booking_period">예약 기간</string>
     <string name="screen_request_confirm_total_price">총 금액</string>
@@ -84,6 +83,9 @@
     <string name="modal_chatroom_accept_request_btn_accept">수락</string>
     <string name="modal_chatroom_accept_request_btn_cancel">취소</string>
 
+    <string name="screen_accept_confirm_title">요청이 수락되었어요!</string>
+    <string name="screen_accept_confirm_btn_complete">완료</string>
+
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
     <string name="screen_mypage_info_text_start">내가 대여한 %s의 반납일이</string>
@@ -106,5 +108,6 @@
     <string name="content_description_for_ic_send">전송 아이콘</string>
     <string name="content_description_for_img_profile_placeholder">프로필 임시 이미지</string>
     <string name="content_description_for_img_empty_box">빈 박스 이미지</string>
+    <string name="content_description_for_ic_check">확인 아이콘</string>
 
 </resources>
