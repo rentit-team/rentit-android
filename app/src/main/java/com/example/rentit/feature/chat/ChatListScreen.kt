@@ -40,7 +40,7 @@ fun ChatListScreen() {
 }
 
 @Composable
-fun TopSection() {
+private fun TopSection() {
     Row {
         Text(
             text = stringResource(id = R.string.title_activity_chat_tab),

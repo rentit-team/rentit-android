@@ -73,6 +73,11 @@
     
     <string name="screen_chat_list_btn_up_to_date_order">최신순</string>
 
+    <string name="screen_chatroom_request_info_label">보낸 요청</string>
+    <string name="screen_chatroom_request_action_btn_reject">거절하기</string>
+    <string name="screen_chatroom_request_action_btn_accept">수락하기</string>
+    <string name="screen_chatroom_input_placeholder">메세지를 입력하세요</string>
+
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
     <string name="screen_mypage_info_text_start">내가 대여한 %s의 반납일이</string>
@@ -92,6 +97,7 @@
     <string name="content_description_for_ic_chevron_right">오른쪽 꺽쇠 아이콘</string>
     <string name="content_description_for_ic_bell">알림 아이콘</string>
     <string name="content_description_for_ic_setting">설정 아이콘</string>
+    <string name="content_description_for_ic_send">전송 아이콘</string>
     <string name="content_description_for_img_profile_placeholder">프로필 임시 이미지</string>
     <string name="content_description_for_img_empty_box">빈 박스 이미지</string>
 

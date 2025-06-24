@@ -113,7 +113,7 @@ fun ChatListItem() {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun formatDateTime(dateTimeString: String): String {
+private fun formatDateTime(dateTimeString: String): String {
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
     val localDateTime = LocalDateTime.parse(dateTimeString, formatter)
     val dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
