@@ -45,18 +45,18 @@ class ProductViewModel @Inject constructor(
         RequestInfoDto(
             reservationId = 1002,
             renterNickName = "눈송",
-            startDate = "2025-07-01",
+            startDate = "2025-07-04",
             endDate = "2025-07-05",
             status = "PENDING",
             requestedAt = LocalDateTime.of(2025, 4, 10, 10, 30, 0).format(formatter)
         ),
         RequestInfoDto(
-            reservationId = 1003,
+            reservationId = 21,
             renterNickName = "눈송",
-            startDate = "2025-06-10",
-            endDate = "2025-06-12",
+            startDate = "2025-06-27",
+            endDate = "2025-07-03",
             status = "PENDING",
-            requestedAt = LocalDateTime.of(2025, 4, 25, 16, 15, 0).format(formatter)
+            requestedAt = LocalDateTime.of(2025, 6, 25, 16, 15, 0).format(formatter)
         ),
     )
 
