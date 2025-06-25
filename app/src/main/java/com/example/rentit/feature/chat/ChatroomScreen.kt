@@ -47,12 +47,16 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.component.BookingStatus
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
@@ -69,7 +73,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatroomScreen() {
+fun ChatroomScreen(navHostController: NavHostController) {
     val chatViewModel: ChatViewModel = hiltViewModel()
     val sampleData = chatViewModel.exampleChatDetailResponse
 
@@ -107,7 +111,7 @@ fun ChatroomScreen() {
     if (showAcceptDialog) {
         RequestAcceptDialog(
             onDismissRequest = { showAcceptDialog = false },
-            onAcceptRequest = { }
+            onAcceptRequest = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) }
         )
     }
 }
@@ -344,6 +348,6 @@ private fun formatDateTime(dateTimeString: String): String {
 @Composable
 fun PreviewChatroomScreen() {
     RentItTheme {
-        ChatroomScreen()
+        ChatroomScreen(rememberNavController())
     }
 }

@@ -18,4 +18,8 @@ object NavigationRoutes {
 
     const val NAVHOSTMYPRODUCTDETAIL = "NAVHOSTMYPRODUCTDETAIL"
     const val REQUESTHISTORY = "REQUESTHISTORY"
+
+    const val NAVHOSTCHAT = "NAVHOSTCHAT"
+    const val CHATROOM = "CHATROOM"
+    const val ACCEPTCONFIRM = "ACCEPTCONFIRM"
 }

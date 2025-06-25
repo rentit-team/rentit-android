@@ -21,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto
@@ -61,7 +63,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
             ) {
                 item { Spacer(Modifier.size(2.dp)) }
                 items(groupedByMonth[yearMonth] ?: emptyList()) { info ->
-                    RequestHistoryListItem(requestInfo = info) {}
+                    RequestHistoryListItem(requestInfo = info) { moveScreen(navHostController, NavigationRoutes.NAVHOSTCHAT) }
                 }
                 item { Spacer(Modifier.size(50.dp)) }
             }

@@ -36,7 +36,9 @@ import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.feature.chat.AcceptConfirmationScreen
 import com.example.rentit.feature.chat.ChatListScreen
+import com.example.rentit.feature.chat.ChatroomScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.user.MyPageScreen
 import com.example.rentit.feature.product.BookingRequestScreen
@@ -116,11 +118,12 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
     // TopBar, BottomBar 등에 UI가 가려지지 않도록 padding으로 안전한 영역 확보
     NavHost(navController = navHostController, startDestination = BottomNavItem.Home.screenRoute, modifier = Modifier.padding(paddingValues)){
         composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController) }
-        composable(BottomNavItem.Chat.screenRoute) { ChatListScreen() }
+        composable(BottomNavItem.Chat.screenRoute) { ChatListScreen(navHostController) }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen(navHostController) }
         composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
             ProductDetailNavHost(productId) }
+        composable(NavigationRoutes.NAVHOSTCHAT) { ChatroomNavHost() }
         composable(NavigationRoutes.NAVHOSTMYPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
             MyProductDetailNavHost(productId) }
@@ -163,6 +166,18 @@ fun MyProductDetailNavHost(productId: Int?) {
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
         composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.NAVHOSTCHAT) { ChatroomNavHost() }
+        composable(NavigationRoutes.MAIN) { MainView() }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ChatroomNavHost() {
+    val navHostController: NavHostController = rememberNavController()
+    NavHost(navController =  navHostController, startDestination = NavigationRoutes.CHATROOM){
+        composable(NavigationRoutes.CHATROOM) { ChatroomScreen(navHostController) }
+        composable(NavigationRoutes.ACCEPTCONFIRM) { AcceptConfirmationScreen(navHostController) }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
 }

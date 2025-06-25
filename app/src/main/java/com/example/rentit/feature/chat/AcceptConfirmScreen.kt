@@ -17,6 +17,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -25,7 +27,7 @@ import com.example.rentit.common.theme.RentItTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AcceptConfirmationScreen() {
+fun AcceptConfirmationScreen(navHostController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -52,6 +54,7 @@ fun AcceptConfirmationScreen() {
             containerColor = PrimaryBlue500,
             contentColor = Color.White,
         ) {
+            navHostController.popBackStack()
         }
     }
 }
@@ -61,6 +64,6 @@ fun AcceptConfirmationScreen() {
 @Composable
 fun PreviewAcceptConfirmationScreen() {
     RentItTheme {
-        AcceptConfirmationScreen()
+        AcceptConfirmationScreen(rememberNavController())
     }
 }
