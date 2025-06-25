@@ -25,6 +25,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.getKorDayOfWeek
+import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -45,6 +47,9 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
     val endDate = LocalDate.parse(requestInfo.endDate)
     val period = ChronoUnit.DAYS.between(startDate, endDate).toInt() + 1
 
+    val isPast = startDate.isBefore(LocalDate.now())
+    val pastDateColor = Gray300
+
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -63,12 +68,13 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
                 Text(
                     modifier = Modifier.padding(end = 8.dp),
                     text = requestInfo.renterNickName,
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.labelMedium,
+                    color = if (isPast) pastDateColor else AppBlack
                 )
                 Text(
                     text = "${requestedAt.format(formatter)} ${getKorDayOfWeek(requestedAt.dayOfWeek.toString())}",
                     style = MaterialTheme.typography.labelMedium,
-                    color = Gray400
+                    color = if (isPast) pastDateColor else Gray400
                 )
             }
             Row(
@@ -85,9 +91,14 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
                         getKorDayOfWeek(endDate.dayOfWeek.toString()),
                         period
                     ),
-                    style = MaterialTheme.typography.labelLarge
+                    style = MaterialTheme.typography.labelLarge,
+                    color = if (isPast) pastDateColor else AppBlack
                 )
-                TextButton(modifier = Modifier.padding(start = 20.dp), onClick = onStartChatClick) {
+                TextButton(
+                    modifier = Modifier.padding(start = 20.dp),
+                    onClick = onStartChatClick,
+                    enabled = !isPast
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -95,14 +106,14 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
                             modifier = Modifier.padding(end = 4.dp),
                             text = stringResource(id = R.string.request_history_list_item_text_chat),
                             style = MaterialTheme.typography.labelLarge,
-                            color = PrimaryBlue500
+                            color = if (isPast) pastDateColor else PrimaryBlue500
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.ic_chevron_right),
                             contentDescription = stringResource(
                                 id = R.string.content_description_for_ic_chevron_right
                             ),
-                            tint = PrimaryBlue500
+                            tint = if (isPast) pastDateColor else PrimaryBlue500
                         )
                     }
                 }
