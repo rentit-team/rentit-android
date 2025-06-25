@@ -39,7 +39,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListItem() {
+fun ChatListItem(onClick: () -> Unit) {
     val data = ChatRoomDataDto(
         chatroomId = "sadsadsadfas",
         productTitle = "캐논 EOS 550D",
@@ -54,7 +54,7 @@ fun ChatListItem() {
             .fillMaxWidth()
             .basicListItemTopDivider()
             .background(Color.White)
-            .clickable { })
+            .clickable { onClick() })
     {
         Row(
             modifier = Modifier
@@ -125,6 +125,6 @@ private fun formatDateTime(dateTimeString: String): String {
 @Composable
 fun ChatListItemPreview() {
     RentItTheme {
-        ChatListItem()
+        ChatListItem {}
     }
 }

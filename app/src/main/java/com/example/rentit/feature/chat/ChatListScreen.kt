@@ -16,15 +16,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
+import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.feature.chat.component.ChatListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListScreen() {
+fun ChatListScreen(navHostController: NavHostController) {
     Column(Modifier
         .fillMaxSize()
         .padding(top = 45.dp)) {
@@ -35,7 +39,7 @@ fun ChatListScreen() {
             TopSection()
             OrderButtonSection()
         }
-        ChatListSection()
+        ChatListSection { moveScreen(navHostController, NavigationRoutes.NAVHOSTCHAT) }
     }
 }
 
@@ -63,10 +67,10 @@ fun OrderButtonSection() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListSection() {
+fun ChatListSection(onClick: () -> Unit) {
     LazyColumn {
         items(5) {
-            ChatListItem()
+            ChatListItem { onClick() }
         }
     }
 }
@@ -76,6 +80,6 @@ fun ChatListSection() {
 @Composable
 fun ChatListScreenPreview() {
     RentItTheme {
-        ChatListScreen()
+        ChatListScreen(rememberNavController())
     }
 }
