@@ -124,9 +124,6 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
             val productId = backStackEntry.arguments?.getInt("productId")
             ProductDetailNavHost(productId) }
         composable(NavigationRoutes.NAVHOSTCHAT) { ChatroomNavHost() }
-        composable(NavigationRoutes.NAVHOSTMYPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId")
-            MyProductDetailNavHost(productId) }
         composable(NavigationRoutes.CREATEPOST) { CreatePostNavHost() }
     }
 }
@@ -147,24 +144,6 @@ fun ProductDetailNavHost(productId: Int?) {
         composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.MAIN) { MainView() }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun MyProductDetailNavHost(productId: Int?) {
-    val navHostController: NavHostController = rememberNavController()
-    val productViewModel: ProductViewModel = hiltViewModel()
-
-    LaunchedEffect(productId) {
-        if (productId != null) {
-            productViewModel.setProductId(productId)
-        }
-    }
-
-    NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
-        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.NAVHOSTCHAT) { ChatroomNavHost() }
         composable(NavigationRoutes.MAIN) { MainView() }

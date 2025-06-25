@@ -90,7 +90,7 @@ fun MyPageScreen(navHostController: NavHostController) {
             myProductList = myProductList,
             onRentList = onRentList,
             onTabActive = { isFirstTabSelected = !isFirstTabSelected },
-            onItemClick = { id -> moveScreen(navHostController, NavigationRoutes.NAVHOSTMYPRODUCTDETAIL + "/$id", saveStateEnabled = true, restoreStateEnabled = true) }
+            onItemClick = { id -> moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/$id", saveStateEnabled = true, restoreStateEnabled = true) }
         )
     }
 }
