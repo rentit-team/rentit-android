@@ -2,16 +2,21 @@ package com.example.rentit.feature.user
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestPeriodDto
 import com.example.rentit.feature.product.ProductViewModel
@@ -35,10 +40,12 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
             modifier = Modifier.padding(it)
         ) {
             RequestCheckCalendar(requestPeriodList)
-            LazyColumn {
+            LazyColumn(modifier = Modifier.screenHorizontalPadding(), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                item { Spacer(Modifier.size(2.dp)) }
                 items(sampleRequestHistory) { info ->
-                    RequestHistoryListItem(requestInfo = info)
+                    RequestHistoryListItem(requestInfo = info) {}
                 }
+                item { Spacer(Modifier.size(50.dp)) }
             }
         }
     }

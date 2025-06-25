@@ -26,7 +26,7 @@ fun RequestCheckCalendar(requestPeriodList: List<RequestPeriodDto>) {
 
     fun changeMonth(monthsToAdd: Long) { yearMonth.value = yearMonth.value.plusMonths(monthsToAdd) }
 
-    Column(modifier = Modifier.padding(bottom = 32.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         CalendarHeader(yearMonth.value, { changeMonth(-1) }, { changeMonth(1) })
         DayOfWeek(cellWidth)
         CalendarDate(
