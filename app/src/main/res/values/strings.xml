@@ -72,6 +72,8 @@
     
     <string name="screen_chat_list_btn_up_to_date_order">최신순</string>
 
+    <string name="error_chat_list_load">채팅 목록을 불러올 수 없어요</string>
+
     <string name="screen_chatroom_request_info_label">보낸 요청</string>
     <string name="screen_chatroom_request_action_btn_reject">거절하기</string>
     <string name="screen_chatroom_request_action_btn_accept">수락하기</string>

@@ -1,18 +1,30 @@
 package com.example.rentit.feature.chat
 
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.rentit.R
 import com.example.rentit.data.chat.dto.ChangedByDto
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.dto.ChatMessageDto
 import com.example.rentit.data.chat.dto.ChatParticipantDto
 import com.example.rentit.data.chat.dto.ChatRoomDetailDto
+import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
 import com.example.rentit.data.chat.dto.SenderDto
 import com.example.rentit.data.chat.dto.StatusHistoryDto
+import com.example.rentit.data.chat.repository.ChatRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
+    private val chatRepository: ChatRepository
 ) : ViewModel() {
     val exampleChatDetailResponse = ChatDetailResponseDto(
         chatRoom = ChatRoomDetailDto(
@@ -85,5 +97,18 @@ class ChatViewModel @Inject constructor(
         hasNext = false,
         totalPage = 2
     )
+
+    private val _chatList = MutableStateFlow<List<ChatRoomSummaryDto>>(emptyList())
+    val chatList: StateFlow<List<ChatRoomSummaryDto>> = _chatList
+
+    fun getChatList(onError: (Throwable) -> Unit = {}) {
+        viewModelScope.launch {
+            chatRepository.getChatList()
+                .onSuccess {
+                    _chatList.value = it.chatRooms
+                }
+                .onFailure(onError)
+        }
+    }
 
 }

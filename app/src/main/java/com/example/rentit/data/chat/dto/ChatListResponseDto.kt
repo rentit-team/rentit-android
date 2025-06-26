@@ -2,9 +2,9 @@ package com.example.rentit.data.chat.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ChatRoomListResponseDto(
+data class ChatListResponseDto(
     @SerializedName("chatrooms")
-    val chatrooms: List<ChatRoomDataDto>,
+    val chatRooms: List<ChatRoomSummaryDto>,
 
     @SerializedName("hasNext")
     val hasNext: Boolean,
@@ -13,9 +13,9 @@ data class ChatRoomListResponseDto(
     val totalPage: Int
 )
 
-data class ChatRoomDataDto(
+data class ChatRoomSummaryDto(
     @SerializedName("chatroomId")
-    val chatroomId: String,
+    val chatRoomId: String,
 
     @SerializedName("productTitle")
     val productTitle: String,
@@ -27,5 +27,5 @@ data class ChatRoomDataDto(
     val lastMessage: String,
 
     @SerializedName("lastMessageTime")
-    val lastMessageTime: String,
+    val lastMessageTime: String?,
 )
