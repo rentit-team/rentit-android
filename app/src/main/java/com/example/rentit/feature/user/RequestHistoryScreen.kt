@@ -1,6 +1,7 @@
 package com.example.rentit.feature.user
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,6 +39,7 @@ import java.time.YearMonth
 fun RequestHistoryScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
     //val requestHistory by productViewModel.requestList.collectAsStateWithLifecycle()
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
+    val productId by productViewModel.productId.collectAsStateWithLifecycle()
     val sampleRequestHistory = productViewModel.sampleReservationsList
 
     val requestPeriodList: List<RequestPeriodDto> = sampleRequestHistory.map {
@@ -63,7 +65,16 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
             ) {
                 item { Spacer(Modifier.size(2.dp)) }
                 items(groupedByMonth[yearMonth] ?: emptyList()) { info ->
-                    RequestHistoryListItem(requestInfo = info) { moveScreen(navHostController, NavigationRoutes.NAVHOSTCHAT) }
+                    RequestHistoryListItem(requestInfo = info) {
+                        if(info.chatRoomId != null) {
+                            moveScreen(
+                                navHostController,
+                                "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.chatRoomId}"
+                            )
+                        } else {
+                            Toast.makeText(navHostController.context, "채팅방이 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
                 item { Spacer(Modifier.size(50.dp)) }
             }

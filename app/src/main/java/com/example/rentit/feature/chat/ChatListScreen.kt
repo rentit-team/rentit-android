@@ -65,7 +65,12 @@ fun ChatListScreen(navHostController: NavHostController) {
         }
         LazyColumn {
             items(chatList) {
-                ChatListItem(it) { moveScreen(navHostController, NavigationRoutes.NAVHOSTCHAT) }
+                ChatListItem(it) {
+                    moveScreen(
+                        navHostController,
+                        "${NavigationRoutes.NAVHOSTCHAT}/0/${it.chatRoomId}"
+                    )
+                }
             }
         }
     }

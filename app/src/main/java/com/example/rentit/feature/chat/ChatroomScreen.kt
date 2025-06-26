@@ -77,7 +77,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatroomScreen(navHostController: NavHostController) {
+fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRoomId: String?) {
     val chatViewModel: ChatViewModel = hiltViewModel()
     val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -89,13 +89,18 @@ fun ChatroomScreen(navHostController: NavHostController) {
     val isCursorAtEnd = textFieldValue.selection.max == textFieldValue.text.length
 
     LaunchedEffect(Unit) {
-        chatViewModel.getChatDetail(chatRoomMessageId = "room_74248fca-630a-4d25-9e26-a3b943afe300"){
-            var toastMsg = context.getString(R.string.error_chat_unknown)
-            when(it){
-                is ForbiddenChatAccessException -> toastMsg = context.getString(R.string.error_chat_access)
-                is ServerException -> toastMsg = context.getString(R.string.error_common_server)
-                else -> Unit
+        var toastMsg = context.getString(R.string.error_chat_unknown)
+        if (chatRoomId != null) {
+            chatViewModel.getChatDetail(chatRoomId){
+                when(it){
+                    is ForbiddenChatAccessException -> toastMsg = context.getString(R.string.error_chat_access)
+                    is ServerException -> toastMsg = context.getString(R.string.error_common_server)
+                    else -> Unit
+                }
+                Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
+                moveScreen(navHostController, NavigationRoutes.MAIN)
             }
+        } else {
             Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
             moveScreen(navHostController, NavigationRoutes.MAIN)
         }
@@ -368,6 +373,6 @@ private fun formatDateTime(dateTimeString: String): String {
 @Composable
 fun PreviewChatroomScreen() {
     RentItTheme {
-        ChatroomScreen(rememberNavController())
+        ChatroomScreen(rememberNavController(), -1, "")
     }
 }

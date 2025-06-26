@@ -120,10 +120,23 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
         composable(BottomNavItem.Home.screenRoute) { HomeScreen(navHostController) }
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen(navHostController) }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen(navHostController) }
-        composable(NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}", arguments = listOf(navArgument("productId") { type = NavType.IntType })) { backStackEntry ->
+        composable(
+            route = NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}",
+            arguments = listOf(navArgument("productId") { type = NavType.IntType })
+        ) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
-            ProductDetailNavHost(productId) }
-        composable(NavigationRoutes.NAVHOSTCHAT) { ChatroomNavHost() }
+            ProductDetailNavHost(productId)
+        }
+        composable(
+            route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{chatRoomId}",
+            arguments = listOf(
+                navArgument("productId") { type = NavType.IntType },
+                navArgument("chatRoomId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val pId = backStackEntry.arguments?.getInt("productId")
+            val cId = backStackEntry.arguments?.getString("chatRoomId")
+            ChatroomNavHost(pId, cId)
+        }
         composable(NavigationRoutes.CREATEPOST) { CreatePostNavHost() }
     }
 }
@@ -145,17 +158,26 @@ fun ProductDetailNavHost(productId: Int?) {
         composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.NAVHOSTCHAT) { ChatroomNavHost() }
+        composable(
+            route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{chatRoomId}",
+            arguments = listOf(
+                navArgument("productId") { type = NavType.IntType },
+                navArgument("chatRoomId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val pId = backStackEntry.arguments?.getInt("productId")
+            val cId = backStackEntry.arguments?.getString("chatRoomId")
+            ChatroomNavHost(pId, cId)
+        }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatroomNavHost() {
+fun ChatroomNavHost(productId: Int?, chatRoomId: String?) {
     val navHostController: NavHostController = rememberNavController()
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.CHATROOM){
-        composable(NavigationRoutes.CHATROOM) { ChatroomScreen(navHostController) }
+        composable(NavigationRoutes.CHATROOM) { ChatroomScreen(navHostController, productId, chatRoomId) }
         composable(NavigationRoutes.ACCEPTCONFIRM) { AcceptConfirmationScreen(navHostController) }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
