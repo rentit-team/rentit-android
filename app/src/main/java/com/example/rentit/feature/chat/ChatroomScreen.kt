@@ -1,6 +1,7 @@
 package com.example.rentit.feature.chat
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
@@ -58,6 +60,8 @@ import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
+import com.example.rentit.common.exception.chat.ServerException
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
@@ -75,7 +79,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ChatroomScreen(navHostController: NavHostController) {
     val chatViewModel: ChatViewModel = hiltViewModel()
-    val sampleData = chatViewModel.exampleChatDetailResponse
+    val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val scrollState = rememberScrollState()
@@ -83,37 +88,52 @@ fun ChatroomScreen(navHostController: NavHostController) {
 
     val isCursorAtEnd = textFieldValue.selection.max == textFieldValue.text.length
 
+    LaunchedEffect(Unit) {
+        chatViewModel.getChatDetail(chatRoomMessageId = "room_74248fca-630a-4d25-9e26-a3b943afe300"){
+            var toastMsg = context.getString(R.string.error_chat_unknown)
+            when(it){
+                is ForbiddenChatAccessException -> toastMsg = context.getString(R.string.error_chat_access)
+                is ServerException -> toastMsg = context.getString(R.string.error_common_server)
+                else -> Unit
+            }
+            Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
+            moveScreen(navHostController, NavigationRoutes.MAIN)
+        }
+    }
+
     LaunchedEffect(textFieldValue.text) {
         if (isCursorAtEnd) {
             scrollState.animateScrollTo(scrollState.maxValue)
         }
     }
 
-    Column(Modifier.background(Color.White)) {
-        CommonTopAppBar(onClick = { /*TODO*/ })
-        // 상단 예약 관련 정보
-        Column(Modifier.screenHorizontalPadding()) {
-            ProductInfo()
-            sampleData.chatRoom.statusHistory.lastOrNull()?.let { statusInfo ->
-                RequestInfo(statusInfo)
-                if (BookingStatus.isPending(statusInfo.status)) {
-                    BookingActions(onAcceptAction = { showAcceptDialog = true })
+    chatDetail?.let { detail ->
+        Column(Modifier.background(Color.White)) {
+            CommonTopAppBar(onClick = { /*TODO*/ })
+            // 상단 예약 관련 정보
+            Column(Modifier.screenHorizontalPadding()) {
+                ProductInfo()
+                detail.chatRoom.statusHistory.lastOrNull()?.let { statusInfo ->
+                    RequestInfo(statusInfo)
+                    if (BookingStatus.isPending(statusInfo.status)) {
+                        BookingActions(onAcceptAction = { showAcceptDialog = true })
+                    }
                 }
             }
+            ChatMsgList(Modifier.weight(1F), detail.messages)
+            BottomInputBar(
+                textFieldValue = textFieldValue,
+                scrollState = scrollState,
+                onValueChange = { textFieldValue = it }
+            )
         }
-        ChatMsgList(Modifier.weight(1F), sampleData.messages)
-        BottomInputBar(
-            textFieldValue = textFieldValue,
-            scrollState = scrollState,
-            onValueChange = { textFieldValue = it }
-        )
-    }
-    if (showAcceptDialog) {
-        RequestAcceptDialog(
-            onDismissRequest = { showAcceptDialog = false },
-            onAcceptRequest = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) }
-        )
-    }
+        if (showAcceptDialog) {
+            RequestAcceptDialog(
+                onDismissRequest = { showAcceptDialog = false },
+                onAcceptRequest = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) }
+            )
+        }
+    } ?: return
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
