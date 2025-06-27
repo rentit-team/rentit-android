@@ -69,6 +69,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.chat.dto.ChatMessageDto
 import com.example.rentit.data.chat.dto.StatusHistoryDto
+import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.feature.chat.component.ReceivedMsgBubble
 import com.example.rentit.feature.chat.component.SentMsgBubble
 import java.text.NumberFormat
@@ -79,6 +80,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRoomId: String?) {
     val chatViewModel: ChatViewModel = hiltViewModel()
+    val productDetail by chatViewModel.productDetail.collectAsStateWithLifecycle()
     val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
@@ -90,13 +92,17 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
 
     LaunchedEffect(Unit) {
         var toastMsg = context.getString(R.string.error_chat_unknown)
-        if (chatRoomId != null) {
+        if (chatRoomId != null && productId != null) {
             chatViewModel.getChatDetail(chatRoomId){
                 when(it){
                     is ForbiddenChatAccessException -> toastMsg = context.getString(R.string.error_chat_access)
                     is ServerException -> toastMsg = context.getString(R.string.error_common_server)
                     else -> Unit
                 }
+                Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
+                moveScreen(navHostController, NavigationRoutes.MAIN)
+            }
+            chatViewModel.getProductDetail(productId){
                 Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
                 moveScreen(navHostController, NavigationRoutes.MAIN)
             }
@@ -112,41 +118,45 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
         }
     }
 
-    chatDetail?.let { detail ->
-        Column(Modifier.background(Color.White)) {
-            CommonTopAppBar(onClick = { /*TODO*/ })
-            // 상단 예약 관련 정보
-            Column(Modifier.screenHorizontalPadding()) {
-                ProductInfo()
-                detail.chatRoom.statusHistory.lastOrNull()?.let { statusInfo ->
-                    RequestInfo(statusInfo)
-                    if (BookingStatus.isPending(statusInfo.status)) {
-                        BookingActions(onAcceptAction = { showAcceptDialog = true })
-                    }
+    Column(Modifier.background(Color.White)) {
+        CommonTopAppBar(onClick = { /*TODO*/ })
+        // 상단 예약 관련 정보
+        productDetail?.let { ProductInfo(it.product) } ?: Column(Modifier
+            .fillMaxWidth()
+            .height(100.dp)) {}
+        chatDetail?.let { detail ->
+            detail.chatRoom.statusHistory.lastOrNull()?.let { statusInfo ->
+                RequestInfo(statusInfo)
+                if (BookingStatus.isPending(statusInfo.status)) {
+                    BookingActions(onAcceptAction = { showAcceptDialog = true })
                 }
             }
             ChatMsgList(Modifier.weight(1F), detail.messages)
-            BottomInputBar(
-                textFieldValue = textFieldValue,
-                scrollState = scrollState,
-                onValueChange = { textFieldValue = it }
-            )
-        }
-        if (showAcceptDialog) {
-            RequestAcceptDialog(
-                onDismissRequest = { showAcceptDialog = false },
-                onAcceptRequest = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) }
-            )
-        }
-    } ?: return
+        } ?: Column(Modifier.weight(1F)){}
+        BottomInputBar(
+            textFieldValue = textFieldValue,
+            scrollState = scrollState,
+            onValueChange = { textFieldValue = it }
+        )
+    }
+    if (showAcceptDialog) {
+        RequestAcceptDialog(
+            onDismissRequest = { showAcceptDialog = false },
+            onAcceptRequest = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) }
+        )
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun ProductInfo() {
-    val lastMessageTime = formatDateTime("2025-04-09T22:00:00")
+private fun ProductInfo(productInfo: ProductDto) {
+    val lastMessageTime = formatDateTime(productInfo.createdAt)
     val numFormatter = NumberFormat.getNumberInstance()
+    val period = productInfo.period
     Row(
+        modifier = Modifier
+            .screenHorizontalPadding()
+            .padding(bottom = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
@@ -154,7 +164,7 @@ private fun ProductInfo() {
                 .size(60.dp)
                 .clip(RoundedCornerShape(15.dp)),
             model = ImageRequest.Builder(LocalContext.current)
-                .data("")
+                .data(productInfo.thumbnailImgUrl)
                 .error(R.drawable.img_thumbnail_placeholder)
                 .placeholder(R.drawable.img_thumbnail_placeholder)
                 .fallback(R.drawable.img_thumbnail_placeholder)
@@ -174,12 +184,29 @@ private fun ProductInfo() {
                 Text(
                     modifier = Modifier.width(160.dp),
                     maxLines = 1,
-                    text = "캐논 EOS 550D",
+                    text = productInfo.title,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyLarge
                 )
                 Text(
-                    text = "0일 이상",
+                    text = if (period != null) {
+                        if (period.min != null && period.max != null) stringResource(
+                            R.string.product_list_item_period_text_more_and_less_than_day,
+                            period.min.toInt(),
+                            period.max.toInt()
+                        )
+                        else if (period.min != null) stringResource(
+                            R.string.product_list_item_period_text_more_than_day,
+                            period.min.toInt()
+                        )
+                        else if (period.max != null) stringResource(
+                            R.string.product_list_item_period_text_less_than_day,
+                            period.max.toInt()
+                        )
+                        else stringResource(R.string.product_list_item_period_text_more_than_zero)
+                    } else {
+                        stringResource(R.string.product_list_item_period_text_more_than_zero)
+                    },
                     style = MaterialTheme.typography.bodyLarge,
                     color = PrimaryBlue500
                 )
@@ -192,7 +219,7 @@ private fun ProductInfo() {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = numFormatter.format(100000) + stringResource(R.string.common_price_unit),
+                    text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Gray400
                 )
@@ -212,7 +239,8 @@ private fun RequestInfo(statusInfo: StatusHistoryDto) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 20.dp),
+            .screenHorizontalPadding()
+            .padding(bottom = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row {
@@ -243,6 +271,7 @@ private fun BookingActions(onAcceptAction: () -> Unit = {}, onRejectAction: () -
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .screenHorizontalPadding()
             .padding(bottom = 14.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
