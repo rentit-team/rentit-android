@@ -61,7 +61,7 @@ import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
-import com.example.rentit.common.exception.chat.ServerException
+import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800

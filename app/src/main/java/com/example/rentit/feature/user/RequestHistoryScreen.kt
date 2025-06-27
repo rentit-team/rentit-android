@@ -17,10 +17,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
+import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
@@ -38,9 +41,11 @@ import java.time.YearMonth
 @Composable
 fun RequestHistoryScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
     //val requestHistory by productViewModel.requestList.collectAsStateWithLifecycle()
+    val userViewModel: UserViewModel = hiltViewModel()
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
     val productId by productViewModel.productId.collectAsStateWithLifecycle()
     val sampleRequestHistory = productViewModel.sampleReservationsList
+    val errorMsgNewChatRoom = LocalContext.current.getString(R.string.error_mypage_new_chatroom)
 
     val requestPeriodList: List<RequestPeriodDto> = sampleRequestHistory.map {
         RequestPeriodDto(
@@ -66,13 +71,24 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
                 item { Spacer(Modifier.size(2.dp)) }
                 items(groupedByMonth[yearMonth] ?: emptyList()) { info ->
                     RequestHistoryListItem(requestInfo = info) {
-                        if(info.chatRoomId != null) {
+                        if (info.chatRoomId != null) {
                             moveScreen(
                                 navHostController,
                                 "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.chatRoomId}"
                             )
                         } else {
-                            Toast.makeText(navHostController.context, "채팅방이 없습니다.", Toast.LENGTH_SHORT).show()
+                            userViewModel.postNewChat(
+                                productId = productId,
+                                onSuccess = { chatRoomId ->
+                                    moveScreen(
+                                        navHostController,
+                                        "${NavigationRoutes.NAVHOSTCHAT}/$productId/$chatRoomId"
+                                    )
+                                },
+                                onError = {
+                                    Toast.makeText(navHostController.context, errorMsgNewChatRoom, Toast.LENGTH_SHORT).show()
+                                }
+                            )
                         }
                     }
                 }

@@ -44,13 +44,13 @@ class ProductViewModel @Inject constructor(
             chatRoomId = "room_74248fca-630a-4d25-9e26-a3b943afe300"
         ),
         RequestInfoDto(
-            reservationId = 1002,
+            reservationId = 22,
             renterNickName = "눈송",
             startDate = "2025-07-04",
             endDate = "2025-07-05",
             status = "PENDING",
             requestedAt = LocalDateTime.of(2025, 4, 10, 10, 30, 0).format(formatter),
-            chatRoomId = "room_74248fca-630a-4d25-9e26-a3b943afe300"
+            chatRoomId = null   // 채팅방 생성 테스트 용
         ),
         RequestInfoDto(
             reservationId = 21,
