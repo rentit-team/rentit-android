@@ -26,7 +26,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.chat.dto.ChatMessageDto
 import com.example.rentit.data.chat.dto.SenderDto
-import java.time.OffsetDateTime
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -65,8 +65,7 @@ fun SentMsgBubble(msg: ChatMessageDto) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun formatDateTime(dateTimeString: String): String {
-    val offsetDateTime = OffsetDateTime.parse(dateTimeString)
-    val localDateTime = offsetDateTime.toLocalDateTime()
+    val localDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
     return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 }
 

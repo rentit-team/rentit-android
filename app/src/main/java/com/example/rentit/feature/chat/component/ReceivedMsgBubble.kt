@@ -83,7 +83,7 @@ fun ReceivedMsgBubble(msg: ChatMessageDto) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 private fun formatDateTime(dateTimeString: String): String {
-    val localDateTime = LocalDateTime.parse(dateTimeString)
+    val localDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
     return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 }
 
