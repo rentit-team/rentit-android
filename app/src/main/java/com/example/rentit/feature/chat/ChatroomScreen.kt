@@ -1,6 +1,7 @@
 package com.example.rentit.feature.chat
 
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
@@ -29,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,11 +69,11 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.chat.dto.ChatMessageDto
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.feature.chat.component.ReceivedMsgBubble
 import com.example.rentit.feature.chat.component.SentMsgBubble
+import com.example.rentit.feature.chat.model.ChatMessageUiModel
 import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -82,40 +84,52 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
     val chatViewModel: ChatViewModel = hiltViewModel()
     val productDetail by chatViewModel.productDetail.collectAsStateWithLifecycle()
     val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
-    val initialMessages by chatViewModel.initialMessages.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    val senderNickname by chatViewModel.senderNickname.collectAsStateWithLifecycle()
+    val initialMessages by chatViewModel.initialMessages.collectAsStateWithLifecycle()
+    val realTimeMessages by chatViewModel.realTimeMessages.collectAsStateWithLifecycle()
+
     var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
-    val scrollState = rememberScrollState()
+    val inputScrollState = rememberScrollState()
     var showAcceptDialog by remember { mutableStateOf(false) }
 
     val isCursorAtEnd = textFieldValue.selection.max == textFieldValue.text.length
 
     LaunchedEffect(Unit) {
-        var toastMsg = context.getString(R.string.error_chat_unknown)
+        var errorMsg = context.getString(R.string.error_chat_unknown)
         if (chatRoomId != null && productId != null) {
+            chatViewModel.connectWebSocket(chatRoomId) {
+                Toast.makeText(context, context.getString(R.string.toast_chatroom_entered), Toast.LENGTH_SHORT).show()
+            }
             chatViewModel.getChatDetail(chatRoomId){
                 when(it){
-                    is ForbiddenChatAccessException -> toastMsg = context.getString(R.string.error_chat_access)
-                    is ServerException -> toastMsg = context.getString(R.string.error_common_server)
+                    is ForbiddenChatAccessException -> errorMsg = context.getString(R.string.error_chat_access)
+                    is ServerException -> errorMsg = context.getString(R.string.error_common_server)
                     else -> Unit
                 }
-                Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
                 moveScreen(navHostController, NavigationRoutes.MAIN)
             }
             chatViewModel.getProductDetail(productId){
-                Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
                 moveScreen(navHostController, NavigationRoutes.MAIN)
             }
         } else {
-            Toast.makeText(context, toastMsg, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
             moveScreen(navHostController, NavigationRoutes.MAIN)
         }
     }
 
     LaunchedEffect(textFieldValue.text) {
         if (isCursorAtEnd) {
-            scrollState.animateScrollTo(scrollState.maxValue)
+            inputScrollState.animateScrollTo(inputScrollState.maxValue)
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            chatViewModel.disconnectWebSocket()
         }
     }
 
@@ -132,12 +146,22 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
                     BookingActions(onAcceptAction = { showAcceptDialog = true })
                 }
             }
-            ChatMsgList(Modifier.weight(1F), initialMessages)
+            ChatMsgList(
+                Modifier.weight(1F),
+                senderNickname ?: stringResource(R.string.screen_chatroom_nickname_unknown),
+                (realTimeMessages + initialMessages),
+            )
         } ?: Column(Modifier.weight(1F)){}
         BottomInputBar(
             textFieldValue = textFieldValue,
-            scrollState = scrollState,
-            onValueChange = { textFieldValue = it }
+            scrollState = inputScrollState,
+            onValueChange = { textFieldValue = it },
+            onSend = {
+                if (chatRoomId != null && textFieldValue.text.isNotEmpty()) {
+                    chatViewModel.sendMessage(chatRoomId, textFieldValue.text)
+                    textFieldValue = TextFieldValue("")
+                }
+            }
         )
     }
     if (showAcceptDialog) {
@@ -292,7 +316,11 @@ private fun BookingActions(onAcceptAction: () -> Unit = {}, onRejectAction: () -
 // 채팅 메세지 리스트
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun ChatMsgList(modifier: Modifier, msgList: List<ChatMessageDto>) {
+private fun ChatMsgList(
+    modifier: Modifier,
+    senderNickname: String,
+    msgList: List<ChatMessageUiModel>,
+) {
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -302,9 +330,9 @@ private fun ChatMsgList(modifier: Modifier, msgList: List<ChatMessageDto>) {
     ) {
         items(msgList) { msg ->
             if (msg.isMine) {
-                SentMsgBubble(msg)
+                SentMsgBubble(msg.message, msg.sentAt)
             } else {
-                ReceivedMsgBubble(msg)
+                ReceivedMsgBubble(msg.message, msg.sentAt, senderNickname)
             }
         }
     }

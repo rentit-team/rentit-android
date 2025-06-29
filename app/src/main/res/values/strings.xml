@@ -76,10 +76,13 @@
     <string name="error_chat_access">채팅방 접근 권한이 없어요.</string>
     <string name="error_chat_unknown">채팅방에 접속할 수 없어요.</string>
 
+    <string name="toast_chatroom_entered">채팅방에 입장했어요.</string>
+
     <string name="screen_chatroom_request_info_label">보낸 요청</string>
     <string name="screen_chatroom_request_action_btn_reject">거절하기</string>
     <string name="screen_chatroom_request_action_btn_accept">수락하기</string>
     <string name="screen_chatroom_input_placeholder">메세지를 입력하세요</string>
+    <string name="screen_chatroom_nickname_unknown">알수 없음</string>
 
     <string name="modal_chatroom_accept_request_title">요청을 수락할까요?</string>
     <string name="modal_chatroom_accept_request_label_rental_period">대여 기간</string>

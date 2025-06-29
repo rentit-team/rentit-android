@@ -65,6 +65,11 @@ dependencies {
 
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
 
+    // Stomp
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+
     // Google Play Service
     val credentialVersion = "1.3.0-alpha01"
     implementation("androidx.credentials:credentials:$credentialVersion")
