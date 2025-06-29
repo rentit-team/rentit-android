@@ -27,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.rentit.R
+import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.White
@@ -56,17 +57,27 @@ fun ReceivedMsgBubble(msg: String, sentAt: String, senderNickname: String) {
                 style = MaterialTheme.typography.labelMedium
             )
             Row(verticalAlignment = Alignment.Bottom) {
-                Box(
-                    modifier = Modifier
-                        .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 0.6f)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(White)
-                        .padding(vertical = 8.dp, horizontal = 12.dp)
-                ) {
-                    Text(
-                        text = msg,
-                        style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple)
-                    )
+                when (msg) {
+                    AutoMsgType.REQUEST_ACCEPT.code -> {
+                        AutoMsgBubble(false, AutoMsgType.REQUEST_ACCEPT, onPayClick = {})
+                    }
+                    AutoMsgType.COMPLETE_PAY.code -> {
+                        AutoMsgBubble(false, AutoMsgType.COMPLETE_PAY)
+                    }
+                    else -> {
+                        Box(
+                            modifier = Modifier
+                                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 0.6f)
+                                .clip(RoundedCornerShape(20.dp))
+                                .background(White)
+                                .padding(vertical = 8.dp, horizontal = 12.dp)
+                        ) {
+                            Text(
+                                text = msg,
+                                style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple)
+                            )
+                        }
+                    }
                 }
                 Text(
                     modifier = Modifier.padding(start = 6.dp),

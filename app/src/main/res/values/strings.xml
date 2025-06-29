@@ -72,9 +72,20 @@
     
     <string name="screen_chat_list_btn_up_to_date_order">최신순</string>
 
+    <string name="auto_msg_type_request_accept_title">[렌팃] 요청이 수락되었습니다.</string>
+    <string name="auto_msg_type_request_accept_content">결제는 아래 버튼으로\n간편하게 진행하실 수 있어요 :)</string>
+    <string name="auto_msg_type_request_accept_btn_text">결제 진행하기</string>
+
+    <string name="auto_msg_type_pay_complete_title">[렌팃] 결제가 완료되었습니다.</string>
+    <string name="auto_msg_type_pay_complete_content">물품 전달 관련해서 이야기해요!</string>
+
     <string name="error_chat_list_load">채팅 목록을 불러올 수 없어요.</string>
     <string name="error_chat_access">채팅방 접근 권한이 없어요.</string>
     <string name="error_chat_unknown">채팅방에 접속할 수 없어요.</string>
+
+    <string name="error_only_seller">해당 작업은 판매자만 수행할 수 있어요.</string>
+    <string name="error_cant_process_accept_request">요청을 수락할 수 없어요.</string>
+    <string name="error_reservation_not_found">예약 정보를 찾을 수 없어요.</string>
 
     <string name="toast_chatroom_entered">채팅방에 입장했어요.</string>
 

@@ -21,6 +21,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -45,19 +46,30 @@ fun SentMsgBubble(msg: String, sentAt: String) {
             style = MaterialTheme.typography.labelMedium,
             color = Gray400
         )
-        Box(
-            modifier = Modifier
-                .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 0.6f)
-                .clip(RoundedCornerShape(20.dp))
-                .background(PrimaryBlue500)
-                .padding(vertical = 8.dp, horizontal = 12.dp)
-        ) {
-            Text(
-                text = msg,
-                style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple),
-                color = Color.White,
-            )
+        when (msg) {
+            AutoMsgType.REQUEST_ACCEPT.code -> {
+                AutoMsgBubble(true, AutoMsgType.REQUEST_ACCEPT)
+            }
+            AutoMsgType.COMPLETE_PAY.code -> {
+                AutoMsgBubble(true, AutoMsgType.COMPLETE_PAY)
+            }
+            else -> {
+                Box(
+                    modifier = Modifier
+                        .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 0.6f)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(PrimaryBlue500)
+                        .padding(vertical = 8.dp, horizontal = 12.dp)
+                ) {
+                    Text(
+                        text = msg,
+                        style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple),
+                        color = Color.White,
+                    )
+                }
+            }
         }
+
     }
 }
 
