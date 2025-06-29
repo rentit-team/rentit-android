@@ -1,5 +1,6 @@
 package com.example.rentit.common.di
 
+import com.example.rentit.data.chat.remote.ChatApiService
 import com.example.rentit.data.product.remote.ProductApiService
 import com.example.rentit.data.user.remote.UserApiService
 import dagger.Module
@@ -11,6 +12,11 @@ import retrofit2.Retrofit
 @Module
 @InstallIn(SingletonComponent::class)
 object ApiModule {
+    @Provides
+    fun provideChatApiService(retrofit: Retrofit): ChatApiService {
+        return retrofit.create(ChatApiService::class.java)
+    }
+
     @Provides
     fun provideUserApiService(retrofit: Retrofit): UserApiService {
         return retrofit.create(UserApiService::class.java)

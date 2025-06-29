@@ -40,15 +40,17 @@ class ProductViewModel @Inject constructor(
             startDate = "2025-06-15",
             endDate = "2025-06-17",
             status = "PENDING",
-            requestedAt = LocalDateTime.of(2025, 3, 20, 14, 0, 0).format(formatter)
+            requestedAt = LocalDateTime.of(2025, 3, 20, 14, 0, 0).format(formatter),
+            chatRoomId = "room_74248fca-630a-4d25-9e26-a3b943afe300"
         ),
         RequestInfoDto(
-            reservationId = 1002,
+            reservationId = 22,
             renterNickName = "눈송",
             startDate = "2025-07-04",
             endDate = "2025-07-05",
             status = "PENDING",
-            requestedAt = LocalDateTime.of(2025, 4, 10, 10, 30, 0).format(formatter)
+            requestedAt = LocalDateTime.of(2025, 4, 10, 10, 30, 0).format(formatter),
+            chatRoomId = null   // 채팅방 생성 테스트 용
         ),
         RequestInfoDto(
             reservationId = 21,
@@ -56,7 +58,8 @@ class ProductViewModel @Inject constructor(
             startDate = "2025-06-27",
             endDate = "2025-07-03",
             status = "PENDING",
-            requestedAt = LocalDateTime.of(2025, 6, 25, 16, 15, 0).format(formatter)
+            requestedAt = LocalDateTime.of(2025, 6, 25, 16, 15, 0).format(formatter),
+            chatRoomId = "room_74248fca-630a-4d25-9e26-a3b943afe300"
         ),
     )
 

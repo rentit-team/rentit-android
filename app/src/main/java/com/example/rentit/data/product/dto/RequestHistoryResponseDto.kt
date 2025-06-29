@@ -25,4 +25,7 @@ data class RequestInfoDto(
 
     @SerializedName("requestedAt")
     val requestedAt: String,
+
+    @SerializedName("chatroomId")
+    val chatRoomId: String?,
 )

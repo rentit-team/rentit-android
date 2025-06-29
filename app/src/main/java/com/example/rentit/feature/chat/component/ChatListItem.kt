@@ -33,21 +33,14 @@ import com.example.rentit.common.component.basicListItemTopDivider
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.chat.dto.ChatRoomDataDto
-import java.time.LocalDateTime
+import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
+import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListItem(onClick: () -> Unit) {
-    val data = ChatRoomDataDto(
-        chatroomId = "sadsadsadfas",
-        productTitle = "캐논 EOS 550D",
-        partnerNickname = "상대 아이디",
-        lastMessage = "내일 가능할까요?",
-        lastMessageTime = "2025-04-09T22:00:00"
-    )
-    val lastMessageTime = formatDateTime(data.lastMessageTime)
+fun ChatListItem(data: ChatRoomSummaryDto, onClick: () -> Unit) {
+    val lastMessageTime = if(data.lastMessageTime != null) formatDateTime(data.lastMessageTime) else ""
 
     Box(
         modifier = Modifier
@@ -112,19 +105,26 @@ fun ChatListItem(onClick: () -> Unit) {
     }
 }
 
+// 시간대(Offset)을 포함한 ISO 8601 형식의 OffsetDateTime 포맷팅
 @RequiresApi(Build.VERSION_CODES.O)
 private fun formatDateTime(dateTimeString: String): String {
-    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-    val localDateTime = LocalDateTime.parse(dateTimeString, formatter)
-    val dateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd")
-    return localDateTime.format(dateFormatter)
+    val offsetDateTime = OffsetDateTime.parse(dateTimeString)
+    val localDateTime = offsetDateTime.toLocalDateTime()
+    return localDateTime.format(DateTimeFormatter.ofPattern("yy.MM.dd"))
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ChatListItemPreview() {
+    val data = ChatRoomSummaryDto(
+        chatRoomId = "sadsadsadfas",
+        productTitle = "캐논 EOS 550D",
+        partnerNickname = "상대 아이디",
+        lastMessage = "내일 가능할까요?",
+        lastMessageTime = "2025-04-09T22:00:00"
+    )
     RentItTheme {
-        ChatListItem {}
+        ChatListItem(data) {}
     }
 }
