@@ -29,7 +29,7 @@ data class ChatRoomDetailDto(
 
 data class ChatParticipantDto(
     @SerializedName("userId")
-    val userId: String,
+    val userId: Long,
 
     @SerializedName("nickname")
     val nickname: String,

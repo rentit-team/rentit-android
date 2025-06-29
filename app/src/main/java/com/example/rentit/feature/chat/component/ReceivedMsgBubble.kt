@@ -30,15 +30,13 @@ import com.example.rentit.R
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.White
-import com.example.rentit.data.chat.dto.ChatMessageDto
-import com.example.rentit.data.chat.dto.SenderDto
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ReceivedMsgBubble(msg: ChatMessageDto) {
-    val msgTime = formatDateTime(msg.sentAt)
+fun ReceivedMsgBubble(msg: String, sentAt: String, senderNickname: String) {
+    val msgTime = formatDateTime(sentAt)
 
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
         AsyncImage(
@@ -54,7 +52,7 @@ fun ReceivedMsgBubble(msg: ChatMessageDto) {
         Column(modifier = Modifier.padding(start = 8.dp)) {
             Text(
                 modifier = Modifier.padding(bottom = 6.dp),
-                text = msg.sender.nickname,
+                text = senderNickname,
                 style = MaterialTheme.typography.labelMedium
             )
             Row(verticalAlignment = Alignment.Bottom) {
@@ -66,7 +64,7 @@ fun ReceivedMsgBubble(msg: ChatMessageDto) {
                         .padding(vertical = 8.dp, horizontal = 12.dp)
                 ) {
                     Text(
-                        text = msg.content,
+                        text = msg,
                         style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple)
                     )
                 }
@@ -91,18 +89,7 @@ private fun formatDateTime(dateTimeString: String): String {
 @Preview
 @Composable
 fun PreviewReceivedMsgBubble() {
-    val msg = ChatMessageDto(
-        messageId = "msg_001",
-        sender = SenderDto(
-            userId = 2,
-            nickname = "홍길동"
-        ),
-        content = "요청보고 연락드렸습니다.",
-        sentAt = "2025-03-25T09:30:00Z",
-        type = "TEXT",
-        isMine = false
-    )
     RentItTheme {
-        ReceivedMsgBubble(msg)
+        ReceivedMsgBubble("메세지 샘플", "2025-03-25T09:30:00Z", "홍길동")
     }
 }

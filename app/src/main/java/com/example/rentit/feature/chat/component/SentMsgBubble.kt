@@ -24,15 +24,13 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.chat.dto.ChatMessageDto
-import com.example.rentit.data.chat.dto.SenderDto
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SentMsgBubble(msg: ChatMessageDto) {
-    val msgTime = formatDateTime(msg.sentAt)
+fun SentMsgBubble(msg: String, sentAt: String) {
+    val msgTime = formatDateTime(sentAt)
 
     Row(
         modifier = Modifier
@@ -55,7 +53,7 @@ fun SentMsgBubble(msg: ChatMessageDto) {
                 .padding(vertical = 8.dp, horizontal = 12.dp)
         ) {
             Text(
-                text = msg.content,
+                text = msg,
                 style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple),
                 color = Color.White,
             )
@@ -73,18 +71,7 @@ private fun formatDateTime(dateTimeString: String): String {
 @Preview
 @Composable
 fun PreviewSentMsgBubble() {
-    val msg = ChatMessageDto(
-        messageId = "msg_001",
-        sender = SenderDto(
-            userId = 2,
-            nickname = "홍길동"
-        ),
-        content = "요청보고 연락드렸습니다.",
-        sentAt = "2025-03-25T09:30:00Z",
-        type = "TEXT",
-        isMine = false
-    )
     RentItTheme {
-        SentMsgBubble(msg)
+        SentMsgBubble("메세지 샘플", "2025-03-25T09:30:00Z")
     }
 }
