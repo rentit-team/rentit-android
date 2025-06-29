@@ -82,6 +82,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
     val chatViewModel: ChatViewModel = hiltViewModel()
     val productDetail by chatViewModel.productDetail.collectAsStateWithLifecycle()
     val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
+    val initialMessages by chatViewModel.initialMessages.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
@@ -131,7 +132,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
                     BookingActions(onAcceptAction = { showAcceptDialog = true })
                 }
             }
-            ChatMsgList(Modifier.weight(1F), detail.messages)
+            ChatMsgList(Modifier.weight(1F), initialMessages)
         } ?: Column(Modifier.weight(1F)){}
         BottomInputBar(
             textFieldValue = textFieldValue,

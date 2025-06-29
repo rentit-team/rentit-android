@@ -3,6 +3,7 @@ package com.example.rentit.feature.chat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
+import com.example.rentit.data.chat.dto.ChatMessageDto
 import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
 import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
@@ -28,6 +29,9 @@ class ChatViewModel @Inject constructor(
     private val _chatDetail = MutableStateFlow<ChatDetailResponseDto?>(null)
     val chatDetail: StateFlow<ChatDetailResponseDto?> = _chatDetail
 
+    private val _initialMessages = MutableStateFlow<List<ChatMessageDto>>(emptyList())
+    val initialMessages: StateFlow<List<ChatMessageDto>> = _initialMessages
+
     fun getChatList(onError: (Throwable) -> Unit = {}) {
         viewModelScope.launch {
             chatRepository.getChatList()
@@ -50,9 +54,12 @@ class ChatViewModel @Inject constructor(
 
     fun getChatDetail(chatRoomMessageId: String, onError: (Throwable) -> Unit = {}) {
         viewModelScope.launch {
-            chatRepository.getChatDetail(chatRoomMessageId)
+            val skip = 0
+            val listSize = 30
+            chatRepository.getChatDetail(chatRoomMessageId, skip, listSize)
                 .onSuccess {
                     _chatDetail.value = it
+                    _initialMessages.value += it.messages
                 }
                 .onFailure(onError)
         }

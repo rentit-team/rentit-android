@@ -33,9 +33,9 @@ class ChatRepository @Inject constructor(
         }
     }
 
-    suspend fun getChatDetail(chatRoomMessageId: String): Result<ChatDetailResponseDto> {
+    suspend fun getChatDetail(chatRoomMessageId: String, skip: Int, size: Int): Result<ChatDetailResponseDto> {
         return runCatching {
-            val response = chatRemoteDataSource.getChatDetail(chatRoomMessageId)
+            val response = chatRemoteDataSource.getChatDetail(chatRoomMessageId, skip, size)
             when (response.code()) {
                 200 -> response.body() ?: throw Exception("Empty response body")
                 403 -> {

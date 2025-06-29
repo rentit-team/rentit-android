@@ -12,8 +12,8 @@ class ChatRemoteDataSource @Inject constructor(
     suspend fun getChatList(): Response<ChatListResponseDto> {
         return chatApiService.getChatList()
     }
-    suspend fun getChatDetail(chatRoomId: String): Response<ChatDetailResponseDto> {
-        return chatApiService.getChatDetail(chatRoomId)
+    suspend fun getChatDetail(chatRoomId: String, skip: Int, size: Int): Response<ChatDetailResponseDto> {
+        return chatApiService.getChatDetail(chatRoomId, skip, size)
     }
     suspend fun postNewChat(productId: Int): Response<NewChatResponseDto> {
         return chatApiService.postNewChat(productId)
