@@ -31,6 +31,7 @@ import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.component.basicListItemTopDivider
 import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
@@ -97,7 +98,11 @@ fun ChatListItem(data: ChatRoomSummaryDto, onClick: () -> Unit) {
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
-                    text = data.lastMessage,
+                    text = when (data.lastMessage) {
+                        AutoMsgType.REQUEST_ACCEPT.code -> stringResource(R.string.auto_msg_type_request_accept_title)
+                        AutoMsgType.COMPLETE_PAY.code -> stringResource(R.string.auto_msg_type_pay_complete_title)
+                        else -> data.lastMessage
+                    },
                     style = MaterialTheme.typography.labelMedium,
                 )
             }
