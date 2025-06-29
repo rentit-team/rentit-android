@@ -5,6 +5,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.AutoMsgType
+import com.example.rentit.common.enums.BookingStatus
 import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.websocket.WebSocketManager
@@ -12,6 +14,7 @@ import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
 import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
+import com.example.rentit.data.product.dto.UpdateBookingStatusRequestDto
 import com.example.rentit.data.product.repository.ProductRepository
 import com.example.rentit.feature.chat.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -101,4 +104,19 @@ class ChatViewModel @Inject constructor(
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun updateBookingStatus(chatroomId: String, productId: Int, reservationId: Int, onSuccess: () -> Unit = {}, onError: (Throwable) -> Unit = {}) {
+        viewModelScope.launch {
+            productRepository.updateBookingStatus(
+                productId,
+                reservationId,
+                UpdateBookingStatusRequestDto(BookingStatus.ACCEPTED)
+            )
+                .onSuccess {
+                    onSuccess()
+                    sendMessage(chatroomId, AutoMsgType.REQUEST_ACCEPT.code)
+                }
+                .onFailure(onError)
+        }
+    }
 }

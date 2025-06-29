@@ -83,6 +83,10 @@
     <string name="error_chat_access">채팅방 접근 권한이 없어요.</string>
     <string name="error_chat_unknown">채팅방에 접속할 수 없어요.</string>
 
+    <string name="error_only_seller">해당 작업은 판매자만 수행할 수 있어요.</string>
+    <string name="error_cant_process_accept_request">요청을 수락할 수 없어요.</string>
+    <string name="error_reservation_not_found">예약 정보를 찾을 수 없어요.</string>
+
     <string name="toast_chatroom_entered">채팅방에 입장했어요.</string>
 
     <string name="screen_chatroom_request_info_label">보낸 요청</string>

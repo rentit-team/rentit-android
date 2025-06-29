@@ -1,7 +1,6 @@
 package com.example.rentit.feature.chat
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
@@ -56,7 +55,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
-import com.example.rentit.common.component.BookingStatus
+import com.example.rentit.common.enums.BookingStatus
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.NavigationRoutes
@@ -64,6 +63,8 @@ import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
+import com.example.rentit.common.exception.product.NotProductOwnerException
+import com.example.rentit.common.exception.product.ReservationNotFoundException
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
@@ -167,7 +168,26 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
     if (showAcceptDialog) {
         RequestAcceptDialog(
             onDismissRequest = { showAcceptDialog = false },
-            onAcceptRequest = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) }
+            onAcceptRequest = {
+                if(productId != null && chatRoomId != null){
+                    chatViewModel.updateBookingStatus(
+                        chatRoomId,
+                        11, // sample product id
+                        24, // sample chatroom id
+                        onSuccess = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) },
+                        onError = {
+                            var errorMsg = context.getString(R.string.error_cant_process_accept_request)
+                            when(it){
+                                is NotProductOwnerException -> errorMsg = context.getString(R.string.error_only_seller)
+                                is ReservationNotFoundException -> errorMsg = context.getString(R.string.error_reservation_not_found)
+                                is ServerException -> errorMsg = context.getString(R.string.error_common_server)
+                                else -> Unit
+                            }
+                            Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            }
         )
     }
 }

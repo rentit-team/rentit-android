@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.enums
 
 import androidx.compose.ui.graphics.Color
 import com.example.rentit.common.theme.AppGreen
