@@ -80,8 +80,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
     val productId by productViewModel.productId.collectAsStateWithLifecycle()
     val productDetailResult by productViewModel.productDetail.collectAsStateWithLifecycle()
     val reservedDateList by productViewModel.reservedDateList.collectAsStateWithLifecycle()
-
-    val sampleRequestHistory = productViewModel.sampleReservationsList
+    val requestHistory by productViewModel.requestList.collectAsStateWithLifecycle()
 
     val productDetail = productDetailResult?.getOrNull()?.product
     val ownerId = productDetail?.owner?.userId ?: -1
@@ -105,7 +104,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) },
-        bottomBar = { PostBottomBar(navHostController, productDetail?.price ?: 0, isMyProduct, sampleRequestHistory.size) },
+        bottomBar = { PostBottomBar(navHostController, productDetail?.price ?: 0, isMyProduct, requestHistory.size) },
         floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
         Box(

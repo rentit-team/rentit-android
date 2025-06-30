@@ -81,7 +81,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRoomId: String?) {
+fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reservationId: Int?, chatRoomId: String?) {
     val chatViewModel: ChatViewModel = hiltViewModel()
     val productDetail by chatViewModel.productDetail.collectAsStateWithLifecycle()
     val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
@@ -169,11 +169,11 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, chatRo
         RequestAcceptDialog(
             onDismissRequest = { showAcceptDialog = false },
             onAcceptRequest = {
-                if(productId != null && chatRoomId != null){
+                if(productId != null && chatRoomId != null && reservationId != null){
                     chatViewModel.updateBookingStatus(
                         chatRoomId,
-                        11, // sample product id
-                        24, // sample chatroom id
+                        productId,
+                        reservationId,
                         onSuccess = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) },
                         onError = {
                             var errorMsg = context.getString(R.string.error_cant_process_accept_request)
@@ -443,14 +443,4 @@ private fun formatDateTime(dateTimeString: String): String {
     val localDateTime = LocalDateTime.parse(dateTimeString, formatter)
     val dateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
     return localDateTime.format(dateFormatter)
-}
-
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun PreviewChatroomScreen() {
-    RentItTheme {
-        ChatroomScreen(rememberNavController(), -1, "")
-    }
 }

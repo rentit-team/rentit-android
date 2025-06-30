@@ -17,6 +17,12 @@ data class ChatRoomSummaryDto(
     @SerializedName("chatroomId")
     val chatRoomId: String,
 
+    @SerializedName("productId")
+    val productId: Int,
+
+    @SerializedName("reservationId")
+    val reservationId: Int,
+
     @SerializedName("productTitle")
     val productTitle: String,
 

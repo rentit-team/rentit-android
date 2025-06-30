@@ -68,7 +68,7 @@ fun ChatListScreen(navHostController: NavHostController) {
                 ChatListItem(it) {
                     moveScreen(
                         navHostController,
-                        "${NavigationRoutes.NAVHOSTCHAT}/8/${it.chatRoomId}"    // 임시 ProductId
+                        "${NavigationRoutes.NAVHOSTCHAT}/${it.productId}/${it.reservationId}/${it.chatRoomId}"    // 임시 ProductId
                     )
                 }
             }

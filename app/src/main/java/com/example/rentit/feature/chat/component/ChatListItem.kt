@@ -124,6 +124,8 @@ private fun formatDateTime(dateTimeString: String): String {
 fun ChatListItemPreview() {
     val data = ChatRoomSummaryDto(
         chatRoomId = "sadsadsadfas",
+        productId = 1,
+        reservationId = 1,
         productTitle = "캐논 EOS 550D",
         partnerNickname = "상대 아이디",
         lastMessage = "내일 가능할까요?",
