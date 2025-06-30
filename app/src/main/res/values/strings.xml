@@ -113,6 +113,9 @@
     <string name="screen_mypage_tab_title_on_rent">대여 중</string>
     <string name="screen_mypage_text_tab_list_empty">게시글이 없어요</string>
 
+    <string name="screen_mypage_my_rental_list_item_label_renting">대여중</string>
+    <string name="screen_mypage_my_rental_list_item_label_request_at">요청일: </string>
+
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 
     <string name="request_history_list_item_period">%s (%s) ~ %s (%s) · %d일</string>
