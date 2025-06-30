@@ -51,6 +51,10 @@ class ChatViewModel @Inject constructor(
     private val _senderNickname = MutableStateFlow<String?>(null)
     val senderNickname: StateFlow<String?> = _senderNickname
 
+    // 백엔드 오류로 인한 임시 요청 확인 처리
+    private val _isRequestAccepted = MutableStateFlow(false)
+    val isRequestAccepted: StateFlow<Boolean> = _isRequestAccepted
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun connectWebSocket(chatroomId: String, onConnect: () -> Unit) {
         val token = getToken(context) ?: return
@@ -66,6 +70,17 @@ class ChatViewModel @Inject constructor(
 
     fun disconnectWebSocket() {
         WebSocketManager.disconnect()
+    }
+
+    fun resetRealTimeMessages() {
+        _realTimeMessages.value = emptyList()
+    }
+
+    // 백엔드 오류로 인한 임시 요청 확인 처리
+    fun checkRequestAccepted() {
+        if(_initialMessages.value.find { it.message == AutoMsgType.REQUEST_ACCEPT.code } != null) {
+            _isRequestAccepted.value = true
+        }
     }
 
     fun getChatList(onError: (Throwable) -> Unit = {}) {

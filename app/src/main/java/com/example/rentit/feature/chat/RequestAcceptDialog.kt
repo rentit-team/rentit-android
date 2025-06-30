@@ -29,9 +29,12 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import java.text.NumberFormat
 
 @Composable
-fun RequestAcceptDialog(onDismissRequest: () -> Unit, onAcceptRequest: () -> Unit) {
+fun RequestAcceptDialog(productPrice: Int, onDismissRequest: () -> Unit, onAcceptRequest: () -> Unit) {
+    val rentalPeriod = 4
+    val numFormat = NumberFormat.getNumberInstance()
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
@@ -77,7 +80,7 @@ fun RequestAcceptDialog(onDismissRequest: () -> Unit, onAcceptRequest: () -> Uni
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
-                        text = "40,000 ${stringResource(R.string.common_price_unit)}",
+                        text = "${numFormat.format(productPrice * rentalPeriod)} ${stringResource(R.string.common_price_unit)}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }
@@ -111,6 +114,6 @@ fun RequestAcceptDialog(onDismissRequest: () -> Unit, onAcceptRequest: () -> Uni
 @Composable
 fun PreviewRequestAcceptDialog() {
     RentItTheme {
-        RequestAcceptDialog(onDismissRequest = {}, onAcceptRequest = {})
+        RequestAcceptDialog(10000, onDismissRequest = {}, onAcceptRequest = {})
     }
 }

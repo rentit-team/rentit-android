@@ -46,12 +46,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
@@ -69,7 +67,6 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.feature.chat.component.ReceivedMsgBubble
@@ -87,6 +84,9 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
     val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    // 백엔드 오류로 인한 임시 요청 확인 처리
+    val isRequestAccepted by chatViewModel.isRequestAccepted.collectAsStateWithLifecycle()
+
     val senderNickname by chatViewModel.senderNickname.collectAsStateWithLifecycle()
     val initialMessages by chatViewModel.initialMessages.collectAsStateWithLifecycle()
     val realTimeMessages by chatViewModel.realTimeMessages.collectAsStateWithLifecycle()
@@ -97,7 +97,13 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
 
     val isCursorAtEnd = textFieldValue.selection.max == textFieldValue.text.length
 
+    // 백엔드 오류로 인한 임시 요청 확인 처리
+    LaunchedEffect(initialMessages + realTimeMessages) {
+        chatViewModel.checkRequestAccepted()
+    }
+
     LaunchedEffect(Unit) {
+        chatViewModel.resetRealTimeMessages()
         var errorMsg = context.getString(R.string.error_chat_unknown)
         if (chatRoomId != null && productId != null) {
             chatViewModel.connectWebSocket(chatRoomId) {
@@ -143,7 +149,9 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
         chatDetail?.let { detail ->
             detail.chatRoom.statusHistory.lastOrNull()?.let { statusInfo ->
                 RequestInfo(statusInfo)
-                if (BookingStatus.isPending(statusInfo.status)) {
+
+                // 백엔드 오류로 인한 임시 요청 확인 처리
+                if (BookingStatus.isPending(statusInfo.status) && !isRequestAccepted) {
                     BookingActions(onAcceptAction = { showAcceptDialog = true })
                 }
             }
@@ -167,6 +175,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
     }
     if (showAcceptDialog) {
         RequestAcceptDialog(
+            productPrice = productDetail?.product?.price ?: 0,
             onDismissRequest = { showAcceptDialog = false },
             onAcceptRequest = {
                 if(productId != null && chatRoomId != null && reservationId != null){
