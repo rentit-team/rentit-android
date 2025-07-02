@@ -1,8 +1,10 @@
 package com.example.rentit.data.user.repository
 
+import com.example.rentit.common.exception.ServerException
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
+import com.example.rentit.data.user.dto.MyRentalListResponseDto
 import com.example.rentit.data.user.remote.UserRemoteDataSource
 import javax.inject.Inject
 
@@ -103,6 +105,30 @@ class UserRepository @Inject constructor(
                 }
                 500 -> {
                     Result.failure(Exception("Server error"))
+                }
+                else -> {
+                    Result.failure(Exception("Unexpected error"))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun getMyRentalList(): Result<MyRentalListResponseDto> {
+        return try {
+            val response = remoteDataSource.getMyRentalList()
+            when(response.code()) {
+                200 -> {
+                    val body = response.body()
+                    if(body != null) {
+                        Result.success(body)
+                    } else {
+                        Result.failure(Exception("Empty response body"))
+                    }
+                }
+                500 -> {
+                    Result.failure(ServerException())
                 }
                 else -> {
                     Result.failure(Exception("Unexpected error"))

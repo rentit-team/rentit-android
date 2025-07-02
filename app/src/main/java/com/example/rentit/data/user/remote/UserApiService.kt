@@ -4,6 +4,7 @@ import com.example.rentit.data.user.dto.GoogleLoginRequestDto
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
+import com.example.rentit.data.user.dto.MyRentalListResponseDto
 import com.example.rentit.data.user.dto.SignUpRequestDto
 import retrofit2.Response
 import retrofit2.http.Body
@@ -27,4 +28,8 @@ interface UserApiService {
     @GET("api/v1/users/products")
     @Headers("Content-Type: application/json")
     suspend fun getMyProductList(): Response<MyProductListResponseDto>
+
+    @GET("api/v1/users/reservations")
+    @Headers("Content-Type: application/json")
+    suspend fun getMyRentalList(): Response<MyRentalListResponseDto>
 }

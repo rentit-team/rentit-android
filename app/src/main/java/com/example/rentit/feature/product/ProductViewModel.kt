@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.BookingStatus
 import com.example.rentit.data.product.dto.BookingRequestDto
 import com.example.rentit.data.product.dto.BookingResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
@@ -31,37 +32,6 @@ class ProductViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss") // requestedAt 형식을 위한 포맷터
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    val sampleReservationsList = listOf(
-        RequestInfoDto(
-            reservationId = 1001,
-            renterNickName = "눈송",
-            startDate = "2025-06-15",
-            endDate = "2025-06-17",
-            status = "PENDING",
-            requestedAt = LocalDateTime.of(2025, 3, 20, 14, 0, 0).format(formatter),
-            chatRoomId = "room_74248fca-630a-4d25-9e26-a3b943afe300"
-        ),
-        RequestInfoDto(
-            reservationId = 22,
-            renterNickName = "눈송",
-            startDate = "2025-07-04",
-            endDate = "2025-07-05",
-            status = "PENDING",
-            requestedAt = LocalDateTime.of(2025, 4, 10, 10, 30, 0).format(formatter),
-            chatRoomId = null   // 채팅방 생성 테스트 용
-        ),
-        RequestInfoDto(
-            reservationId = 21,
-            renterNickName = "눈송",
-            startDate = "2025-06-27",
-            endDate = "2025-07-03",
-            status = "PENDING",
-            requestedAt = LocalDateTime.of(2025, 6, 25, 16, 15, 0).format(formatter),
-            chatRoomId = "room_74248fca-630a-4d25-9e26-a3b943afe300"
-        ),
-    )
 
     private val _productId = savedStateHandle.getStateFlow("productId", -1)
     val productId: StateFlow<Int> = _productId
@@ -151,7 +121,7 @@ class ProductViewModel @Inject constructor(
     fun getProductRequestList(productId: Int){
         viewModelScope.launch {
             repository.getProductRequestList(productId).onSuccess {
-                _requestList.value = it.reservations
+                _requestList.value = it.reservations.filter { data -> BookingStatus.isPending(data.status) }
             }
         }
     }

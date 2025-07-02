@@ -38,13 +38,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
@@ -56,24 +54,26 @@ import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.data.product.dto.ProductDto
+import com.example.rentit.data.user.dto.ReservationDto
 import com.example.rentit.feature.home.component.ProductListItem
+import com.example.rentit.feature.user.component.RentalHistoryListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(navHostController: NavHostController) {
-    val onRentList = emptyList<ProductDto>()
     val userViewModel: UserViewModel = hiltViewModel()
 
     var isFirstTabSelected by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         userViewModel.getMyProductList()
+        userViewModel.getMyRentalList()
     }
 
     val myProductList by userViewModel.myProductList.collectAsStateWithLifecycle()
+    val myRentalList by userViewModel.myRentalList.collectAsStateWithLifecycle()
 
     Column {
         Column(
@@ -88,9 +88,16 @@ fun MyPageScreen(navHostController: NavHostController) {
         TabbedListSection(
             isFirstTabSelected = isFirstTabSelected,
             myProductList = myProductList,
-            onRentList = onRentList,
+            myRentList = myRentalList,
             onTabActive = { isFirstTabSelected = !isFirstTabSelected },
-            onItemClick = { id -> moveScreen(navHostController, NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/$id", saveStateEnabled = true, restoreStateEnabled = true) }
+            onItemClick = { id ->
+                moveScreen(
+                    navHostController,
+                    NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/$id",
+                    saveStateEnabled = true,
+                    restoreStateEnabled = true
+                )
+            }
         )
     }
 }
@@ -224,7 +231,7 @@ fun InfoBox() {
 fun TabbedListSection(
     isFirstTabSelected: Boolean,
     myProductList: List<ProductDto>,
-    onRentList: List<ProductDto>,
+    myRentList: List<ReservationDto>,
     onTabActive: () -> Unit,
     onItemClick: (Int) -> Unit,
 ) {
@@ -249,10 +256,16 @@ fun TabbedListSection(
             .background(Gray200),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val list = if (isFirstTabSelected) myProductList else onRentList
+        val list = if (isFirstTabSelected) myProductList else myRentList
         if (list.isNotEmpty()) {
-            items(list) {
-                ProductListItem(it, true) { onItemClick(it.productId) }
+            if (isFirstTabSelected) {
+                items(myProductList) {
+                    ProductListItem(it, true) { onItemClick(it.productId) }
+                }
+            } else {
+                items(myRentList) {
+                    RentalHistoryListItem(it)
+                }
             }
         } else {
             item {
@@ -297,14 +310,5 @@ fun TabTitle(title: String, isTabSelected: Boolean, modifier: Modifier, onClick:
                     .background(PrimaryBlue500)
             )
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true)
-@Composable
-fun PreviewMyPageScreen() {
-    RentItTheme {
-        MyPageScreen(rememberNavController())
     }
 }

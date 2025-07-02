@@ -40,20 +40,19 @@ import java.time.YearMonth
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestHistoryScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
-    //val requestHistory by productViewModel.requestList.collectAsStateWithLifecycle()
+    val requestHistory by productViewModel.requestList.collectAsStateWithLifecycle()
     val userViewModel: UserViewModel = hiltViewModel()
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
     val productId by productViewModel.productId.collectAsStateWithLifecycle()
-    val sampleRequestHistory = productViewModel.sampleReservationsList
     val errorMsgNewChatRoom = LocalContext.current.getString(R.string.error_mypage_new_chatroom)
 
-    val requestPeriodList: List<RequestPeriodDto> = sampleRequestHistory.map {
+    val requestPeriodList: List<RequestPeriodDto> = requestHistory.map {
         RequestPeriodDto(
             LocalDate.parse(it.startDate), LocalDate.parse(it.endDate)
         )
     }
 
-    val groupedByMonth: Map<YearMonth, List<RequestInfoDto>> = sampleRequestHistory.groupBy {
+    val groupedByMonth: Map<YearMonth, List<RequestInfoDto>> = requestHistory.groupBy {
         YearMonth.from(LocalDate.parse(it.startDate))
     }
 
@@ -74,7 +73,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
                         if (info.chatRoomId != null) {
                             moveScreen(
                                 navHostController,
-                                "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.chatRoomId}"
+                                "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.reservationId}/${info.chatRoomId}"
                             )
                         } else {
                             userViewModel.postNewChat(
@@ -82,7 +81,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
                                 onSuccess = { chatRoomId ->
                                     moveScreen(
                                         navHostController,
-                                        "${NavigationRoutes.NAVHOSTCHAT}/$productId/$chatRoomId"
+                                        "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.reservationId}/$chatRoomId"
                                     )
                                 },
                                 onError = {
