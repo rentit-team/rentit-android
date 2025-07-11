@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,8 +32,6 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.dto.RequestPeriodDto
-import com.example.rentit.feature.productdetail.ProductViewModel
-import com.example.rentit.feature.user.UserViewModel
 import com.example.rentit.feature.productdetail.reservation.requesthistory.components.RequestCalendar
 import com.example.rentit.feature.productdetail.reservation.requesthistory.components.RequestHistoryListItem
 import java.time.LocalDate
@@ -40,11 +39,12 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestHistoryScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
-    val requestHistory by productViewModel.requestList.collectAsStateWithLifecycle()
-    val userViewModel: UserViewModel = hiltViewModel()
+fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) {
+    val requestHistoryViewModel: RequestHistoryViewModel = hiltViewModel()
+    val requestHistory by requestHistoryViewModel.requestList.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
-    val productId by productViewModel.productId.collectAsStateWithLifecycle()
     val errorMsgNewChatRoom = LocalContext.current.getString(R.string.error_mypage_new_chatroom)
 
     val requestPeriodList: List<RequestPeriodDto> = requestHistory.map {
@@ -55,6 +55,15 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
 
     val groupedByMonth: Map<YearMonth, List<RequestInfoDto>> = requestHistory.groupBy {
         YearMonth.from(LocalDate.parse(it.startDate))
+    }
+
+    LaunchedEffect(productId) {
+        if(productId == null){
+            Toast.makeText(context, context.getString(R.string.error_common_cant_find_product), Toast.LENGTH_SHORT).show()
+            navHostController.popBackStack()
+        } else {
+            requestHistoryViewModel.getProductRequestList(productId)
+        }
     }
 
     Scaffold(
@@ -77,8 +86,8 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
                                 "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.reservationId}/${info.chatRoomId}"
                             )
                         } else {
-                            userViewModel.postNewChat(
-                                productId = productId,
+                            requestHistoryViewModel.postNewChat(
+                                productId = productId ?: -1,
                                 onSuccess = { chatRoomId ->
                                     moveScreen(
                                         navHostController,

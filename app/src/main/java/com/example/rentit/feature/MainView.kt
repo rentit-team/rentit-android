@@ -159,7 +159,7 @@ fun ProductDetailNavHost(productId: Int?) {
         composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTCONFIRM) { ResvRequestCompleteScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productId) }
         composable(
             route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{reservationId}/{chatRoomId}",
             arguments = listOf(
