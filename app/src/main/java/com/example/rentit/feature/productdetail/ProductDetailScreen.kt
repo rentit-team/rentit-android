@@ -130,7 +130,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
                 )
                 if(showBottomSheet) {
                     ModalBottomSheet(onDismissRequest = { showBottomSheet = false }, sheetState = sheetState) {
-                        RentalHistoryBottomDrawer(reservedDateList)
+                        RentalHistoryBottomDrawer(productId)
                     }
                 }
             }
