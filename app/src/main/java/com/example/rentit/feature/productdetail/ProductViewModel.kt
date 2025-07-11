@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.productdetail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import javax.inject.Inject

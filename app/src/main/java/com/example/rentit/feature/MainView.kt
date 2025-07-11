@@ -41,12 +41,12 @@ import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.chat.ChatroomScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.user.MyPageScreen
-import com.example.rentit.feature.product.BookingRequestScreen
-import com.example.rentit.feature.product.CreatePostScreen
-import com.example.rentit.feature.product.ProductDetailScreen
-import com.example.rentit.feature.product.ProductViewModel
-import com.example.rentit.feature.product.RequestConfirmationScreen
-import com.example.rentit.feature.user.RequestHistoryScreen
+import com.example.rentit.feature.productdetail.reservation.request.BookingRequestScreen
+import com.example.rentit.feature.createpost.CreatePostScreen
+import com.example.rentit.feature.productdetail.ProductDetailScreen
+import com.example.rentit.feature.productdetail.ProductViewModel
+import com.example.rentit.feature.productdetail.reservation.request.complete.RequestConfirmationScreen
+import com.example.rentit.feature.productdetail.reservation.requesthistory.RequestHistoryScreen
 
 sealed class BottomNavItem(
     val title: Int, val icon: Int, val iconSelected: Int, val screenRoute: String

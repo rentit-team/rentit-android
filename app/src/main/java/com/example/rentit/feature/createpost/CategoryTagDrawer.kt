@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.createpost
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
-import com.example.rentit.feature.product.component.TagButton
+import com.example.rentit.feature.createpost.component.TagButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

@@ -1,4 +1,4 @@
-package com.example.rentit.feature.user
+package com.example.rentit.feature.productdetail.reservation.requesthistory
 
 import android.os.Build
 import android.widget.Toast
@@ -31,9 +31,10 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.dto.RequestPeriodDto
-import com.example.rentit.feature.product.ProductViewModel
-import com.example.rentit.feature.user.component.RequestCheckCalendar
-import com.example.rentit.feature.user.component.RequestHistoryListItem
+import com.example.rentit.feature.productdetail.ProductViewModel
+import com.example.rentit.feature.user.UserViewModel
+import com.example.rentit.feature.productdetail.reservation.requesthistory.components.RequestCheckCalendar
+import com.example.rentit.feature.productdetail.reservation.requesthistory.components.RequestHistoryListItem
 import java.time.LocalDate
 import java.time.YearMonth
 

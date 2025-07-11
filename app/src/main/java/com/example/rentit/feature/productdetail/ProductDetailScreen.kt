@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.productdetail
 
 import android.os.Build
 import android.util.Log
@@ -67,6 +67,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.feature.productdetail.rentalhistory.UsageDetailBottomDrawer
 import java.text.NumberFormat
 
 @RequiresApi(Build.VERSION_CODES.O)

@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.productdetail.reservation.request
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -40,7 +40,8 @@ import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.product.component.calendar.DateRangePicker
+import com.example.rentit.feature.productdetail.ProductViewModel
+import com.example.rentit.feature.productdetail.reservation.request.components.DateRangePicker
 import java.text.NumberFormat
 import java.time.YearMonth
 

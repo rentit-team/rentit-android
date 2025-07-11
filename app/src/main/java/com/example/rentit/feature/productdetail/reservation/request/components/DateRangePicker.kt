@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product.component.calendar
+package com.example.rentit.feature.productdetail.reservation.request.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -36,7 +36,7 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.product.ProductViewModel
+import com.example.rentit.feature.productdetail.ProductViewModel
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)

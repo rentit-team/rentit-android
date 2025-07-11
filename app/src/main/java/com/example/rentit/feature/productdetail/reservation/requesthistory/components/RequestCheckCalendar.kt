@@ -1,4 +1,4 @@
-package com.example.rentit.feature.user.component
+package com.example.rentit.feature.productdetail.reservation.requesthistory.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi

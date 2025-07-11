@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.productdetail.reservation.request.complete
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -34,6 +34,7 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.feature.productdetail.ProductViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
