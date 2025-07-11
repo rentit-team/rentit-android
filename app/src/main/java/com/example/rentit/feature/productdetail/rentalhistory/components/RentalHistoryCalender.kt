@@ -19,7 +19,7 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ReadOnlyCalender(yearMonth: YearMonth, disabledDates: List<String> = listOf("2025-04-03", "2025-04-28", "2025-05-01", "2025-05-03"), modifier: Modifier = Modifier) {
+fun RentalHistoryCalendar(yearMonth: YearMonth, disabledDates: List<String> = listOf("2025-04-03", "2025-04-28", "2025-05-01", "2025-05-03"), modifier: Modifier = Modifier) {
     var yearMonth = remember { mutableStateOf(yearMonth) }
     val cellWidth = 48.dp
 
@@ -35,8 +35,8 @@ fun ReadOnlyCalender(yearMonth: YearMonth, disabledDates: List<String> = listOf(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewReadOnlyCalender() {
+private fun Preview() {
     RentItTheme {
-        ReadOnlyCalender(YearMonth.now())
+        RentalHistoryCalendar(YearMonth.now())
     }
 }

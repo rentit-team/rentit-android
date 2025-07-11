@@ -38,7 +38,7 @@ import com.example.rentit.feature.productdetail.ProductViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestConfirmationScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
+fun ResvRequestCompleteScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
 
     val resvStartDate by productViewModel.resvStartDate.collectAsStateWithLifecycle()
     val resvEndDate by productViewModel.resvEndDate.collectAsStateWithLifecycle()
@@ -87,8 +87,8 @@ fun RequestConfirmationScreen(navHostController: NavHostController, productViewM
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewRequestConfirmationScreen() {
+private fun Preview() {
     RentItTheme {
-        RequestConfirmationScreen(rememberNavController(), hiltViewModel())
+        ResvRequestCompleteScreen(rememberNavController(), hiltViewModel())
     }
 }

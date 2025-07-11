@@ -45,7 +45,7 @@ import com.example.rentit.feature.productdetail.reservation.request.ResvRequestS
 import com.example.rentit.feature.createpost.CreatePostScreen
 import com.example.rentit.feature.productdetail.ProductDetailScreen
 import com.example.rentit.feature.productdetail.ProductViewModel
-import com.example.rentit.feature.productdetail.reservation.request.complete.RequestConfirmationScreen
+import com.example.rentit.feature.productdetail.reservation.request.complete.ResvRequestCompleteScreen
 import com.example.rentit.feature.productdetail.reservation.requesthistory.RequestHistoryScreen
 
 sealed class BottomNavItem(
@@ -158,7 +158,7 @@ fun ProductDetailNavHost(productId: Int?) {
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
         composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.REQUESTCONFIRM) { ResvRequestCompleteScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
         composable(
             route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{reservationId}/{chatRoomId}",

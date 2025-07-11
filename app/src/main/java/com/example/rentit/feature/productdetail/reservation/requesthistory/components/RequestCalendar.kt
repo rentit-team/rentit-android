@@ -20,7 +20,7 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestCheckCalendar(requestPeriodList: List<RequestPeriodDto>, onChangeMonth: (month: YearMonth) -> Unit = {}) {
+fun RequestCalendar(requestPeriodList: List<RequestPeriodDto>, onChangeMonth: (month: YearMonth) -> Unit = {}) {
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
     val cellWidth = 48.dp
 
@@ -45,8 +45,8 @@ fun RequestCheckCalendar(requestPeriodList: List<RequestPeriodDto>, onChangeMont
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewRequestCheckCalendar() {
+private fun Preview() {
     RentItTheme {
-        RequestCheckCalendar(emptyList())
+        RequestCalendar(emptyList())
     }
 }

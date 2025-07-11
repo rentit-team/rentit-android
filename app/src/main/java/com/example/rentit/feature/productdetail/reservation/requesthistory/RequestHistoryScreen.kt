@@ -33,7 +33,7 @@ import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.dto.RequestPeriodDto
 import com.example.rentit.feature.productdetail.ProductViewModel
 import com.example.rentit.feature.user.UserViewModel
-import com.example.rentit.feature.productdetail.reservation.requesthistory.components.RequestCheckCalendar
+import com.example.rentit.feature.productdetail.reservation.requesthistory.components.RequestCalendar
 import com.example.rentit.feature.productdetail.reservation.requesthistory.components.RequestHistoryListItem
 import java.time.LocalDate
 import java.time.YearMonth
@@ -63,7 +63,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
         Column(
             modifier = Modifier.padding(it)
         ) {
-            RequestCheckCalendar(requestPeriodList) { month -> yearMonth = month }
+            RequestCalendar(requestPeriodList) { month -> yearMonth = month }
             LazyColumn(
                 modifier = Modifier.screenHorizontalPadding(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -101,7 +101,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productViewModel:
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewRequestHistoryScreen() {
+private fun Preview() {
     RentItTheme {
         //RequestHistoryScreen()
     }

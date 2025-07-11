@@ -67,7 +67,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.productdetail.rentalhistory.UsageDetailBottomDrawer
+import com.example.rentit.feature.productdetail.rentalhistory.RentalHistoryBottomDrawer
 import java.text.NumberFormat
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -130,7 +130,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
                 )
                 if(showBottomSheet) {
                     ModalBottomSheet(onDismissRequest = { showBottomSheet = false }, sheetState = sheetState) {
-                        UsageDetailBottomDrawer(reservedDateList)
+                        RentalHistoryBottomDrawer(reservedDateList)
                     }
                 }
             }
@@ -320,7 +320,7 @@ fun MiniButton(isBgColorWhite: Boolean, text: String, onClick: () -> Unit) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun PreviewProductDetailScreen() {
+private fun Preview() {
     RentItTheme {
         ProductDetailScreen(rememberNavController(), hiltViewModel())
     }

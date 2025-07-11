@@ -27,7 +27,7 @@ import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UsageListItem(
+fun RentalHistoryListItem(
     periodCnt: Int = 0,
     startDate: LocalDate = LocalDate.now(),
     endDate: LocalDate = LocalDate.now(),
@@ -78,8 +78,8 @@ fun UsageListItem(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewUsageListItem() {
+private fun Preview() {
     RentItTheme {
-        UsageListItem()
+        RentalHistoryListItem()
     }
 }

@@ -126,7 +126,7 @@ fun DateBox(date: String, isSelectingDate: Boolean, onDateClick: () -> Unit) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, apiLevel = 33)
 @Composable
-fun PreviewDateRangePicker() {
+private fun Preview() {
     RentItTheme {
         DateRangePicker(hiltViewModel(), YearMonth.now())
     }

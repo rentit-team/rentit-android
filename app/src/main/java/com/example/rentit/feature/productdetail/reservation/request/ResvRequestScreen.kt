@@ -151,7 +151,7 @@ fun ResvResultHandler(productViewModel: ProductViewModel, onResvSuccess: () -> U
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewResvRequestScreen() {
+private fun Preview() {
     RentItTheme {
         ResvRequestScreen(rememberNavController(), hiltViewModel())
     }

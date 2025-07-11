@@ -125,7 +125,7 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun PreviewRequestHistoryListItem() {
+private fun Preview() {
     RentItTheme {
         //RequestHistoryListItem() {}
     }
