@@ -53,7 +53,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
-import com.example.rentit.common.enums.BookingStatus
+import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.NavigationRoutes
@@ -151,8 +151,8 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                 RequestInfo(statusInfo)
 
                 // 백엔드 오류로 인한 임시 요청 확인 처리
-                if (BookingStatus.isPending(statusInfo.status) && !isRequestAccepted) {
-                    BookingActions(onAcceptAction = { showAcceptDialog = true })
+                if (ResvStatus.isPending(statusInfo.status) && !isRequestAccepted) {
+                    ResvActions(onAcceptAction = { showAcceptDialog = true })
                 }
             }
             ChatMsgList(
@@ -179,7 +179,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
             onDismissRequest = { showAcceptDialog = false },
             onAcceptRequest = {
                 if(productId != null && chatRoomId != null && reservationId != null){
-                    chatViewModel.updateBookingStatus(
+                    chatViewModel.updateResvStatus(
                         chatRoomId,
                         productId,
                         reservationId,
@@ -303,7 +303,7 @@ private fun RequestInfo(statusInfo: StatusHistoryDto) {
                 text = stringResource(R.string.screen_chatroom_request_info_label),
                 style = MaterialTheme.typography.labelLarge,
             )
-            BookingStatus.fromLabel(statusInfo.status)?.let {
+            ResvStatus.fromLabel(statusInfo.status)?.let {
                 Text(
                     text = it.label,
                     style = MaterialTheme.typography.labelMedium,
@@ -321,7 +321,7 @@ private fun RequestInfo(statusInfo: StatusHistoryDto) {
 
 // 거절하기 / 수락하기 버튼
 @Composable
-private fun BookingActions(onAcceptAction: () -> Unit = {}, onRejectAction: () -> Unit = {}) {
+private fun ResvActions(onAcceptAction: () -> Unit = {}, onRejectAction: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()

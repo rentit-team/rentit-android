@@ -41,7 +41,7 @@ import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.chat.ChatroomScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.user.MyPageScreen
-import com.example.rentit.feature.productdetail.reservation.request.BookingRequestScreen
+import com.example.rentit.feature.productdetail.reservation.request.ResvRequestScreen
 import com.example.rentit.feature.createpost.CreatePostScreen
 import com.example.rentit.feature.productdetail.ProductDetailScreen
 import com.example.rentit.feature.productdetail.ProductViewModel
@@ -157,7 +157,7 @@ fun ProductDetailNavHost(productId: Int?) {
 
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
         composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController, productViewModel) }
         composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
         composable(

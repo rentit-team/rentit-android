@@ -5,9 +5,9 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.enums.BookingStatus
-import com.example.rentit.data.product.dto.BookingRequestDto
-import com.example.rentit.data.product.dto.BookingResponseDto
+import com.example.rentit.common.enums.ResvStatus
+import com.example.rentit.data.product.dto.ResvRequestDto
+import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.repository.ProductRepository
@@ -35,19 +35,19 @@ class ProductViewModel @Inject constructor(
     private val _productId = savedStateHandle.getStateFlow("productId", -1)
     val productId: StateFlow<Int> = _productId
 
-    private val _bookingStartDate = MutableStateFlow<LocalDate?>(null)
-    val bookingStartDate: StateFlow<LocalDate?> = _bookingStartDate
+    private val _resvStartDate = MutableStateFlow<LocalDate?>(null)
+    val resvStartDate: StateFlow<LocalDate?> = _resvStartDate
 
-    private val _bookingEndDate = MutableStateFlow<LocalDate?>(null)
-    val bookingEndDate: StateFlow<LocalDate?> = _bookingEndDate
+    private val _resvEndDate = MutableStateFlow<LocalDate?>(null)
+    val resvEndDate: StateFlow<LocalDate?> = _resvEndDate
 
     private val _formattedTotalPrice = MutableStateFlow<String?>(null)
     val formattedTotalPrice: StateFlow<String?> = _formattedTotalPrice
 
     @RequiresApi(Build.VERSION_CODES.O)
-    val bookingPeriod: StateFlow<Int> = combine(
-        _bookingStartDate,
-        _bookingEndDate
+    val resvPeriod: StateFlow<Int> = combine(
+        _resvStartDate,
+        _resvEndDate
     ) { start, end ->
         if(start != null && end != null) {
             ChronoUnit.DAYS.between(start, end).toInt() + 1
@@ -62,8 +62,8 @@ class ProductViewModel @Inject constructor(
     private val _reservedDateList =  MutableStateFlow<List<String>>(emptyList())
     val reservedDateList: StateFlow<List<String>> = _reservedDateList
 
-    private val _bookingResult =  MutableStateFlow<Result<BookingResponseDto>?>(null)
-    val bookingResult: StateFlow<Result<BookingResponseDto>?> = _bookingResult
+    private val _resvResult =  MutableStateFlow<Result<ResvResponseDto>?>(null)
+    val resvResult: StateFlow<Result<ResvResponseDto>?> = _resvResult
 
     private val _requestList =  MutableStateFlow<List<RequestInfoDto>>(emptyList())
     val requestList: StateFlow<List<RequestInfoDto>> = _requestList
@@ -87,11 +87,11 @@ class ProductViewModel @Inject constructor(
             }
         }
     }
-    fun setBookingStartDate(date: LocalDate?) {
-        _bookingStartDate.value = date
+    fun setResvStartDate(date: LocalDate?) {
+        _resvStartDate.value = date
     }
-    fun setBookingEndDate(date: LocalDate?) {
-        _bookingEndDate.value = date
+    fun setResvEndDate(date: LocalDate?) {
+        _resvEndDate.value = date
     }
     fun setFormattedTotalPrice(formattedPrice: String?) {
         _formattedTotalPrice.value = formattedPrice
@@ -110,17 +110,17 @@ class ProductViewModel @Inject constructor(
         }
     }
 
-    fun postBooking(productId: Int, startDate: LocalDate, endDate: LocalDate){
-        val request = BookingRequestDto(startDate.toString(), endDate.toString())
+    fun postResv(productId: Int, startDate: LocalDate, endDate: LocalDate){
+        val request = ResvRequestDto(startDate.toString(), endDate.toString())
         viewModelScope.launch {
-            _bookingResult.value = repository.postBooking(productId, request)
+            _resvResult.value = repository.postResv(productId, request)
         }
     }
 
     fun getProductRequestList(productId: Int){
         viewModelScope.launch {
             repository.getProductRequestList(productId).onSuccess {
-                _requestList.value = it.reservations.filter { data -> BookingStatus.isPending(data.status) }
+                _requestList.value = it.reservations.filter { data -> ResvStatus.isPending(data.status) }
             }
         }
     }

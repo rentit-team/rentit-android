@@ -47,12 +47,12 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BookingRequestScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
+fun ResvRequestScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
 
     val productId by productViewModel.productId.collectAsStateWithLifecycle()
-    val bookingStartDate = productViewModel.bookingStartDate.collectAsStateWithLifecycle()
-    val bookingEndDate = productViewModel.bookingEndDate.collectAsStateWithLifecycle()
-    val rentalPeriod by productViewModel.bookingPeriod.collectAsStateWithLifecycle()
+    val resvStartDate = productViewModel.resvStartDate.collectAsStateWithLifecycle()
+    val resvEndDate = productViewModel.resvEndDate.collectAsStateWithLifecycle()
+    val rentalPeriod by productViewModel.resvPeriod.collectAsStateWithLifecycle()
 
     val productDetailResult by productViewModel.productDetail.collectAsStateWithLifecycle()
     val productPrice = productDetailResult?.getOrNull()?.product?.price ?: 0
@@ -71,7 +71,7 @@ fun BookingRequestScreen(navHostController: NavHostController, productViewModel:
 
     Scaffold(
         topBar = { CommonTopAppBar(title = stringResource(
-            id = R.string.screen_booking_request_app_bar_title), onClick = {}) }
+            id = R.string.screen_resv_request_app_bar_title), onClick = {}) }
     ) {
         Column(
             modifier = Modifier
@@ -88,13 +88,13 @@ fun BookingRequestScreen(navHostController: NavHostController, productViewModel:
             Column(Modifier.screenHorizontalPadding()) {
                 LabelValueRow(Modifier.padding(bottom = 10.dp)) {
                     Text(text = stringResource(
-                        id = R.string.screen_booking_request_label_total_rental_fee), style = MaterialTheme.typography.bodyMedium)
+                        id = R.string.screen_resv_request_label_total_rental_fee), style = MaterialTheme.typography.bodyMedium)
                     Text(text = "$formattedRentalPrice 원", style = MaterialTheme.typography.bodyMedium, color = Gray800)
                 }
                 LabelValueRow(Modifier.padding(bottom = 14.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = stringResource(
-                            id = R.string.screen_booking_request_label_deposit), style = MaterialTheme.typography.bodyMedium)
+                            id = R.string.screen_resv_request_label_deposit), style = MaterialTheme.typography.bodyMedium)
                         Icon(modifier = Modifier.padding(start = 5.dp), painter = painterResource(id = R.drawable.ic_info), contentDescription = "", tint = Gray300 )
                     }
                     Text(text = "${numFormat.format(sampleDeposit)} 원",
@@ -105,15 +105,15 @@ fun BookingRequestScreen(navHostController: NavHostController, productViewModel:
                 CommonDivider()
                 LabelValueRow(Modifier.padding(top = 14.dp)) {
                     Text(text = stringResource(
-                        id = R.string.screen_booking_request_label_total_fee), style = MaterialTheme.typography.bodyLarge)
+                        id = R.string.screen_resv_request_label_total_fee), style = MaterialTheme.typography.bodyLarge)
                     Text(text = "${formattedTotalPrice.value} 원", style = MaterialTheme.typography.bodyLarge, color = PrimaryBlue500)
                 }
-                CommonButton(text = stringResource(id = R.string.screen_booking_request_btn_booking_request),
+                CommonButton(text = stringResource(id = R.string.screen_resv_request_btn_resv_request),
                     containerColor = PrimaryBlue500, contentColor = Color.White, modifier = Modifier.padding(top = 21.dp)) {
-                    val startDate = bookingStartDate.value
-                    val endDate = bookingEndDate.value
+                    val startDate = resvStartDate.value
+                    val endDate = resvEndDate.value
                     if (startDate != null && endDate != null) {
-                        productViewModel.postBooking(
+                        productViewModel.postResv(
                             productId,
                             startDate = startDate,
                             endDate = endDate
@@ -123,7 +123,7 @@ fun BookingRequestScreen(navHostController: NavHostController, productViewModel:
             }
         }
     }
-    BookingResultHandler(productViewModel){
+    ResvResultHandler(productViewModel){
         moveScreen(navHostController, NavigationRoutes.REQUESTCONFIRM)
     }
 }
@@ -138,11 +138,11 @@ fun LabelValueRow(modifier: Modifier, content: @Composable () -> Unit) {
 }
 
 @Composable
-fun BookingResultHandler(productViewModel: ProductViewModel, onBookingSuccess: () -> Unit){
-    val bookingResult by productViewModel.bookingResult.collectAsStateWithLifecycle()
-    LaunchedEffect(bookingResult) {
-        bookingResult?.onSuccess {
-            onBookingSuccess()
+fun ResvResultHandler(productViewModel: ProductViewModel, onResvSuccess: () -> Unit){
+    val resvResult by productViewModel.resvResult.collectAsStateWithLifecycle()
+    LaunchedEffect(resvResult) {
+        resvResult?.onSuccess {
+            onResvSuccess()
         }?.onFailure {
             /* 예약 실패 시 */
         }
@@ -151,8 +151,8 @@ fun BookingResultHandler(productViewModel: ProductViewModel, onBookingSuccess: (
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewBookingRequestScreen() {
+fun PreviewResvRequestScreen() {
     RentItTheme {
-        BookingRequestScreen(rememberNavController(), hiltViewModel())
+        ResvRequestScreen(rememberNavController(), hiltViewModel())
     }
 }

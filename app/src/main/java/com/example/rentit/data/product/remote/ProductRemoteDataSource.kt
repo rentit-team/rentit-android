@@ -1,14 +1,14 @@
 package com.example.rentit.data.product.remote
 
-import com.example.rentit.data.product.dto.BookingRequestDto
-import com.example.rentit.data.product.dto.BookingResponseDto
+import com.example.rentit.data.product.dto.ResvRequestDto
+import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
-import com.example.rentit.data.product.dto.UpdateBookingStatusRequestDto
+import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -26,8 +26,8 @@ class ProductRemoteDataSource @Inject constructor(
     suspend fun getReservedDates(productId: Int): Response<ProductReservedDatesResponseDto> {
         return productApiService.getReservedDates(productId)
     }
-    suspend fun postBooking(productId: Int, request: BookingRequestDto): Response<BookingResponseDto> {
-        return productApiService.postBooking(productId, request)
+    suspend fun postResv(productId: Int, request: ResvRequestDto): Response<ResvResponseDto> {
+        return productApiService.postResv(productId, request)
     }
     suspend fun getCategories(): Response<CategoryListResponseDto> {
         return productApiService.getCategories()
@@ -38,8 +38,8 @@ class ProductRemoteDataSource @Inject constructor(
     suspend fun getProductRequestList(productId: Int): Response<RequestHistoryResponseDto> {
         return productApiService.getProductRequestList(productId)
     }
-    suspend fun updateBookingStatus(productId: Int, reservationId: Int, request: UpdateBookingStatusRequestDto): Response<Unit> {
-        return productApiService.updateBookingStatus(productId, reservationId, request)
+    suspend fun updateResvStatus(productId: Int, reservationId: Int, request: UpdateResvStatusRequestDto): Response<Unit> {
+        return productApiService.updateResvStatus(productId, reservationId, request)
     }
 
 }

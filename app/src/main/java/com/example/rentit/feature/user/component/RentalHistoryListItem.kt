@@ -25,7 +25,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.component.getKorDayOfWeek
-import com.example.rentit.common.enums.BookingStatus
+import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
@@ -75,11 +75,11 @@ fun RentalHistoryListItem(rentalInfo: ReservationDto) {
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
-                    text = if(rentalInfo.status == BookingStatus.ACCEPTED.name)
+                    text = if(rentalInfo.status == ResvStatus.ACCEPTED.name)
                         stringResource(R.string.screen_mypage_my_rental_list_item_label_renting)
-                    else BookingStatus.fromLabel(rentalInfo.status)?.label ?: "",
+                    else ResvStatus.fromLabel(rentalInfo.status)?.label ?: "",
                     style = MaterialTheme.typography.labelLarge,
-                    color = if(rentalInfo.status == BookingStatus.ACCEPTED.name) SecondaryYellow else Gray400
+                    color = if(rentalInfo.status == ResvStatus.ACCEPTED.name) SecondaryYellow else Gray400
                 )
             }
             Text(

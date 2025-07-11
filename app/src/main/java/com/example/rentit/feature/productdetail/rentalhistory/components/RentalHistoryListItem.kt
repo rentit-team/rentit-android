@@ -55,7 +55,7 @@ fun UsageListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.usage_list_item_title_rent_booking),
+                    text = stringResource(R.string.usage_list_item_title_rent_resv),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(

@@ -3,15 +3,15 @@ package com.example.rentit.data.product.repository
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.product.NotProductOwnerException
 import com.example.rentit.common.exception.product.ReservationNotFoundException
-import com.example.rentit.data.product.dto.BookingRequestDto
-import com.example.rentit.data.product.dto.BookingResponseDto
+import com.example.rentit.data.product.dto.ResvRequestDto
+import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
-import com.example.rentit.data.product.dto.UpdateBookingStatusRequestDto
+import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import com.example.rentit.data.product.remote.ProductRemoteDataSource
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -91,9 +91,9 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun postBooking(productId: Int, request: BookingRequestDto): Result<BookingResponseDto> {
+    suspend fun postResv(productId: Int, request: ResvRequestDto): Result<ResvResponseDto> {
         return try {
-            val response = productRemoteDataSource.postBooking(productId, request)
+            val response = productRemoteDataSource.postResv(productId, request)
             when(response.code()) {
                 200 -> {
                     val body = response.body()
@@ -198,9 +198,9 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun updateBookingStatus(productId: Int, reservationId: Int, request: UpdateBookingStatusRequestDto): Result<Unit> {
+    suspend fun updateResvStatus(productId: Int, reservationId: Int, request: UpdateResvStatusRequestDto): Result<Unit> {
         return try {
-            val response = productRemoteDataSource.updateBookingStatus(productId, reservationId, request)
+            val response = productRemoteDataSource.updateResvStatus(productId, reservationId, request)
             when(response.code()) {
                 200 -> Result.success(Unit)
                 403 -> Result.failure(NotProductOwnerException())

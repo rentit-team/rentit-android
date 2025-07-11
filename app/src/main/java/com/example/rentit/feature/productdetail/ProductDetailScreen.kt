@@ -276,7 +276,7 @@ fun PostBottomBar(navHostController: NavHostController, price: Int, isMyProduct:
             MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { moveScreen(navHostController, NavigationRoutes.REQUESTHISTORY) }
         } else {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
-            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.BOOKINGREQUEST)  }
+            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.RESVREQUEST)  }
         }
     }
 }

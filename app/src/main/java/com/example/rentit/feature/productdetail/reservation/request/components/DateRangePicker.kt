@@ -49,9 +49,9 @@ fun DateRangePicker(productViewModel: ProductViewModel, yearMonth: YearMonth = Y
     var isSelectingStartDate by remember { mutableStateOf(false) }
     var isSelectingEndDate by remember { mutableStateOf(false) }
 
-    val rentalStartDate = productViewModel.bookingStartDate.collectAsStateWithLifecycle()
-    val rentalEndDate = productViewModel.bookingEndDate.collectAsStateWithLifecycle()
-    val rentalPeriod = productViewModel.bookingPeriod.collectAsStateWithLifecycle()
+    val rentalStartDate = productViewModel.resvStartDate.collectAsStateWithLifecycle()
+    val rentalEndDate = productViewModel.resvEndDate.collectAsStateWithLifecycle()
+    val rentalPeriod = productViewModel.resvPeriod.collectAsStateWithLifecycle()
 
     fun changeMonth(monthsToAdd: Long) { yearMonth.value = yearMonth.value.plusMonths(monthsToAdd) }
 
@@ -62,19 +62,19 @@ fun DateRangePicker(productViewModel: ProductViewModel, yearMonth: YearMonth = Y
             if (!isSelectingStartDate && rentalStartDate.value != null) {
                 if (date.isBefore(rentalStartDate.value)) {
                     if (isSelectingEndDate) {
-                        productViewModel.setBookingStartDate(null)
-                        productViewModel.setBookingEndDate(date)
+                        productViewModel.setResvStartDate(null)
+                        productViewModel.setResvEndDate(date)
                         isSelectingEndDate = false
                     } else {
-                        productViewModel.setBookingStartDate(date)
+                        productViewModel.setResvStartDate(date)
                     }
                 } else {
-                    productViewModel.setBookingEndDate(date)
+                    productViewModel.setResvEndDate(date)
                     isSelectingEndDate = false
                 }
             } else {
-                if (rentalEndDate.value != null && date.isAfter(rentalEndDate.value)) productViewModel.setBookingEndDate(null)
-                productViewModel.setBookingStartDate(date)
+                if (rentalEndDate.value != null && date.isAfter(rentalEndDate.value)) productViewModel.setResvEndDate(null)
+                productViewModel.setResvStartDate(date)
                 isSelectingStartDate = false
             }
         }

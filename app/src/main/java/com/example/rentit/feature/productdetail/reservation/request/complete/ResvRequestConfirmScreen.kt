@@ -40,9 +40,9 @@ import com.example.rentit.feature.productdetail.ProductViewModel
 @Composable
 fun RequestConfirmationScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
 
-    val bookingStartDate by productViewModel.bookingStartDate.collectAsStateWithLifecycle()
-    val bookingEndDate by productViewModel.bookingEndDate.collectAsStateWithLifecycle()
-    val rentalPeriod by productViewModel.bookingPeriod.collectAsStateWithLifecycle()
+    val resvStartDate by productViewModel.resvStartDate.collectAsStateWithLifecycle()
+    val resvEndDate by productViewModel.resvEndDate.collectAsStateWithLifecycle()
+    val rentalPeriod by productViewModel.resvPeriod.collectAsStateWithLifecycle()
     val formattedTotalPrice by productViewModel.formattedTotalPrice.collectAsStateWithLifecycle()
 
     Column(
@@ -63,8 +63,8 @@ fun RequestConfirmationScreen(navHostController: NavHostController, productViewM
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
-                id = R.string.screen_request_confirm_booking_period), style = MaterialTheme.typography.bodyLarge)
-            Text(text = "$bookingStartDate ~ $bookingEndDate · $rentalPeriod 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
+                id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
+            Text(text = "$resvStartDate ~ $resvEndDate · $rentalPeriod 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
         CommonDivider()
         Row(modifier = Modifier

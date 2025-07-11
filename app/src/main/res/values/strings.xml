@@ -45,14 +45,14 @@
     <string name="common_calendar_left_chevron_description">다음달로 이동</string>
     <string name="common_calendar_right_chevron_description">이전달로 이동</string>
 
-    <string name="screen_booking_request_app_bar_title">예약 기간을 설정해주세요.</string>
-    <string name="screen_booking_request_label_total_rental_fee">총 대여 비용</string>
-    <string name="screen_booking_request_label_deposit">보증금</string>
-    <string name="screen_booking_request_label_total_fee">합계</string>
-    <string name="screen_booking_request_btn_booking_request">예약 요청</string>
+    <string name="screen_resv_request_app_bar_title">예약 기간을 설정해주세요.</string>
+    <string name="screen_resv_request_label_total_rental_fee">총 대여 비용</string>
+    <string name="screen_resv_request_label_deposit">보증금</string>
+    <string name="screen_resv_request_label_total_fee">합계</string>
+    <string name="screen_resv_request_btn_resv_request">예약 요청</string>
 
     <string name="screen_request_confirm_title">요청이 전달되었어요!</string>
-    <string name="screen_request_confirm_booking_period">예약 기간</string>
+    <string name="screen_request_confirm_resv_period">예약 기간</string>
     <string name="screen_request_confirm_total_price">총 금액</string>
     <string name="screen_request_confirm_btn_complete">완료</string>
 
@@ -121,7 +121,7 @@
     <string name="request_history_list_item_period">%s (%s) ~ %s (%s) · %d일</string>
     <string name="request_history_list_item_text_chat">채팅하기</string>
 
-    <string name="usage_list_item_title_rent_booking">대여 예약</string>
+    <string name="usage_list_item_title_rent_resv">대여 예약</string>
     <string name="usage_list_item_text_rent_period_count">%d일</string>
     <string name="usage_list_item_text_rent_period">%s ~ %s</string>
 
