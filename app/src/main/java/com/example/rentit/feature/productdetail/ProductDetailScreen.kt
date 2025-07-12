@@ -2,6 +2,7 @@ package com.example.rentit.feature.productdetail
 
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -73,15 +74,14 @@ import java.text.NumberFormat
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
+fun ProductDetailScreen(navHostController: NavHostController, productId: Int?) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(false) }
     var showFullImage by remember { mutableStateOf(false) }
 
-    val productId by productViewModel.productId.collectAsStateWithLifecycle()
-    val productDetailResult by productViewModel.productDetail.collectAsStateWithLifecycle()
-    val reservedDateList by productViewModel.reservedDateList.collectAsStateWithLifecycle()
-    val requestHistory by productViewModel.requestList.collectAsStateWithLifecycle()
+    val productDetailViewModel: ProductDetailViewModel = hiltViewModel()
+    val productDetailResult by productDetailViewModel.productDetail.collectAsStateWithLifecycle()
+    val requestHistory by productDetailViewModel.requestList.collectAsStateWithLifecycle()
 
     val productDetail = productDetailResult?.getOrNull()?.product
     val ownerId = productDetail?.owner?.userId ?: -1
@@ -89,9 +89,16 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
     val myId = getMyIdFromPrefs(LocalContext.current).toInt()
     val isMyProduct = ownerId > -1 && myId == ownerId
 
-    if(isMyProduct) {
-        LaunchedEffect(Unit) {
-            productViewModel.getProductRequestList(productId)
+    val context = LocalContext.current
+
+    LaunchedEffect(productId) {
+        if(productId == null) {
+            Toast.makeText(context, context.getString(R.string.error_common_cant_find_product), Toast.LENGTH_SHORT).show()
+            navHostController.popBackStack()
+        } else {
+            productDetailViewModel.getProductDetail(productId)
+            if(isMyProduct)
+                productDetailViewModel.getProductRequestList(productId)
         }
     }
 
@@ -130,7 +137,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productViewModel: 
                 )
                 if(showBottomSheet) {
                     ModalBottomSheet(onDismissRequest = { showBottomSheet = false }, sheetState = sheetState) {
-                        RentalHistoryBottomDrawer(productId)
+                        RentalHistoryBottomDrawer(productId ?: -1)
                     }
                 }
             }

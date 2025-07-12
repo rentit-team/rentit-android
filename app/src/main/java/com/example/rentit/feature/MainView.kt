@@ -14,7 +14,6 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -44,7 +42,6 @@ import com.example.rentit.feature.user.MyPageScreen
 import com.example.rentit.feature.productdetail.reservation.request.ResvRequestScreen
 import com.example.rentit.feature.createpost.CreatePostScreen
 import com.example.rentit.feature.productdetail.ProductDetailScreen
-import com.example.rentit.feature.productdetail.ProductViewModel
 import com.example.rentit.feature.productdetail.reservation.request.complete.ResvRequestCompleteScreen
 import com.example.rentit.feature.productdetail.reservation.requesthistory.RequestHistoryScreen
 
@@ -147,16 +144,9 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
 @Composable
 fun ProductDetailNavHost(productId: Int?) {
     val navHostController: NavHostController = rememberNavController()
-    val productViewModel: ProductViewModel = hiltViewModel()
-
-    LaunchedEffect(productId) {
-        if (productId != null) {
-            productViewModel.setProductId(productId)
-        }
-    }
 
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
-        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productId) }
         composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productId) }
         composable(
             route = NavigationRoutes.REQUESTCONFIRM + "/{rentalStartDate}/{rentalEndDate}/{rentalPeriod}/{formattedTotalPrice}",
