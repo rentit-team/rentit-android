@@ -21,7 +21,7 @@ object WebSocketManager {
     private var sendDisposable: Disposable? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun connect(chatroomId: String, receiverId: Long, token: String, onConnect: () -> Unit, onMessageReceived: (MessageResponseDto) -> Unit) {
+    fun connect(chatroomId: String, token: String, onConnect: () -> Unit, onMessageReceived: (MessageResponseDto) -> Unit) {
         val url = "ws://api.rentit.o-r.kr:8080/ws/chat/websocket"
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
 
