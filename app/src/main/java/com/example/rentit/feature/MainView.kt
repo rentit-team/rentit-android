@@ -40,7 +40,7 @@ import com.example.rentit.feature.chat.chatroom.ChatroomScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.mypage.MyPageScreen
 import com.example.rentit.feature.productdetail.reservation.request.ResvRequestScreen
-import com.example.rentit.feature.createpost.CreatePostScreen
+import com.example.rentit.feature.home.createpost.CreatePostScreen
 import com.example.rentit.feature.productdetail.ProductDetailScreen
 import com.example.rentit.feature.productdetail.reservation.request.complete.ResvRequestCompleteScreen
 import com.example.rentit.feature.productdetail.reservation.requesthistory.RequestHistoryScreen

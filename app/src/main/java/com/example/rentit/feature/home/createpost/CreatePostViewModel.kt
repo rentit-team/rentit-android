@@ -1,4 +1,4 @@
-package com.example.rentit.feature.createpost
+package com.example.rentit.feature.home.createpost
 
 import android.content.Context
 import android.net.Uri
@@ -29,24 +29,11 @@ class CreatePostViewModel @Inject constructor(
     private val repository: ProductRepository
 ) : ViewModel() {
 
-    val sampleCategoryList = listOf(
-        CategoryDto(1, "취미", true, null),
-        CategoryDto(2, "태그2", false, 1),
-        CategoryDto(3, "태그3", false, 1),
-        CategoryDto(4, "태그4", false, 1),
-        CategoryDto(5, "스포츠", true, null),
-        CategoryDto(6, "태그22", false, 5),
-        CategoryDto(7, "태그22", false, 5),
-        CategoryDto(8, "태그2sdfasdfasdf2", false, 5),
-        CategoryDto(9, "태그2sdfasdfasdf2", false, 5),
-        CategoryDto(10, "태그22", false, 5),
-    )
-
     private val _categoryList = MutableStateFlow<List<CategoryDto>>(emptyList())
     val categoryList: StateFlow<List<CategoryDto>> = _categoryList
 
-    private val _categoryTagList =  MutableStateFlow<List<CategoryDto>>(emptyList())
-    val categoryTagList: StateFlow<List<CategoryDto>> = _categoryTagList
+    private val _selectedCategoryList =  MutableStateFlow<List<CategoryDto>>(emptyList())
+    val selectedCategoryList: StateFlow<List<CategoryDto>> = _selectedCategoryList
 
     private val _selectedImgUriList =  MutableStateFlow<List<Uri>>(emptyList())
     val selectedImgUriList: StateFlow<List<Uri>> = _selectedImgUriList
@@ -55,10 +42,9 @@ class CreatePostViewModel @Inject constructor(
     val createPostResult: StateFlow<Result<CreatePostResponseDto>?> = _createPostResult
 
     init {
-        viewModelScope.launch {
-            getCategoryList()
-        }
+        getCategoryList()
     }
+
     private fun getCategoryList() {
         viewModelScope.launch {
             repository.getCategories().onSuccess {
@@ -70,16 +56,16 @@ class CreatePostViewModel @Inject constructor(
     }
 
     fun handleCategoryClick(category: CategoryDto) {
-        if(_categoryTagList.value.contains(category)){
-            _categoryTagList.value = _categoryTagList.value - category
+        if(_selectedCategoryList.value.contains(category)){
+            _selectedCategoryList.value -= category
         } else {
-            _categoryTagList.value = _categoryTagList.value + category
+            _selectedCategoryList.value += category
         }
     }
 
     fun removeSelectedCategory(category: CategoryDto) {
-        if(_categoryTagList.value.contains(category)){
-            _categoryTagList.value = _categoryTagList.value - category
+        if(_selectedCategoryList.value.contains(category)){
+            _selectedCategoryList.value -= category
         }
     }
 
@@ -88,7 +74,7 @@ class CreatePostViewModel @Inject constructor(
     }
 
     fun removeImageUri(uri: Uri){
-        _selectedImgUriList.value = _selectedImgUriList.value - uri
+        _selectedImgUriList.value -= uri
     }
 
     fun createPost(postData: CreatePostRequestDto, thumbnailImgUri: Uri?) {
