@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.rentit.data.chat.dto.MessageRequestDto
 import com.example.rentit.data.chat.dto.MessageResponseDto
-import com.example.rentit.feature.chat.chatroom.model.ChatMessageUiModel
 import com.google.gson.Gson
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient
@@ -22,7 +21,7 @@ object WebSocketManager {
     private var sendDisposable: Disposable? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun connect(chatroomId: String, receiverId: Long, token: String, onConnect: () -> Unit, onMessageReceived: (ChatMessageUiModel) -> Unit) {
+    fun connect(chatroomId: String, receiverId: Long, token: String, onConnect: () -> Unit, onMessageReceived: (MessageResponseDto) -> Unit) {
         val url = "ws://api.rentit.o-r.kr:8080/ws/chat/websocket"
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, url)
 
@@ -46,9 +45,9 @@ object WebSocketManager {
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe { topicMessage ->
                 val json = topicMessage.payload
-                val dto = Gson().fromJson(json, MessageResponseDto::class.java)
+                val response = Gson().fromJson(json, MessageResponseDto::class.java)
                 Log.d(TAG, "Received message: ${topicMessage.payload}")
-                onMessageReceived(ChatMessageUiModel(dto.senderId == receiverId, dto.content, dto.sentAt))
+                onMessageReceived(response)
             }
 
     }
