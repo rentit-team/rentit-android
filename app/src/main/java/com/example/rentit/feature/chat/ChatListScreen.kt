@@ -31,7 +31,7 @@ import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.chat.component.ChatListItem
+import com.example.rentit.feature.chat.components.ChatListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -101,7 +101,7 @@ fun OrderButtonSection() {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun ChatListScreenPreview() {
+private fun Preview() {
     RentItTheme {
         ChatListScreen(rememberNavController())
     }

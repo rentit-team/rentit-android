@@ -16,7 +16,7 @@ import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import com.example.rentit.data.product.repository.ProductRepository
-import com.example.rentit.feature.chat.model.ChatMessageUiModel
+import com.example.rentit.feature.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow

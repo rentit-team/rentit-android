@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat.component
+package com.example.rentit.feature.chat.chatroom.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -96,7 +96,7 @@ fun AutoMsgBubble(isSender: Boolean, type: AutoMsgType, onPayClick: () -> Unit =
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun PreviewAutoMsgBubble() {
+private fun Preview() {
     RentItTheme {
         AutoMsgBubble(true, AutoMsgType.COMPLETE_PAY)
     }

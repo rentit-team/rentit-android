@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat.component
+package com.example.rentit.feature.chat.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi

@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.rentit.data.chat.dto.MessageRequestDto
 import com.example.rentit.data.chat.dto.MessageResponseDto
-import com.example.rentit.feature.chat.model.ChatMessageUiModel
+import com.example.rentit.feature.chat.chatroom.model.ChatMessageUiModel
 import com.google.gson.Gson
 import ua.naiksoftware.stomp.Stomp
 import ua.naiksoftware.stomp.StompClient

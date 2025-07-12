@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat
+package com.example.rentit.feature.chat.chatroom.requestaccept
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -112,7 +112,7 @@ fun RequestAcceptDialog(productPrice: Int, onDismissRequest: () -> Unit, onAccep
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewRequestAcceptDialog() {
+private fun Preview() {
     RentItTheme {
         RequestAcceptDialog(10000, onDismissRequest = {}, onAcceptRequest = {})
     }

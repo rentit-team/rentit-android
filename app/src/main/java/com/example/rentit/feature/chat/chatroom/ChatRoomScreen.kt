@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat
+package com.example.rentit.feature.chat.chatroom
 
 import android.os.Build
 import android.widget.Toast
@@ -69,9 +69,11 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.feature.chat.component.ReceivedMsgBubble
-import com.example.rentit.feature.chat.component.SentMsgBubble
-import com.example.rentit.feature.chat.model.ChatMessageUiModel
+import com.example.rentit.feature.chat.ChatViewModel
+import com.example.rentit.feature.chat.chatroom.requestaccept.RequestAcceptDialog
+import com.example.rentit.feature.chat.chatroom.components.ReceivedMsgBubble
+import com.example.rentit.feature.chat.chatroom.components.SentMsgBubble
+import com.example.rentit.feature.chat.chatroom.model.ChatMessageUiModel
 import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter

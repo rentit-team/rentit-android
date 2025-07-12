@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat.component
+package com.example.rentit.feature.chat.chatroom.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -99,7 +99,7 @@ private fun formatDateTime(dateTimeString: String): String {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
-fun PreviewReceivedMsgBubble() {
+private fun Preview() {
     RentItTheme {
         ReceivedMsgBubble("메세지 샘플", "2025-03-25T09:30:00Z", "홍길동")
     }

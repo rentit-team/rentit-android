@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat
+package com.example.rentit.feature.chat.chatroom.requestaccept.confirm
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -27,7 +27,7 @@ import com.example.rentit.common.theme.RentItTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AcceptConfirmationScreen(navHostController: NavHostController) {
+fun RequestAcceptConfirmScreen(navHostController: NavHostController) {
 
     Column(
         modifier = Modifier
@@ -62,8 +62,8 @@ fun AcceptConfirmationScreen(navHostController: NavHostController) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewAcceptConfirmationScreen() {
+private fun Preview() {
     RentItTheme {
-        AcceptConfirmationScreen(rememberNavController())
+        RequestAcceptConfirmScreen(rememberNavController())
     }
 }
