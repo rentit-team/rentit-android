@@ -27,7 +27,6 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.calendar.CalendarDate
 import com.example.rentit.common.component.calendar.CalendarHeader
@@ -36,45 +35,49 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.productdetail.ProductViewModel
+import java.time.LocalDate
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DateRangePicker(productViewModel: ProductViewModel, yearMonth: YearMonth = YearMonth.now(), disabledDates: List<String> = listOf("2025-04-03", "2025-04-28", "2025-05-01", "2025-05-03"), modifier: Modifier = Modifier) {
-    val yearMonth = remember { mutableStateOf(yearMonth) }
+fun DateRangePicker(
+    modifier: Modifier = Modifier,
+    rentalStartDate: LocalDate?,
+    rentalEndDate: LocalDate?,
+    rentalPeriod: Int,
+    disabledDates: List<String> = emptyList(),
+    setRentalStartDate: (LocalDate?) -> Unit,
+    setRentalEndDate: (LocalDate?) -> Unit,
+) {
+    val yearMonth = remember { mutableStateOf(YearMonth.now()) }
     val cellWidth = 48.dp
 
     // 시작일 설정, 종료일 설정 모드 확인
     var isSelectingStartDate by remember { mutableStateOf(false) }
     var isSelectingEndDate by remember { mutableStateOf(false) }
 
-    val rentalStartDate = productViewModel.resvStartDate.collectAsStateWithLifecycle()
-    val rentalEndDate = productViewModel.resvEndDate.collectAsStateWithLifecycle()
-    val rentalPeriod = productViewModel.resvPeriod.collectAsStateWithLifecycle()
-
     fun changeMonth(monthsToAdd: Long) { yearMonth.value = yearMonth.value.plusMonths(monthsToAdd) }
 
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         CalendarHeader(yearMonth.value, { changeMonth(-1) }, { changeMonth(1) })
         DayOfWeek(cellWidth)
-        CalendarDate(yearMonth = yearMonth.value, disabledDates = disabledDates, cellWidth = cellWidth, isPastDateDisabled = true, rentalStartDate.value, rentalEndDate.value, rentalPeriod.value) { date ->
-            if (!isSelectingStartDate && rentalStartDate.value != null) {
-                if (date.isBefore(rentalStartDate.value)) {
+        CalendarDate(yearMonth = yearMonth.value, disabledDates = disabledDates, cellWidth = cellWidth, isPastDateDisabled = true, rentalStartDate, rentalEndDate, rentalPeriod) { date ->
+            if (!isSelectingStartDate && rentalStartDate != null) {
+                if (date.isBefore(rentalStartDate)) {
                     if (isSelectingEndDate) {
-                        productViewModel.setResvStartDate(null)
-                        productViewModel.setResvEndDate(date)
+                        setRentalStartDate(null)
+                        setRentalEndDate(date)
                         isSelectingEndDate = false
                     } else {
-                        productViewModel.setResvStartDate(date)
+                        setRentalStartDate(date)
                     }
                 } else {
-                    productViewModel.setResvEndDate(date)
+                    setRentalEndDate(date)
                     isSelectingEndDate = false
                 }
             } else {
-                if (rentalEndDate.value != null && date.isAfter(rentalEndDate.value)) productViewModel.setResvEndDate(null)
-                productViewModel.setResvStartDate(date)
+                if (rentalEndDate != null && date.isAfter(rentalEndDate)) setRentalEndDate(null)
+                setRentalStartDate(date)
                 isSelectingStartDate = false
             }
         }
@@ -82,21 +85,21 @@ fun DateRangePicker(productViewModel: ProductViewModel, yearMonth: YearMonth = Y
             .fillMaxWidth()
             .screenHorizontalPadding(), horizontalAlignment = Alignment.CenterHorizontally) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                DateBox(rentalStartDate.value?.toString() ?: "-", isSelectingStartDate) {
+                DateBox(rentalStartDate?.toString() ?: "-", isSelectingStartDate) {
                     isSelectingStartDate = !isSelectingStartDate; isSelectingEndDate = false
                 }
                 Text(modifier = Modifier.padding(horizontal = 5.dp), text = "부터", style = MaterialTheme.typography.bodyMedium)
-                DateBox(rentalEndDate.value?.toString() ?: "-", isSelectingEndDate) {
+                DateBox(rentalEndDate?.toString() ?: "-", isSelectingEndDate) {
                     isSelectingEndDate = !isSelectingEndDate; isSelectingStartDate = false
                 }
                 Text(modifier = Modifier.padding(horizontal = 5.dp), text = "까지", style = MaterialTheme.typography.bodyMedium)
             }
-            totalPeriodText(rentalPeriod.value)
+            TotalPeriodText(rentalPeriod)
         }
     }
 }
 @Composable
-fun totalPeriodText(period: Int) {
+fun TotalPeriodText(period: Int) {
     Text(
         modifier = Modifier.padding(top = 16.dp),
         text = buildAnnotatedString {
@@ -128,6 +131,13 @@ fun DateBox(date: String, isSelectingDate: Boolean, onDateClick: () -> Unit) {
 @Composable
 private fun Preview() {
     RentItTheme {
-        DateRangePicker(hiltViewModel(), YearMonth.now())
+        DateRangePicker(
+            hiltViewModel(),
+            rentalStartDate = null,
+            rentalEndDate = null,
+            rentalPeriod = 0,
+            setRentalStartDate = { },
+            setRentalEndDate = { },
+        )
     }
 }

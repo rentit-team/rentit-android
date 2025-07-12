@@ -157,8 +157,21 @@ fun ProductDetailNavHost(productId: Int?) {
 
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
         composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.REQUESTCONFIRM) { ResvRequestCompleteScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productId) }
+        composable(
+            route = NavigationRoutes.REQUESTCONFIRM + "/{rentalStartDate}/{rentalEndDate}/{rentalPeriod}/{formattedTotalPrice}",
+            arguments = listOf(
+                navArgument("rentalStartDate") { type = NavType.StringType },
+                navArgument("rentalEndDate") { type = NavType.StringType },
+                navArgument("rentalPeriod") { type = NavType.IntType },
+                navArgument("formattedTotalPrice") { type = NavType.StringType },
+            )
+        ) { backStackEntry ->
+            val rentalStartDate = backStackEntry.arguments?.getString("rentalStartDate") ?: ""
+            val rentalEndDate = backStackEntry.arguments?.getString("rentalEndDate") ?: ""
+            val rentalPeriod = backStackEntry.arguments?.getInt("rentalPeriod") ?: 0
+            val formattedTotalPrice = backStackEntry.arguments?.getString("formattedTotalPrice") ?: "0"
+            ResvRequestCompleteScreen(navHostController, rentalStartDate, rentalEndDate, rentalPeriod, formattedTotalPrice) }
         composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productId) }
         composable(
             route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{reservationId}/{chatRoomId}",

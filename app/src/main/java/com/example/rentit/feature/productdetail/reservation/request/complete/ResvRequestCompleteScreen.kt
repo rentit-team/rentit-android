@@ -12,15 +12,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
@@ -34,17 +31,16 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.productdetail.ProductViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ResvRequestCompleteScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
-
-    val resvStartDate by productViewModel.resvStartDate.collectAsStateWithLifecycle()
-    val resvEndDate by productViewModel.resvEndDate.collectAsStateWithLifecycle()
-    val rentalPeriod by productViewModel.resvPeriod.collectAsStateWithLifecycle()
-    val formattedTotalPrice by productViewModel.formattedTotalPrice.collectAsStateWithLifecycle()
-
+fun ResvRequestCompleteScreen(
+    navHostController: NavHostController,
+    rentalStartDate: String,
+    rentalEndDate: String,
+    rentalPeriod: Int,
+    formattedTotalPrice: String,
+    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +60,7 @@ fun ResvRequestCompleteScreen(navHostController: NavHostController, productViewM
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
-            Text(text = "$resvStartDate ~ $resvEndDate · $rentalPeriod 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
+            Text(text = "$rentalStartDate ~ $rentalEndDate · $rentalPeriod 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
         CommonDivider()
         Row(modifier = Modifier
@@ -89,6 +85,12 @@ fun ResvRequestCompleteScreen(navHostController: NavHostController, productViewM
 @Composable
 private fun Preview() {
     RentItTheme {
-        ResvRequestCompleteScreen(rememberNavController(), hiltViewModel())
+        ResvRequestCompleteScreen(
+            rememberNavController(),
+            rentalStartDate = "2025-07-12",
+            rentalEndDate = "2025-07-16",
+            rentalPeriod = 5,
+            formattedTotalPrice = "45,000"
+        )
     }
 }
