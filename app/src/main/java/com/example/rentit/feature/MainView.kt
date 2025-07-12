@@ -38,7 +38,7 @@ import com.example.rentit.feature.chat.AcceptConfirmationScreen
 import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.chat.ChatroomScreen
 import com.example.rentit.feature.home.HomeScreen
-import com.example.rentit.feature.user.MyPageScreen
+import com.example.rentit.feature.mypage.MyPageScreen
 import com.example.rentit.feature.productdetail.reservation.request.ResvRequestScreen
 import com.example.rentit.feature.createpost.CreatePostScreen
 import com.example.rentit.feature.productdetail.ProductDetailScreen

@@ -1,4 +1,4 @@
-package com.example.rentit.feature.user
+package com.example.rentit.feature.mypage
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -57,23 +57,23 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
-import com.example.rentit.feature.home.component.ProductListItem
-import com.example.rentit.feature.user.component.RentalHistoryListItem
+import com.example.rentit.common.component.ProductListItem
+import com.example.rentit.feature.mypage.component.MyRentalHistoryListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(navHostController: NavHostController) {
-    val userViewModel: UserViewModel = hiltViewModel()
+    val myPageViewModel: MyPageViewModel = hiltViewModel()
 
     var isFirstTabSelected by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
-        userViewModel.getMyProductList()
-        userViewModel.getMyRentalList()
+        myPageViewModel.getMyProductList()
+        myPageViewModel.getMyRentalList()
     }
 
-    val myProductList by userViewModel.myProductList.collectAsStateWithLifecycle()
-    val myRentalList by userViewModel.myRentalList.collectAsStateWithLifecycle()
+    val myProductList by myPageViewModel.myProductList.collectAsStateWithLifecycle()
+    val myRentalList by myPageViewModel.myRentalList.collectAsStateWithLifecycle()
 
     Column {
         Column(
@@ -264,7 +264,7 @@ fun TabbedListSection(
                 }
             } else {
                 items(myRentList) {
-                    RentalHistoryListItem(it)
+                    MyRentalHistoryListItem(it)
                 }
             }
         } else {

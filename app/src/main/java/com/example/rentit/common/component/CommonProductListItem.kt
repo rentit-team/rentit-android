@@ -1,4 +1,4 @@
-package com.example.rentit.feature.home.component
+package com.example.rentit.common.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -33,8 +33,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.component.ProductStatus.getKorProductStatus
-import com.example.rentit.common.component.basicListItemTopDivider
-import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme

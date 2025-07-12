@@ -32,7 +32,7 @@ import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.home.component.ProductListItem
+import com.example.rentit.common.component.ProductListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

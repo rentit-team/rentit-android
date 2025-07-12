@@ -1,8 +1,7 @@
-package com.example.rentit.feature.user
+package com.example.rentit.feature.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
 import com.example.rentit.data.user.repository.UserRepository
@@ -13,9 +12,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class UserViewModel @Inject constructor(
+class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val chatRepository: ChatRepository
 ) : ViewModel() {
 
     private val _myProductList = MutableStateFlow<List<ProductDto>>(emptyList())
@@ -41,16 +39,6 @@ class UserViewModel @Inject constructor(
             }.onFailure {
                 /* 로딩 실패 시 */
             }
-        }
-    }
-
-    fun postNewChat(productId: Int, onSuccess: (String) -> Unit = {}, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            chatRepository.postNewChat(productId)
-                .onSuccess {
-                    onSuccess(it.data.chatRoomId)
-                }
-                .onFailure(onError)
         }
     }
 }
