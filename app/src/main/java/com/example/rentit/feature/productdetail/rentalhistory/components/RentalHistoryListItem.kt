@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product.component
+package com.example.rentit.feature.productdetail.rentalhistory.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -27,7 +27,7 @@ import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun UsageListItem(
+fun RentalHistoryListItem(
     periodCnt: Int = 0,
     startDate: LocalDate = LocalDate.now(),
     endDate: LocalDate = LocalDate.now(),
@@ -55,7 +55,7 @@ fun UsageListItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(R.string.usage_list_item_title_rent_booking),
+                    text = stringResource(R.string.usage_list_item_title_rent_resv),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
@@ -78,8 +78,8 @@ fun UsageListItem(
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewUsageListItem() {
+private fun Preview() {
     RentItTheme {
-        UsageListItem()
+        RentalHistoryListItem()
     }
 }

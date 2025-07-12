@@ -1,6 +1,7 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.productdetail.reservation.request
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,37 +42,46 @@ import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.product.component.calendar.DateRangePicker
+import com.example.rentit.feature.productdetail.reservation.request.components.DateRangePicker
 import java.text.NumberFormat
-import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun BookingRequestScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
+fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
+    val resvRequestViewModel: ResvRequestViewModel = hiltViewModel()
+    val context = LocalContext.current
 
-    val productId by productViewModel.productId.collectAsStateWithLifecycle()
-    val bookingStartDate = productViewModel.bookingStartDate.collectAsStateWithLifecycle()
-    val bookingEndDate = productViewModel.bookingEndDate.collectAsStateWithLifecycle()
-    val rentalPeriod by productViewModel.bookingPeriod.collectAsStateWithLifecycle()
-
-    val productDetailResult by productViewModel.productDetail.collectAsStateWithLifecycle()
-    val productPrice = productDetailResult?.getOrNull()?.product?.price ?: 0
-
-    val sampleDeposit = 5000
+    val rentalStartDate by resvRequestViewModel.rentalStartDate.collectAsStateWithLifecycle()
+    val rentalEndDate by resvRequestViewModel.rentalEndDate.collectAsStateWithLifecycle()
+    val rentalPeriod by resvRequestViewModel.rentalPeriod.collectAsStateWithLifecycle()
+    val productPrice by resvRequestViewModel.productPrice.collectAsStateWithLifecycle()
+    val reservedDateList by resvRequestViewModel.reservedDateList.collectAsStateWithLifecycle()
 
     val numFormat = NumberFormat.getNumberInstance()
     var formattedRentalPrice by remember { mutableStateOf("") }
-    val formattedTotalPrice = productViewModel.formattedTotalPrice.collectAsStateWithLifecycle()
+    val formattedTotalPrice = resvRequestViewModel.formattedTotalPrice.collectAsStateWithLifecycle()
+
+    val sampleDeposit = 5000
+
+    LaunchedEffect(productId) {
+        if(productId == null) {
+            Toast.makeText(context, context.getString(R.string.error_common_cant_find_product), Toast.LENGTH_SHORT).show()
+            navHostController.popBackStack()
+        } else {
+            resvRequestViewModel.getProductDetail(productId)
+            resvRequestViewModel.getReservedDates(productId)
+        }
+    }
 
     LaunchedEffect(rentalPeriod) {
         val totalPrice = rentalPeriod * productPrice
         formattedRentalPrice = numFormat.format(totalPrice)
-        productViewModel.setFormattedTotalPrice(numFormat.format(totalPrice + sampleDeposit))
+        resvRequestViewModel.setFormattedTotalPrice(numFormat.format(totalPrice + sampleDeposit))
     }
 
     Scaffold(
         topBar = { CommonTopAppBar(title = stringResource(
-            id = R.string.screen_booking_request_app_bar_title), onClick = {}) }
+            id = R.string.screen_resv_request_app_bar_title), onClick = {}) }
     ) {
         Column(
             modifier = Modifier
@@ -80,20 +91,26 @@ fun BookingRequestScreen(navHostController: NavHostController, productViewModel:
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DateRangePicker(
-                productViewModel, yearMonth = YearMonth.now(), modifier = Modifier
+                modifier = Modifier
                     .weight(1F)
-                    .padding(top = 24.dp)
+                    .padding(top = 24.dp),
+                rentalStartDate = rentalStartDate,
+                rentalEndDate = rentalEndDate,
+                rentalPeriod = rentalPeriod,
+                disabledDates = reservedDateList,
+                setRentalStartDate = { date -> resvRequestViewModel.setRentalStartDate(date) },
+                setRentalEndDate = { date -> resvRequestViewModel.setRentalEndDate(date) }
             )
             Column(Modifier.screenHorizontalPadding()) {
                 LabelValueRow(Modifier.padding(bottom = 10.dp)) {
                     Text(text = stringResource(
-                        id = R.string.screen_booking_request_label_total_rental_fee), style = MaterialTheme.typography.bodyMedium)
+                        id = R.string.screen_resv_request_label_total_rental_fee), style = MaterialTheme.typography.bodyMedium)
                     Text(text = "$formattedRentalPrice 원", style = MaterialTheme.typography.bodyMedium, color = Gray800)
                 }
                 LabelValueRow(Modifier.padding(bottom = 14.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(text = stringResource(
-                            id = R.string.screen_booking_request_label_deposit), style = MaterialTheme.typography.bodyMedium)
+                            id = R.string.screen_resv_request_label_deposit), style = MaterialTheme.typography.bodyMedium)
                         Icon(modifier = Modifier.padding(start = 5.dp), painter = painterResource(id = R.drawable.ic_info), contentDescription = "", tint = Gray300 )
                     }
                     Text(text = "${numFormat.format(sampleDeposit)} 원",
@@ -104,26 +121,23 @@ fun BookingRequestScreen(navHostController: NavHostController, productViewModel:
                 CommonDivider()
                 LabelValueRow(Modifier.padding(top = 14.dp)) {
                     Text(text = stringResource(
-                        id = R.string.screen_booking_request_label_total_fee), style = MaterialTheme.typography.bodyLarge)
+                        id = R.string.screen_resv_request_label_total_fee), style = MaterialTheme.typography.bodyLarge)
                     Text(text = "${formattedTotalPrice.value} 원", style = MaterialTheme.typography.bodyLarge, color = PrimaryBlue500)
                 }
-                CommonButton(text = stringResource(id = R.string.screen_booking_request_btn_booking_request),
+                CommonButton(text = stringResource(id = R.string.screen_resv_request_btn_resv_request),
                     containerColor = PrimaryBlue500, contentColor = Color.White, modifier = Modifier.padding(top = 21.dp)) {
-                    val startDate = bookingStartDate.value
-                    val endDate = bookingEndDate.value
-                    if (startDate != null && endDate != null) {
-                        productViewModel.postBooking(
-                            productId,
-                            startDate = startDate,
-                            endDate = endDate
-                        )
+                    if (rentalStartDate != null && rentalEndDate != null) {
+                        resvRequestViewModel.postResv(productId ?: -1)
                     }
                 }
             }
         }
     }
-    BookingResultHandler(productViewModel){
-        moveScreen(navHostController, NavigationRoutes.REQUESTCONFIRM)
+    ResvResultHandler(resvRequestViewModel){
+        moveScreen(
+            navHostController,
+            NavigationRoutes.REQUESTCONFIRM + "/${rentalStartDate}/${rentalEndDate}/${rentalPeriod}/${formattedTotalPrice.value}"
+        )
     }
 }
 
@@ -137,11 +151,11 @@ fun LabelValueRow(modifier: Modifier, content: @Composable () -> Unit) {
 }
 
 @Composable
-fun BookingResultHandler(productViewModel: ProductViewModel, onBookingSuccess: () -> Unit){
-    val bookingResult by productViewModel.bookingResult.collectAsStateWithLifecycle()
-    LaunchedEffect(bookingResult) {
-        bookingResult?.onSuccess {
-            onBookingSuccess()
+fun ResvResultHandler(resvRequestViewModel: ResvRequestViewModel, onResvSuccess: () -> Unit){
+    val resvResult by resvRequestViewModel.resvResult.collectAsStateWithLifecycle()
+    LaunchedEffect(resvResult) {
+        resvResult?.onSuccess {
+            onResvSuccess()
         }?.onFailure {
             /* 예약 실패 시 */
         }
@@ -150,8 +164,8 @@ fun BookingResultHandler(productViewModel: ProductViewModel, onBookingSuccess: (
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewBookingRequestScreen() {
+private fun Preview() {
     RentItTheme {
-        BookingRequestScreen(rememberNavController(), hiltViewModel())
+        ResvRequestScreen(rememberNavController(), 0)
     }
 }

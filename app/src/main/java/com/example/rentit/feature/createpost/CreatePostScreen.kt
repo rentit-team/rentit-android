@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.createpost
 
 import android.net.Uri
 import android.util.Log
@@ -79,7 +79,7 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
-import com.example.rentit.feature.product.component.RemovableTagButton
+import com.example.rentit.feature.createpost.component.RemovableTagButton
 import java.text.NumberFormat
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.productdetail.reservation.request.complete
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -12,15 +12,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
@@ -37,13 +34,13 @@ import com.example.rentit.common.theme.RentItTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestConfirmationScreen(navHostController: NavHostController, productViewModel: ProductViewModel) {
-
-    val bookingStartDate by productViewModel.bookingStartDate.collectAsStateWithLifecycle()
-    val bookingEndDate by productViewModel.bookingEndDate.collectAsStateWithLifecycle()
-    val rentalPeriod by productViewModel.bookingPeriod.collectAsStateWithLifecycle()
-    val formattedTotalPrice by productViewModel.formattedTotalPrice.collectAsStateWithLifecycle()
-
+fun ResvRequestCompleteScreen(
+    navHostController: NavHostController,
+    rentalStartDate: String,
+    rentalEndDate: String,
+    rentalPeriod: Int,
+    formattedTotalPrice: String,
+    ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -62,8 +59,8 @@ fun RequestConfirmationScreen(navHostController: NavHostController, productViewM
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
-                id = R.string.screen_request_confirm_booking_period), style = MaterialTheme.typography.bodyLarge)
-            Text(text = "$bookingStartDate ~ $bookingEndDate · $rentalPeriod 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
+                id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
+            Text(text = "$rentalStartDate ~ $rentalEndDate · $rentalPeriod 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
         CommonDivider()
         Row(modifier = Modifier
@@ -86,8 +83,14 @@ fun RequestConfirmationScreen(navHostController: NavHostController, productViewM
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun PreviewRequestConfirmationScreen() {
+private fun Preview() {
     RentItTheme {
-        RequestConfirmationScreen(rememberNavController(), hiltViewModel())
+        ResvRequestCompleteScreen(
+            rememberNavController(),
+            rentalStartDate = "2025-07-12",
+            rentalEndDate = "2025-07-16",
+            rentalPeriod = 5,
+            formattedTotalPrice = "45,000"
+        )
     }
 }

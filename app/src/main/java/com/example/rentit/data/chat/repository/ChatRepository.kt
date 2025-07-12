@@ -4,7 +4,7 @@ import android.util.Log
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.chat.ChatRoomAlreadyExistsException
-import com.example.rentit.common.exception.product.ReservationByOwnerException
+import com.example.rentit.common.exception.product.ResvByOwnerException
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.dto.ChatListResponseDto
 import com.example.rentit.data.chat.dto.NewChatResponseDto
@@ -61,7 +61,7 @@ class ChatRepository @Inject constructor(
                 200 -> response.body() ?: throw Exception("Empty response body")
                 403 -> {
                     Log.e(TAG, "Server error 403: ${response.errorBody()?.string()}")
-                    throw ReservationByOwnerException()
+                    throw ResvByOwnerException()
                 }
                 409 -> {
                     Log.e(TAG, "Server error 409: ${response.errorBody()?.string()}")

@@ -1,4 +1,4 @@
-package com.example.rentit.feature.product
+package com.example.rentit.feature.createpost
 
 import android.content.Context
 import android.net.Uri

@@ -14,7 +14,6 @@ import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +21,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -41,12 +39,11 @@ import com.example.rentit.feature.chat.ChatListScreen
 import com.example.rentit.feature.chat.ChatroomScreen
 import com.example.rentit.feature.home.HomeScreen
 import com.example.rentit.feature.user.MyPageScreen
-import com.example.rentit.feature.product.BookingRequestScreen
-import com.example.rentit.feature.product.CreatePostScreen
-import com.example.rentit.feature.product.ProductDetailScreen
-import com.example.rentit.feature.product.ProductViewModel
-import com.example.rentit.feature.product.RequestConfirmationScreen
-import com.example.rentit.feature.user.RequestHistoryScreen
+import com.example.rentit.feature.productdetail.reservation.request.ResvRequestScreen
+import com.example.rentit.feature.createpost.CreatePostScreen
+import com.example.rentit.feature.productdetail.ProductDetailScreen
+import com.example.rentit.feature.productdetail.reservation.request.complete.ResvRequestCompleteScreen
+import com.example.rentit.feature.productdetail.reservation.requesthistory.RequestHistoryScreen
 
 sealed class BottomNavItem(
     val title: Int, val icon: Int, val iconSelected: Int, val screenRoute: String
@@ -147,19 +144,25 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
 @Composable
 fun ProductDetailNavHost(productId: Int?) {
     val navHostController: NavHostController = rememberNavController()
-    val productViewModel: ProductViewModel = hiltViewModel()
-
-    LaunchedEffect(productId) {
-        if (productId != null) {
-            productViewModel.setProductId(productId)
-        }
-    }
 
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
-        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.BOOKINGREQUEST) { BookingRequestScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.REQUESTCONFIRM) { RequestConfirmationScreen(navHostController, productViewModel) }
-        composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productViewModel) }
+        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productId) }
+        composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productId) }
+        composable(
+            route = NavigationRoutes.REQUESTCONFIRM + "/{rentalStartDate}/{rentalEndDate}/{rentalPeriod}/{formattedTotalPrice}",
+            arguments = listOf(
+                navArgument("rentalStartDate") { type = NavType.StringType },
+                navArgument("rentalEndDate") { type = NavType.StringType },
+                navArgument("rentalPeriod") { type = NavType.IntType },
+                navArgument("formattedTotalPrice") { type = NavType.StringType },
+            )
+        ) { backStackEntry ->
+            val rentalStartDate = backStackEntry.arguments?.getString("rentalStartDate") ?: ""
+            val rentalEndDate = backStackEntry.arguments?.getString("rentalEndDate") ?: ""
+            val rentalPeriod = backStackEntry.arguments?.getInt("rentalPeriod") ?: 0
+            val formattedTotalPrice = backStackEntry.arguments?.getString("formattedTotalPrice") ?: "0"
+            ResvRequestCompleteScreen(navHostController, rentalStartDate, rentalEndDate, rentalPeriod, formattedTotalPrice) }
+        composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productId) }
         composable(
             route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{reservationId}/{chatRoomId}",
             arguments = listOf(

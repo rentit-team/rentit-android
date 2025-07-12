@@ -1,14 +1,14 @@
 package com.example.rentit.data.product.remote
 
-import com.example.rentit.data.product.dto.BookingRequestDto
-import com.example.rentit.data.product.dto.BookingResponseDto
+import com.example.rentit.data.product.dto.ResvRequestDto
+import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
-import com.example.rentit.data.product.dto.UpdateBookingStatusRequestDto
+import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -36,7 +36,7 @@ interface ProductApiService {
 
     @POST("api/v1/products/{productId}/reservations")
     @Headers("Content-Type: application/json")
-    suspend fun postBooking(@Path("productId") productId: Int, @Body request: BookingRequestDto): Response<BookingResponseDto>
+    suspend fun postResv(@Path("productId") productId: Int, @Body request: ResvRequestDto): Response<ResvResponseDto>
 
     @GET("api/v1/products/categories")
     @Headers("Content-Type: application/json")
@@ -55,9 +55,9 @@ interface ProductApiService {
 
     @PATCH("api/v1/products/{productId}/reservations/{reservationId}")
     @Headers("Content-Type: application/json")
-    suspend fun updateBookingStatus(
+    suspend fun updateResvStatus(
         @Path("productId") productId: Int,
         @Path("reservationId") reservationId: Int,
-        @Body request: UpdateBookingStatusRequestDto
+        @Body request: UpdateResvStatusRequestDto
     ): Response<Unit>
 }

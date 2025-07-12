@@ -2,12 +2,12 @@ package com.example.rentit.data.product.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class BookingResponseDto(
+data class ResvResponseDto(
     @SerializedName("data")
-    val data: BookingDataDto
+    val data: ResvDataDto
 )
 
-data class BookingDataDto(
+data class ResvDataDto(
     @SerializedName("reservationId")
     val reservationId: Int,
 
