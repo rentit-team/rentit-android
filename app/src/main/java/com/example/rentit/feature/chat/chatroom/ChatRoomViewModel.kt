@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat
+package com.example.rentit.feature.chat.chatroom
 
 import android.content.Context
 import android.os.Build
@@ -11,7 +11,6 @@ import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
-import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
 import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
@@ -25,22 +24,23 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ChatViewModel @Inject constructor(
+class ChatRoomViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val chatRepository: ChatRepository,
     private val productRepository: ProductRepository
-) : ViewModel() {
+): ViewModel() {
 
     private val myId: Long = getMyIdFromPrefs(context)
-
-    private val _chatList = MutableStateFlow<List<ChatRoomSummaryDto>>(emptyList())
-    val chatList: StateFlow<List<ChatRoomSummaryDto>> = _chatList
 
     private val _productDetail = MutableStateFlow<ProductDetailResponseDto?>(null)
     val productDetail: StateFlow<ProductDetailResponseDto?> = _productDetail
 
     private val _chatDetail = MutableStateFlow<ChatDetailResponseDto?>(null)
     val chatDetail: StateFlow<ChatDetailResponseDto?> = _chatDetail
+
+    // 백엔드 오류로 인한 임시 요청 확인 처리
+    private val _isRequestAccepted = MutableStateFlow(false)
+    val isRequestAccepted: StateFlow<Boolean> = _isRequestAccepted
 
     private val _initialMessages = MutableStateFlow<List<ChatMessageUiModel>>(emptyList())
     val initialMessages: StateFlow<List<ChatMessageUiModel>> = _initialMessages
@@ -51,9 +51,31 @@ class ChatViewModel @Inject constructor(
     private val _senderNickname = MutableStateFlow<String?>(null)
     val senderNickname: StateFlow<String?> = _senderNickname
 
-    // 백엔드 오류로 인한 임시 요청 확인 처리
-    private val _isRequestAccepted = MutableStateFlow(false)
-    val isRequestAccepted: StateFlow<Boolean> = _isRequestAccepted
+    fun getProductDetail(productId: Int, onError: (Throwable) -> Unit = {}) {
+        viewModelScope.launch {
+            productRepository.getProductDetail(productId)
+                .onSuccess {
+                    _productDetail.value = it
+                }
+                .onFailure(onError)
+        }
+    }
+
+    fun getChatDetail(chatRoomMessageId: String, onError: (Throwable) -> Unit = {}) {
+        viewModelScope.launch {
+            val skip = 0
+            val listSize = 30
+            chatRepository.getChatDetail(chatRoomMessageId, skip, listSize)
+                .onSuccess { detail ->
+                    _chatDetail.value = detail
+                    _initialMessages.value =
+                        detail.messages.map { ChatMessageUiModel(it.isMine, it.content, it.sentAt) }
+                    _senderNickname.value =
+                        detail.chatRoom.participants.find { it.userId != myId }?.nickname
+                }
+                .onFailure(onError)
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun connectWebSocket(chatroomId: String, onConnect: () -> Unit) {
@@ -81,42 +103,6 @@ class ChatViewModel @Inject constructor(
     fun checkRequestAccepted() {
         if(_initialMessages.value.find { it.message == AutoMsgType.REQUEST_ACCEPT.code } != null) {
             _isRequestAccepted.value = true
-        }
-    }
-
-    fun getChatList(onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            chatRepository.getChatList()
-                .onSuccess {
-                    _chatList.value = it.chatRooms
-                }
-                .onFailure(onError)
-        }
-    }
-
-    fun getProductDetail(productId: Int, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            productRepository.getProductDetail(productId)
-                .onSuccess {
-                    _productDetail.value = it
-                }
-                .onFailure(onError)
-        }
-    }
-
-    fun getChatDetail(chatRoomMessageId: String, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            val skip = 0
-            val listSize = 30
-            chatRepository.getChatDetail(chatRoomMessageId, skip, listSize)
-                .onSuccess { detail ->
-                    _chatDetail.value = detail
-                    _initialMessages.value =
-                        detail.messages.map { ChatMessageUiModel(it.isMine, it.content, it.sentAt) }
-                    _senderNickname.value =
-                        detail.chatRoom.participants.find { it.userId != myId }?.nickname
-                }
-                .onFailure(onError)
         }
     }
 

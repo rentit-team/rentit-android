@@ -36,13 +36,13 @@ import com.example.rentit.feature.chat.components.ChatListItem
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListScreen(navHostController: NavHostController) {
-    val chatViewModel: ChatViewModel = hiltViewModel()
-    val chatList by chatViewModel.chatList.collectAsStateWithLifecycle()
+    val chatListViewModel: ChatListViewModel = hiltViewModel()
+    val chatList by chatListViewModel.chatList.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     // 최초 한 번만 호출
     LaunchedEffect(Unit) {
-        chatViewModel.getChatList {
+        chatListViewModel.getChatList {
             Toast.makeText(
                 context,
                 context.getString(R.string.error_chat_list_load),
