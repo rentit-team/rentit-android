@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.mypage.component
+package com.example.rentit.presentation.mypage.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi

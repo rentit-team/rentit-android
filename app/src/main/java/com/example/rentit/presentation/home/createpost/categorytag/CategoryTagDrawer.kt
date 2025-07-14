@@ -14,7 +14,7 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.presentation.home.createpost.LabeledContent
-import com.example.rentit.presentation.home.createpost.component.TagButton
+import com.example.rentit.presentation.home.createpost.components.TagButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable

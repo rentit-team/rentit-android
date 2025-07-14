@@ -80,7 +80,7 @@ import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
 import com.example.rentit.presentation.home.createpost.categorytag.CategoryTagDrawer
-import com.example.rentit.presentation.home.createpost.component.RemovableTagButton
+import com.example.rentit.presentation.home.createpost.components.RemovableTagButton
 import java.text.NumberFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
