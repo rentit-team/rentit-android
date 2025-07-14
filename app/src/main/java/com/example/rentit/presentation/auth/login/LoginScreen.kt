@@ -29,7 +29,7 @@ import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.storage.saveToken
 import com.example.rentit.data.user.model.GoogleSignInResult
-import com.example.rentit.presentation.auth.login.component.GoogleLoginButton
+import com.example.rentit.presentation.auth.login.components.GoogleLoginButton
 import java.net.URLEncoder
 
 private const val TAG = "Login"

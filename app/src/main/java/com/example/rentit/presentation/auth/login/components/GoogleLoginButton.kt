@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.auth.login.component
+package com.example.rentit.presentation.auth.login.components
 
 import android.content.Context
 import android.content.Intent
