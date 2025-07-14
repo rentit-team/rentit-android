@@ -78,17 +78,17 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun connectWebSocket(chatroomId: String, onConnect: () -> Unit) {
+    fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
         val token = getToken(context) ?: return
-        WebSocketManager.connect(chatroomId, token, onConnect) { data ->
+        WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
             val msg = ChatMessageUiModel(data.senderId == myId, data.content, data.sentAt)
             _realTimeMessages.value = listOf(msg) + _realTimeMessages.value
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun sendMessage(chatroomId: String, message: String) {
-        WebSocketManager.sendMessage(chatroomId, myId, message)
+    fun sendMessage(chatRoomId: String, message: String) {
+        WebSocketManager.sendMessage(chatRoomId, myId, message)
     }
 
     fun disconnectWebSocket() {
