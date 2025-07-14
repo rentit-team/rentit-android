@@ -1,8 +1,7 @@
-package com.example.rentit.feature.auth.component
+package com.example.rentit.feature.auth.login.component
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -16,9 +15,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,16 +27,14 @@ import com.example.rentit.common.GOOGLE_CLIENT_ID
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.PretendardTextStyle
-import com.example.rentit.data.user.model.GoogleSignInResult
-import com.example.rentit.feature.auth.AuthViewModel
+import com.example.rentit.feature.auth.login.LoginViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import java.net.URLEncoder
 
 @Composable
-fun GoogleLoginButton(authViewModel: AuthViewModel){
+fun GoogleLoginButton(loginViewModel: LoginViewModel){
     val context = LocalContext.current
-    val launcher = googleSignInLauncher(authViewModel)
+    val launcher = googleSignInLauncher(loginViewModel)
 
     OutlinedButton(
         onClick = { launchGoogleSignIn(launcher, context) },
@@ -51,7 +45,6 @@ fun GoogleLoginButton(authViewModel: AuthViewModel){
         ),
         border = CommonBorders.mediumBorder()
     ){
-        GoogleSignInStateHandler(authViewModel)
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -72,11 +65,11 @@ fun GoogleLoginButton(authViewModel: AuthViewModel){
 
 
 @Composable
-fun googleSignInLauncher(authViewModel: AuthViewModel): ManagedActivityResultLauncher<Intent, ActivityResult> {
+fun googleSignInLauncher(loginViewModel: LoginViewModel): ManagedActivityResultLauncher<Intent, ActivityResult> {
     return rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        authViewModel.handleGoogleSignInResult(
+        loginViewModel.handleGoogleSignInResult(
             requestCode = 9001,
             resultCode = result.resultCode,
             data = result.data
@@ -84,28 +77,6 @@ fun googleSignInLauncher(authViewModel: AuthViewModel): ManagedActivityResultLau
     }
 }
 
-@Composable
-fun GoogleSignInStateHandler(authViewModel: AuthViewModel) {
-    val googleSignInState by authViewModel.googleSignInState.collectAsState()
-
-    LaunchedEffect(googleSignInState) {
-        when (googleSignInState) {
-            is GoogleSignInResult.Success -> {
-                var authCode = (googleSignInState as GoogleSignInResult.Success).authCode
-                authCode = URLEncoder.encode(authCode, "UTF-8")
-                Log.d("GoogleSignInResult", "성공: $authCode")
-                authViewModel.onGoogleLogin(authCode)
-            }
-
-            is GoogleSignInResult.Failure -> {
-                val errorMessage = (googleSignInState as GoogleSignInResult.Failure).message
-                Log.d("GoogleSignInResult", "실패: $errorMessage")
-            }
-
-            else -> Unit
-        }
-    }
-}
 
 fun launchGoogleSignIn(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>, context: Context) {
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

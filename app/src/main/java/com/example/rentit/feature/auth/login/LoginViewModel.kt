@@ -1,16 +1,13 @@
-package com.example.rentit.feature.auth
+package com.example.rentit.feature.auth.login
 
 import android.content.Intent
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.GOOGLE_REDIRECT_URI
-import com.example.rentit.data.user.repository.UserRepository
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.UserDto
 import com.example.rentit.data.user.model.GoogleSignInResult
+import com.example.rentit.data.user.repository.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,27 +16,29 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val RC_SIGN_IN = 9001
+
 @HiltViewModel
-class AuthViewModel @Inject constructor(
+class LoginViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
-
-    var googleLoginResult by mutableStateOf<Result<GoogleLoginResponseDto>?>(null)
-        private set
-    var signUpResult by mutableStateOf<Result<Unit>?>(null)
-        private set
-    var userData by mutableStateOf<UserDto?>(null)
-    var nickname by mutableStateOf("")
-        private set
 
     private val _googleSignInState = MutableStateFlow<GoogleSignInResult>(GoogleSignInResult.Idle)
     val googleSignInState: StateFlow<GoogleSignInResult> = _googleSignInState
 
+    private val _googleLoginResult = MutableStateFlow<Result<GoogleLoginResponseDto>?>(null)
+    val googleLoginResult: StateFlow<Result<GoogleLoginResponseDto>?> = _googleLoginResult
+
+    private val _userData = MutableStateFlow<UserDto?>(null)
+    val userData: StateFlow<UserDto?> = _userData
+
     fun onGoogleLogin(code: String) {
         viewModelScope.launch {
-            googleLoginResult = repository.googleLogin(code, GOOGLE_REDIRECT_URI)
+            _googleLoginResult.value = repository.googleLogin(code, GOOGLE_REDIRECT_URI)
+                .onSuccess { _userData.value = it.data.user }
         }
     }
+
     fun handleGoogleSignInResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RC_SIGN_IN) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -57,16 +56,4 @@ class AuthViewModel @Inject constructor(
             }
         }
     }
-
-    fun onSignUp(name: String = "", email: String, nickname: String, profileImageUrl: String = "") {
-        viewModelScope.launch {
-            signUpResult = repository.signUp(name, email, nickname, profileImageUrl)
-        }
-    }
-
-    fun onNicknameChanged(newValue: String){
-        nickname = newValue
-    }
 }
-
-private const val RC_SIGN_IN = 9001

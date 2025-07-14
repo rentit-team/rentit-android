@@ -206,7 +206,7 @@ fun ImageSelectSection(
     onUpdateImageList: (List<Uri>) -> Unit,
     onImageRemoveClick: (Uri) -> Unit
 ) {
-    val pickMultipleImage = PickMultipleImage(onUpdateImageList)
+    val pickMultipleImage = pickMultipleImage(onUpdateImageList)
     val boxModifier = Modifier
         .width(160.dp)
         .height(120.dp)
@@ -270,7 +270,7 @@ fun ImageSelectSection(
 }
 
 @Composable
-fun PickMultipleImage(onUpdateImageList: (List<Uri>) -> Unit): ManagedActivityResultLauncher<PickVisualMediaRequest, List<Uri>> {
+fun pickMultipleImage(onUpdateImageList: (List<Uri>) -> Unit): ManagedActivityResultLauncher<PickVisualMediaRequest, List<Uri>> {
     return rememberLauncherForActivityResult(
         PickMultipleVisualMedia()
     ) { uris ->

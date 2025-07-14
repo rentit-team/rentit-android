@@ -20,6 +20,9 @@
     <string name="screen_join_btn_text">RentIt 시작하기</string>
     <string name="screen_join_headline">에서 사용할\n닉네임을 정해주세요.</string>
     <string name="screen_join_nickname_empty_notification">닉네임을 1자 이상 입력해 주세요.</string>
+    <string name="screen_join_error_email_null">회원가입을 진행할 수 없어요.</string>
+    <string name="screen_join_toast_complete">회원가입이 완료되었어요. 이제 로그인이 가능해요.</string>
+    <string name="screen_join_toast_fail">회원가입에 실패했어요. 잠시 후 다시 시도해주세요.</string>
 
     <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
     <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
