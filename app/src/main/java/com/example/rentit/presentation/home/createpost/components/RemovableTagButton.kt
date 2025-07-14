@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.home.createpost.component
+package com.example.rentit.presentation.home.createpost.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
