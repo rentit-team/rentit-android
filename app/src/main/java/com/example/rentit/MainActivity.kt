@@ -14,9 +14,9 @@ import androidx.navigation.navArgument
 import com.example.rentit.common.component.NavigationRoutes
 import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.MainView
-import com.example.rentit.feature.auth.join.JoinScreen
-import com.example.rentit.feature.auth.login.LoginScreen
+import com.example.rentit.presentation.MainView
+import com.example.rentit.presentation.auth.join.JoinScreen
+import com.example.rentit.presentation.auth.login.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
