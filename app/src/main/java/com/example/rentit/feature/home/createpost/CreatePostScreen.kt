@@ -1,4 +1,4 @@
-package com.example.rentit.feature.createpost
+package com.example.rentit.feature.home.createpost
 
 import android.net.Uri
 import android.util.Log
@@ -79,7 +79,8 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
-import com.example.rentit.feature.createpost.component.RemovableTagButton
+import com.example.rentit.feature.home.createpost.categorytag.CategoryTagDrawer
+import com.example.rentit.feature.home.createpost.component.RemovableTagButton
 import java.text.NumberFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,8 +92,10 @@ fun CreatePostScreen(navHostController: NavHostController) {
     var periodSliderPosition by remember { mutableStateOf(3F..15F) }
     var price by remember { mutableIntStateOf(0) }
     var priceInput by remember { mutableStateOf(TextFieldValue()) }
+
     val createPostViewModel: CreatePostViewModel = hiltViewModel()
-    val selectedCategoryList by createPostViewModel.categoryTagList.collectAsStateWithLifecycle()
+    val categoryList by createPostViewModel.categoryList.collectAsStateWithLifecycle()
+    val selectedCategoryList by createPostViewModel.selectedCategoryList.collectAsStateWithLifecycle()
     val selectedImgUriList by createPostViewModel.selectedImgUriList.collectAsStateWithLifecycle()
 
     val priceLimit = 5000000
@@ -176,6 +179,7 @@ fun CreatePostScreen(navHostController: NavHostController) {
         if(showTagDrawer) {
             ModalBottomSheet(onDismissRequest = { showTagDrawer = false }) {
                 CategoryTagDrawer(
+                    categoryList = categoryList,
                     selectedCategoryList = selectedCategoryList,
                     onTagButtonClick = createPostViewModel::handleCategoryClick
                 )

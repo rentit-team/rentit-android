@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat.model
+package com.example.rentit.feature.chat.chatroom.model
 
 data class ChatMessageUiModel (
     val isMine: Boolean,

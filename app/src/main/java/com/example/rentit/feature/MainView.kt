@@ -34,13 +34,13 @@ import com.example.rentit.common.component.moveScreen
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.feature.chat.AcceptConfirmationScreen
+import com.example.rentit.feature.chat.chatroom.requestaccept.confirm.RequestAcceptConfirmScreen
 import com.example.rentit.feature.chat.ChatListScreen
-import com.example.rentit.feature.chat.ChatroomScreen
+import com.example.rentit.feature.chat.chatroom.ChatroomScreen
 import com.example.rentit.feature.home.HomeScreen
-import com.example.rentit.feature.user.MyPageScreen
+import com.example.rentit.feature.mypage.MyPageScreen
 import com.example.rentit.feature.productdetail.reservation.request.ResvRequestScreen
-import com.example.rentit.feature.createpost.CreatePostScreen
+import com.example.rentit.feature.home.createpost.CreatePostScreen
 import com.example.rentit.feature.productdetail.ProductDetailScreen
 import com.example.rentit.feature.productdetail.reservation.request.complete.ResvRequestCompleteScreen
 import com.example.rentit.feature.productdetail.reservation.requesthistory.RequestHistoryScreen
@@ -185,7 +185,7 @@ fun ChatroomNavHost(productId: Int?, reservationId: Int?, chatRoomId: String?) {
     val navHostController: NavHostController = rememberNavController()
     NavHost(navController =  navHostController, startDestination = NavigationRoutes.CHATROOM){
         composable(NavigationRoutes.CHATROOM) { ChatroomScreen(navHostController, productId, reservationId, chatRoomId) }
-        composable(NavigationRoutes.ACCEPTCONFIRM) { AcceptConfirmationScreen(navHostController) }
+        composable(NavigationRoutes.ACCEPTCONFIRM) { RequestAcceptConfirmScreen(navHostController) }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
 }

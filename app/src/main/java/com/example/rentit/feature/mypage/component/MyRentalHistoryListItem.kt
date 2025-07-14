@@ -1,4 +1,4 @@
-package com.example.rentit.feature.user.component
+package com.example.rentit.feature.mypage.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -40,7 +40,7 @@ import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalHistoryListItem(rentalInfo: ReservationDto) {
+fun MyRentalHistoryListItem(rentalInfo: ReservationDto) {
     val formatter = DateTimeFormatter.ofPattern("yy.MM.dd")
     val requestedAt = LocalDateTime.parse(rentalInfo.requestedAt).toLocalDate()
     val startDate = LocalDate.parse(rentalInfo.startDate)
@@ -135,6 +135,6 @@ fun PreviewRentalHistoryListItem() {
         requestedAt = "2025-03-20T14:00:00"
     )
     RentItTheme {
-        RentalHistoryListItem(sampleReservation)
+        MyRentalHistoryListItem(sampleReservation)
     }
 }

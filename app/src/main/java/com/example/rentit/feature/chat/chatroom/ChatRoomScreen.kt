@@ -1,4 +1,4 @@
-package com.example.rentit.feature.chat
+package com.example.rentit.feature.chat.chatroom
 
 import android.os.Build
 import android.widget.Toast
@@ -69,9 +69,10 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.feature.chat.component.ReceivedMsgBubble
-import com.example.rentit.feature.chat.component.SentMsgBubble
-import com.example.rentit.feature.chat.model.ChatMessageUiModel
+import com.example.rentit.feature.chat.chatroom.requestaccept.RequestAcceptDialog
+import com.example.rentit.feature.chat.chatroom.components.ReceivedMsgBubble
+import com.example.rentit.feature.chat.chatroom.components.SentMsgBubble
+import com.example.rentit.feature.chat.chatroom.model.ChatMessageUiModel
 import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -79,17 +80,17 @@ import java.time.format.DateTimeFormatter
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reservationId: Int?, chatRoomId: String?) {
-    val chatViewModel: ChatViewModel = hiltViewModel()
-    val productDetail by chatViewModel.productDetail.collectAsStateWithLifecycle()
-    val chatDetail by chatViewModel.chatDetail.collectAsStateWithLifecycle()
+    val chatRoomViewModel: ChatRoomViewModel = hiltViewModel()
+    val productDetail by chatRoomViewModel.productDetail.collectAsStateWithLifecycle()
+    val chatDetail by chatRoomViewModel.chatDetail.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     // 백엔드 오류로 인한 임시 요청 확인 처리
-    val isRequestAccepted by chatViewModel.isRequestAccepted.collectAsStateWithLifecycle()
+    val isRequestAccepted by chatRoomViewModel.isRequestAccepted.collectAsStateWithLifecycle()
 
-    val senderNickname by chatViewModel.senderNickname.collectAsStateWithLifecycle()
-    val initialMessages by chatViewModel.initialMessages.collectAsStateWithLifecycle()
-    val realTimeMessages by chatViewModel.realTimeMessages.collectAsStateWithLifecycle()
+    val senderNickname by chatRoomViewModel.senderNickname.collectAsStateWithLifecycle()
+    val initialMessages by chatRoomViewModel.initialMessages.collectAsStateWithLifecycle()
+    val realTimeMessages by chatRoomViewModel.realTimeMessages.collectAsStateWithLifecycle()
 
     var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
     val inputScrollState = rememberScrollState()
@@ -99,17 +100,17 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
 
     // 백엔드 오류로 인한 임시 요청 확인 처리
     LaunchedEffect(initialMessages + realTimeMessages) {
-        chatViewModel.checkRequestAccepted()
+        chatRoomViewModel.checkRequestAccepted()
     }
 
     LaunchedEffect(Unit) {
-        chatViewModel.resetRealTimeMessages()
+        chatRoomViewModel.resetRealTimeMessages()
         var errorMsg = context.getString(R.string.error_chat_unknown)
         if (chatRoomId != null && productId != null) {
-            chatViewModel.connectWebSocket(chatRoomId) {
+            chatRoomViewModel.connectWebSocket(chatRoomId) {
                 Toast.makeText(context, context.getString(R.string.toast_chatroom_entered), Toast.LENGTH_SHORT).show()
             }
-            chatViewModel.getChatDetail(chatRoomId){
+            chatRoomViewModel.getChatDetail(chatRoomId){
                 when(it){
                     is ForbiddenChatAccessException -> errorMsg = context.getString(R.string.error_chat_access)
                     is ServerException -> errorMsg = context.getString(R.string.error_common_server)
@@ -118,7 +119,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                 Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
                 moveScreen(navHostController, NavigationRoutes.MAIN)
             }
-            chatViewModel.getProductDetail(productId){
+            chatRoomViewModel.getProductDetail(productId){
                 Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
                 moveScreen(navHostController, NavigationRoutes.MAIN)
             }
@@ -136,7 +137,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
 
     DisposableEffect(Unit) {
         onDispose {
-            chatViewModel.disconnectWebSocket()
+            chatRoomViewModel.disconnectWebSocket()
         }
     }
 
@@ -167,7 +168,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
             onValueChange = { textFieldValue = it },
             onSend = {
                 if (chatRoomId != null && textFieldValue.text.isNotEmpty()) {
-                    chatViewModel.sendMessage(chatRoomId, textFieldValue.text)
+                    chatRoomViewModel.sendMessage(chatRoomId, textFieldValue.text)
                     textFieldValue = TextFieldValue("")
                 }
             }
@@ -179,7 +180,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
             onDismissRequest = { showAcceptDialog = false },
             onAcceptRequest = {
                 if(productId != null && chatRoomId != null && reservationId != null){
-                    chatViewModel.updateResvStatus(
+                    chatRoomViewModel.updateResvStatus(
                         chatRoomId,
                         productId,
                         reservationId,
