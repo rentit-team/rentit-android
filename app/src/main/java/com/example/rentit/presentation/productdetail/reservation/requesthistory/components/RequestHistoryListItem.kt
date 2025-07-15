@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.getKorLabel
+import com.example.rentit.common.util.getKorLabel
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray400

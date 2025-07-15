@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.util
 
 import android.os.Build
 import androidx.annotation.RequiresApi

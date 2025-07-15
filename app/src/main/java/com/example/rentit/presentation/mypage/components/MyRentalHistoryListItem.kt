@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
-import com.example.rentit.common.component.getKorLabel
+import com.example.rentit.common.util.getKorLabel
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
