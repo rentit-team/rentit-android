@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.rentit.BuildConfig
 import com.example.rentit.R
-import com.example.rentit.common.GOOGLE_CLIENT_ID
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.PretendardTextStyle
@@ -80,8 +80,8 @@ fun googleSignInLauncher(loginViewModel: LoginViewModel): ManagedActivityResultL
 
 fun launchGoogleSignIn(launcher: ManagedActivityResultLauncher<Intent, ActivityResult>, context: Context) {
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(GOOGLE_CLIENT_ID)
-        .requestServerAuthCode(GOOGLE_CLIENT_ID)
+        .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
+        .requestServerAuthCode(BuildConfig.GOOGLE_CLIENT_ID)
         .build()
     val googleSignInClient = GoogleSignIn.getClient(context, gso)
     launcher.launch(googleSignInClient.signInIntent)    // Google Login Intent 실행

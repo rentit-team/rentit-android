@@ -3,7 +3,7 @@ package com.example.rentit.presentation.auth.login
 import android.content.Intent
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.GOOGLE_REDIRECT_URI
+import com.example.rentit.BuildConfig
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.UserDto
 import com.example.rentit.data.user.model.GoogleSignInResult
@@ -34,7 +34,7 @@ class LoginViewModel @Inject constructor(
 
     fun onGoogleLogin(code: String) {
         viewModelScope.launch {
-            _googleLoginResult.value = repository.googleLogin(code, GOOGLE_REDIRECT_URI)
+            _googleLoginResult.value = repository.googleLogin(code, BuildConfig.GOOGLE_REDIRECT_URI)
                 .onSuccess { _userData.value = it.data.user }
         }
     }
