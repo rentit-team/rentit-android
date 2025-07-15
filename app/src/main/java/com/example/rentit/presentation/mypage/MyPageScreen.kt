@@ -93,7 +93,7 @@ fun MyPageScreen(navHostController: NavHostController) {
             onItemClick = { id ->
                 moveScreen(
                     navHostController,
-                    NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/$id",
+                    NavigationRoutes.PRODUCT_DETAIL_NAV_HOST + "/$id",
                     saveStateEnabled = true,
                     restoreStateEnabled = true
                 )

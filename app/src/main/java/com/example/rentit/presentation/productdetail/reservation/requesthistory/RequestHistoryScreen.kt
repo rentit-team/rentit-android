@@ -83,7 +83,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
                         if (info.chatRoomId != null) {
                             moveScreen(
                                 navHostController,
-                                "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.reservationId}/${info.chatRoomId}"
+                                "${NavigationRoutes.CHAT_NAV_HOST}/$productId/${info.reservationId}/${info.chatRoomId}"
                             )
                         } else {
                             requestHistoryViewModel.postNewChat(
@@ -91,7 +91,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
                                 onSuccess = { chatRoomId ->
                                     moveScreen(
                                         navHostController,
-                                        "${NavigationRoutes.NAVHOSTCHAT}/$productId/${info.reservationId}/$chatRoomId"
+                                        "${NavigationRoutes.CHAT_NAV_HOST}/$productId/${info.reservationId}/$chatRoomId"
                                     )
                                 },
                                 onError = {

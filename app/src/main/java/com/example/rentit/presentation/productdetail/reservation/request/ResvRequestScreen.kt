@@ -136,7 +136,7 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
     ResvResultHandler(resvRequestViewModel){
         moveScreen(
             navHostController,
-            NavigationRoutes.REQUESTCONFIRM + "/${rentalStartDate}/${rentalEndDate}/${rentalPeriod}/${formattedTotalPrice.value}"
+            NavigationRoutes.RESV_REQUEST_COMPLETE + "/${rentalStartDate}/${rentalEndDate}/${rentalPeriod}/${formattedTotalPrice.value}"
         )
     }
 }

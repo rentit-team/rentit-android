@@ -184,7 +184,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                         chatRoomId,
                         productId,
                         reservationId,
-                        onSuccess = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) },
+                        onSuccess = { moveScreen(navHostController, NavigationRoutes.REQUEST_ACCEPT_CONFIRM) },
                         onError = {
                             var errorMsg = context.getString(R.string.error_cant_process_accept_request)
                             when(it){

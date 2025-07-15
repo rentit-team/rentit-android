@@ -280,10 +280,10 @@ fun PostBottomBar(navHostController: NavHostController, price: Int, isMyProduct:
             style = MaterialTheme.typography.titleLarge
         )
         if(isMyProduct) {
-            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { moveScreen(navHostController, NavigationRoutes.REQUESTHISTORY) }
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { moveScreen(navHostController, NavigationRoutes.RESV_REQUEST_HISTORY) }
         } else {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
-            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.RESVREQUEST)  }
+            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.RESV_REQUEST)  }
         }
     }
 }

@@ -50,7 +50,7 @@ sealed class BottomNavItem(
 ){
     data object Home: BottomNavItem(R.string.title_activity_home_tab, R.drawable.ic_home, R.drawable.ic_home_fill, NavigationRoutes.HOME)
     data object Chat: BottomNavItem(R.string.title_activity_chat_tab, R.drawable.ic_chat, R.drawable.ic_chat_fill, NavigationRoutes.CHAT)
-    data object MyPage: BottomNavItem(R.string.title_activity_my_page_tab, R.drawable.ic_user, R.drawable.ic_user_fill, NavigationRoutes.MYPAGE)
+    data object MyPage: BottomNavItem(R.string.title_activity_my_page_tab, R.drawable.ic_user, R.drawable.ic_user_fill, NavigationRoutes.MY_PAGE)
 }
 
 val navItems = listOf(
@@ -101,7 +101,7 @@ fun MainView() {
     }
     },
         floatingActionButton = { if(currentRoute == NavigationRoutes.HOME) CreatePostFloatingButton {
-            moveScreen(navHostController, NavigationRoutes.CREATEPOST)
+            moveScreen(navHostController, NavigationRoutes.CREATE_POST_NAV_HOST)
         } }) {
         TabNavHost(navHostController, it)
     }
@@ -118,14 +118,14 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
         composable(BottomNavItem.Chat.screenRoute) { ChatListScreen(navHostController) }
         composable(BottomNavItem.MyPage.screenRoute) { MyPageScreen(navHostController) }
         composable(
-            route = NavigationRoutes.NAVHOSTPRODUCTDETAIL+"/{productId}",
+            route = NavigationRoutes.PRODUCT_DETAIL_NAV_HOST+"/{productId}",
             arguments = listOf(navArgument("productId") { type = NavType.IntType })
         ) { backStackEntry ->
             val productId = backStackEntry.arguments?.getInt("productId")
             ProductDetailNavHost(productId)
         }
         composable(
-            route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{reservationId}/{chatRoomId}",
+            route = NavigationRoutes.CHAT_NAV_HOST + "/{productId}/{reservationId}/{chatRoomId}",
             arguments = listOf(
                 navArgument("productId") { type = NavType.IntType },
                 navArgument("reservationId") { type = NavType.IntType },
@@ -136,7 +136,7 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
             val cId = backStackEntry.arguments?.getString("chatRoomId")
             ChatroomNavHost(pId, rId, cId)
         }
-        composable(NavigationRoutes.CREATEPOST) { CreatePostNavHost() }
+        composable(NavigationRoutes.CREATE_POST_NAV_HOST) { CreatePostNavHost() }
     }
 }
 
@@ -145,11 +145,11 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
 fun ProductDetailNavHost(productId: Int?) {
     val navHostController: NavHostController = rememberNavController()
 
-    NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCTDETAIL){
-        composable(NavigationRoutes.PRODUCTDETAIL) { ProductDetailScreen(navHostController, productId) }
-        composable(NavigationRoutes.RESVREQUEST) { ResvRequestScreen(navHostController, productId) }
+    NavHost(navController =  navHostController, startDestination = NavigationRoutes.PRODUCT_DETAIL){
+        composable(NavigationRoutes.PRODUCT_DETAIL) { ProductDetailScreen(navHostController, productId) }
+        composable(NavigationRoutes.RESV_REQUEST) { ResvRequestScreen(navHostController, productId) }
         composable(
-            route = NavigationRoutes.REQUESTCONFIRM + "/{rentalStartDate}/{rentalEndDate}/{rentalPeriod}/{formattedTotalPrice}",
+            route = NavigationRoutes.RESV_REQUEST_COMPLETE + "/{rentalStartDate}/{rentalEndDate}/{rentalPeriod}/{formattedTotalPrice}",
             arguments = listOf(
                 navArgument("rentalStartDate") { type = NavType.StringType },
                 navArgument("rentalEndDate") { type = NavType.StringType },
@@ -162,9 +162,9 @@ fun ProductDetailNavHost(productId: Int?) {
             val rentalPeriod = backStackEntry.arguments?.getInt("rentalPeriod") ?: 0
             val formattedTotalPrice = backStackEntry.arguments?.getString("formattedTotalPrice") ?: "0"
             ResvRequestCompleteScreen(navHostController, rentalStartDate, rentalEndDate, rentalPeriod, formattedTotalPrice) }
-        composable(NavigationRoutes.REQUESTHISTORY) { RequestHistoryScreen(navHostController, productId) }
+        composable(NavigationRoutes.RESV_REQUEST_HISTORY) { RequestHistoryScreen(navHostController, productId) }
         composable(
-            route = NavigationRoutes.NAVHOSTCHAT + "/{productId}/{reservationId}/{chatRoomId}",
+            route = NavigationRoutes.CHAT_NAV_HOST + "/{productId}/{reservationId}/{chatRoomId}",
             arguments = listOf(
                 navArgument("productId") { type = NavType.IntType },
                 navArgument("reservationId") { type = NavType.IntType },
@@ -183,9 +183,9 @@ fun ProductDetailNavHost(productId: Int?) {
 @Composable
 fun ChatroomNavHost(productId: Int?, reservationId: Int?, chatRoomId: String?) {
     val navHostController: NavHostController = rememberNavController()
-    NavHost(navController =  navHostController, startDestination = NavigationRoutes.CHATROOM){
-        composable(NavigationRoutes.CHATROOM) { ChatroomScreen(navHostController, productId, reservationId, chatRoomId) }
-        composable(NavigationRoutes.ACCEPTCONFIRM) { RequestAcceptConfirmScreen(navHostController) }
+    NavHost(navController =  navHostController, startDestination = NavigationRoutes.CHAT_ROOM){
+        composable(NavigationRoutes.CHAT_ROOM) { ChatroomScreen(navHostController, productId, reservationId, chatRoomId) }
+        composable(NavigationRoutes.REQUEST_ACCEPT_CONFIRM) { RequestAcceptConfirmScreen(navHostController) }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
 }
@@ -194,8 +194,8 @@ fun ChatroomNavHost(productId: Int?, reservationId: Int?, chatRoomId: String?) {
 @Composable
 fun CreatePostNavHost() {
     val navHostController: NavHostController = rememberNavController()
-    NavHost(navController =  navHostController, startDestination = NavigationRoutes.CREATEPOST){
-        composable(NavigationRoutes.CREATEPOST) { CreatePostScreen(navHostController) }
+    NavHost(navController =  navHostController, startDestination = NavigationRoutes.CREATE_POST){
+        composable(NavigationRoutes.CREATE_POST) { CreatePostScreen(navHostController) }
         composable(NavigationRoutes.MAIN) { MainView() }
     }
 }
