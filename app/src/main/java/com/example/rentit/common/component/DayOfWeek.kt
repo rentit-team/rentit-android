@@ -1,14 +1,10 @@
 package com.example.rentit.common.component
 
-fun getKorDayOfWeek(enDayOfWeek: String): String {
-    return when(enDayOfWeek){
-        "MONDAY" -> "월"
-        "TUESDAY" -> "화"
-        "WEDNESDAY" -> "수"
-        "THURSDAY" -> "목"
-        "FRIDAY" -> "금"
-        "SATURDAY" -> "토"
-        "SUNDAY" -> "일"
-        else -> "요일"
-    }
-}
+import android.os.Build
+import androidx.annotation.RequiresApi
+import java.time.DayOfWeek
+
+private val korLabels = listOf("월", "화", "수", "목", "금", "토", "일")
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun DayOfWeek.getKorLabel(): String = korLabels[this.ordinal]

@@ -24,7 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.getKorDayOfWeek
+import com.example.rentit.common.component.getKorLabel
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray400
@@ -72,7 +72,7 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
                     color = if (isPast) pastDateColor else AppBlack
                 )
                 Text(
-                    text = "${requestedAt.format(formatter)} ${getKorDayOfWeek(requestedAt.dayOfWeek.toString())}",
+                    text = "${requestedAt.format(formatter)} ${requestedAt.dayOfWeek.getKorLabel()}",
                     style = MaterialTheme.typography.labelMedium,
                     color = if (isPast) pastDateColor else Gray400
                 )
@@ -86,9 +86,9 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
                     text = stringResource(
                         id = R.string.request_history_list_item_period,
                         startDate.format(formatter),
-                        getKorDayOfWeek(startDate.dayOfWeek.toString()),
+                        startDate.dayOfWeek.getKorLabel(),
                         endDate.format(formatter),
-                        getKorDayOfWeek(endDate.dayOfWeek.toString()),
+                        endDate.dayOfWeek.getKorLabel(),
                         period
                     ),
                     style = MaterialTheme.typography.labelLarge,
