@@ -26,8 +26,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.NavigationRoutes
-import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto

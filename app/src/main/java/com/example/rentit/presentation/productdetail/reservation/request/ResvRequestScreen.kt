@@ -35,8 +35,8 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.NavigationRoutes
-import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800

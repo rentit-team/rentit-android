@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.navigation
 
 object NavigationRoutes {
     const val HOME = "HOME"

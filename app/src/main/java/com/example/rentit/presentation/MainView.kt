@@ -29,8 +29,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.rentit.R
-import com.example.rentit.common.component.NavigationRoutes
-import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
