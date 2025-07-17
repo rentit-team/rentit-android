@@ -56,8 +56,8 @@ import com.example.rentit.R
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.NavigationRoutes
-import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
@@ -184,7 +184,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                         chatRoomId,
                         productId,
                         reservationId,
-                        onSuccess = { moveScreen(navHostController, NavigationRoutes.ACCEPTCONFIRM) },
+                        onSuccess = { moveScreen(navHostController, NavigationRoutes.REQUEST_ACCEPT_CONFIRM) },
                         onError = {
                             var errorMsg = context.getString(R.string.error_cant_process_accept_request)
                             when(it){

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
-import com.example.rentit.common.component.getKorDayOfWeek
+import com.example.rentit.common.util.getKorLabel
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
@@ -87,9 +87,9 @@ fun MyRentalHistoryListItem(rentalInfo: ReservationDto) {
                 text = stringResource(
                     id = R.string.request_history_list_item_period,
                     startDate.format(formatter),
-                    getKorDayOfWeek(startDate.dayOfWeek.toString()),
+                    startDate.dayOfWeek.getKorLabel(),
                     endDate.format(formatter),
-                    getKorDayOfWeek(endDate.dayOfWeek.toString()),
+                    endDate.dayOfWeek.getKorLabel(),
                     period
                 ),
                 style = MaterialTheme.typography.bodyMedium,

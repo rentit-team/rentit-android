@@ -1,6 +1,5 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.navigation
 
-import android.util.Log
 import androidx.navigation.NavHostController
 
 fun moveScreen(

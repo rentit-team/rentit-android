@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
-import com.example.rentit.common.component.ProductStatus.getKorProductStatus
+import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -48,6 +48,7 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
     val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
     val period = productInfo.period
 
+    val status = ProductStatus.entries.firstOrNull { it.name == productInfo.status }
     val categoryText = productInfo.categories.joinToString("·") ?: ""
 
     Box(
@@ -86,14 +87,18 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(modifier = Modifier.width(160.dp), maxLines = 1, text = productInfo.title, overflow = TextOverflow.Ellipsis, style = MaterialTheme.typography.bodyLarge)
-                    getKorProductStatus(productInfo.status)?.let {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.labelMedium,
-                            color = PrimaryBlue500
-                        )
-                    }
+                    Text(
+                        modifier = Modifier.width(160.dp),
+                        maxLines = 1,
+                        text = productInfo.title,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.bodyLarge
+                    )
+                    Text(
+                        text = status?.label ?: "",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = PrimaryBlue500
+                    )
                 }
                 Text(
                     modifier = Modifier.padding(top = 4.dp, bottom = 18.dp),
@@ -114,8 +119,14 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                                 productInfo.period.min!!.toInt(),
                                 productInfo.period.max!!.toInt()
                             )
-                            else if (period.min != null) stringResource(R.string.product_list_item_period_text_more_than_day, productInfo.period.min!!.toInt())
-                            else if (period.max != null) stringResource(R.string.product_list_item_period_text_less_than_day, productInfo.period.max!!.toInt())
+                            else if (period.min != null) stringResource(
+                                R.string.product_list_item_period_text_more_than_day,
+                                productInfo.period.min!!.toInt()
+                            )
+                            else if (period.max != null) stringResource(
+                                R.string.product_list_item_period_text_less_than_day,
+                                productInfo.period.max!!.toInt()
+                            )
                             else stringResource(R.string.product_list_item_period_text_more_than_zero)
                         } else {
                             stringResource(R.string.product_list_item_period_text_more_than_zero)
@@ -140,7 +151,7 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                         text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit),
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    if(isMyProduct){
+                    if (isMyProduct) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 modifier = Modifier.padding(end = 6.dp),
@@ -160,8 +171,8 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
             }
         }
     }
-
 }
+
 
 @Preview(showBackground = true)
 @Composable

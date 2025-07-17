@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -6,9 +8,16 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+val localProps = gradleLocalProperties(rootDir, providers)
+
 android {
     namespace = "com.example.rentit"
     compileSdk = 34
+
+    buildFeatures {
+        buildConfig = true
+        compose = true
+    }
 
     defaultConfig {
         applicationId = "com.example.rentit"
@@ -21,6 +30,17 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField(
+            "String",
+            "GOOGLE_CLIENT_ID",
+            localProps.getProperty("GOOGLE_CLIENT_ID")
+        )
+        buildConfigField(
+            "String",
+            "GOOGLE_REDIRECT_URI",
+            localProps.getProperty("GOOGLE_REDIRECT_URI")
+        )
     }
 
     buildTypes {
@@ -38,9 +58,6 @@ android {
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.7"

@@ -58,8 +58,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.NavigationRoutes
-import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.theme.Gray100
@@ -280,10 +280,10 @@ fun PostBottomBar(navHostController: NavHostController, price: Int, isMyProduct:
             style = MaterialTheme.typography.titleLarge
         )
         if(isMyProduct) {
-            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { moveScreen(navHostController, NavigationRoutes.REQUESTHISTORY) }
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { moveScreen(navHostController, NavigationRoutes.RESV_REQUEST_HISTORY) }
         } else {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
-            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.RESVREQUEST)  }
+            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.RESV_REQUEST)  }
         }
     }
 }

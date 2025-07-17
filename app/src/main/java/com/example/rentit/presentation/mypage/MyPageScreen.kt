@@ -46,9 +46,9 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.component.NavigationRoutes
+import com.example.rentit.common.navigation.NavigationRoutes
 import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
@@ -93,7 +93,7 @@ fun MyPageScreen(navHostController: NavHostController) {
             onItemClick = { id ->
                 moveScreen(
                     navHostController,
-                    NavigationRoutes.NAVHOSTPRODUCTDETAIL + "/$id",
+                    NavigationRoutes.PRODUCT_DETAIL_NAV_HOST + "/$id",
                     saveStateEnabled = true,
                     restoreStateEnabled = true
                 )

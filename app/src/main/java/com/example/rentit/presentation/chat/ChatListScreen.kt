@@ -27,8 +27,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
-import com.example.rentit.common.component.NavigationRoutes
-import com.example.rentit.common.component.moveScreen
+import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.chat.components.ChatListItem
@@ -68,7 +68,7 @@ fun ChatListScreen(navHostController: NavHostController) {
                 ChatListItem(it) {
                     moveScreen(
                         navHostController,
-                        "${NavigationRoutes.NAVHOSTCHAT}/${it.productId}/${it.reservationId}/${it.chatRoomId}"    // 임시 ProductId
+                        "${NavigationRoutes.CHAT_NAV_HOST}/${it.productId}/${it.reservationId}/${it.chatRoomId}"    // 임시 ProductId
                     )
                 }
             }
