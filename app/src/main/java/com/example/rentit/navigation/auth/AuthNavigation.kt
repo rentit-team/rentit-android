@@ -14,12 +14,17 @@ fun NavHostController.navigateToLogin(
 ) {
     navigate(
         route = AuthRoute.Login
-    )
+    ) {
+        popUpTo(AuthRoute.Login){
+            inclusive = true
+        }
+        launchSingleTop = true
+    }
 }
 
 fun NavHostController.navigateToJoin(
     name: String?,
-    email: String?
+    email: String?,
 ) {
     navigate(
         route = AuthRoute.Join(name, email)
@@ -30,7 +35,11 @@ fun NavHostController.navigateToMain(
 ) {
     navigate(
         route = AuthRoute.Main
-    )
+    ) {
+        popUpTo(0){
+            inclusive = true
+        }
+    }
 }
 
 

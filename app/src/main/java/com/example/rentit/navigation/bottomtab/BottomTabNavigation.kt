@@ -10,7 +10,13 @@ import com.example.rentit.presentation.home.HomeScreen
 import com.example.rentit.presentation.mypage.MyPageScreen
 
 fun NavHostController.navigateBottomTab(route: String) {
-    navigate(route = route)
+    navigate(route = route) {
+        popUpTo(BottomTabRoute.Home.route) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
