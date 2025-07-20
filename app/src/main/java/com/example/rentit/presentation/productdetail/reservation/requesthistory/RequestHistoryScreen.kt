@@ -26,13 +26,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.navigation.NavigationRoutes
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.dto.RequestPeriodDto
-import com.example.rentit.navigation.ChatRoomRoute
 import com.example.rentit.navigation.navigateToChatRoom
 import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestCalendar
 import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestHistoryListItem

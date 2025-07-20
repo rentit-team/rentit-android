@@ -25,10 +25,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.navigation.NavigationRoutes
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.storage.saveToken
 import com.example.rentit.data.user.model.GoogleSignInResult
+import com.example.rentit.navigation.navigateToJoin
+import com.example.rentit.navigation.navigateToMain
 import com.example.rentit.presentation.auth.login.components.GoogleLoginButton
 import java.net.URLEncoder
 
@@ -97,10 +97,10 @@ fun LoginResultHandler(navHostController: NavHostController, loginViewModel: Log
     LaunchedEffect(googleLoginResult) {
         googleLoginResult?.onSuccess { response ->
             if(response.data.isUserRegistered){
-                moveScreen(navHostController, NavigationRoutes.MAIN, isInclusive = true)
+                navHostController.navigateToMain()
                 saveToken(context, response.data.accessToken.token)
             } else {
-                moveScreen(navHostController, NavigationRoutes.JOIN + "/${userData?.name}/${userData?.email}")
+                navHostController.navigateToJoin(userData?.name, userData?.email)
             }
             Toast.makeText(context, "구글 데이터 전송 성공 [${userData?.name}/${userData?.email}]", Toast.LENGTH_SHORT).show()
             Log.d(TAG, "${response.data}")

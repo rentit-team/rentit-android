@@ -33,13 +33,12 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.navigation.NavigationRoutes
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.navigation.navigateToLogin
 
 private const val TAG = "Join"
 
@@ -135,11 +134,11 @@ fun SignUpResultHandler(joinViewModel: JoinViewModel, navHostController: NavHost
         signUpResult.value?.onSuccess {
             Log.d(TAG, "Sign Up Success")
             Toast.makeText(context, context.getString(R.string.screen_join_toast_complete), Toast.LENGTH_SHORT).show()
-            moveScreen(navHostController, NavigationRoutes.LOGIN)
+            navHostController.navigateToLogin()
         }?.onFailure { error ->
             Log.d(TAG, "${error.message}")
             Toast.makeText(context, context.getString(R.string.screen_join_toast_fail), Toast.LENGTH_SHORT).show()
-            moveScreen(navHostController, NavigationRoutes.LOGIN)
+            navHostController.navigateToLogin()
         }
 
     }
