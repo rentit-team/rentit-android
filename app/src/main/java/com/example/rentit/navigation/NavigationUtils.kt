@@ -1,4 +1,4 @@
-package com.example.rentit.common.navigation
+package com.example.rentit.navigation
 
 import androidx.navigation.NavHostController
 
@@ -12,7 +12,7 @@ fun moveScreen(
     navController.navigate(route) {
         navController.graph.startDestinationRoute?.let {
             popUpTo(it) {
-                saveState = saveStateEnabled  // 그래프의 시작 지점까지 스택을 정리하면서 이동
+                saveState = saveStateEnabled  // Stack에서 제거되는 화면의 상태 저장
                 inclusive = isInclusive    // 특정(현재)화면까지 스택에서 제거
             }
         }

@@ -58,8 +58,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.navigation.NavigationRoutes
-import com.example.rentit.common.navigation.moveScreen
+import com.example.rentit.navigation.NavigationRoutes
+import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.theme.Gray100

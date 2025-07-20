@@ -25,8 +25,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.navigation.NavigationRoutes
-import com.example.rentit.common.navigation.moveScreen
+import com.example.rentit.navigation.NavigationRoutes
+import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.storage.saveToken
 import com.example.rentit.data.user.model.GoogleSignInResult
 import com.example.rentit.presentation.auth.login.components.GoogleLoginButton

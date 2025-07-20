@@ -11,10 +11,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.navigation.NavigationRoutes
 import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.MainView
+import com.example.rentit.presentation.main.MainView
 import com.example.rentit.presentation.auth.join.JoinScreen
 import com.example.rentit.presentation.auth.login.LoginScreen
 import dagger.hilt.android.AndroidEntryPoint

@@ -46,9 +46,9 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.navigation.NavigationRoutes
+import com.example.rentit.navigation.NavigationRoutes
 import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.navigation.moveScreen
+import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200

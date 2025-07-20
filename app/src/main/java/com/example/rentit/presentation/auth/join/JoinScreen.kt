@@ -33,8 +33,8 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.navigation.NavigationRoutes
-import com.example.rentit.common.navigation.moveScreen
+import com.example.rentit.navigation.NavigationRoutes
+import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.PretendardTextStyle

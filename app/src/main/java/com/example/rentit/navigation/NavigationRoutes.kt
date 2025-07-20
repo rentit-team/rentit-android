@@ -1,4 +1,4 @@
-package com.example.rentit.common.navigation
+package com.example.rentit.navigation
 
 object NavigationRoutes {
 
