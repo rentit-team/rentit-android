@@ -6,7 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.FloatingActionButton
@@ -24,11 +24,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.navigation.NavigationRoutes
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.navigation.TabNavHost
+import com.example.rentit.navigation.navigateBottomTab
 import com.example.rentit.navigation.navigateToCreatePost
 
 
@@ -38,16 +38,11 @@ fun MainView() {
     val navHostController = rememberNavController()
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val navItems = listOf(
-        BottomNavItem.Home,
-        BottomNavItem.Chat,
-        BottomNavItem.MyPage
-    )
-    val showBottomBar = currentRoute in navItems.map { it.screenRoute }
+    val showBottomBar = currentRoute in BottomNavItem.entries.map { it.screenRoute }
 
     Scaffold(bottomBar = { if (showBottomBar) {
         BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
-            navItems.forEach { item ->
+            BottomNavItem.entries.forEach { item ->
                 BottomNavigationItem(
                     modifier = Modifier.fillMaxHeight(),
                     icon = {
@@ -58,9 +53,7 @@ fun MainView() {
                             contentDescription = stringResource(
                                 id = item.title
                             ),
-                            modifier = Modifier
-                                .width(28.dp)
-                                .height(28.dp)
+                            modifier = Modifier.size(28.dp)
                         )
                     },
                     unselectedContentColor = Gray400,
@@ -68,18 +61,14 @@ fun MainView() {
                     selected = currentRoute == item.screenRoute,
                     alwaysShowLabel = false,
                     onClick = {
-                        moveScreen(
-                            navHostController,
-                            item.screenRoute,
-                            restoreStateEnabled = true
-                        )
+                        navHostController.navigateBottomTab(item.screenRoute)
                     },
                 )
             }
         }
     }
     },
-        floatingActionButton = { if(currentRoute == NavigationRoutes.HOME) CreatePostFloatingButton {
+        floatingActionButton = { if(currentRoute == BottomNavItem.Home.screenRoute) CreatePostFloatingButton {
             navHostController.navigateToCreatePost()
         } }) {
         TabNavHost(navHostController, it)

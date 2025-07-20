@@ -79,6 +79,8 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
+import com.example.rentit.navigation.BottomTabRoute
+import com.example.rentit.navigation.navigateBottomTab
 import com.example.rentit.presentation.home.createpost.categorytag.CategoryTagDrawer
 import com.example.rentit.presentation.home.createpost.components.RemovableTagButton
 import java.text.NumberFormat
@@ -187,7 +189,7 @@ fun CreatePostScreen(navHostController: NavHostController) {
         }
     }
     CreatePostResultHandler(createPostViewModel) {
-        moveScreen(navHostController, NavigationRoutes.MAIN)
+        navHostController.navigateBottomTab(BottomTabRoute.Home.route)
     }
 }
 

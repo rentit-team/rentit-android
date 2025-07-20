@@ -56,8 +56,6 @@ import com.example.rentit.R
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.navigation.NavigationRoutes
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
@@ -69,6 +67,8 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
+import com.example.rentit.navigation.BottomTabRoute
+import com.example.rentit.navigation.navigateBottomTab
 import com.example.rentit.navigation.navigateToRequestAcceptConfirm
 import com.example.rentit.presentation.chat.chatroom.requestaccept.RequestAcceptDialog
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
@@ -118,15 +118,15 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                     else -> Unit
                 }
                 Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-                moveScreen(navHostController, NavigationRoutes.MAIN)
+                navHostController.navigateBottomTab(BottomTabRoute.Chat.route)
             }
             chatRoomViewModel.getProductDetail(productId){
                 Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-                moveScreen(navHostController, NavigationRoutes.MAIN)
+                navHostController.navigateBottomTab(BottomTabRoute.Chat.route)
             }
         } else {
             Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-            moveScreen(navHostController, NavigationRoutes.MAIN)
+            navHostController.navigateBottomTab(BottomTabRoute.Chat.route)
         }
     }
 
