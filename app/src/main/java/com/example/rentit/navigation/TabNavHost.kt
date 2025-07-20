@@ -34,6 +34,6 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
             ProductDetailNavHost(productId)
         }
         chatRoomGraph(navHostController)
-        composable(NavigationRoutes.CREATE_POST_NAV_HOST) { CreatePostNavHost() }
+        createPostGraph(navHostController)
     }
 }

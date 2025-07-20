@@ -29,6 +29,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.navigation.TabNavHost
+import com.example.rentit.navigation.navigateToCreatePost
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -79,7 +80,7 @@ fun MainView() {
     }
     },
         floatingActionButton = { if(currentRoute == NavigationRoutes.HOME) CreatePostFloatingButton {
-            moveScreen(navHostController, NavigationRoutes.CREATE_POST_NAV_HOST)
+            navHostController.navigateToCreatePost()
         } }) {
         TabNavHost(navHostController, it)
     }
