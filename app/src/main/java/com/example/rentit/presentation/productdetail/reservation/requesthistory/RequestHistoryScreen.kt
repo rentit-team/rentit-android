@@ -83,10 +83,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
                 items(groupedByMonth[yearMonth] ?: emptyList()) { info ->
                     RequestHistoryListItem(requestInfo = info) {
                         if (info.chatRoomId != null) {
-                            moveScreen(
-                                navHostController,
-                                "${NavigationRoutes.CHAT_NAV_HOST}/$productId/${info.reservationId}/${info.chatRoomId}"
-                            )
+                            navHostController.navigateToChatRoom(productId, info.reservationId, info.chatRoomId)
                             navHostController.navigateToChatRoom(
                                 productId,
                                 info.reservationId,
@@ -95,12 +92,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
                         } else {
                             requestHistoryViewModel.postNewChat(
                                 productId = productId ?: -1,
-                                onSuccess = { chatRoomId ->
-                                    moveScreen(
-                                        navHostController,
-                                        "${NavigationRoutes.CHAT_NAV_HOST}/$productId/${info.reservationId}/$chatRoomId"
-                                    )
-                                },
+                                onSuccess = { chatRoomId -> navHostController.navigateToChatRoom(productId, info.reservationId, chatRoomId) },
                                 onError = {
                                     Toast.makeText(navHostController.context, errorMsgNewChatRoom, Toast.LENGTH_SHORT).show()
                                 }

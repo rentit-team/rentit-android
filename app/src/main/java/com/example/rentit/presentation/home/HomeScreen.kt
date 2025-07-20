@@ -28,11 +28,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
-import com.example.rentit.navigation.NavigationRoutes
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.ProductListItem
+import com.example.rentit.navigation.navigateToProductDetail
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -91,7 +90,7 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
             modifier = Modifier.fillMaxSize(),
         ) {
             items(productList) {
-                ProductListItem(it) { moveScreen(navHostController, NavigationRoutes.PRODUCT_DETAIL_NAV_HOST + "/${it.productId}", saveStateEnabled = true, restoreStateEnabled = true) }
+                ProductListItem(it) { navHostController.navigateToProductDetail(it.productId) }
             }
         }
     }

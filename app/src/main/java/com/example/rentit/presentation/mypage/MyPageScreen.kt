@@ -46,9 +46,7 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.navigation.NavigationRoutes
 import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
@@ -58,6 +56,7 @@ import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
 import com.example.rentit.common.component.ProductListItem
+import com.example.rentit.navigation.navigateToProductDetail
 import com.example.rentit.presentation.mypage.components.MyRentalHistoryListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -90,14 +89,7 @@ fun MyPageScreen(navHostController: NavHostController) {
             myProductList = myProductList,
             myRentList = myRentalList,
             onTabActive = { isFirstTabSelected = !isFirstTabSelected },
-            onItemClick = { id ->
-                moveScreen(
-                    navHostController,
-                    NavigationRoutes.PRODUCT_DETAIL_NAV_HOST + "/$id",
-                    saveStateEnabled = true,
-                    restoreStateEnabled = true
-                )
-            }
+            onItemClick = { navHostController.navigateToProductDetail(it) }
         )
     }
 }
