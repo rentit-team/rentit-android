@@ -67,9 +67,9 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.navigation.BottomTabRoute
-import com.example.rentit.navigation.navigateBottomTab
-import com.example.rentit.navigation.navigateToRequestAcceptConfirm
+import com.example.rentit.navigation.bottomtab.BottomTabRoute
+import com.example.rentit.navigation.bottomtab.navigateBottomTab
+import com.example.rentit.navigation.chatroom.navigateToRequestAcceptConfirm
 import com.example.rentit.presentation.chat.chatroom.requestaccept.RequestAcceptDialog
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble

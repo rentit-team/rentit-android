@@ -1,4 +1,4 @@
-package com.example.rentit.navigation
+package com.example.rentit.navigation.productdetail
 
 import kotlinx.serialization.Serializable
 

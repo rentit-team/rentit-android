@@ -26,9 +26,9 @@ import com.example.rentit.R
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.TabNavHost
-import com.example.rentit.navigation.navigateBottomTab
-import com.example.rentit.navigation.navigateToCreatePost
+import com.example.rentit.navigation.MainNavHost
+import com.example.rentit.navigation.bottomtab.navigateBottomTab
+import com.example.rentit.navigation.createpost.navigateToCreatePost
 
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -70,7 +70,7 @@ fun MainView() {
         floatingActionButton = { if(currentRoute == BottomNavItem.Home.screenRoute) CreatePostFloatingButton {
             navHostController.navigateToCreatePost()
         } }) {
-        TabNavHost(navHostController, it)
+        MainNavHost(navHostController, it)
     }
 }
 

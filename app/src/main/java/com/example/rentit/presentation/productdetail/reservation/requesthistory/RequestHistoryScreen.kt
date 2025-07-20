@@ -30,7 +30,7 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.dto.RequestPeriodDto
-import com.example.rentit.navigation.navigateToChatRoom
+import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestCalendar
 import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestHistoryListItem
 import java.time.LocalDate

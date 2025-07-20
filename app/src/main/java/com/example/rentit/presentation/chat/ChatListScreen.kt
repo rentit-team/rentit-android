@@ -29,8 +29,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.ChatRoomRoute
-import com.example.rentit.navigation.navigateToChatRoom
+import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.presentation.chat.components.ChatListItem
 
 @RequiresApi(Build.VERSION_CODES.O)

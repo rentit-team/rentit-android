@@ -1,4 +1,4 @@
-package com.example.rentit.navigation
+package com.example.rentit.navigation.bottomtab
 
 import android.os.Build
 import androidx.annotation.RequiresApi

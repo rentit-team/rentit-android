@@ -1,4 +1,4 @@
-package com.example.rentit.navigation
+package com.example.rentit.navigation.createpost
 
 import kotlinx.serialization.Serializable
 

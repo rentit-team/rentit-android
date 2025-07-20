@@ -66,8 +66,8 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.navigateToResvRequest
-import com.example.rentit.navigation.navigateToResvRequestHistory
+import com.example.rentit.navigation.productdetail.navigateToResvRequest
+import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
 import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryBottomDrawer
 import java.text.NumberFormat
 

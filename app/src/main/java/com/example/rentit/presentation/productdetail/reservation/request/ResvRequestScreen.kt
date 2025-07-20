@@ -40,7 +40,7 @@ import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.navigateToResvRequestComplete
+import com.example.rentit.navigation.productdetail.navigateToResvRequestComplete
 import com.example.rentit.presentation.productdetail.reservation.request.components.DateRangePicker
 import java.text.NumberFormat
 

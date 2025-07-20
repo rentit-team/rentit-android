@@ -29,8 +29,8 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.BottomTabRoute
-import com.example.rentit.navigation.navigateBottomTab
+import com.example.rentit.navigation.bottomtab.BottomTabRoute
+import com.example.rentit.navigation.bottomtab.navigateBottomTab
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

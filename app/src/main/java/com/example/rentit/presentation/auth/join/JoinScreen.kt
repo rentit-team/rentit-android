@@ -38,7 +38,7 @@ import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.navigateToLogin
+import com.example.rentit.navigation.auth.navigateToLogin
 
 private const val TAG = "Join"
 

@@ -1,7 +1,7 @@
 package com.example.rentit.presentation.main
 
 import com.example.rentit.R
-import com.example.rentit.navigation.BottomTabRoute
+import com.example.rentit.navigation.bottomtab.BottomTabRoute
 
 enum class BottomNavItem(
     val title: Int, val icon: Int, val iconSelected: Int, val screenRoute: String,

@@ -31,7 +31,7 @@ import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.ProductListItem
-import com.example.rentit.navigation.navigateToProductDetail
+import com.example.rentit.navigation.productdetail.navigateToProductDetail
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

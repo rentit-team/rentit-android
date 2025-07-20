@@ -1,4 +1,4 @@
-package com.example.rentit.navigation
+package com.example.rentit.navigation.auth
 
 import android.os.Build
 import androidx.annotation.RequiresApi

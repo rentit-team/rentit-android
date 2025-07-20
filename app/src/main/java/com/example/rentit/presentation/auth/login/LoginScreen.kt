@@ -27,8 +27,8 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.storage.saveToken
 import com.example.rentit.data.user.model.GoogleSignInResult
-import com.example.rentit.navigation.navigateToJoin
-import com.example.rentit.navigation.navigateToMain
+import com.example.rentit.navigation.auth.navigateToJoin
+import com.example.rentit.navigation.auth.navigateToMain
 import com.example.rentit.presentation.auth.login.components.GoogleLoginButton
 import java.net.URLEncoder
 
