@@ -69,6 +69,7 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
+import com.example.rentit.navigation.navigateToRequestAcceptConfirm
 import com.example.rentit.presentation.chat.chatroom.requestaccept.RequestAcceptDialog
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
@@ -184,7 +185,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                         chatRoomId,
                         productId,
                         reservationId,
-                        onSuccess = { moveScreen(navHostController, NavigationRoutes.REQUEST_ACCEPT_CONFIRM) },
+                        onSuccess = { navHostController.navigateToRequestAcceptConfirm() },
                         onError = {
                             var errorMsg = context.getString(R.string.error_cant_process_accept_request)
                             when(it){

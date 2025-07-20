@@ -27,10 +27,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
-import com.example.rentit.navigation.NavigationRoutes
-import com.example.rentit.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.navigation.ChatRoomRoute
+import com.example.rentit.navigation.navigateToChatRoom
 import com.example.rentit.presentation.chat.components.ChatListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -66,10 +66,7 @@ fun ChatListScreen(navHostController: NavHostController) {
         LazyColumn {
             items(chatList) {
                 ChatListItem(it) {
-                    moveScreen(
-                        navHostController,
-                        "${NavigationRoutes.CHAT_NAV_HOST}/${it.productId}/${it.reservationId}/${it.chatRoomId}"    // 임시 ProductId
-                    )
+                    navHostController.navigateToChatRoom(it.productId, it.reservationId, it.chatRoomId)
                 }
             }
         }

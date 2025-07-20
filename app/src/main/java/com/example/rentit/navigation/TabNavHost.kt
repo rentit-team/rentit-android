@@ -33,18 +33,7 @@ fun TabNavHost(navHostController: NavHostController, paddingValues: PaddingValue
             val productId = backStackEntry.arguments?.getInt("productId")
             ProductDetailNavHost(productId)
         }
-        composable(
-            route = NavigationRoutes.CHAT_NAV_HOST + "/{productId}/{reservationId}/{chatRoomId}",
-            arguments = listOf(
-                navArgument("productId") { type = NavType.IntType },
-                navArgument("reservationId") { type = NavType.IntType },
-                navArgument("chatRoomId") { type = NavType.StringType })
-        ) { backStackEntry ->
-            val pId = backStackEntry.arguments?.getInt("productId")
-            val rId = backStackEntry.arguments?.getInt("reservationId")
-            val cId = backStackEntry.arguments?.getString("chatRoomId")
-            ChatroomNavHost(pId, rId, cId)
-        }
+        chatRoomGraph(navHostController)
         composable(NavigationRoutes.CREATE_POST_NAV_HOST) { CreatePostNavHost() }
     }
 }
