@@ -35,13 +35,12 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.navigation.NavigationRoutes
-import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.navigation.productdetail.navigateToResvRequestComplete
 import com.example.rentit.presentation.productdetail.reservation.request.components.DateRangePicker
 import java.text.NumberFormat
 
@@ -134,9 +133,11 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
         }
     }
     ResvResultHandler(resvRequestViewModel){
-        moveScreen(
-            navHostController,
-            NavigationRoutes.RESV_REQUEST_COMPLETE + "/${rentalStartDate}/${rentalEndDate}/${rentalPeriod}/${formattedTotalPrice.value}"
+        navHostController.navigateToResvRequestComplete(
+            rentalStartDate = rentalStartDate.toString(),
+            rentalEndDate = rentalEndDate.toString(),
+            rentalPeriod = rentalPeriod,
+            formattedTotalPrice = formattedTotalPrice.value
         )
     }
 }

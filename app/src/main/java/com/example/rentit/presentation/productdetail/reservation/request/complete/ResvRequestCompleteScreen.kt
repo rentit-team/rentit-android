@@ -23,14 +23,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.navigation.NavigationRoutes
-import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.navigation.bottomtab.BottomTabRoute
+import com.example.rentit.navigation.bottomtab.navigateBottomTab
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -75,7 +75,7 @@ fun ResvRequestCompleteScreen(
                 color = PrimaryBlue500)
         }
         CommonButton(text = "완료", containerColor = Gray100, contentColor = AppBlack, modifier = Modifier.padding(top = 52.dp)) {
-            moveScreen(navHostController, NavigationRoutes.MAIN)
+            navHostController.navigateBottomTab(BottomTabRoute.Home.route)
         }
     }
 }

@@ -58,8 +58,6 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.navigation.NavigationRoutes
-import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.theme.Gray100
@@ -68,6 +66,8 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.navigation.productdetail.navigateToResvRequest
+import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
 import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryBottomDrawer
 import java.text.NumberFormat
 
@@ -112,7 +112,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productId: Int?) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = { CommonTopAppBar(onClick = { /*TODO*/ }) },
-        bottomBar = { PostBottomBar(navHostController, productDetail?.price ?: 0, isMyProduct, requestHistory.size) },
+        bottomBar = { PostBottomBar(navHostController, productId, productDetail?.price ?: 0, isMyProduct, requestHistory.size) },
         floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
         Box(
@@ -258,7 +258,7 @@ fun PostHeader(title: String, category: String, creationDate: String) {
 }
 
 @Composable
-fun PostBottomBar(navHostController: NavHostController, price: Int, isMyProduct: Boolean, requestCount: Int) {
+fun PostBottomBar(navHostController: NavHostController, productId: Int?, price: Int, isMyProduct: Boolean, requestCount: Int) {
     val formattedPrice = NumberFormat.getNumberInstance().format(price)
     // Shadow for bottom bar
     Box(modifier = Modifier
@@ -280,10 +280,10 @@ fun PostBottomBar(navHostController: NavHostController, price: Int, isMyProduct:
             style = MaterialTheme.typography.titleLarge
         )
         if(isMyProduct) {
-            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { moveScreen(navHostController, NavigationRoutes.RESV_REQUEST_HISTORY) }
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { navHostController.navigateToResvRequestHistory(productId) }
         } else {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
-            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { moveScreen(navHostController, NavigationRoutes.RESV_REQUEST)  }
+            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { navHostController.navigateToResvRequest(productId) }
         }
     }
 }

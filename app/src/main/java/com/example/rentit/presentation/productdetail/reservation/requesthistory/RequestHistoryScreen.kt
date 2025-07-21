@@ -26,12 +26,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.navigation.NavigationRoutes
-import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.dto.RequestPeriodDto
+import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestCalendar
 import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestHistoryListItem
 import java.time.LocalDate
@@ -81,19 +80,16 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
                 items(groupedByMonth[yearMonth] ?: emptyList()) { info ->
                     RequestHistoryListItem(requestInfo = info) {
                         if (info.chatRoomId != null) {
-                            moveScreen(
-                                navHostController,
-                                "${NavigationRoutes.CHAT_NAV_HOST}/$productId/${info.reservationId}/${info.chatRoomId}"
+                            navHostController.navigateToChatRoom(productId, info.reservationId, info.chatRoomId)
+                            navHostController.navigateToChatRoom(
+                                productId,
+                                info.reservationId,
+                                info.chatRoomId
                             )
                         } else {
                             requestHistoryViewModel.postNewChat(
                                 productId = productId ?: -1,
-                                onSuccess = { chatRoomId ->
-                                    moveScreen(
-                                        navHostController,
-                                        "${NavigationRoutes.CHAT_NAV_HOST}/$productId/${info.reservationId}/$chatRoomId"
-                                    )
-                                },
+                                onSuccess = { chatRoomId -> navHostController.navigateToChatRoom(productId, info.reservationId, chatRoomId) },
                                 onError = {
                                     Toast.makeText(navHostController.context, errorMsgNewChatRoom, Toast.LENGTH_SHORT).show()
                                 }

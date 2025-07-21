@@ -66,9 +66,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.navigation.NavigationRoutes
 import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.navigation.moveScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
@@ -79,6 +77,8 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
+import com.example.rentit.navigation.bottomtab.BottomTabRoute
+import com.example.rentit.navigation.bottomtab.navigateBottomTab
 import com.example.rentit.presentation.home.createpost.categorytag.CategoryTagDrawer
 import com.example.rentit.presentation.home.createpost.components.RemovableTagButton
 import java.text.NumberFormat
@@ -187,7 +187,7 @@ fun CreatePostScreen(navHostController: NavHostController) {
         }
     }
     CreatePostResultHandler(createPostViewModel) {
-        moveScreen(navHostController, NavigationRoutes.MAIN)
+        navHostController.navigateBottomTab(BottomTabRoute.Home.route)
     }
 }
 

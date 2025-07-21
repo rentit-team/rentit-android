@@ -32,8 +32,8 @@ class ResvRequestViewModel @Inject constructor(
     private val _rentalEndDate = MutableStateFlow<LocalDate?>(null)
     val rentalEndDate: StateFlow<LocalDate?> = _rentalEndDate
 
-    private val _formattedTotalPrice = MutableStateFlow<String?>(null)
-    val formattedTotalPrice: StateFlow<String?> = _formattedTotalPrice
+    private val _formattedTotalPrice = MutableStateFlow("0")
+    val formattedTotalPrice: StateFlow<String> = _formattedTotalPrice
 
     private val _productPrice = MutableStateFlow(0)
     val productPrice: StateFlow<Int> = _productPrice
@@ -61,7 +61,7 @@ class ResvRequestViewModel @Inject constructor(
         _rentalEndDate.value = date
     }
 
-    fun setFormattedTotalPrice(formattedPrice: String?) {
+    fun setFormattedTotalPrice(formattedPrice: String) {
         _formattedTotalPrice.value = formattedPrice
     }
 
