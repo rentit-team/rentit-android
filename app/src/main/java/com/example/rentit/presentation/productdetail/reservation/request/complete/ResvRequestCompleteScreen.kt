@@ -29,8 +29,7 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.bottomtab.BottomTabRoute
-import com.example.rentit.navigation.bottomtab.navigateBottomTab
+import com.example.rentit.navigation.bottomtab.navigateToHome
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -75,7 +74,7 @@ fun ResvRequestCompleteScreen(
                 color = PrimaryBlue500)
         }
         CommonButton(text = "완료", containerColor = Gray100, contentColor = AppBlack, modifier = Modifier.padding(top = 52.dp)) {
-            navHostController.navigateBottomTab(BottomTabRoute.Home.route)
+            navHostController.navigateToHome()
         }
     }
 }
