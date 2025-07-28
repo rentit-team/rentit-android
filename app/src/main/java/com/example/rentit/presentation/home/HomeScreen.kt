@@ -89,7 +89,7 @@ fun HomeScreen(navHostController: NavHostController, modifier: Modifier = Modifi
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
         ) {
-            items(productList) {
+            items(productList.reversed()) {
                 ProductListItem(it) { navHostController.navigateToProductDetail(it.productId) }
             }
         }
