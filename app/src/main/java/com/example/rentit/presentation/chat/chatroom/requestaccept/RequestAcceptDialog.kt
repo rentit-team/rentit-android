@@ -67,7 +67,7 @@ fun RequestAcceptDialog(productPrice: Int, onDismissRequest: () -> Unit, onAccep
                 )
                 Text(
                     modifier = Modifier.padding(bottom = 18.dp),
-                    text = "25.08.17 (목) ~ 25.08.20 (일) · 4일",
+                    text = "25.08.17 (목) ~ 25.08.20 (일) · 4일",      // 백엔드 데이터 누락
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray800
                 )
@@ -80,7 +80,7 @@ fun RequestAcceptDialog(productPrice: Int, onDismissRequest: () -> Unit, onAccep
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
-                        text = "${numFormat.format(productPrice * rentalPeriod)} ${stringResource(R.string.common_price_unit)}",
+                        text = "${numFormat.format(productPrice * rentalPeriod)} ${stringResource(R.string.common_price_unit_per_day)}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

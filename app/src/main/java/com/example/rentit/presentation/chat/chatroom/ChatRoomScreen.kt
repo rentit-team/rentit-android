@@ -273,7 +273,7 @@ private fun ProductInfo(productInfo: ProductDto) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit),
+                    text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Gray400
                 )
@@ -312,7 +312,7 @@ private fun RequestInfo(statusInfo: StatusHistoryDto) {
             }
         }
         Text(
-            text = "25.08.17 (목) ~ 25.08.20 (일) · 4일",
+            text = "25.08.17 (목) ~ 25.08.20 (일) · 4일",      // 백엔드 데이터 누락
             style = MaterialTheme.typography.labelMedium,
             color = Gray800
         )

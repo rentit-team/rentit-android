@@ -77,8 +77,6 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
-import com.example.rentit.navigation.bottomtab.BottomTabRoute
-import com.example.rentit.navigation.bottomtab.navigateBottomTab
 import com.example.rentit.navigation.bottomtab.navigateToHome
 import com.example.rentit.presentation.home.createpost.categorytag.CategoryTagDrawer
 import com.example.rentit.presentation.home.createpost.components.RemovableTagButton
@@ -364,7 +362,7 @@ fun PriceInputSection(priceInput: TextFieldValue, onValueChange: (String) -> Uni
             modifier = Modifier.width(140.dp)
         )
         Text(
-            text = stringResource(id = R.string.common_price_unit),
+            text = stringResource(id = R.string.common_price_unit_per_day),
             modifier = Modifier.padding(start = 10.dp),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray800
