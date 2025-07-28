@@ -67,8 +67,6 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.navigation.bottomtab.BottomTabRoute
-import com.example.rentit.navigation.bottomtab.navigateBottomTab
 import com.example.rentit.navigation.chatroom.navigateToRequestAcceptConfirm
 import com.example.rentit.presentation.chat.chatroom.requestaccept.RequestAcceptDialog
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
@@ -118,15 +116,15 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                     else -> Unit
                 }
                 Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-                navHostController.navigateBottomTab(BottomTabRoute.Chat.route)
+                navHostController.popBackStack()
             }
             chatRoomViewModel.getProductDetail(productId){
                 Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-                navHostController.navigateBottomTab(BottomTabRoute.Chat.route)
+                navHostController.popBackStack()
             }
         } else {
             Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-            navHostController.navigateBottomTab(BottomTabRoute.Chat.route)
+            navHostController.popBackStack()
         }
     }
 
