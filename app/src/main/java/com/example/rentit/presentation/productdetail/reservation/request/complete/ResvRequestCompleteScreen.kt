@@ -38,7 +38,6 @@ fun ResvRequestCompleteScreen(
     navHostController: NavHostController,
     rentalStartDate: String,
     rentalEndDate: String,
-    rentalPeriod: Int,
     formattedTotalPrice: String,
     ) {
     Column(
@@ -89,7 +88,6 @@ private fun Preview() {
             rememberNavController(),
             rentalStartDate = "2025-07-12",
             rentalEndDate = "2025-07-16",
-            rentalPeriod = 5,
             formattedTotalPrice = "45,000"
         )
     }

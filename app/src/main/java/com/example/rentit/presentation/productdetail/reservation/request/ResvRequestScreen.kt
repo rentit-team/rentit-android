@@ -136,7 +136,6 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
         navHostController.navigateToResvRequestComplete(
             rentalStartDate = rentalStartDate.toString(),
             rentalEndDate = rentalEndDate.toString(),
-            rentalPeriod = rentalPeriod,
             formattedTotalPrice = formattedTotalPrice.value
         )
     }
