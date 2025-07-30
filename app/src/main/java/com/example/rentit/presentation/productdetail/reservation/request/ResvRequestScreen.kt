@@ -40,9 +40,9 @@ import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.navigation.productdetail.navigateToResvRequestComplete
 import com.example.rentit.presentation.productdetail.reservation.request.components.DateRangePicker
-import java.text.NumberFormat
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -56,7 +56,6 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
     val productPrice by resvRequestViewModel.productPrice.collectAsStateWithLifecycle()
     val reservedDateList by resvRequestViewModel.reservedDateList.collectAsStateWithLifecycle()
 
-    val numFormat = NumberFormat.getNumberInstance()
     var formattedRentalPrice by remember { mutableStateOf("") }
     val formattedTotalPrice = resvRequestViewModel.formattedTotalPrice.collectAsStateWithLifecycle()
 
@@ -74,8 +73,8 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
 
     LaunchedEffect(rentalPeriod) {
         val totalPrice = rentalPeriod * productPrice
-        formattedRentalPrice = numFormat.format(totalPrice)
-        resvRequestViewModel.setFormattedTotalPrice(numFormat.format(totalPrice + sampleDeposit))
+        formattedRentalPrice = formatPrice(totalPrice)
+        resvRequestViewModel.setFormattedTotalPrice(formatPrice(totalPrice + sampleDeposit))
     }
 
     Scaffold(
@@ -112,7 +111,7 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
                             id = R.string.screen_resv_request_label_deposit), style = MaterialTheme.typography.bodyMedium)
                         Icon(modifier = Modifier.padding(start = 5.dp), painter = painterResource(id = R.drawable.ic_info), contentDescription = "", tint = Gray300 )
                     }
-                    Text(text = "${numFormat.format(sampleDeposit)} 원",
+                    Text(text = "${formatPrice(sampleDeposit)} 원",
                         style = MaterialTheme.typography.bodyMedium,
                         color = PrimaryBlue500
                     )

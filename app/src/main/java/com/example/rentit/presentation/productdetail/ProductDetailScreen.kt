@@ -66,10 +66,10 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.navigation.productdetail.navigateToResvRequest
 import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
 import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryBottomDrawer
-import java.text.NumberFormat
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -259,7 +259,7 @@ fun PostHeader(title: String, category: String, creationDate: String) {
 
 @Composable
 fun PostBottomBar(navHostController: NavHostController, productId: Int?, price: Int, isMyProduct: Boolean, requestCount: Int) {
-    val formattedPrice = NumberFormat.getNumberInstance().format(price)
+    val formattedPrice = formatPrice(price)
     // Shadow for bottom bar
     Box(modifier = Modifier
         .fillMaxWidth()

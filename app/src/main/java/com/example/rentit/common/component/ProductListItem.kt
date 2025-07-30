@@ -36,8 +36,8 @@ import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.data.product.dto.ProductDto
-import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -141,14 +141,13 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                         color = Gray400
                     )
                 }
-                val numFormatter = NumberFormat.getNumberInstance()
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
+                        text = formatPrice(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     if (isMyProduct) {
