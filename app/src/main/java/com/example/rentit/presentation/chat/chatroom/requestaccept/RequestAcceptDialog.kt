@@ -29,12 +29,11 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import java.text.NumberFormat
+import com.example.rentit.common.util.formatPrice
 
 @Composable
 fun RequestAcceptDialog(productPrice: Int, onDismissRequest: () -> Unit, onAcceptRequest: () -> Unit) {
     val rentalPeriod = 4
-    val numFormat = NumberFormat.getNumberInstance()
     Dialog(
         onDismissRequest = onDismissRequest
     ) {
@@ -80,7 +79,7 @@ fun RequestAcceptDialog(productPrice: Int, onDismissRequest: () -> Unit, onAccep
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
-                        text = "${numFormat.format(productPrice * rentalPeriod)} ${stringResource(R.string.common_price_unit_per_day)}",
+                        text = "${formatPrice(productPrice * rentalPeriod)} ${stringResource(R.string.common_price_unit_per_day)}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                 }

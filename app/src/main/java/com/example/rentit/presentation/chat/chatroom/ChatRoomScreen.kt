@@ -65,6 +65,7 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.navigation.chatroom.navigateToRequestAcceptConfirm
@@ -72,7 +73,6 @@ import com.example.rentit.presentation.chat.chatroom.requestaccept.RequestAccept
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
-import java.text.NumberFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
@@ -205,7 +205,6 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
 @Composable
 private fun ProductInfo(productInfo: ProductDto) {
     val lastMessageTime = formatDateTime(productInfo.createdAt)
-    val numFormatter = NumberFormat.getNumberInstance()
     val period = productInfo.period
     Row(
         modifier = Modifier
@@ -273,7 +272,7 @@ private fun ProductInfo(productInfo: ProductDto) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
+                    text = formatPrice(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
                     style = MaterialTheme.typography.bodyLarge,
                     color = Gray400
                 )
