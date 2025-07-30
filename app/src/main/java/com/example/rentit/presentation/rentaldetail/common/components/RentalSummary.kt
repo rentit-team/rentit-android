@@ -28,8 +28,12 @@ import com.example.rentit.common.util.formatPrice
 import com.example.rentit.common.util.formatRentalPeriod
 
 /**
-* 대여 정보(상품 사진, 게시글 제목, 대여 기간, 총 금액)을 함께 표시하는 공통 UI 컴포넌트
+* 대여 정보(상품 사진, 게시글 제목, 대여 기간, 총 금액)을 함께 표시하는 UI 컴포넌트
  */
+
+private val imageSize = 62.dp
+private val contentStartPadding = 15.dp
+private val periodTextVerticalPadding = 6.dp
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -48,7 +52,7 @@ fun RentalSummary(
     Row(modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
         AsyncImage(
             modifier = Modifier
-                .size(62.dp)
+                .size(imageSize)
                 .clip(RoundedCornerShape(20.dp)),
             model = ImageRequest.Builder(LocalContext.current)
                 .data(thumbnailImgUrl)
@@ -59,10 +63,10 @@ fun RentalSummary(
             contentDescription = stringResource(id = R.string.common_list_item_thumbnail_img_placeholder_description),
             contentScale = ContentScale.Crop
         )
-        Column(Modifier.padding(start = 15.dp)) {
+        Column(Modifier.padding(start = contentStartPadding)) {
             Text(text = productTitle, style = MaterialTheme.typography.labelMedium)
             Text(
-                modifier = Modifier.padding(vertical = 6.dp),
+                modifier = Modifier.padding(vertical = periodTextVerticalPadding),
                 text = formatRentalPeriod(LocalContext.current, startDate, endDate),
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray800
