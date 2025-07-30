@@ -13,8 +13,8 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
 
 @Composable
-fun CommonDivider() {
-    Box(modifier = Modifier
+fun CommonDivider(modifier: Modifier = Modifier) {
+    Box(modifier = modifier
         .fillMaxWidth()
         .height(1.dp)
         .background(Gray100))
