@@ -20,17 +20,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 
 @Composable
-fun CommonTopAppBar(title: String = "", onClick: () -> Unit, modifier: Modifier = Modifier) {
-    Box(modifier = modifier
-        .fillMaxWidth()
-        .height(60.dp)
-        .background(Color.White)
-        .padding(top = 5.dp)
-    ){
+fun CommonTopAppBar(
+    modifier: Modifier = Modifier,
+    title: String = "",
+    navHostController: NavHostController,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(Color.White)
+            .padding(top = 5.dp)
+    ) {
         IconButton(
-            onClick = onClick,
+            onClick = { navHostController.popBackStack() },
             modifier = Modifier.align(Alignment.CenterStart)
         ) {
             Icon(
@@ -50,8 +57,8 @@ fun CommonTopAppBar(title: String = "", onClick: () -> Unit, modifier: Modifier 
 
 @Preview
 @Composable
-fun TopAppBarPreview(){
+fun TopAppBarPreview() {
     RentItTheme {
-        CommonTopAppBar("제목", {})
+        CommonTopAppBar(Modifier, "제목", rememberNavController())
     }
 }
