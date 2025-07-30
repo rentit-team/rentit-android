@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.util.daysBetween
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.repository.ProductRepository
@@ -15,7 +16,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -46,12 +46,8 @@ class ResvRequestViewModel @Inject constructor(
         _rentalStartDate,
         _rentalEndDate
     ) { start, end ->
-        if(start != null && end != null) {
-            ChronoUnit.DAYS.between(start, end).toInt() + 1
-        } else {
-            0
-        }
-    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0 )
+        daysBetween(start, end)
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
     fun setRentalStartDate(date: LocalDate?) {
         _rentalStartDate.value = date

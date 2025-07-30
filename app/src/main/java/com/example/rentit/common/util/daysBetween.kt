@@ -20,7 +20,8 @@ fun daysBetween(startDateStr: String, endDateStr: String): Int {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun daysBetween(start: LocalDate, end: LocalDate): Int {
-    return start.until(end, ChronoUnit.DAYS).toInt() + 1
+fun daysBetween(start: LocalDate?, end: LocalDate?): Int {
+    if(start == null || end == null) return 0
+    return start.until(end, ChronoUnit.DAYS).toInt().plus(1)
 }
 
