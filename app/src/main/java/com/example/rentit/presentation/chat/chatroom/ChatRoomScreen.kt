@@ -141,7 +141,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
     }
 
     Column(Modifier.background(Color.White)) {
-        CommonTopAppBar(onClick = { /*TODO*/ })
+        CommonTopAppBar(navHostController = navHostController)
         // 상단 예약 관련 정보
         productDetail?.let { ProductInfo(it.product) } ?: Column(Modifier
             .fillMaxWidth()

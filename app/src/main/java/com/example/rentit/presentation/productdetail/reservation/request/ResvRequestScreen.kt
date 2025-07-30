@@ -78,8 +78,12 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
     }
 
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(
-            id = R.string.screen_resv_request_app_bar_title), onClick = {}) }
+        topBar = {
+            CommonTopAppBar(
+                title = stringResource(id = R.string.screen_resv_request_app_bar_title),
+                navHostController = navHostController
+            )
+        }
     ) {
         Column(
             modifier = Modifier

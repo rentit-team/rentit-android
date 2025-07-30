@@ -66,7 +66,7 @@ fun JoinScreen(navHostController: NavHostController, name: String?, email: Strin
     Column {
         CommonTopAppBar(
             title = stringResource(id = R.string.screen_join_title),
-            onClick = {}
+            navHostController = navHostController
         )
         Column(
             modifier = Modifier
