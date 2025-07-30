@@ -29,6 +29,7 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.navigation.bottomtab.navigateToHome
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -37,7 +38,6 @@ fun ResvRequestCompleteScreen(
     navHostController: NavHostController,
     rentalStartDate: String,
     rentalEndDate: String,
-    rentalPeriod: Int,
     formattedTotalPrice: String,
     ) {
     Column(
@@ -59,7 +59,7 @@ fun ResvRequestCompleteScreen(
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
-            Text(text = "$rentalStartDate ~ $rentalEndDate · $rentalPeriod 일", style = MaterialTheme.typography.bodyMedium, color = Gray800)
+            Text(text = formatRentalPeriod(navHostController.context, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
         CommonDivider()
         Row(modifier = Modifier
@@ -88,7 +88,6 @@ private fun Preview() {
             rememberNavController(),
             rentalStartDate = "2025-07-12",
             rentalEndDate = "2025-07-16",
-            rentalPeriod = 5,
             formattedTotalPrice = "45,000"
         )
     }

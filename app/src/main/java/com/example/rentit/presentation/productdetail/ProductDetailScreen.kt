@@ -276,7 +276,7 @@ fun PostBottomBar(navHostController: NavHostController, productId: Int?, price: 
         verticalAlignment = Alignment.CenterVertically) {
         Text(
             modifier = Modifier.weight(1F),
-            text = "$formattedPrice " + stringResource(id = R.string.common_price_unit),
+            text = "$formattedPrice " + stringResource(id = R.string.common_price_unit_per_day),
             style = MaterialTheme.typography.titleLarge
         )
         if(isMyProduct) {

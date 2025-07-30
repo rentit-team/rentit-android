@@ -13,7 +13,6 @@ sealed class ProductDetailRoute {
     data class ResvRequestComplete(
         val rentalStartDate: String,
         val rentalEndDate: String,
-        val rentalPeriod: Int,
         val formattedTotalPrice: String,
     ) : ProductDetailRoute()
 

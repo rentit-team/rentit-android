@@ -24,28 +24,22 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.rentit.R
-import com.example.rentit.common.util.getKorLabel
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
+import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.toShortFormat
 import com.example.rentit.data.product.dto.OwnerDto
 import com.example.rentit.data.product.dto.PeriodDto
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyRentalHistoryListItem(rentalInfo: ReservationDto) {
-    val formatter = DateTimeFormatter.ofPattern("yy.MM.dd")
     val requestedAt = LocalDateTime.parse(rentalInfo.requestedAt).toLocalDate()
-    val startDate = LocalDate.parse(rentalInfo.startDate)
-    val endDate = LocalDate.parse(rentalInfo.endDate)
-    val period = ChronoUnit.DAYS.between(startDate, endDate).toInt() + 1
 
     Row(
         modifier = Modifier
@@ -84,18 +78,11 @@ fun MyRentalHistoryListItem(rentalInfo: ReservationDto) {
             }
             Text(
                 modifier = Modifier.padding(top = 5.dp, bottom = 8.dp),
-                text = stringResource(
-                    id = R.string.request_history_list_item_period,
-                    startDate.format(formatter),
-                    startDate.dayOfWeek.getKorLabel(),
-                    endDate.format(formatter),
-                    endDate.dayOfWeek.getKorLabel(),
-                    period
-                ),
+                text = formatRentalPeriod(LocalContext.current, rentalInfo.startDate, rentalInfo.endDate),
                 style = MaterialTheme.typography.bodyMedium,
             )
             Text(
-                text = "${stringResource(R.string.screen_mypage_my_rental_list_item_label_request_at)} ${requestedAt.format(formatter)}",
+                text = "${stringResource(R.string.screen_mypage_my_rental_list_item_label_request_at)} ${requestedAt.toShortFormat()}",
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
             )

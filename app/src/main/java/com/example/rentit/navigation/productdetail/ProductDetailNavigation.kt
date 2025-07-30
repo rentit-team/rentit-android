@@ -26,14 +26,12 @@ fun NavHostController.navigateToResvRequest(productId: Int?) {
 fun NavHostController.navigateToResvRequestComplete(
     rentalStartDate: String = "",
     rentalEndDate: String = "",
-    rentalPeriod: Int = 0,
     formattedTotalPrice: String = "0",
 ) {
     navigate(
         route = ProductDetailRoute.ResvRequestComplete(
             rentalStartDate,
             rentalEndDate,
-            rentalPeriod,
             formattedTotalPrice
         )
     )
@@ -61,7 +59,6 @@ fun NavGraphBuilder.productDetailGraph(navHostController: NavHostController) {
             navHostController,
             items.rentalStartDate,
             items.rentalEndDate,
-            items.rentalPeriod,
             items.formattedTotalPrice
         )
     }

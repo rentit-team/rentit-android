@@ -19,6 +19,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,11 +31,12 @@ import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.parseLocalDateOrNull
 import com.example.rentit.data.product.dto.RequestInfoDto
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -43,11 +45,8 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
     val formatter = DateTimeFormatter.ofPattern("yy.MM.dd")
 
     val requestedAt = LocalDateTime.parse(requestInfo.requestedAt).toLocalDate()
-    val startDate = LocalDate.parse(requestInfo.startDate)
-    val endDate = LocalDate.parse(requestInfo.endDate)
-    val period = ChronoUnit.DAYS.between(startDate, endDate).toInt() + 1
-
-    val isPast = startDate.isBefore(LocalDate.now())
+    val startDate = parseLocalDateOrNull(requestInfo.startDate)
+    val isPast = startDate?.isBefore(LocalDate.now()) ?: true
     val pastDateColor = Gray300
 
     Card(
@@ -83,14 +82,7 @@ fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> 
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(
-                        id = R.string.request_history_list_item_period,
-                        startDate.format(formatter),
-                        startDate.dayOfWeek.getKorLabel(),
-                        endDate.format(formatter),
-                        endDate.dayOfWeek.getKorLabel(),
-                        period
-                    ),
+                    text = formatRentalPeriod(LocalContext.current, requestInfo.startDate, requestInfo.endDate),
                     style = MaterialTheme.typography.labelLarge,
                     color = if (isPast) pastDateColor else AppBlack
                 )

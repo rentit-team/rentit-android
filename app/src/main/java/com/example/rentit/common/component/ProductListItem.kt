@@ -148,7 +148,7 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit),
+                        text = numFormatter.format(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
                         style = MaterialTheme.typography.bodyLarge
                     )
                     if (isMyProduct) {
