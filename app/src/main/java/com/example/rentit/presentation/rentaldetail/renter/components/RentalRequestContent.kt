@@ -1,0 +1,102 @@
+package com.example.rentit.presentation.rentaldetail.renter.components
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.example.rentit.R
+import com.example.rentit.common.DEPOSIT_BASIS_DAYS
+import com.example.rentit.common.theme.PrimaryBlue500
+import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
+import com.example.rentit.presentation.rentaldetail.common.components.PriceSummary
+import com.example.rentit.presentation.rentaldetail.common.components.RentalSummary
+import com.example.rentit.presentation.rentaldetail.common.PriceItemUiModel
+import com.example.rentit.presentation.rentaldetail.common.components.ArrowedTextButton
+import com.example.rentit.presentation.rentaldetail.common.components.NoticeBanner
+import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
+
+/**
+ * 요청과 관련된 상태(대여 요청, 요청 수락, 요청 거절, 거래 취소)를 나타내는 UI 컨텐츠
+ */
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun RentalRequestContent(
+    pendingData: RentalStatusRenterUiModel.Request,
+) {
+    NoticeBanner(noticeText = buildAnnotatedString {
+        withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
+            append("")
+        }
+        append("")
+    })
+    LabeledSection(
+        labelText = AnnotatedString(stringResource(R.string.rental_status_canceled)),
+        labelColor = PrimaryBlue500
+    ) {
+        RentalSummary(
+            productTitle = pendingData.productTitle,
+            startDate = pendingData.startDate,
+            endDate = pendingData.endDate,
+            pricePerDay = pendingData.pricePerDay,
+            depositBasisDays = DEPOSIT_BASIS_DAYS
+        )
+        ArrowedTextButton(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .offset(y = 8.dp),
+            text = ""
+        ) { }
+    }
+
+    LabeledSection(labelText = AnnotatedString("")) {
+        PriceSummary(
+            priceItems = listOf(
+                PriceItemUiModel(label = "", price = pendingData.basicRentalPrice),
+                PriceItemUiModel(label = "", price = pendingData.deposit)
+            ),
+            totalLabel = ""
+        )
+    }
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+        ArrowedTextButton(
+            modifier = Modifier
+                .padding(vertical = 10.dp),
+            text = ""
+        ) { }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+@Preview(showBackground = true)
+private fun Preview() {
+    val examplePendingUiModel = RentalStatusRenterUiModel.Request(
+        status = "REJECTED",
+        productTitle = "캐논 EOS 550D",
+        startDate = "2025-08-17",
+        endDate = "2025-08-20",
+        pricePerDay = 10_000,
+        basicRentalPrice = 10_000 * 4,
+        deposit = 10_000 * 3
+    )
+    RentItTheme {
+        Column {
+            RentalRequestContent(pendingData = examplePendingUiModel)
+        }
+    }
+}
