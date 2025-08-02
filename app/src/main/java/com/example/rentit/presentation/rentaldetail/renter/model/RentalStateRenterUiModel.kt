@@ -15,7 +15,7 @@ sealed class RentalStatusRenterUiModel {
 
     data object Paid: RentalStatusRenterUiModel()
 
-    data object RENTING: RentalStatusRenterUiModel()
+    data object Renting: RentalStatusRenterUiModel()
 
     data object Returned: RentalStatusRenterUiModel()
 

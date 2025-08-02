@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RentalDetailDto
@@ -20,7 +22,7 @@ import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRen
 @Composable
 fun RentalDetailRenterView(navHostController: NavHostController, uiModel: RentalStatusRenterUiModel) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = "대여 상세", navHostController = navHostController) }
+        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), navHostController = navHostController) }
     ) {
         Column(modifier = Modifier.padding(it)) {
             when(uiModel) {
@@ -28,7 +30,7 @@ fun RentalDetailRenterView(navHostController: NavHostController, uiModel: Rental
                     RentalRequestContent(uiModel)
                 is RentalStatusRenterUiModel.Paid -> {}
 
-                is RentalStatusRenterUiModel.RENTING -> {}
+                is RentalStatusRenterUiModel.Renting -> {}
 
                 is RentalStatusRenterUiModel.Returned -> {}
 

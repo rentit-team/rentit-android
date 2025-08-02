@@ -29,7 +29,7 @@ fun RentalDetailDto.toUiModel(): RentalStatusRenterUiModel {
 
         RentalStatus.PAID.name -> RentalStatusRenterUiModel.Paid
 
-        RentalStatus.RENTING.name -> RentalStatusRenterUiModel.RENTING
+        RentalStatus.RENTING.name -> RentalStatusRenterUiModel.Renting
 
         RentalStatus.RETURNED.name -> RentalStatusRenterUiModel.Returned
 

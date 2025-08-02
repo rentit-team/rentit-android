@@ -30,6 +30,7 @@ import com.example.rentit.presentation.rentaldetail.common.components.NoticeBann
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 
 /**
+ * 대여 상세(판매자)에서
  * 요청과 관련된 상태(대여 요청, 요청 수락, 요청 거절, 거래 취소)를 나타내는 UI 컨텐츠
  */
 
@@ -40,12 +41,12 @@ fun RentalRequestContent(
 ) {
     NoticeBanner(noticeText = buildAnnotatedString {
         withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
-            append("")
+            append(stringResource(R.string.screen_rental_detail_renter_request_notice_pay))
         }
-        append("")
+        append(stringResource(R.string.screen_rental_detail_renter_request_notice_wait))
     })
     LabeledSection(
-        labelText = AnnotatedString(stringResource(R.string.rental_status_canceled)),
+        labelText = AnnotatedString(pendingData.status),
         labelColor = PrimaryBlue500
     ) {
         RentalSummary(
@@ -59,24 +60,30 @@ fun RentalRequestContent(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .offset(y = 8.dp),
-            text = ""
+            text = stringResource(R.string.screen_rental_detail_renter_request_btn_pay)
         ) { }
     }
 
-    LabeledSection(labelText = AnnotatedString("")) {
+    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_renter_request_content_price_title))) {
         PriceSummary(
             priceItems = listOf(
-                PriceItemUiModel(label = "", price = pendingData.basicRentalPrice),
-                PriceItemUiModel(label = "", price = pendingData.deposit)
+                PriceItemUiModel(
+                    label = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_basic_rent),
+                    price = pendingData.basicRentalPrice
+                ),
+                PriceItemUiModel(
+                    label = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_deposit),
+                    price = pendingData.deposit
+                )
             ),
-            totalLabel = ""
+            totalLabel = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_total)
         )
     }
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
         ArrowedTextButton(
             modifier = Modifier
                 .padding(vertical = 10.dp),
-            text = ""
+            text = stringResource(R.string.screen_rental_detail_renter_request_btn_cancel_rent)
         ) { }
     }
 }
@@ -86,7 +93,7 @@ fun RentalRequestContent(
 @Preview(showBackground = true)
 private fun Preview() {
     val examplePendingUiModel = RentalStatusRenterUiModel.Request(
-        status = "REJECTED",
+        status = "PENDING",
         productTitle = "캐논 EOS 550D",
         startDate = "2025-08-17",
         endDate = "2025-08-20",
