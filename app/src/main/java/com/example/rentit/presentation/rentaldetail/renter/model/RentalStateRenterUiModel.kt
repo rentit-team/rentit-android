@@ -8,8 +8,7 @@ sealed class RentalStatusRenterUiModel {
         val productTitle: String,
         val startDate: String,
         val endDate: String,
-        val pricePerDay: Int,
-        val basicRentalPrice: Int,
+        val totalPrice: Int,
         val deposit: Int
     ): RentalStatusRenterUiModel()
 

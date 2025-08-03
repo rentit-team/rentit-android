@@ -43,12 +43,8 @@ fun RentalSummary(
     productTitle: String,
     startDate: String,
     endDate: String,
-    pricePerDay: Int,
-    depositBasisDays: Int = 0,
+    totalPrice: Int,
 ) {
-    val period = daysBetween(startDate, endDate)
-    val totalPrice = formatPrice(pricePerDay * period + pricePerDay * depositBasisDays)
-
     Row(modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
         AsyncImage(
             modifier = Modifier
@@ -72,7 +68,9 @@ fun RentalSummary(
                 color = Gray800
             )
             Text(
-                text = "${stringResource(R.string.common_total)} $totalPrice ${stringResource(R.string.common_price_unit)}",
+                text = "${stringResource(R.string.common_total)} " +
+                        "${formatPrice(totalPrice)} " +
+                        stringResource(R.string.common_price_unit),
                 style = MaterialTheme.typography.labelLarge
             )
         }
@@ -88,8 +86,7 @@ private fun Preview() {
             productTitle = "캐논 EOS 550D",
             startDate = "2025-08-17",
             endDate = "2025-08-20",
-            pricePerDay = 10000,
-            depositBasisDays = 3
+            totalPrice = 700000,
         )
     }
 }

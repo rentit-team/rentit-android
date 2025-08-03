@@ -18,7 +18,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.DEPOSIT_BASIS_DAYS
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
@@ -37,26 +37,29 @@ import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRen
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalRequestContent(
-    pendingData: RentalStatusRenterUiModel.Request,
+    requestData: RentalStatusRenterUiModel.Request,
 ) {
-    NoticeBanner(noticeText = buildAnnotatedString {
+    val isAccepted = requestData.status == RentalStatus.ACCEPTED.name
+
+    if(isAccepted) NoticeBanner(noticeText = buildAnnotatedString {
         withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
             append(stringResource(R.string.screen_rental_detail_renter_request_notice_pay))
         }
         append(stringResource(R.string.screen_rental_detail_renter_request_notice_wait))
     })
+
     LabeledSection(
-        labelText = AnnotatedString(pendingData.status),
+        labelText = AnnotatedString(requestData.status),
         labelColor = PrimaryBlue500
     ) {
         RentalSummary(
-            productTitle = pendingData.productTitle,
-            startDate = pendingData.startDate,
-            endDate = pendingData.endDate,
-            pricePerDay = pendingData.pricePerDay,
-            depositBasisDays = DEPOSIT_BASIS_DAYS
+            productTitle = requestData.productTitle,
+            startDate = requestData.startDate,
+            endDate = requestData.endDate,
+            totalPrice = requestData.totalPrice,
         )
-        ArrowedTextButton(
+
+        if(isAccepted) ArrowedTextButton(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .offset(y = 8.dp),
@@ -69,17 +72,18 @@ fun RentalRequestContent(
             priceItems = listOf(
                 PriceItemUiModel(
                     label = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_basic_rent),
-                    price = pendingData.basicRentalPrice
+                    price = requestData.totalPrice-requestData.deposit
                 ),
                 PriceItemUiModel(
                     label = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_deposit),
-                    price = pendingData.deposit
+                    price = requestData.deposit
                 )
             ),
             totalLabel = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_total)
         )
     }
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+
+    if(isAccepted) Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
         ArrowedTextButton(
             modifier = Modifier
                 .padding(vertical = 10.dp),
@@ -93,17 +97,16 @@ fun RentalRequestContent(
 @Preview(showBackground = true)
 private fun Preview() {
     val examplePendingUiModel = RentalStatusRenterUiModel.Request(
-        status = "PENDING",
+        status = "ACCEPTED",
         productTitle = "캐논 EOS 550D",
         startDate = "2025-08-17",
         endDate = "2025-08-20",
-        pricePerDay = 10_000,
-        basicRentalPrice = 10_000 * 4,
+        totalPrice = 10_000 * 6,
         deposit = 10_000 * 3
     )
     RentItTheme {
         Column {
-            RentalRequestContent(pendingData = examplePendingUiModel)
+            RentalRequestContent(requestData = examplePendingUiModel)
         }
     }
 }
