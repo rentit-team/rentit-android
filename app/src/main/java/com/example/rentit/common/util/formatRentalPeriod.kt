@@ -19,7 +19,7 @@ fun formatRentalPeriod(context: Context, startDateStr: String, endDateStr: Strin
 
     val startDayOfWeekKor = start.dayOfWeek.getKorLabel()
     val endDayOfWeekKor = end.dayOfWeek.getKorLabel()
-    val period = daysBetween(start, end)
+    val period = inclusiveDaysBetween(start, end)
 
     return context.getString(
         R.string.util_formatted_period,

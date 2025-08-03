@@ -23,7 +23,6 @@ import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.daysBetween
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.common.util.formatRentalPeriod
 
