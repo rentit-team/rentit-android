@@ -1,13 +1,38 @@
 package com.example.rentit.presentation.rentaldetail.renter.model
 
+import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color
 import com.example.rentit.R
 import com.example.rentit.common.theme.AppGreen
 import com.example.rentit.common.theme.AppRed
+import com.example.rentit.common.theme.Gray100
+import com.example.rentit.common.theme.PrimaryBlue300
 import com.example.rentit.common.theme.SecondaryYellow
 
-enum class RentingStatus(val strRes: Int, val textColor: Color) {
-    RENTING_IN_USE(R.string.rental_status_renting, SecondaryYellow),
-    RENTING_RETURN_DAY(R.string.rental_status_renting_return_day, AppGreen),
-    RENTING_OVERDUE(R.string.rental_status_renting_return_overdue, AppRed)
+enum class RentingStatus(
+    @StringRes val strRes: Int,
+    val textColor: Color,
+    @StringRes val noticeBannerStrRes: Int?,
+    val noticeBannerBgColor: Color = PrimaryBlue300,
+    @StringRes val subLabelStrRes: Int?,
+) {
+    RENTING_IN_USE(
+        strRes = R.string.rental_status_renting,
+        textColor = SecondaryYellow,
+        noticeBannerStrRes = null,
+        subLabelStrRes = R.string.screen_rental_detail_renter_renting_day_before_return
+    ),
+    RENTING_RETURN_DAY(
+        strRes = R.string.rental_status_renting_return_day,
+        textColor = AppGreen,
+        noticeBannerStrRes = R.string.screen_rental_detail_renter_return_day_notice_text,
+        subLabelStrRes = null
+    ),
+    RENTING_OVERDUE(
+        strRes = R.string.rental_status_renting_return_overdue,
+        textColor = AppRed,
+        noticeBannerStrRes = R.string.screen_rental_detail_renter_return_overdue_notice_text,
+        noticeBannerBgColor = Gray100,
+        subLabelStrRes = R.string.screen_rental_detail_renter_renting_day_overdue
+    )
 }

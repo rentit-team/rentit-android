@@ -30,6 +30,8 @@ sealed class RentalStatusRenterUiModel {
 
     data class Renting(
         val status: RentingStatus,
+        val isOverdue: Boolean,
+        val isReturnAvailable: Boolean,
         val daysFromReturnDate: Int,
         val productTitle: String,
         val thumbnailImgUrl: String,
@@ -37,6 +39,8 @@ sealed class RentalStatusRenterUiModel {
         val endDate: String,
         val totalPrice: Int,
         val deposit: Int,
+        val isReturnPhotoRegistered: Boolean,
+        val isReturnTrackingNumRegistered: Boolean,
         val rentalTrackingNumber: String?
     ): RentalStatusRenterUiModel()
 

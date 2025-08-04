@@ -14,16 +14,15 @@ import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.rental.dto.ChangedBy
 import com.example.rentit.data.rental.dto.DeliveryStatus
 import com.example.rentit.data.rental.dto.Product
 import com.example.rentit.data.rental.dto.Rental
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.Renter
 import com.example.rentit.data.rental.dto.ReturnStatus
-import com.example.rentit.data.rental.dto.StatusHistory
 import com.example.rentit.presentation.rentaldetail.renter.components.PaidContent
 import com.example.rentit.presentation.rentaldetail.renter.components.RentalRequestContent
+import com.example.rentit.presentation.rentaldetail.renter.components.RentingContent
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -38,8 +37,8 @@ fun RentalDetailRenterView(navHostController: NavHostController, uiModel: Rental
                     RentalRequestContent(uiModel)
                 is RentalStatusRenterUiModel.Paid ->
                     PaidContent(uiModel)
-                is RentalStatusRenterUiModel.Renting -> {}
-
+                is RentalStatusRenterUiModel.Renting ->
+                    RentingContent(uiModel)
                 is RentalStatusRenterUiModel.Returned -> {}
 
                 is RentalStatusRenterUiModel.Unknown -> {}
@@ -52,73 +51,59 @@ fun RentalDetailRenterView(navHostController: NavHostController, uiModel: Rental
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val sampleRentalDetail = RentalDetailResponseDto(
+    val sample1 = RentalDetailResponseDto(
         rental = Rental(
             reservationId = 1001,
-            renter = Renter(
-                userId = 101,
-                nickname = "김철수"
-            ),
-            status = "PAID",
+            renter = Renter(userId = 101, nickname = "김철수"),
+            status = "RENTING",
             product = Product(
                 title = "캐논 EOS R6 카메라",
                 thumbnailImgUrl = "https://example.com/image/123.jpg"
             ),
-            startDate = "2025-04-15",
-            endDate = "2025-04-17",
+            startDate = "2025-08-02",
+            endDate = "2025-08-05",
             totalAmount = 90000,
             depositAmount = 45000,
             rentalTrackingNumber = "1234567890",
             returnTrackingNumber = null,
-            deliveryStatus = DeliveryStatus(
-                isPhotoRegistered = true,
-                isTrackingNumberRegistered = true
-            ),
-            returnStatus = ReturnStatus(
-                isPhotoRegistered = false,
-                isTrackingNumberRegistered = false
-            )
+            deliveryStatus = DeliveryStatus(isPhotoRegistered = true, isTrackingNumberRegistered = true),
+            returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = false)
         ),
-        statusHistory = listOf(
-            StatusHistory(
-                status = "PENDING",
-                changedAt = "2025-03-25T09:00:00Z",
-                changedBy = ChangedBy(
-                    userId = 1,
-                    nickname = "김숙명"
-                )
-            ),
-            StatusHistory(
-                status = "ACCEPTED",
-                changedAt = "2025-03-25T10:00:00Z",
-                changedBy = ChangedBy(
-                    userId = 2,
-                    nickname = "홍길동"
-                )
-            ),
-            StatusHistory(
-                status = "COMPLETED",
-                changedAt = "2025-03-25T10:30:00Z",
-                changedBy = ChangedBy(
-                    userId = 1,
-                    nickname = "김숙명"
-                )
-            ),
-            StatusHistory(
-                status = "RENTING",
-                changedAt = "2025-04-15T00:00:00Z",
-                changedBy = ChangedBy(
-                    userId = 0,
-                    nickname = "SYSTEM"
-                )
-            )
+        statusHistory = listOf(/* 생략 */)
+    )
+
+    val sample2 = sample1.copy(
+        rental = sample1.rental.copy(
+            endDate = "2025-08-04",
+            returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = false)
+        )
+    )
+
+    val sample3 = sample1.copy(
+        rental = sample1.rental.copy(
+            endDate = "2025-08-01",
+            returnStatus = ReturnStatus(isPhotoRegistered = true, isTrackingNumberRegistered = false)
+        )
+    )
+
+    val sample4 = sample1.copy(
+        rental = sample1.rental.copy(
+            endDate = "2025-07-30",
+            returnStatus = ReturnStatus(isPhotoRegistered = true, isTrackingNumberRegistered = true)
+        )
+    )
+
+    val sample5 = sample1.copy(
+        rental = sample1.rental.copy(
+            endDate = "2025-07-28",
+            returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = true)
         )
     )
 
     RentItTheme {
         RentalDetailRenterView(
             navHostController = rememberNavController(),
-            sampleRentalDetail.toUiModel()
+            sample5.toUiModel()
         )
     }
 }

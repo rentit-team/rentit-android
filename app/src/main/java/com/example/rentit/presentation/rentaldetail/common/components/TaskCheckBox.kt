@@ -33,15 +33,15 @@ import com.example.rentit.common.theme.RentItTheme
  * 라벨과 구분선이 포함된 섹션 레이아웃
  */
 
-private val cardVerticalPadding = 4.dp
-private val cardCornerRadius = 25.dp
-private val innerHorizontalPadding = 12.dp
-private val innerVerticalPadding = 12.dp
+private val cardVerticalPadding = 2.dp
+private val cardCornerRadius = 12.dp
+private val innerVerticalPadding = 8.dp
 private val spacerSize = 8.dp
 
 @Composable
 fun TaskCheckBox(
     modifier: Modifier = Modifier,
+    isTaskEnable: Boolean,
     taskText: String,
     isDone: Boolean = false,
     onClick: () -> Unit = {},
@@ -50,6 +50,7 @@ fun TaskCheckBox(
     val iconDescription =
         if (isDone) stringResource(R.string.screen_rental_detail_task_check_box_icon_done, taskText)
         else stringResource(R.string.screen_rental_detail_task_check_box_icon_not_done, taskText)
+    val isButtonEnable = !isDone && isTaskEnable
 
     OutlinedButton(
         modifier = modifier
@@ -57,21 +58,21 @@ fun TaskCheckBox(
             .padding(vertical = cardVerticalPadding)
             .clip(RoundedCornerShape(cardCornerRadius)),
         shape = RoundedCornerShape(cardCornerRadius),
-        border = BorderStroke(3.dp, Gray100),
+        border = BorderStroke(2.dp, Gray100),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.White,
             disabledContainerColor = Gray100
         ),
         onClick = onClick,
-        enabled = !isDone
+        enabled = isButtonEnable
     ) {
         Row(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(horizontal = innerHorizontalPadding, vertical = innerVerticalPadding),
+                .padding(vertical = innerVerticalPadding),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(taskText, style = MaterialTheme.typography.labelLarge)
+            Text(taskText, style = MaterialTheme.typography.labelMedium)
             Spacer(Modifier.size(spacerSize))
             Icon(
                 modifier = Modifier.size(16.dp),
@@ -89,7 +90,8 @@ fun TaskCheckBox(
 private fun Preview() {
     RentItTheme {
         TaskCheckBox(
-            taskText = "대여 전 사진 등록"
+            taskText = "대여 전 사진 등록",
+            isTaskEnable = true,
         )
     }
 }
