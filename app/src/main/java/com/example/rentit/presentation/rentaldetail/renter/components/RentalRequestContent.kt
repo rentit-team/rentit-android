@@ -19,7 +19,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
 import com.example.rentit.presentation.rentaldetail.common.components.PriceSummary
@@ -39,9 +38,7 @@ import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRen
 fun RentalRequestContent(
     requestData: RentalStatusRenterUiModel.Request,
 ) {
-    val isAccepted = requestData.status == RentalStatus.ACCEPTED.name
-
-    if(isAccepted) NoticeBanner(noticeText = buildAnnotatedString {
+    if(requestData.isAccepted) NoticeBanner(noticeText = buildAnnotatedString {
         withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
             append(stringResource(R.string.screen_rental_detail_renter_request_notice_pay))
         }
@@ -49,17 +46,18 @@ fun RentalRequestContent(
     })
 
     LabeledSection(
-        labelText = AnnotatedString(requestData.status),
-        labelColor = PrimaryBlue500
+        labelText = AnnotatedString(stringResource(requestData.status.strRes)),
+        labelColor = requestData.status.textColor
     ) {
         RentalSummary(
             productTitle = requestData.productTitle,
+            thumbnailImgUrl = requestData.thumbnailImgUrl,
             startDate = requestData.startDate,
             endDate = requestData.endDate,
             totalPrice = requestData.totalPrice,
         )
 
-        if(isAccepted) ArrowedTextButton(
+        if(requestData.isAccepted) ArrowedTextButton(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .offset(y = 8.dp),
@@ -83,7 +81,7 @@ fun RentalRequestContent(
         )
     }
 
-    if(isAccepted) Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+    if(requestData.isAccepted) Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
         ArrowedTextButton(
             modifier = Modifier
                 .padding(vertical = 10.dp),
@@ -97,8 +95,10 @@ fun RentalRequestContent(
 @Preview(showBackground = true)
 private fun Preview() {
     val examplePendingUiModel = RentalStatusRenterUiModel.Request(
-        status = "ACCEPTED",
+        status = RentalStatus.ACCEPTED,
+        isAccepted = true,
         productTitle = "캐논 EOS 550D",
+        thumbnailImgUrl = "",
         startDate = "2025-08-17",
         endDate = "2025-08-20",
         totalPrice = 10_000 * 6,

@@ -9,7 +9,7 @@
     <string name="rental_status_pending">대여 요청</string>
     <string name="rental_status_accepted">요청 수락</string>
     <string name="rental_status_rejected">요청 거절</string>
-    <string name="rental_status_paid_renter">결제 완료</string>
+    <string name="rental_status_paid">결제 완료</string>
     <string name="rental_status_paid_owner">상품 발송 준비</string>
     <string name="rental_status_renting">대여중</string>
     <string name="rental_status_renting_return_day">반납일</string>
