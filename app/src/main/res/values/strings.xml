@@ -139,10 +139,10 @@
     <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
 
     <string name="screen_rental_detail_title">대여 상세</string>
-    <string name="screen_rental_detail_renter_request_content_price_title">대여 요금 상세</string>
-    <string name="screen_rental_detail_renter_request_content_price_label_basic_rent">기본 대여료</string>
-    <string name="screen_rental_detail_renter_request_content_price_label_deposit">보증금</string>
-    <string name="screen_rental_detail_renter_request_content_price_label_total">합계</string>
+    <string name="screen_rental_detail_renter_charge_price_title">대여 요금 상세</string>
+    <string name="screen_rental_detail_renter_charge_price_label_basic_rent">기본 대여료</string>
+    <string name="screen_rental_detail_renter_charge_price_label_deposit">보증금</string>
+    <string name="screen_rental_detail_renter_charge_price_label_total">합계</string>
 
     <string name="screen_rental_detail_renter_request_notice_pay">결제</string>
     <string name="screen_rental_detail_renter_request_notice_wait">를 기다리고 있어요!</string>

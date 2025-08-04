@@ -65,19 +65,19 @@ fun RentalRequestContent(
         ) { }
     }
 
-    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_renter_request_content_price_title))) {
+    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_renter_charge_price_title))) {
         PriceSummary(
             priceItems = listOf(
                 PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_basic_rent),
+                    label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_basic_rent),
                     price = requestData.totalPrice-requestData.deposit
                 ),
                 PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_deposit),
+                    label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_deposit),
                     price = requestData.deposit
                 )
             ),
-            totalLabel = stringResource(R.string.screen_rental_detail_renter_request_content_price_label_total)
+            totalLabel = stringResource(R.string.screen_rental_detail_renter_charge_price_label_total)
         )
     }
 
