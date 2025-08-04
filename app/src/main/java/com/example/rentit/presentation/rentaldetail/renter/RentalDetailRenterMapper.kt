@@ -30,7 +30,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
         }
 
         RentalStatus.PAID -> {
-            val daysUntilRental = daysFromToday(rental.startDate) * (-1)
+            val daysUntilRental = daysFromToday(rental.startDate)
             RentalStatusRenterUiModel.Paid(
                 status = status,
                 daysUntilRental = daysUntilRental,

@@ -22,6 +22,7 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.Renter
 import com.example.rentit.data.rental.dto.ReturnStatus
 import com.example.rentit.data.rental.dto.StatusHistory
+import com.example.rentit.presentation.rentaldetail.renter.components.PaidContent
 import com.example.rentit.presentation.rentaldetail.renter.components.RentalRequestContent
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 
@@ -35,8 +36,8 @@ fun RentalDetailRenterView(navHostController: NavHostController, uiModel: Rental
             when(uiModel) {
                 is RentalStatusRenterUiModel.Request ->
                     RentalRequestContent(uiModel)
-                is RentalStatusRenterUiModel.Paid -> {}
-
+                is RentalStatusRenterUiModel.Paid ->
+                    PaidContent(uiModel)
                 is RentalStatusRenterUiModel.Renting -> {}
 
                 is RentalStatusRenterUiModel.Returned -> {}
@@ -58,7 +59,7 @@ private fun Preview() {
                 userId = 101,
                 nickname = "김철수"
             ),
-            status = "ACCEPTED",
+            status = "PAID",
             product = Product(
                 title = "캐논 EOS R6 카메라",
                 thumbnailImgUrl = "https://example.com/image/123.jpg"
