@@ -37,7 +37,7 @@ fun BaseDialog(
     titleText: String,
     closeText: String? = null,
     confirmText: String,
-    content: @Composable ColumnScope.() -> Unit,
+    content: @Composable ColumnScope.() -> Unit = {},
     onCloseRequest: () -> Unit,
     onConfirmRequest: () -> Unit,
 ) {

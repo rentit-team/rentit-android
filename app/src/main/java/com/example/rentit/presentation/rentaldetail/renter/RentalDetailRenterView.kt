@@ -20,6 +20,7 @@ import com.example.rentit.data.rental.dto.Rental
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.Renter
 import com.example.rentit.data.rental.dto.ReturnStatus
+import com.example.rentit.presentation.rentaldetail.common.dialog.UnknownStatusDialog
 import com.example.rentit.presentation.rentaldetail.renter.components.PaidContent
 import com.example.rentit.presentation.rentaldetail.renter.components.RentalRequestContent
 import com.example.rentit.presentation.rentaldetail.renter.components.RentingContent
@@ -42,7 +43,8 @@ fun RentalDetailRenterView(navHostController: NavHostController, uiModel: Rental
                     RentingContent(uiModel)
                 is RentalStatusRenterUiModel.Returned ->
                     ReturnedContent(uiModel)
-                is RentalStatusRenterUiModel.Unknown -> {}
+                is RentalStatusRenterUiModel.Unknown ->
+                    UnknownStatusDialog { navHostController.popBackStack() }
             }
         }
     }

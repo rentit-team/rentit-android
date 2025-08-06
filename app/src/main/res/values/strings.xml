@@ -185,6 +185,9 @@
 
     <string name="screen_rental_detail_renter_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
 
+    <string name="screen_rental_detail_unknown_dialog_title">대여 정보가 존재하지 않아요.</string>
+    <string name="screen_rental_detail_unknown_dialog_confirm_btn">확인</string>
+
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 
     <string name="request_history_list_item_text_chat">채팅하기</string>
