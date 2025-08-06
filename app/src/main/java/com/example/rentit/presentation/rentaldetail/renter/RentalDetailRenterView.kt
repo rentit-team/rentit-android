@@ -23,6 +23,7 @@ import com.example.rentit.data.rental.dto.ReturnStatus
 import com.example.rentit.presentation.rentaldetail.renter.components.PaidContent
 import com.example.rentit.presentation.rentaldetail.renter.components.RentalRequestContent
 import com.example.rentit.presentation.rentaldetail.renter.components.RentingContent
+import com.example.rentit.presentation.rentaldetail.renter.components.ReturnedContent
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -39,8 +40,8 @@ fun RentalDetailRenterView(navHostController: NavHostController, uiModel: Rental
                     PaidContent(uiModel)
                 is RentalStatusRenterUiModel.Renting ->
                     RentingContent(uiModel)
-                is RentalStatusRenterUiModel.Returned -> {}
-
+                is RentalStatusRenterUiModel.Returned ->
+                    ReturnedContent(uiModel)
                 is RentalStatusRenterUiModel.Unknown -> {}
             }
         }
@@ -95,6 +96,7 @@ private fun Preview() {
 
     val sample5 = sample1.copy(
         rental = sample1.rental.copy(
+            status = "RETURNED",
             endDate = "2025-07-28",
             returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = true)
         )

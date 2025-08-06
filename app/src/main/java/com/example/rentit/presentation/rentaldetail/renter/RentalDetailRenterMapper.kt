@@ -77,7 +77,8 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
             endDate = rental.endDate,
             totalPrice = rental.totalAmount,
             deposit = rental.depositAmount,
-            rentalTrackingNumber = rental.rentalTrackingNumber
+            rentalTrackingNumber = rental.rentalTrackingNumber,
+            returnTrackingNumber = rental.returnTrackingNumber
         )
 
         null -> RentalStatusRenterUiModel.Unknown

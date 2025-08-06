@@ -138,6 +138,7 @@
     <string name="screen_rental_detail_task_check_box_icon_done">%s 완료</string>
     <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
 
+    <!-- 대여 상세 -->
     <string name="screen_rental_detail_title">대여 상세</string>
 
     <string name="screen_rental_detail_tracking_info_title">운송장 정보</string>
@@ -154,6 +155,11 @@
     <string name="screen_rental_detail_renter_paid_price_label_basic_rent">기본 대여료</string>
     <string name="screen_rental_detail_renter_paid_price_label_deposit">보증금</string>
     <string name="screen_rental_detail_renter_paid_price_label_total">총 결제 금액</string>
+
+    <string name="screen_rental_detail_renter_total_paid_price_title">최종 결제 금액</string>
+    <string name="screen_rental_detail_renter_total_paid_price_label_basic_rent">기본 대여료</string>
+    <string name="screen_rental_detail_renter_total_paid_price_label_deposit">반납 지연 요금</string>
+    <string name="screen_rental_detail_renter_total_paid_price_label_total">총 결제 금액</string>
 
     <string name="screen_rental_detail_renter_request_notice_pay">결제</string>
     <string name="screen_rental_detail_renter_request_notice_wait">를 기다리고 있어요!</string>
@@ -176,6 +182,8 @@
     <string name="screen_rental_detail_renter_renting_overdue_warning_day_highlight">일 지연</string>
     <string name="screen_rental_detail_renter_renting_overdue_warning_middle_text">되고 있어요.\n현재까지 보증금에서 </string>
     <string name="screen_rental_detail_renter_renting_overdue_warning_tail_text">이 차감되었어요.</string>
+
+    <string name="screen_rental_detail_renter_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
 
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 

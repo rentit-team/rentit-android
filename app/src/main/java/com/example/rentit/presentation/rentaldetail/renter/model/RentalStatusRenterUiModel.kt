@@ -52,7 +52,8 @@ sealed class RentalStatusRenterUiModel {
         val endDate: String,
         val totalPrice: Int,
         val deposit: Int,
-        val rentalTrackingNumber: String?
+        val rentalTrackingNumber: String?,
+        val returnTrackingNumber: String?
     ): RentalStatusRenterUiModel()
 
     data object Unknown: RentalStatusRenterUiModel()
