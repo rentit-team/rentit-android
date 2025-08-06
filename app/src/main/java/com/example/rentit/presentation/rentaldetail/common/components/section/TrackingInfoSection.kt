@@ -13,7 +13,7 @@ import com.example.rentit.presentation.rentaldetail.common.components.LabeledSec
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
 
 @Composable
-fun TrackingSection(rentalTrackingNumber: String?, returnTrackingNumber: String?) {
+fun TrackingInfoSection(rentalTrackingNumber: String? = null, returnTrackingNumber: String? = null) {
     LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_tracking_info_title))) {
         LabeledValue(
             modifier = Modifier.padding(bottom = 10.dp),
@@ -33,7 +33,7 @@ fun TrackingSection(rentalTrackingNumber: String?, returnTrackingNumber: String?
 @Preview(showBackground = true)
 private fun Preview() {
     RentItTheme {
-        TrackingSection(
+        TrackingInfoSection(
             rentalTrackingNumber = null,
             returnTrackingNumber = null
         )
