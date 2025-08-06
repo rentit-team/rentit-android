@@ -30,7 +30,7 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
 import com.example.rentit.presentation.rentaldetail.common.components.PriceSummary
 import com.example.rentit.presentation.rentaldetail.common.components.RentalSummary
-import com.example.rentit.presentation.rentaldetail.common.PriceItemUiModel
+import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
 import com.example.rentit.presentation.rentaldetail.common.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.common.components.TaskCheckBox
