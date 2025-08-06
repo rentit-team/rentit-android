@@ -1,6 +1,7 @@
 package com.example.rentit.presentation.rentaldetail.renter.model
 
 import com.example.rentit.common.enums.RentalStatus
+import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 
 
 sealed class RentalStatusRenterUiModel {
@@ -8,22 +9,16 @@ sealed class RentalStatusRenterUiModel {
     data class Request(
         val status: RentalStatus,
         val isAccepted: Boolean,
-        val productTitle: String,
-        val thumbnailImgUrl: String,
-        val startDate: String,
-        val endDate: String,
-        val totalPrice: Int,
-        val deposit: Int
+        val rentalSummary: RentalSummaryUiModel,
+        val basicRentalFee: Int,
+        val deposit: Int,
     ): RentalStatusRenterUiModel()
 
     data class Paid(
         val status: RentalStatus,
         val daysUntilRental: Int,
-        val productTitle: String,
-        val thumbnailImgUrl: String,
-        val startDate: String,
-        val endDate: String,
-        val totalPrice: Int,
+        val rentalSummary: RentalSummaryUiModel,
+        val basicRentalFee: Int,
         val deposit: Int,
         val rentalTrackingNumber: String?
     ): RentalStatusRenterUiModel()
@@ -33,11 +28,8 @@ sealed class RentalStatusRenterUiModel {
         val isOverdue: Boolean,
         val isReturnAvailable: Boolean,
         val daysFromReturnDate: Int,
-        val productTitle: String,
-        val thumbnailImgUrl: String,
-        val startDate: String,
-        val endDate: String,
-        val totalPrice: Int,
+        val rentalSummary: RentalSummaryUiModel,
+        val basicRentalFee: Int,
         val deposit: Int,
         val isReturnPhotoRegistered: Boolean,
         val isReturnTrackingNumRegistered: Boolean,
@@ -46,11 +38,8 @@ sealed class RentalStatusRenterUiModel {
 
     data class Returned(
         val status: RentalStatus,
-        val productTitle: String,
-        val thumbnailImgUrl: String,
-        val startDate: String,
-        val endDate: String,
-        val totalPrice: Int,
+        val rentalSummary: RentalSummaryUiModel,
+        val basicRentalFee: Int,
         val deposit: Int,
         val rentalTrackingNumber: String?,
         val returnTrackingNumber: String?

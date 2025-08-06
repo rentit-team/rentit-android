@@ -22,18 +22,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.rentit.R
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray100
-import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
-import com.example.rentit.presentation.rentaldetail.common.components.PriceSummary
-import com.example.rentit.presentation.rentaldetail.common.components.RentalSummary
 import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
 import com.example.rentit.presentation.rentaldetail.common.components.NoticeBanner
-import com.example.rentit.presentation.rentaldetail.common.components.TaskCheckBox
+import com.example.rentit.presentation.rentaldetail.common.components.section.PaymentInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.RentalInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.TaskSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.TrackingInfoSection
+import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentingStatus
 import kotlin.math.abs
@@ -48,92 +48,56 @@ import kotlin.math.abs
 fun RentingContent(
     rentingData: RentalStatusRenterUiModel.Renting,
 ) {
-    val returnRegCountText = listOf(
-        rentingData.isReturnPhotoRegistered,
-        rentingData.isReturnTrackingNumRegistered
-    ).count { it }.let { "($it/2)" }
+    val priceItems = listOf(
+        PriceItemUiModel(
+            label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_basic_rent),
+            price = rentingData.basicRentalFee
+        ),
+        PriceItemUiModel(
+            label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_deposit),
+            price = rentingData.deposit
+        )
+    )
 
-    if (rentingData.status.noticeBannerStrRes != null)
+    if (rentingData.status.noticeBannerStrRes != null) {
         NoticeBanner(noticeText = AnnotatedString(stringResource(rentingData.status.noticeBannerStrRes)))
+    }
 
-    LabeledSection(
-        labelText = buildAnnotatedString {
-            append(stringResource(rentingData.status.strRes))
-            if (rentingData.status.subLabelStrRes != null)
-                withStyle(style = SpanStyle(color = Gray400)) {
-                    append(
-                        " " + stringResource(
-                            rentingData.status.subLabelStrRes,
-                            abs(rentingData.daysFromReturnDate)
-                        )
-                    )
-                }
+    RentalInfoSection(
+        title = stringResource(rentingData.status.strRes),
+        titleColor = rentingData.status.textColor,
+        subTitle = rentingData.status.subLabelStrRes?.let {
+            stringResource( it, abs(rentingData.daysFromReturnDate))
         },
-        labelColor = rentingData.status.textColor
-    ) {
-        RentalSummary(
-            productTitle = rentingData.productTitle,
-            startDate = rentingData.startDate,
-            endDate = rentingData.endDate,
-            totalPrice = rentingData.totalPrice,
-        )
-    }
+        rentalInfo = rentingData.rentalSummary,
+    )
 
-    LabeledSection(
-        labelText = buildAnnotatedString {
-            append(stringResource(R.string.screen_rental_detail_renter_return_task_title) + " $returnRegCountText")
+    TaskSection(
+        title = stringResource(R.string.screen_rental_detail_renter_return_task_title),
+        guideText = stringResource(R.string.screen_rental_detail_renter_return_task_info),
+        policyText = stringResource(R.string.screen_rental_detail_renter_return_task_policy),
+        photoTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_photo),
+        trackingNumTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_tracking_num),
+        isReturnAvailable = rentingData.isReturnAvailable,
+        isPhotoRegistered = rentingData.isReturnPhotoRegistered,
+        isTrackingNumRegistered = rentingData.isReturnTrackingNumRegistered
+    ) { if (rentingData.isOverdue) {
+            ReturnOverdueWarning(
+                rentingData.daysFromReturnDate,
+                rentingData.deposit
+            )
         }
-    ) {
-        if (rentingData.isOverdue) ReturnOverdueWarning(
-            rentingData.daysFromReturnDate,
-            rentingData.deposit
-        )
-        Text(
-            modifier = Modifier.padding(bottom = 10.dp),
-            text = stringResource(R.string.screen_rental_detail_renter_return_task_info),
-            style = MaterialTheme.typography.labelMedium
-        )
-        TaskCheckBox(
-            taskText = stringResource(R.string.screen_rental_detail_renter_return_task_photo),
-            isTaskEnable = rentingData.isReturnAvailable,
-            isDone = rentingData.isReturnPhotoRegistered,
-        )
-        TaskCheckBox(
-            taskText = stringResource(R.string.screen_rental_detail_renter_return_task_tracking_num),
-            isTaskEnable = rentingData.isReturnAvailable,
-            isDone = rentingData.isReturnTrackingNumRegistered
-        )
-        Text(
-            modifier = Modifier.padding(top = 8.dp),
-            text = stringResource(R.string.screen_rental_detail_renter_return_task_policy),
-            style = MaterialTheme.typography.labelSmall,
-            color = Gray400
-        )
     }
 
-    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_renter_paid_price_title))) {
-        PriceSummary(
-            priceItems = listOf(
-                PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_paid_price_label_basic_rent),
-                    price = rentingData.totalPrice - rentingData.deposit
-                ),
-                PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_paid_price_label_deposit),
-                    price = rentingData.deposit
-                )
-            ),
-            totalLabel = stringResource(R.string.screen_rental_detail_renter_paid_price_label_total)
-        )
-    }
+    PaymentInfoSection(
+        title = stringResource(R.string.screen_rental_detail_renter_paid_price_title),
+        priceItems = priceItems,
+        totalLabel = stringResource(R.string.screen_rental_detail_renter_paid_price_label_total)
+    )
 
-    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_tracking_info_title))) {
-        LabeledValue(
-            labelText = stringResource(R.string.screen_rental_detail_rental_tracking_num),
-            value = rentingData.rentalTrackingNumber
-                ?: stringResource(R.string.screen_rental_detail_tracking_num_unregistered)
-        )
-    }
+    TrackingInfoSection(
+        rentalTrackingNumber = rentingData.rentalTrackingNumber,
+    )
 }
 
 @Composable
@@ -160,7 +124,8 @@ fun ReturnOverdueWarning(daysFromReturnDate: Int, deposit: Int) {
                 append(stringResource(R.string.screen_rental_detail_renter_renting_overdue_warning_tail_text))
             },
             style = MaterialTheme.typography.labelMedium,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            lineHeight = 16.sp
         )
     }
 }
@@ -173,11 +138,14 @@ private fun Preview() {
         status = RentingStatus.RENTING_RETURN_DAY,
         isOverdue = false,
         daysFromReturnDate = 3,
-        productTitle = "캐논 EOS 550D",
-        thumbnailImgUrl = "",
-        startDate = "2025-08-17",
-        endDate = "2025-08-20",
-        totalPrice = 10_000 * 6,
+        rentalSummary = RentalSummaryUiModel(
+            productTitle = "프리미엄 캠핑 텐트",
+            thumbnailImgUrl = "https://example.com/images/tent_thumbnail.jpg",
+            startDate = "2025-08-10",
+            endDate = "2025-08-14",
+            totalPrice = 120_000
+        ),
+        basicRentalFee = 90_000,
         deposit = 10_000 * 3,
         rentalTrackingNumber = null,
         isReturnAvailable = false,

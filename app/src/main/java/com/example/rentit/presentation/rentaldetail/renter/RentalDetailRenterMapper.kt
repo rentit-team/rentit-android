@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
+import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentingStatus
 
@@ -17,6 +18,16 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
         .onFailure { Log.w(TAG, "Unknown rental status: ${rental.status}")  }
         .getOrNull()
 
+    val rentalSummary = RentalSummaryUiModel(
+        productTitle = rental.product.title,
+        thumbnailImgUrl = rental.product.thumbnailImgUrl,
+        startDate = rental.startDate,
+        endDate = rental.endDate,
+        totalPrice = rental.totalAmount,
+    )
+
+    val basicRentalFee = rental.totalAmount - rental.depositAmount
+
     return when (status) {
         RentalStatus.PENDING,
         RentalStatus.ACCEPTED,
@@ -25,11 +36,8 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
             RentalStatusRenterUiModel.Request(
                 status = status,
                 isAccepted = status == RentalStatus.ACCEPTED,
-                productTitle = rental.product.title,
-                thumbnailImgUrl = rental.product.thumbnailImgUrl,
-                startDate = rental.startDate,
-                endDate = rental.endDate,
-                totalPrice = rental.totalAmount,
+                rentalSummary = rentalSummary,
+                basicRentalFee = basicRentalFee,
                 deposit = rental.depositAmount
             )
         }
@@ -39,12 +47,9 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
             RentalStatusRenterUiModel.Paid(
                 status = status,
                 daysUntilRental = daysUntilRental,
-                productTitle = rental.product.title,
-                thumbnailImgUrl = rental.product.thumbnailImgUrl,
-                startDate = rental.startDate,
-                endDate = rental.endDate,
-                totalPrice = rental.totalAmount,
+                rentalSummary = rentalSummary,
                 deposit = rental.depositAmount,
+                basicRentalFee = basicRentalFee,
                 rentalTrackingNumber = rental.rentalTrackingNumber
             )
         }
@@ -62,12 +67,9 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
                 isOverdue = rentingStatus == RentingStatus.RENTING_OVERDUE,
                 isReturnAvailable = isReturnAvailable,
                 daysFromReturnDate = daysFromReturnDate,
-                productTitle = rental.product.title,
-                thumbnailImgUrl = rental.product.thumbnailImgUrl,
-                startDate = rental.startDate,
-                endDate = rental.endDate,
-                totalPrice = rental.totalAmount,
+                rentalSummary = rentalSummary,
                 deposit = rental.depositAmount,
+                basicRentalFee = basicRentalFee,
                 isReturnPhotoRegistered = rental.returnStatus.isPhotoRegistered,
                 isReturnTrackingNumRegistered = rental.returnStatus.isTrackingNumberRegistered,
                 rentalTrackingNumber = rental.rentalTrackingNumber
@@ -76,12 +78,9 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
 
         RentalStatus.RETURNED -> RentalStatusRenterUiModel.Returned(
             status = status,
-            productTitle = rental.product.title,
-            thumbnailImgUrl = rental.product.thumbnailImgUrl,
-            startDate = rental.startDate,
-            endDate = rental.endDate,
-            totalPrice = rental.totalAmount,
+            rentalSummary = rentalSummary,
             deposit = rental.depositAmount,
+            basicRentalFee = basicRentalFee,
             rentalTrackingNumber = rental.rentalTrackingNumber,
             returnTrackingNumber = rental.returnTrackingNumber
         )

@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,12 +19,12 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
-import com.example.rentit.presentation.rentaldetail.common.components.PriceSummary
-import com.example.rentit.presentation.rentaldetail.common.components.RentalSummary
 import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
 import com.example.rentit.presentation.rentaldetail.common.components.ArrowedTextButton
 import com.example.rentit.presentation.rentaldetail.common.components.NoticeBanner
+import com.example.rentit.presentation.rentaldetail.common.components.section.PaymentInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.RentalInfoSection
+import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 
 /**
@@ -38,55 +37,54 @@ import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRen
 fun RentalRequestContent(
     requestData: RentalStatusRenterUiModel.Request,
 ) {
-    if(requestData.isAccepted) NoticeBanner(noticeText = buildAnnotatedString {
-        withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
-            append(stringResource(R.string.screen_rental_detail_renter_request_notice_pay))
-        }
-        append(stringResource(R.string.screen_rental_detail_renter_request_notice_wait))
-    })
+    val priceItems = listOf(
+        PriceItemUiModel(
+            label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_basic_rent),
+            price = requestData.basicRentalFee
+        ),
+        PriceItemUiModel(
+            label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_deposit),
+            price = requestData.deposit
+        )
+    )
 
-    LabeledSection(
-        labelText = AnnotatedString(stringResource(requestData.status.strRes)),
-        labelColor = requestData.status.textColor
+    if(requestData.isAccepted) {
+        NoticeBanner(noticeText = buildAnnotatedString {
+            withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
+                append(stringResource(R.string.screen_rental_detail_renter_request_notice_pay))
+            }
+            append(stringResource(R.string.screen_rental_detail_renter_request_notice_wait))
+        })
+    }
+
+    RentalInfoSection(
+        title = stringResource(requestData.status.strRes),
+        titleColor = requestData.status.textColor,
+        rentalInfo = requestData.rentalSummary,
     ) {
-        RentalSummary(
-            productTitle = requestData.productTitle,
-            thumbnailImgUrl = requestData.thumbnailImgUrl,
-            startDate = requestData.startDate,
-            endDate = requestData.endDate,
-            totalPrice = requestData.totalPrice,
-        )
-
-        if(requestData.isAccepted) ArrowedTextButton(
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .offset(y = 8.dp),
-            text = stringResource(R.string.screen_rental_detail_renter_request_btn_pay)
-        ) { }
+        if(requestData.isAccepted) {
+            ArrowedTextButton(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .offset(y = 8.dp),
+                text = stringResource(R.string.screen_rental_detail_renter_request_btn_pay)
+            ) { }
+        }
     }
 
-    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_renter_charge_price_title))) {
-        PriceSummary(
-            priceItems = listOf(
-                PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_basic_rent),
-                    price = requestData.totalPrice-requestData.deposit
-                ),
-                PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_deposit),
-                    price = requestData.deposit
-                )
-            ),
-            totalLabel = stringResource(R.string.screen_rental_detail_renter_charge_price_label_total)
-        )
-    }
+    PaymentInfoSection(
+        title = stringResource(R.string.screen_rental_detail_renter_charge_price_title),
+        priceItems = priceItems,
+        totalLabel = stringResource(R.string.screen_rental_detail_renter_charge_price_label_total)
+    )
 
-    if(requestData.isAccepted) Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-        ArrowedTextButton(
-            modifier = Modifier
-                .padding(vertical = 10.dp),
-            text = stringResource(R.string.screen_rental_detail_renter_request_btn_cancel_rent)
-        ) { }
+    if(requestData.isAccepted) {
+        Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
+            ArrowedTextButton(
+                modifier = Modifier.padding(vertical = 10.dp),
+                text = stringResource(R.string.screen_rental_detail_renter_request_btn_cancel_rent)
+            ) { }
+        }
     }
 }
 
@@ -97,11 +95,14 @@ private fun Preview() {
     val examplePendingUiModel = RentalStatusRenterUiModel.Request(
         status = RentalStatus.ACCEPTED,
         isAccepted = true,
-        productTitle = "캐논 EOS 550D",
-        thumbnailImgUrl = "",
-        startDate = "2025-08-17",
-        endDate = "2025-08-20",
-        totalPrice = 10_000 * 6,
+        rentalSummary = RentalSummaryUiModel(
+            productTitle = "프리미엄 캠핑 텐트",
+            thumbnailImgUrl = "https://example.com/images/tent_thumbnail.jpg",
+            startDate = "2025-08-10",
+            endDate = "2025-08-14",
+            totalPrice = 120_000
+        ),
+        basicRentalFee = 90_000,
         deposit = 10_000 * 3
     )
     RentItTheme {

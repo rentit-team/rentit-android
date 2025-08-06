@@ -1,6 +1,6 @@
 package com.example.rentit.presentation.rentaldetail.common.model
 
-data class RentalInfoUiModel(
+data class RentalSummaryUiModel(
     val productTitle: String,
     val thumbnailImgUrl: String,
     val startDate: String,

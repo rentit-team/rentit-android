@@ -21,6 +21,10 @@ import com.example.rentit.presentation.rentaldetail.common.components.RentalSumm
 import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
 import com.example.rentit.presentation.rentaldetail.common.components.ArrowedTextButton
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
+import com.example.rentit.presentation.rentaldetail.common.components.section.PaymentInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.RentalInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.TrackingInfoSection
+import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 
 /**
@@ -33,17 +37,22 @@ import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRen
 fun ReturnedContent(
     returnedData: RentalStatusRenterUiModel.Returned,
 ) {
-    LabeledSection(
-        labelText = AnnotatedString(stringResource(returnedData.status.strRes)),
-        labelColor = returnedData.status.textColor
-    ) {
-        RentalSummary(
-            productTitle = returnedData.productTitle,
-            thumbnailImgUrl = returnedData.thumbnailImgUrl,
-            startDate = returnedData.startDate,
-            endDate = returnedData.endDate,
-            totalPrice = returnedData.totalPrice,
+    val priceItems = listOf(
+        PriceItemUiModel(
+            label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_basic_rent),
+            price = returnedData.basicRentalFee
+        ),
+        PriceItemUiModel(
+            label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_deposit),
+            price = returnedData.deposit
         )
+    )
+
+    RentalInfoSection(
+        title = stringResource(returnedData.status.strRes),
+        titleColor = returnedData.status.textColor,
+        rentalInfo = returnedData.rentalSummary,
+    ) {
         ArrowedTextButton(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -52,36 +61,16 @@ fun ReturnedContent(
         ) { }
     }
 
-    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_renter_total_paid_price_title))) {
-        PriceSummary(
-            priceItems = listOf(
-                PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_basic_rent),
-                    price = returnedData.totalPrice - returnedData.deposit
-                ),
-                PriceItemUiModel(
-                    label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_deposit),
-                    price = returnedData.deposit
-                )
-            ),
-            totalLabel = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_total)
-        )
-    }
+    PaymentInfoSection(
+        title = stringResource(R.string.screen_rental_detail_renter_total_paid_price_title),
+        priceItems = priceItems,
+        totalLabel = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_total)
+    )
 
-    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_tracking_info_title))) {
-        LabeledValue(
-            modifier = Modifier.padding(bottom = 10.dp),
-            labelText = stringResource(R.string.screen_rental_detail_rental_tracking_num),
-            value = returnedData.rentalTrackingNumber
-                ?: stringResource(R.string.screen_rental_detail_tracking_num_unregistered)
-        )
-        LabeledValue(
-            labelText = stringResource(R.string.screen_rental_detail_returned_tracking_num),
-            value = returnedData.returnTrackingNumber
-                ?: stringResource(R.string.screen_rental_detail_tracking_num_unregistered)
-        )
-    }
-
+    TrackingInfoSection(
+        rentalTrackingNumber = returnedData.rentalTrackingNumber,
+        returnTrackingNumber = returnedData.returnTrackingNumber,
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -90,11 +79,14 @@ fun ReturnedContent(
 private fun Preview() {
     val examplePendingUiModel = RentalStatusRenterUiModel.Returned(
         status = RentalStatus.RETURNED,
-        productTitle = "캐논 EOS 550D",
-        thumbnailImgUrl = "",
-        startDate = "2025-08-17",
-        endDate = "2025-08-20",
-        totalPrice = 10_000 * 6,
+        rentalSummary = RentalSummaryUiModel(
+            productTitle = "프리미엄 캠핑 텐트",
+            thumbnailImgUrl = "https://example.com/images/tent_thumbnail.jpg",
+            startDate = "2025-08-10",
+            endDate = "2025-08-14",
+            totalPrice = 120_000
+        ),
+        basicRentalFee = 90_000,
         deposit = 10_000 * 3,
         rentalTrackingNumber = null,
         returnTrackingNumber = null,

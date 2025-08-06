@@ -2,6 +2,7 @@ package com.example.rentit.presentation.rentaldetail.common.components.section
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -13,7 +14,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
 import com.example.rentit.presentation.rentaldetail.common.components.RentalSummary
-import com.example.rentit.presentation.rentaldetail.common.model.RentalInfoUiModel
+import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -22,8 +23,8 @@ fun RentalInfoSection(
     titleColor: Color,
     subTitle: String? = null,
     subTitleColor: Color = Gray400,
-    rentalInfo: RentalInfoUiModel,
-    content: @Composable () -> Unit = {},
+    rentalInfo: RentalSummaryUiModel,
+    content: @Composable ColumnScope.() -> Unit = {},
 ) {
     val titleWithSubTitle = buildAnnotatedString {
         append(title)
@@ -55,7 +56,7 @@ fun RentalInfoSection(
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val exampleRentalInfo = RentalInfoUiModel(
+    val exampleRentalInfo = RentalSummaryUiModel(
         productTitle = "캐논 EOS 550D",
         thumbnailImgUrl = "",
         startDate = "2025-08-17",
