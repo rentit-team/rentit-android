@@ -56,7 +56,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
                 daysFromReturnDate == -1 -> RentingStatus.RENTING_RETURN_DAY
                 else -> RentingStatus.RENTING_OVERDUE
             }
-            val isReturnAvailable = daysFromReturnDate >= -1
+            val isReturnAvailable = daysFromReturnDate <= -1
             RentalStatusRenterUiModel.Renting(
                 status = rentingStatus,
                 isOverdue = rentingStatus == RentingStatus.RENTING_OVERDUE,
