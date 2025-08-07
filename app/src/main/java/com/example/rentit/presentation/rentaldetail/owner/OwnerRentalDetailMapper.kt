@@ -51,7 +51,9 @@ fun RentalDetailResponseDto.toOwnerUiModel(): OwnerRentalStatusUiModel {
                 rentalSummary = rentalSummary,
                 deposit = rental.depositAmount,
                 basicRentalFee = basicRentalFee,
-                rentalTrackingNumber = rental.rentalTrackingNumber
+                isSendingPhotoRegistered = rental.deliveryStatus.isPhotoRegistered,
+                isSendingTrackingNumRegistered = rental.deliveryStatus.isTrackingNumberRegistered,
+                rentalTrackingNumber = rental.rentalTrackingNumber,
             )
         }
 

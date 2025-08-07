@@ -22,6 +22,8 @@ sealed class OwnerRentalStatusUiModel {
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
         val deposit: Int,
+        val isSendingPhotoRegistered: Boolean,
+        val isSendingTrackingNumRegistered: Boolean,
         val rentalTrackingNumber: String?
     ): OwnerRentalStatusUiModel()
 

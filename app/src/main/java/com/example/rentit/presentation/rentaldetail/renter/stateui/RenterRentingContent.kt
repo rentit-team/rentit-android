@@ -77,7 +77,7 @@ fun RenterRentingContent(
         policyText = stringResource(R.string.screen_rental_detail_renter_return_task_policy),
         photoTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_photo),
         trackingNumTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_tracking_num),
-        isReturnAvailable = rentingData.isReturnAvailable,
+        isTaskAvailable = rentingData.isReturnAvailable,
         isPhotoRegistered = rentingData.isReturnPhotoRegistered,
         isTrackingNumRegistered = rentingData.isReturnTrackingNumRegistered
     ) { if (rentingData.isOverdue) {

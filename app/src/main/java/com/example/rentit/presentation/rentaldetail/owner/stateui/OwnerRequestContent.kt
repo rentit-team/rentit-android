@@ -27,7 +27,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalInf
 import com.example.rentit.common.model.RentalSummaryUiModel
 
 /**
- * 대여 상세(판매자)에서
+ * 대여 상세(대여자)에서
  * 요청과 관련된 상태(대여 요청, 요청 수락, 요청 거절, 거래 취소)를 나타내는 UI 컨텐츠
  */
 

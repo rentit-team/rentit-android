@@ -142,6 +142,7 @@
     <string name="screen_rental_detail_title">대여 상세</string>
     <string name="screen_rental_detail_request_btn_cancel_rent">대여 취소하기</string>
     <string name="screen_rental_detail_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
+    <string name="screen_rental_detail_subtitle_day_before_rent">· 대여 %d일전</string>
 
     <string name="screen_rental_detail_unknown_dialog_title">대여 정보가 존재하지 않아요.</string>
     <string name="screen_rental_detail_unknown_dialog_confirm_btn">확인</string>
@@ -174,8 +175,6 @@
     <string name="screen_rental_detail_renter_request_notice_wait">를 기다리고 있어요!</string>
     <string name="screen_rental_detail_renter_request_btn_pay">결제하고 예약 확정하기</string>
 
-    <string name="screen_rental_detail_renter_paid_day_before_rent">· 대여 %d일전</string>
-
     <string name="screen_rental_detail_renter_return_day_notice_text">오늘은 반납일이에요. 24시간 이내 반납을 진행해주세요.</string>
     <string name="screen_rental_detail_renter_return_overdue_notice_text">반납이 지연되고 있어요. 반납 등록을 완료해주세요.</string>
 
@@ -196,6 +195,12 @@
     <string name="screen_rental_detail_owner_request_notice_pay">결제</string>
     <string name="screen_rental_detail_owner_request_notice_wait">를 기다리고 있어요!</string>
     <string name="screen_rental_detail_owner_request_btn_request_response">요청 응답하기</string>
+
+    <string name="screen_rental_detail_owner_paid_notice_complete_requirement">남은 단계를 완료하고 거래를 확정하세요!</string>
+    <string name="screen_rental_detail_owner_paid_sending_task_title">상품 발송</string>
+    <string name="screen_rental_detail_owner_paid_sending_task_info">아래 항목을 완료해야 추후에 정산이 진행돼요.</string>
+    <string name="screen_rental_detail_owner_paid_sending_task_photo">발송 전 사진 등록</string>
+    <string name="screen_rental_detail_owner_paid_sending_task_tracking_num">운송장 등록</string>
 
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 
