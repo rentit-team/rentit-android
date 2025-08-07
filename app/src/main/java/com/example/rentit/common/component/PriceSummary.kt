@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.components
+package com.example.rentit.common.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -15,10 +15,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
+import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
 import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
 
 /**

@@ -9,12 +9,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
+import com.example.rentit.common.component.TitledContainer
 import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
 
 @Composable
-fun TrackingInfoSection(rentalTrackingNumber: String? = null, returnTrackingNumber: String? = null) {
-    LabeledSection(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_tracking_info_title))) {
+fun RentalTrackingSection(rentalTrackingNumber: String? = null, returnTrackingNumber: String? = null) {
+    TitledContainer(labelText = AnnotatedString(stringResource(R.string.screen_rental_detail_tracking_info_title))) {
         LabeledValue(
             modifier = Modifier.padding(bottom = 10.dp),
             labelText = stringResource(R.string.screen_rental_detail_rental_tracking_num),
@@ -33,7 +33,7 @@ fun TrackingInfoSection(rentalTrackingNumber: String? = null, returnTrackingNumb
 @Preview(showBackground = true)
 private fun Preview() {
     RentItTheme {
-        TrackingInfoSection(
+        RentalTrackingSection(
             rentalTrackingNumber = null,
             returnTrackingNumber = null
         )

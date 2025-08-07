@@ -12,8 +12,8 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
-import com.example.rentit.presentation.rentaldetail.common.components.RentalSummary
+import com.example.rentit.common.component.TitledContainer
+import com.example.rentit.common.component.RentalSummary
 import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -37,7 +37,7 @@ fun RentalInfoSection(
             ) { append(" $subTitle") }
     }
 
-    LabeledSection(
+    TitledContainer(
         labelText = titleWithSubTitle,
         labelColor = titleColor
     ) {

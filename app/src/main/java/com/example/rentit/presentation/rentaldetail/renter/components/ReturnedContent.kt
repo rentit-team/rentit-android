@@ -4,26 +4,20 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
-import com.example.rentit.presentation.rentaldetail.common.components.PriceSummary
-import com.example.rentit.presentation.rentaldetail.common.components.RentalSummary
 import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
 import com.example.rentit.presentation.rentaldetail.common.components.ArrowedTextButton
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
-import com.example.rentit.presentation.rentaldetail.common.components.section.PaymentInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.common.components.section.RentalInfoSection
-import com.example.rentit.presentation.rentaldetail.common.components.section.TrackingInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.RentalTrackingSection
 import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
 
@@ -61,13 +55,13 @@ fun ReturnedContent(
         ) { }
     }
 
-    PaymentInfoSection(
+    RentalPaymentSection(
         title = stringResource(R.string.screen_rental_detail_renter_total_paid_price_title),
         priceItems = priceItems,
         totalLabel = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_total)
     )
 
-    TrackingInfoSection(
+    RentalTrackingSection(
         rentalTrackingNumber = returnedData.rentalTrackingNumber,
         returnTrackingNumber = returnedData.returnTrackingNumber,
     )

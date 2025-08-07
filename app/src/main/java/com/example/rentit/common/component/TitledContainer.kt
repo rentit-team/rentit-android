@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.components
+package com.example.rentit.common.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -17,7 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
@@ -32,7 +31,7 @@ private val dividerTopPadding = 20.dp
 private val dividerHeight = 8.dp
 
 @Composable
-fun LabeledSection(
+fun TitledContainer(
     modifier: Modifier = Modifier,
     labelText: AnnotatedString,
     labelColor: Color = AppBlack,
@@ -63,7 +62,7 @@ fun LabeledSection(
 @Preview(showBackground = true)
 private fun Preview() {
     RentItTheme {
-        LabeledSection(
+        TitledContainer(
             labelText = AnnotatedString("대여 요금 상세")
         ) {}
     }

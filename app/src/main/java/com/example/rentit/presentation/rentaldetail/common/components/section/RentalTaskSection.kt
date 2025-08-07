@@ -10,11 +10,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
+import com.example.rentit.common.component.TitledContainer
 import com.example.rentit.presentation.rentaldetail.common.components.TaskCheckBox
 
 @Composable
-fun TaskSection(
+fun RentalTaskSection(
     title: String,
     guideText: String,
     policyText: String? = null,
@@ -29,7 +29,7 @@ fun TaskSection(
         .count { it }
         .let { "($it/2)" }
 
-    LabeledSection(
+    TitledContainer(
         labelText = buildAnnotatedString {
             append("$title $returnRegCountText")
         }
@@ -64,7 +64,7 @@ fun TaskSection(
 @Preview(showBackground = true)
 private fun Preview() {
     RentItTheme {
-        TaskSection(
+        RentalTaskSection(
             title = "반납 정보",
             guideText = "반납 사진과 운송장 번호를 모두 등록해 주세요.",
             policyText = "※ 등록 후에는 수정이 어렵습니다.",

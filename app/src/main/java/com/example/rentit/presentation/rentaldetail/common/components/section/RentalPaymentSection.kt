@@ -7,16 +7,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledSection
-import com.example.rentit.presentation.rentaldetail.common.components.PriceSummary
+import com.example.rentit.common.component.TitledContainer
+import com.example.rentit.common.component.PriceSummary
 
 @Composable
-fun PaymentInfoSection(
+fun RentalPaymentSection(
     title: String,
     priceItems: List<PriceItemUiModel>,
     totalLabel: String
 ) {
-    LabeledSection(labelText = AnnotatedString(title)) {
+    TitledContainer(labelText = AnnotatedString(title)) {
         PriceSummary(
             priceItems = priceItems,
             totalLabel = totalLabel
@@ -38,7 +38,7 @@ private fun Preview() {
         )
     )
     RentItTheme {
-        PaymentInfoSection(
+        RentalPaymentSection(
             title = stringResource(R.string.screen_rental_detail_renter_paid_price_title),
             priceItems = examplePriceItems,
             totalLabel = stringResource(R.string.screen_rental_detail_renter_paid_price_label_total)

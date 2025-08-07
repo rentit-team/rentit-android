@@ -22,7 +22,7 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
 import com.example.rentit.presentation.rentaldetail.common.components.ArrowedTextButton
 import com.example.rentit.presentation.rentaldetail.common.components.NoticeBanner
-import com.example.rentit.presentation.rentaldetail.common.components.section.PaymentInfoSection
+import com.example.rentit.presentation.rentaldetail.common.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.common.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
@@ -72,7 +72,7 @@ fun RentalRequestContent(
         }
     }
 
-    PaymentInfoSection(
+    RentalPaymentSection(
         title = stringResource(R.string.screen_rental_detail_renter_charge_price_title),
         priceItems = priceItems,
         totalLabel = stringResource(R.string.screen_rental_detail_renter_charge_price_label_total)
