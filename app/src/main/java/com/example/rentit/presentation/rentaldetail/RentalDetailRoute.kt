@@ -12,7 +12,7 @@ import com.example.rentit.presentation.rentaldetail.renter.RentalDetailRenterScr
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRenterRoute(navHostController: NavHostController) {
+fun RentalDetailRoute(navHostController: NavHostController) {
 
     val viewModel: RentalDetailViewModel = hiltViewModel()
     val uiModel by viewModel.uiModel.collectAsStateWithLifecycle()
