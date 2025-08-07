@@ -140,6 +140,11 @@
 
     <!-- 대여 상세 -->
     <string name="screen_rental_detail_title">대여 상세</string>
+    <string name="screen_rental_detail_request_btn_cancel_rent">대여 취소하기</string>
+    <string name="screen_rental_detail_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
+
+    <string name="screen_rental_detail_unknown_dialog_title">대여 정보가 존재하지 않아요.</string>
+    <string name="screen_rental_detail_unknown_dialog_confirm_btn">확인</string>
 
     <string name="screen_rental_detail_tracking_info_title">운송장 정보</string>
     <string name="screen_rental_detail_rental_tracking_num">대여 송장 번호</string>
@@ -161,12 +166,16 @@
     <string name="screen_rental_detail_renter_total_paid_price_label_deposit">반납 지연 요금</string>
     <string name="screen_rental_detail_renter_total_paid_price_label_total">총 결제 금액</string>
 
+    <string name="screen_rental_detail_owner_expected_price_title">예상 수익 상세</string>
+    <string name="screen_rental_detail_owner_expected_price_label_basic_rent">기본 대여료</string>
+    <string name="screen_rental_detail_owner_expected_price_label_total">총합</string>
+
     <string name="screen_rental_detail_renter_request_notice_pay">결제</string>
     <string name="screen_rental_detail_renter_request_notice_wait">를 기다리고 있어요!</string>
     <string name="screen_rental_detail_renter_request_btn_pay">결제하고 예약 확정하기</string>
-    <string name="screen_rental_detail_renter_request_btn_cancel_rent">대여 취소하기</string>
 
     <string name="screen_rental_detail_renter_paid_day_before_rent">· 대여 %d일전</string>
+
     <string name="screen_rental_detail_renter_return_day_notice_text">오늘은 반납일이에요. 24시간 이내 반납을 진행해주세요.</string>
     <string name="screen_rental_detail_renter_return_overdue_notice_text">반납이 지연되고 있어요. 반납 등록을 완료해주세요.</string>
 
@@ -183,10 +192,10 @@
     <string name="screen_rental_detail_renter_renting_overdue_warning_middle_text">되고 있어요.\n현재까지 보증금에서 </string>
     <string name="screen_rental_detail_renter_renting_overdue_warning_tail_text">이 차감되었어요.</string>
 
-    <string name="screen_rental_detail_renter_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
-
-    <string name="screen_rental_detail_unknown_dialog_title">대여 정보가 존재하지 않아요.</string>
-    <string name="screen_rental_detail_unknown_dialog_confirm_btn">확인</string>
+    <string name="screen_rental_detail_owner_request_notice_new_request">새로운 대여 요청이 도착했어요!</string>
+    <string name="screen_rental_detail_owner_request_notice_pay">결제</string>
+    <string name="screen_rental_detail_owner_request_notice_wait">를 기다리고 있어요!</string>
+    <string name="screen_rental_detail_owner_request_btn_request_response">요청 응답하기</string>
 
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 

@@ -81,7 +81,7 @@ fun RenterRequestContent(
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
             ArrowedTextButton(
                 modifier = Modifier.padding(vertical = 10.dp),
-                text = stringResource(R.string.screen_rental_detail_renter_request_btn_cancel_rent)
+                text = stringResource(R.string.screen_rental_detail_request_btn_cancel_rent)
             ) { }
         }
     }

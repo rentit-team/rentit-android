@@ -50,7 +50,7 @@ fun RenterReturnedContent(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .offset(y = 8.dp),
-            text = stringResource(R.string.screen_rental_detail_renter_returned_check_photo_btn)
+            text = stringResource(R.string.screen_rental_detail_returned_check_photo_btn)
         ) { }
     }
 

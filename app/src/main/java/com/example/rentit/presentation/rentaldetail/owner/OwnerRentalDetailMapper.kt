@@ -35,8 +35,8 @@ fun RentalDetailResponseDto.toOwnerUiModel(): OwnerRentalStatusUiModel {
         RentalStatus.CANCELED -> {
             OwnerRentalStatusUiModel.Request(
                 status = status,
-                isAccepted = status == RentalStatus.ACCEPTED,
                 isPending = status == RentalStatus.PENDING,
+                isAccepted = status == RentalStatus.ACCEPTED,
                 rentalSummary = rentalSummary,
                 basicRentalFee = basicRentalFee,
                 deposit = rental.depositAmount

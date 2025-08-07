@@ -19,7 +19,6 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalPay
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.common.model.RentalSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
 
 /**
  * 대여 상세(판매자)에서
@@ -51,7 +50,7 @@ fun OwnerReturnedContent(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .offset(y = 8.dp),
-            text = stringResource(R.string.screen_rental_detail_renter_returned_check_photo_btn)
+            text = stringResource(R.string.screen_rental_detail_returned_check_photo_btn)
         ) { }
     }
 

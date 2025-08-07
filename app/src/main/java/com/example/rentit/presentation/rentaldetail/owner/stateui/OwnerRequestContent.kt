@@ -38,20 +38,20 @@ fun OwnerRequestContent(
 ) {
     val priceItem = listOf(
         PriceSummaryUiModel(
-            label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_basic_rent),
+            label = stringResource(R.string.screen_rental_detail_owner_expected_price_label_basic_rent),
             price = requestData.basicRentalFee
         )
     )
 
     when {
         requestData.isPending -> NoticeBanner(noticeText = buildAnnotatedString {
-            append("새로운 대여 요청이 도착했어요.")
+            append(stringResource(R.string.screen_rental_detail_owner_request_notice_new_request))
         })
         requestData.isAccepted -> NoticeBanner(noticeText = buildAnnotatedString {
             withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
-                append(stringResource(R.string.screen_rental_detail_renter_request_notice_pay))
+                append(stringResource(R.string.screen_rental_detail_owner_request_notice_pay))
             }
-            append(stringResource(R.string.screen_rental_detail_renter_request_notice_wait))
+            append(stringResource(R.string.screen_rental_detail_owner_request_notice_wait))
         })
     }
 
@@ -65,22 +65,22 @@ fun OwnerRequestContent(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .offset(y = 8.dp),
-                text = "요청 응답하기"
+                text = stringResource(R.string.screen_rental_detail_owner_request_btn_request_response)
             ) { }
         }
     }
 
     RentalPaymentSection(
-        title = "예상 수익 상세",
+        title = stringResource(R.string.screen_rental_detail_owner_expected_price_title),
         priceItems = priceItem,
-        totalLabel = "합계"
+        totalLabel = stringResource(R.string.screen_rental_detail_owner_expected_price_label_total)
     )
 
     if(requestData.isAccepted) {
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
             ArrowedTextButton(
                 modifier = Modifier.padding(vertical = 10.dp),
-                text = stringResource(R.string.screen_rental_detail_renter_request_btn_cancel_rent)
+                text = stringResource(R.string.screen_rental_detail_request_btn_cancel_rent)
             ) { }
         }
     }
@@ -91,9 +91,9 @@ fun OwnerRequestContent(
 @Preview(showBackground = true)
 private fun Preview() {
     val examplePendingUiModel = OwnerRentalStatusUiModel.Request(
-        status = RentalStatus.ACCEPTED,
-        isAccepted = true,
+        status = RentalStatus.REJECTED,
         isPending = false,
+        isAccepted = false,
         rentalSummary = RentalSummaryUiModel(
             productTitle = "프리미엄 캠핑 텐트",
             thumbnailImgUrl = "https://example.com/images/tent_thumbnail.jpg",

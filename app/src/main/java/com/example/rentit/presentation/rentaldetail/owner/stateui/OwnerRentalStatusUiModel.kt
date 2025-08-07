@@ -9,8 +9,8 @@ sealed class OwnerRentalStatusUiModel {
 
     data class Request(
         val status: RentalStatus,
-        val isAccepted: Boolean,
         val isPending: Boolean,
+        val isAccepted: Boolean,
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
         val deposit: Int,
