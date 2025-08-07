@@ -80,27 +80,6 @@ private fun Preview() {
 
     val sample2 = sample1.copy(
         rental = sample1.rental.copy(
-            endDate = "2025-08-04",
-            returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = false)
-        )
-    )
-
-    val sample3 = sample1.copy(
-        rental = sample1.rental.copy(
-            endDate = "2025-08-01",
-            returnStatus = ReturnStatus(isPhotoRegistered = true, isTrackingNumberRegistered = false)
-        )
-    )
-
-    val sample4 = sample1.copy(
-        rental = sample1.rental.copy(
-            endDate = "2025-07-30",
-            returnStatus = ReturnStatus(isPhotoRegistered = true, isTrackingNumberRegistered = true)
-        )
-    )
-
-    val sample5 = sample1.copy(
-        rental = sample1.rental.copy(
             status = "RETURNED",
             endDate = "2025-07-28",
             returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = true)
@@ -110,7 +89,7 @@ private fun Preview() {
     RentItTheme {
         RentalDetailRenterScreen(
             navHostController = rememberNavController(),
-            sample5.toUiModel(),
+            sample2.toUiModel(),
             rememberScrollState()
         )
     }
