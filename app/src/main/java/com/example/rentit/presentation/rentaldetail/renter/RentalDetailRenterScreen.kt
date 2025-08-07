@@ -23,12 +23,12 @@ import com.example.rentit.data.rental.dto.Rental
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.Renter
 import com.example.rentit.data.rental.dto.ReturnStatus
-import com.example.rentit.presentation.rentaldetail.common.dialog.UnknownStatusDialog
-import com.example.rentit.presentation.rentaldetail.renter.components.PaidContent
-import com.example.rentit.presentation.rentaldetail.renter.components.RentalRequestContent
-import com.example.rentit.presentation.rentaldetail.renter.components.RentingContent
-import com.example.rentit.presentation.rentaldetail.renter.components.ReturnedContent
-import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
+import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
+import com.example.rentit.presentation.rentaldetail.renter.stateui.PaidContent
+import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalRequestContent
+import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalStatusRenterUiModel
+import com.example.rentit.presentation.rentaldetail.renter.stateui.RentingContent
+import com.example.rentit.presentation.rentaldetail.renter.stateui.ReturnedContent
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

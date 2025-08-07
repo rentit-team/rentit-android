@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.components.section
+package com.example.rentit.presentation.rentaldetail.components.section
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.TitledContainer
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
+import com.example.rentit.presentation.rentaldetail.components.LabeledValue
 
 @Composable
 fun RentalTrackingSection(rentalTrackingNumber: String? = null, returnTrackingNumber: String? = null) {

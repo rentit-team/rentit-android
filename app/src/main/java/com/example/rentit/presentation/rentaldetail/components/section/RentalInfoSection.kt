@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.components.section
+package com.example.rentit.presentation.rentaldetail.components.section
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -14,7 +14,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.TitledContainer
 import com.example.rentit.common.component.RentalSummary
-import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
+import com.example.rentit.common.model.RentalSummaryUiModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

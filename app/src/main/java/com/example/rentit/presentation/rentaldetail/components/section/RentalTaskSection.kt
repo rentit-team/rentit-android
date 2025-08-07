@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.components.section
+package com.example.rentit.presentation.rentaldetail.components.section
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.TitledContainer
-import com.example.rentit.presentation.rentaldetail.common.components.TaskCheckBox
+import com.example.rentit.presentation.rentaldetail.components.TaskCheckBox
 
 @Composable
 fun RentalTaskSection(

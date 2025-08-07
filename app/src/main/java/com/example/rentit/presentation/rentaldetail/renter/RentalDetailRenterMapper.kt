@@ -6,9 +6,9 @@ import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
-import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
-import com.example.rentit.presentation.rentaldetail.renter.model.RentingStatus
+import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentingStatus
+import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalStatusRenterUiModel
 
 private const val TAG = "RentalStatus"
 

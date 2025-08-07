@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.renter.components
+package com.example.rentit.presentation.rentaldetail.renter.stateui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -27,15 +27,14 @@ import com.example.rentit.R
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
-import com.example.rentit.presentation.rentaldetail.common.components.NoticeBanner
-import com.example.rentit.presentation.rentaldetail.common.components.section.RentalPaymentSection
-import com.example.rentit.presentation.rentaldetail.common.components.section.RentalInfoSection
-import com.example.rentit.presentation.rentaldetail.common.components.section.RentalTaskSection
-import com.example.rentit.presentation.rentaldetail.common.components.section.RentalTrackingSection
-import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
-import com.example.rentit.presentation.rentaldetail.renter.model.RentingStatus
+import com.example.rentit.common.model.PriceSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
+import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
+import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
+import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
+import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
+import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 import kotlin.math.abs
 
 /**
@@ -49,11 +48,11 @@ fun RentingContent(
     rentingData: RentalStatusRenterUiModel.Renting,
 ) {
     val priceItems = listOf(
-        PriceItemUiModel(
+        PriceSummaryUiModel(
             label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_basic_rent),
             price = rentingData.basicRentalFee
         ),
-        PriceItemUiModel(
+        PriceSummaryUiModel(
             label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_deposit),
             price = rentingData.deposit
         )

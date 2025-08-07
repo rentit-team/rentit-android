@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.renter
+package com.example.rentit.presentation.rentaldetail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -11,14 +11,15 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.Renter
 import com.example.rentit.data.rental.dto.ReturnStatus
 import com.example.rentit.data.rental.dto.StatusHistory
-import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
+import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalStatusRenterUiModel
+import com.example.rentit.presentation.rentaldetail.renter.toUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 @HiltViewModel
-class RentalDetailRenterViewModel @Inject constructor(
+class RentalDetailViewModel @Inject constructor(
 ): ViewModel() {
     private val sampleRentalDetail = RentalDetailResponseDto(
         rental = Rental(
