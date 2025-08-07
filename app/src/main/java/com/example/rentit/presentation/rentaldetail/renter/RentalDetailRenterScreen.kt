@@ -2,8 +2,11 @@ package com.example.rentit.presentation.rentaldetail.renter
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,11 +32,11 @@ import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRenterView(navHostController: NavHostController, uiModel: RentalStatusRenterUiModel) {
+fun RentalDetailRenterScreen(navHostController: NavHostController, uiModel: RentalStatusRenterUiModel, scrollState: ScrollState) {
     Scaffold(
         topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), navHostController = navHostController) }
     ) {
-        Column(modifier = Modifier.padding(it)) {
+        Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
                 is RentalStatusRenterUiModel.Request ->
                     RentalRequestContent(uiModel)
@@ -105,9 +108,10 @@ private fun Preview() {
     )
 
     RentItTheme {
-        RentalDetailRenterView(
+        RentalDetailRenterScreen(
             navHostController = rememberNavController(),
-            sample5.toUiModel()
+            sample5.toUiModel(),
+            rememberScrollState()
         )
     }
 }
