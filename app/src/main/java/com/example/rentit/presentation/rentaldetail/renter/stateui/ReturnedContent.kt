@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.renter.components
+package com.example.rentit.presentation.rentaldetail.renter.stateui
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -13,13 +13,12 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
-import com.example.rentit.presentation.rentaldetail.common.components.ArrowedTextButton
-import com.example.rentit.presentation.rentaldetail.common.components.section.RentalPaymentSection
-import com.example.rentit.presentation.rentaldetail.common.components.section.RentalInfoSection
-import com.example.rentit.presentation.rentaldetail.common.components.section.RentalTrackingSection
-import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.renter.model.RentalStatusRenterUiModel
+import com.example.rentit.common.model.PriceSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.components.ArrowedTextButton
+import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
+import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
+import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
+import com.example.rentit.common.model.RentalSummaryUiModel
 
 /**
  * 대여 상세(판매자)에서
@@ -32,11 +31,11 @@ fun ReturnedContent(
     returnedData: RentalStatusRenterUiModel.Returned,
 ) {
     val priceItems = listOf(
-        PriceItemUiModel(
+        PriceSummaryUiModel(
             label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_basic_rent),
             price = returnedData.basicRentalFee
         ),
-        PriceItemUiModel(
+        PriceSummaryUiModel(
             label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_deposit),
             price = returnedData.deposit
         )

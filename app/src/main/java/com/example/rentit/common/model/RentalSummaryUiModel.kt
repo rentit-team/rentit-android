@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.model
+package com.example.rentit.common.model
 
 data class RentalSummaryUiModel(
     val productTitle: String,

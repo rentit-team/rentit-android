@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.components.section
+package com.example.rentit.presentation.rentaldetail.components.section
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -6,14 +6,14 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
+import com.example.rentit.common.model.PriceSummaryUiModel
 import com.example.rentit.common.component.TitledContainer
 import com.example.rentit.common.component.PriceSummary
 
 @Composable
 fun RentalPaymentSection(
     title: String,
-    priceItems: List<PriceItemUiModel>,
+    priceItems: List<PriceSummaryUiModel>,
     totalLabel: String
 ) {
     TitledContainer(labelText = AnnotatedString(title)) {
@@ -28,11 +28,11 @@ fun RentalPaymentSection(
 @Preview(showBackground = true)
 private fun Preview() {
     val examplePriceItems = listOf(
-        PriceItemUiModel(
+        PriceSummaryUiModel(
             label = stringResource(R.string.screen_rental_detail_renter_paid_price_label_basic_rent),
             price = 30000
         ),
-        PriceItemUiModel(
+        PriceSummaryUiModel(
             label = stringResource(R.string.screen_rental_detail_renter_paid_price_label_deposit),
             price = 30000
         )

@@ -18,8 +18,8 @@ import com.example.rentit.R
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.presentation.rentaldetail.common.components.LabeledValue
-import com.example.rentit.presentation.rentaldetail.common.model.PriceItemUiModel
+import com.example.rentit.presentation.rentaldetail.components.LabeledValue
+import com.example.rentit.common.model.PriceSummaryUiModel
 
 /**
  * 비용 내역과 총합을 나타내는 UI 컴포넌트
@@ -32,7 +32,7 @@ private val dividerBottomPadding = 14.dp
 @Composable
 fun PriceSummary(
     modifier: Modifier = Modifier,
-    priceItems: List<PriceItemUiModel>,
+    priceItems: List<PriceSummaryUiModel>,
     totalLabel: String,
 ) {
     val totalPrice = priceItems.sumOf { it.price }
@@ -71,8 +71,8 @@ fun PriceSummary(
 @Preview(showBackground = true)
 private fun Preview() {
     val priceItems = listOf(
-        PriceItemUiModel(label = "기본 대여료", price = 30_000),
-        PriceItemUiModel(label = "지연 보상금 (2일)", price = 60_000)
+        PriceSummaryUiModel(label = "기본 대여료", price = 30_000),
+        PriceSummaryUiModel(label = "지연 보상금 (2일)", price = 60_000)
     )
     RentItTheme {
         PriceSummary(

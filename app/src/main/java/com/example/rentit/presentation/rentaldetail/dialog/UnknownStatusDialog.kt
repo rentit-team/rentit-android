@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.common.dialog
+package com.example.rentit.presentation.rentaldetail.dialog
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

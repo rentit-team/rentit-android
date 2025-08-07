@@ -1,7 +1,8 @@
-package com.example.rentit.presentation.rentaldetail.renter.model
+package com.example.rentit.presentation.rentaldetail.renter.stateui
 
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.presentation.rentaldetail.common.model.RentalSummaryUiModel
+import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 
 
 sealed class RentalStatusRenterUiModel {
