@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.util.daysBetween
+import com.example.rentit.common.util.inclusiveDaysBetween
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.repository.ProductRepository
@@ -46,7 +46,7 @@ class ResvRequestViewModel @Inject constructor(
         _rentalStartDate,
         _rentalEndDate
     ) { start, end ->
-        daysBetween(start, end)
+        inclusiveDaysBetween(start, end)
     }.stateIn(viewModelScope, SharingStarted.Eagerly, 0)
 
     fun setRentalStartDate(date: LocalDate?) {

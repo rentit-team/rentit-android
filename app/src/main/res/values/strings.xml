@@ -5,6 +5,17 @@
     <string name="title_activity_chat_tab">채팅</string>
     <string name="title_activity_my_page_tab">마이페이지</string>
 
+    <string name="rental_status_canceled">거래 취소</string>
+    <string name="rental_status_pending">대여 요청</string>
+    <string name="rental_status_accepted">요청 수락</string>
+    <string name="rental_status_rejected">요청 거절</string>
+    <string name="rental_status_paid">결제 완료</string>
+    <string name="rental_status_paid_owner">상품 발송 준비</string>
+    <string name="rental_status_renting">대여중</string>
+    <string name="rental_status_renting_return_day">반납 D-DAY</string>
+    <string name="rental_status_renting_return_overdue">반납 지연</string>
+    <string name="rental_status_returned">반납 완료</string>
+
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_price_unit_per_day">원/일</string>
     <string name="common_price_unit">원</string>
@@ -123,6 +134,59 @@
 
     <string name="screen_mypage_my_rental_list_item_label_renting">대여중</string>
     <string name="screen_mypage_my_rental_list_item_label_request_at">요청일: </string>
+
+    <string name="screen_rental_detail_task_check_box_icon_done">%s 완료</string>
+    <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
+
+    <!-- 대여 상세 -->
+    <string name="screen_rental_detail_title">대여 상세</string>
+
+    <string name="screen_rental_detail_tracking_info_title">운송장 정보</string>
+    <string name="screen_rental_detail_rental_tracking_num">대여 송장 번호</string>
+    <string name="screen_rental_detail_returned_tracking_num">반납 송장 번호</string>
+    <string name="screen_rental_detail_tracking_num_unregistered">미등록</string>
+
+    <string name="screen_rental_detail_renter_charge_price_title">대여 요금 상세</string>
+    <string name="screen_rental_detail_renter_charge_price_label_basic_rent">기본 대여료</string>
+    <string name="screen_rental_detail_renter_charge_price_label_deposit">보증금</string>
+    <string name="screen_rental_detail_renter_charge_price_label_total">합계</string>
+
+    <string name="screen_rental_detail_renter_paid_price_title">결제 정보</string>
+    <string name="screen_rental_detail_renter_paid_price_label_basic_rent">기본 대여료</string>
+    <string name="screen_rental_detail_renter_paid_price_label_deposit">보증금</string>
+    <string name="screen_rental_detail_renter_paid_price_label_total">총 결제 금액</string>
+
+    <string name="screen_rental_detail_renter_total_paid_price_title">최종 결제 금액</string>
+    <string name="screen_rental_detail_renter_total_paid_price_label_basic_rent">기본 대여료</string>
+    <string name="screen_rental_detail_renter_total_paid_price_label_deposit">반납 지연 요금</string>
+    <string name="screen_rental_detail_renter_total_paid_price_label_total">총 결제 금액</string>
+
+    <string name="screen_rental_detail_renter_request_notice_pay">결제</string>
+    <string name="screen_rental_detail_renter_request_notice_wait">를 기다리고 있어요!</string>
+    <string name="screen_rental_detail_renter_request_btn_pay">결제하고 예약 확정하기</string>
+    <string name="screen_rental_detail_renter_request_btn_cancel_rent">대여 취소하기</string>
+
+    <string name="screen_rental_detail_renter_paid_day_before_rent">· 대여 %d일전</string>
+    <string name="screen_rental_detail_renter_return_day_notice_text">오늘은 반납일이에요. 24시간 이내 반납을 진행해주세요.</string>
+    <string name="screen_rental_detail_renter_return_overdue_notice_text">반납이 지연되고 있어요. 반납 등록을 완료해주세요.</string>
+
+    <string name="screen_rental_detail_renter_return_task_title">반납 등록</string>
+    <string name="screen_rental_detail_renter_return_task_info">아래 항목을 완료하면 반납이 접수돼요.</string>
+    <string name="screen_rental_detail_renter_return_task_photo">반납 전 사진 등록</string>
+    <string name="screen_rental_detail_renter_return_task_tracking_num">운송장 등록</string>
+    <string name="screen_rental_detail_renter_return_task_policy">반납은 반납일 하루 전부터 가능하며, 지연 시 보증금에서 차감됩니다.</string>
+
+    <string name="screen_rental_detail_renter_renting_day_before_return">· 반납 %d일전</string>
+    <string name="screen_rental_detail_renter_renting_day_overdue">D+%d</string>
+    <string name="screen_rental_detail_renter_renting_overdue_warning_leading_text">반납이 </string>
+    <string name="screen_rental_detail_renter_renting_overdue_warning_day_highlight">일 지연</string>
+    <string name="screen_rental_detail_renter_renting_overdue_warning_middle_text">되고 있어요.\n현재까지 보증금에서 </string>
+    <string name="screen_rental_detail_renter_renting_overdue_warning_tail_text">이 차감되었어요.</string>
+
+    <string name="screen_rental_detail_renter_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
+
+    <string name="screen_rental_detail_unknown_dialog_title">대여 정보가 존재하지 않아요.</string>
+    <string name="screen_rental_detail_unknown_dialog_confirm_btn">확인</string>
 
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 

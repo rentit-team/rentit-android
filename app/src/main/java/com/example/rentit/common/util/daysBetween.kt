@@ -12,7 +12,7 @@ import java.time.temporal.ChronoUnit
  */
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun daysBetween(startDateStr: String, endDateStr: String): Int {
+fun inclusiveDaysBetween(startDateStr: String, endDateStr: String): Int {
     val start = parseLocalDateOrNull(startDateStr) ?: return 0
     val end = parseLocalDateOrNull(endDateStr) ?: return 0
 
@@ -20,8 +20,15 @@ fun daysBetween(startDateStr: String, endDateStr: String): Int {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun daysBetween(start: LocalDate?, end: LocalDate?): Int {
+fun inclusiveDaysBetween(start: LocalDate?, end: LocalDate?): Int {
     if(start == null || end == null) return 0
     return start.until(end, ChronoUnit.DAYS).toInt().plus(1)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun daysFromToday(targetDateStr: String): Int {
+    val today = LocalDate.now()
+    val targetDate = parseLocalDateOrNull(targetDateStr) ?: return 0
+    return ChronoUnit.DAYS.between(today, targetDate).toInt()
 }
 
