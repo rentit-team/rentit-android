@@ -5,7 +5,7 @@ import com.example.rentit.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 
 
-sealed class RentalStatusRenterUiModel {
+sealed class RenterRentalStatusUiModel {
 
     data class Request(
         val status: RentalStatus,
@@ -13,7 +13,7 @@ sealed class RentalStatusRenterUiModel {
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
         val deposit: Int,
-    ): RentalStatusRenterUiModel()
+    ): RenterRentalStatusUiModel()
 
     data class Paid(
         val status: RentalStatus,
@@ -22,7 +22,7 @@ sealed class RentalStatusRenterUiModel {
         val basicRentalFee: Int,
         val deposit: Int,
         val rentalTrackingNumber: String?
-    ): RentalStatusRenterUiModel()
+    ): RenterRentalStatusUiModel()
 
     data class Renting(
         val status: RentingStatus,
@@ -35,7 +35,7 @@ sealed class RentalStatusRenterUiModel {
         val isReturnPhotoRegistered: Boolean,
         val isReturnTrackingNumRegistered: Boolean,
         val rentalTrackingNumber: String?
-    ): RentalStatusRenterUiModel()
+    ): RenterRentalStatusUiModel()
 
     data class Returned(
         val status: RentalStatus,
@@ -44,7 +44,7 @@ sealed class RentalStatusRenterUiModel {
         val deposit: Int,
         val rentalTrackingNumber: String?,
         val returnTrackingNumber: String?
-    ): RentalStatusRenterUiModel()
+    ): RenterRentalStatusUiModel()
 
-    data object Unknown: RentalStatusRenterUiModel()
+    data object Unknown: RenterRentalStatusUiModel()
 }

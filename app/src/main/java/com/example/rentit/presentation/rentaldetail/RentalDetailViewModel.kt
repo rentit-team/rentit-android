@@ -11,8 +11,8 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.Renter
 import com.example.rentit.data.rental.dto.ReturnStatus
 import com.example.rentit.data.rental.dto.StatusHistory
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalStatusRenterUiModel
-import com.example.rentit.presentation.rentaldetail.renter.toUiModel
+import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
+import com.example.rentit.presentation.rentaldetail.renter.toRenterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -85,9 +85,9 @@ class RentalDetailViewModel @Inject constructor(
     )
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private val _uiModel = MutableStateFlow(sampleRentalDetail.toUiModel())
+    private val _uiModel = MutableStateFlow(sampleRentalDetail.toRenterUiModel())
 
     @RequiresApi(Build.VERSION_CODES.O)
-    val uiModel: StateFlow<RentalStatusRenterUiModel> = _uiModel
+    val uiModel: StateFlow<RenterRentalStatusUiModel> = _uiModel
 
 }

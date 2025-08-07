@@ -33,8 +33,8 @@ import com.example.rentit.common.model.RentalSummaryUiModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalRequestContent(
-    requestData: RentalStatusRenterUiModel.Request,
+fun RenterRequestContent(
+    requestData: RenterRentalStatusUiModel.Request,
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -91,7 +91,7 @@ fun RentalRequestContent(
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val examplePendingUiModel = RentalStatusRenterUiModel.Request(
+    val examplePendingUiModel = RenterRentalStatusUiModel.Request(
         status = RentalStatus.ACCEPTED,
         isAccepted = true,
         rentalSummary = RentalSummaryUiModel(
@@ -106,7 +106,7 @@ private fun Preview() {
     )
     RentItTheme {
         Column {
-            RentalRequestContent(requestData = examplePendingUiModel)
+            RenterRequestContent(requestData = examplePendingUiModel)
         }
     }
 }

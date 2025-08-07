@@ -8,12 +8,12 @@ import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalStatusRenterUiModel
+import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
 
 private const val TAG = "RentalStatus"
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
+fun RentalDetailResponseDto.toRenterUiModel(): RenterRentalStatusUiModel {
     val status = runCatching { RentalStatus.valueOf(rental.status) }
         .onFailure { Log.w(TAG, "Unknown rental status: ${rental.status}")  }
         .getOrNull()
@@ -33,7 +33,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
         RentalStatus.ACCEPTED,
         RentalStatus.REJECTED,
         RentalStatus.CANCELED -> {
-            RentalStatusRenterUiModel.Request(
+            RenterRentalStatusUiModel.Request(
                 status = status,
                 isAccepted = status == RentalStatus.ACCEPTED,
                 rentalSummary = rentalSummary,
@@ -44,7 +44,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
 
         RentalStatus.PAID -> {
             val daysUntilRental = daysFromToday(rental.startDate)
-            RentalStatusRenterUiModel.Paid(
+            RenterRentalStatusUiModel.Paid(
                 status = status,
                 daysUntilRental = daysUntilRental,
                 rentalSummary = rentalSummary,
@@ -62,7 +62,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
                 else -> RentingStatus.RENTING_OVERDUE
             }
             val isReturnAvailable = daysFromReturnDate <= -1
-            RentalStatusRenterUiModel.Renting(
+            RenterRentalStatusUiModel.Renting(
                 status = rentingStatus,
                 isOverdue = rentingStatus == RentingStatus.RENTING_OVERDUE,
                 isReturnAvailable = isReturnAvailable,
@@ -76,7 +76,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
             )
         }
 
-        RentalStatus.RETURNED -> RentalStatusRenterUiModel.Returned(
+        RentalStatus.RETURNED -> RenterRentalStatusUiModel.Returned(
             status = status,
             rentalSummary = rentalSummary,
             deposit = rental.depositAmount,
@@ -85,6 +85,6 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusRenterUiModel {
             returnTrackingNumber = rental.returnTrackingNumber
         )
 
-        null -> RentalStatusRenterUiModel.Unknown
+        null -> RenterRentalStatusUiModel.Unknown
     }
 }
