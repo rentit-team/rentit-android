@@ -24,9 +24,9 @@ fun RequestAcceptDialog(
     onAcceptRequest: () -> Unit,
 ) {
     BaseDialog(
-        titleText = stringResource(R.string.common_dialog_accept_request_title),
-        confirmText = stringResource(R.string.common_dialog_accept_request_btn_accept),
-        closeText = stringResource(R.string.common_dialog_accept_request_btn_cancel),
+        title = stringResource(R.string.common_dialog_accept_request_title),
+        confirmBtnText = stringResource(R.string.common_dialog_accept_request_btn_accept),
+        closeBtnText = stringResource(R.string.common_dialog_accept_request_btn_cancel),
         onCloseRequest = onDismissRequest,
         onConfirmRequest = onAcceptRequest
     ) {

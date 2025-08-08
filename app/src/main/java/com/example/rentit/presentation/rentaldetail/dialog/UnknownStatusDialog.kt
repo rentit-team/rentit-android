@@ -8,8 +8,8 @@ import com.example.rentit.common.component.dialog.BaseDialog
 @Composable
 fun UnknownStatusDialog(onDismiss: () -> Unit = {}) {
     BaseDialog(
-        titleText = stringResource(R.string.screen_rental_detail_unknown_dialog_title),
-        confirmText = stringResource(R.string.screen_rental_detail_unknown_dialog_confirm_btn),
+        title = stringResource(R.string.screen_rental_detail_unknown_dialog_title),
+        confirmBtnText = stringResource(R.string.screen_rental_detail_unknown_dialog_confirm_btn),
         onCloseRequest = onDismiss,
         onConfirmRequest = onDismiss
     )

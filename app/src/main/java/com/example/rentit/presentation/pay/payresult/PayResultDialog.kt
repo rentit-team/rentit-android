@@ -15,14 +15,11 @@ fun PayResultDialog(
     onConfirm: () -> Unit = {},
 ) {
     BaseDialog(
-        titleText = model.titleText,
-        confirmText = stringResource(R.string.dialog_pay_result_btn_confirm),
+        title = model.titleText,
+        content = model.contentText,
+        confirmBtnText = stringResource(R.string.dialog_pay_result_btn_confirm),
         isBackgroundClickable = false,
         onCloseRequest = onClose,
         onConfirmRequest = onConfirm,
-    ) {
-        if (model.contentText != null) {
-            Text(text = model.contentText, style = MaterialTheme.typography.labelMedium, color = Gray800)
-        }
-    }
+    )
 }

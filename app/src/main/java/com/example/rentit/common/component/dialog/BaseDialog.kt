@@ -35,13 +35,14 @@ private val dialogBoxRadius = 28.dp
 
 @Composable
 fun BaseDialog(
-    titleText: String,
-    closeText: String? = null,
-    confirmText: String,
+    title: String,
+    content: String? = null,
+    closeBtnText: String? = null,
+    confirmBtnText: String,
     isBackgroundClickable: Boolean = true,
     onCloseRequest: () -> Unit,
     onConfirmRequest: () -> Unit,
-    content: @Composable ColumnScope.() -> Unit = {}
+    customContent: @Composable ColumnScope.() -> Unit = {}
 ) {
     Dialog(
         onDismissRequest = onCloseRequest
@@ -68,29 +69,37 @@ fun BaseDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = titleBottomPadding),
-                    text = titleText,
+                    text = title,
                     style = MaterialTheme.typography.bodyLarge,
                     textAlign = TextAlign.Center
                 )
 
-                content()
+                if(!content.isNullOrEmpty()) {
+                    Text(
+                        text = content,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Gray800
+                    )
+                }
+
+                customContent()
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End,
                 ) {
-                    if (!closeText.isNullOrEmpty())
+                    if (!closeBtnText.isNullOrEmpty())
                         TextButton(
                             onClick = onCloseRequest,
                         ) {
-                            Text(closeText)
+                            Text(closeBtnText)
                         }
 
                     TextButton(
                         onClick = onConfirmRequest,
                     ) {
                         Text(
-                            text = confirmText,
+                            text = confirmBtnText,
                             style = MaterialTheme.typography.bodyLarge,
                             color = PrimaryBlue500
                         )
@@ -106,16 +115,10 @@ fun BaseDialog(
 private fun Preview() {
     RentItTheme {
         BaseDialog(
-            titleText = "Dialog 제목",
-            closeText = null,
-            confirmText = "확인",
-            content = {
-                Text(
-                    text = "Dialog 세부 내용",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Gray800
-                )
-            },
+            title = "Dialog 제목",
+            content = "Dialog 세부 내용",
+            closeBtnText = null,
+            confirmBtnText = "확인",
             onCloseRequest = {},
             onConfirmRequest = {},
         )
