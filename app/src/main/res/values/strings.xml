@@ -210,6 +210,29 @@
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_leading_text">지연 보상금</string>
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_tail_text">이 지급될 예정이에요.</string>
 
+    <!-- 결제 화면 -->
+    <string name="screen_pay_title">결제하기</string>
+
+    <string name="screen_pay_rental_info_title">대여 정보</string>
+    <string name="screen_pay_price_title">대여 요금 상세</string>
+    <string name="screen_pay_price_label_basic_rental_fee">기본 대여료</string>
+    <string name="screen_pay_price_label_deposit">보증금</string>
+    <string name="screen_pay_price_label_total">합계</string>
+    <string name="screen_pay_btn_text">결제하기</string>
+
+    <string name="screen_pay_policy_title_1">RentIt은 안전한 중고 대여를 위해 에스크로 방식을 사용합니다.</string>
+    <string name="screen_pay_policy_title_2">간단한 절차로 안심하고 거래하세요!</string>
+    <string name="screen_pay_policy_step_1">1. 대여 금액 + 보증금(3일치 대여료)을 RentIt 계좌로 송금해 주세요.</string>
+    <string name="screen_pay_policy_step_2">2. RentIt이 판매자에게 대여 금액을 전달하고, 보증금은 보관합니다.</string>
+    <string name="screen_pay_policy_step_3">3. 대여 종료 후, 물품이 정상 반납되면 보증금을 환급해드립니다.</string>
+    <string name="screen_pay_policy_tip_1">💡 보증금은 거래 보호를 위한 최소한의 금액이며, 반납 지연 시 지연된 일수만큼 차감됩니다. 반납이 완료되면 보증금은 반납 확인 후 24시간 이내에 환급됩니다.</string>
+    <string name="screen_pay_policy_tip_2">💡 결제 완료 시, 판매자에게 안내 메세지가 자동 발송됩니다.</string>
+
+    <string name="dialog_pay_result_success_title">결제가 정상적으로 완료됐어요</string>
+    <string name="dialog_pay_result_failed_title">결제 처리 중 오류가 발생했습니다</string>
+    <string name="dialog_pay_result_failed_content">잠시 후 다시 시도해주세요.</string>
+    <string name="dialog_pay_result_btn_confirm">완료</string>
+
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 
     <string name="request_history_list_item_text_chat">채팅하기</string>
