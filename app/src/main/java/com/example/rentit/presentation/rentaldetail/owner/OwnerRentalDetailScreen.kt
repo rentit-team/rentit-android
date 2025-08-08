@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.renter
+package com.example.rentit.presentation.rentaldetail.owner
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -24,29 +24,29 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.Renter
 import com.example.rentit.data.rental.dto.ReturnStatus
 import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
-import com.example.rentit.presentation.rentaldetail.renter.stateui.PaidContent
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalRequestContent
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RentalStatusRenterUiModel
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RentingContent
-import com.example.rentit.presentation.rentaldetail.renter.stateui.ReturnedContent
+import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerPaidContent
+import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRentalStatusUiModel
+import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRentingContent
+import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRequestContent
+import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerReturnedContent
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRenterScreen(navHostController: NavHostController, uiModel: RentalStatusRenterUiModel, scrollState: ScrollState) {
+fun OwnerRentalDetailScreen(navHostController: NavHostController, uiModel: OwnerRentalStatusUiModel, scrollState: ScrollState) {
     Scaffold(
         topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), navHostController = navHostController) }
     ) {
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
-                is RentalStatusRenterUiModel.Request ->
-                    RentalRequestContent(uiModel)
-                is RentalStatusRenterUiModel.Paid ->
-                    PaidContent(uiModel)
-                is RentalStatusRenterUiModel.Renting ->
-                    RentingContent(uiModel)
-                is RentalStatusRenterUiModel.Returned ->
-                    ReturnedContent(uiModel)
-                is RentalStatusRenterUiModel.Unknown ->
+                is OwnerRentalStatusUiModel.Request ->
+                    OwnerRequestContent(uiModel)
+                is OwnerRentalStatusUiModel.Paid ->
+                    OwnerPaidContent(uiModel)
+                is OwnerRentalStatusUiModel.Renting ->
+                    OwnerRentingContent(uiModel)
+                is OwnerRentalStatusUiModel.Returned ->
+                    OwnerReturnedContent(uiModel)
+                is OwnerRentalStatusUiModel.Unknown ->
                     UnknownStatusDialog { navHostController.popBackStack() }
             }
         }
@@ -87,9 +87,9 @@ private fun Preview() {
     )
 
     RentItTheme {
-        RentalDetailRenterScreen(
+        OwnerRentalDetailScreen(
             navHostController = rememberNavController(),
-            sample2.toUiModel(),
+            sample2.toOwnerUiModel(),
             rememberScrollState()
         )
     }

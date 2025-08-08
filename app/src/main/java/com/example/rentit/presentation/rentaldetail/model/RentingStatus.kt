@@ -34,5 +34,13 @@ enum class RentingStatus(
         noticeBannerStrRes = R.string.screen_rental_detail_renter_return_overdue_notice_text,
         noticeBannerBgColor = Gray100,
         subLabelStrRes = R.string.screen_rental_detail_renter_renting_day_overdue
-    )
+    );
+
+    companion object {
+        fun fromDaysFromReturnDate(daysFromReturnDate: Int): RentingStatus = when {
+            daysFromReturnDate >= 0 -> RENTING_IN_USE
+            daysFromReturnDate == -1 -> RENTING_RETURN_DAY
+            else -> RENTING_OVERDUE
+        }
+    }
 }

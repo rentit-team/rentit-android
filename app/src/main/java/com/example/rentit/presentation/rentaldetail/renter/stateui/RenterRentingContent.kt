@@ -38,14 +38,14 @@ import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 import kotlin.math.abs
 
 /**
- * 대여 상세(판매자)에서
+ * 대여 상세(사용자)에서
  * 대여중 상태(대여중, 반납 전, 반납 지연)를 나타내는 UI 컨텐츠
  */
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentingContent(
-    rentingData: RentalStatusRenterUiModel.Renting,
+fun RenterRentingContent(
+    rentingData: RenterRentalStatusUiModel.Renting,
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -77,7 +77,7 @@ fun RentingContent(
         policyText = stringResource(R.string.screen_rental_detail_renter_return_task_policy),
         photoTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_photo),
         trackingNumTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_tracking_num),
-        isReturnAvailable = rentingData.isReturnAvailable,
+        isTaskAvailable = rentingData.isReturnAvailable,
         isPhotoRegistered = rentingData.isReturnPhotoRegistered,
         isTrackingNumRegistered = rentingData.isReturnTrackingNumRegistered
     ) { if (rentingData.isOverdue) {
@@ -133,7 +133,7 @@ fun ReturnOverdueWarning(daysFromReturnDate: Int, deposit: Int) {
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val examplePendingUiModel = RentalStatusRenterUiModel.Renting(
+    val examplePendingUiModel = RenterRentalStatusUiModel.Renting(
         status = RentingStatus.RENTING_RETURN_DAY,
         isOverdue = false,
         daysFromReturnDate = 3,
@@ -153,7 +153,7 @@ private fun Preview() {
     )
     RentItTheme {
         Column {
-            RentingContent(rentingData = examplePendingUiModel)
+            RenterRentingContent(rentingData = examplePendingUiModel)
         }
     }
 }

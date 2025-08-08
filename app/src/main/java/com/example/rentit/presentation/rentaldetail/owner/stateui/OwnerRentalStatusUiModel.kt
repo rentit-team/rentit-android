@@ -1,41 +1,39 @@
-package com.example.rentit.presentation.rentaldetail.renter.stateui
+package com.example.rentit.presentation.rentaldetail.owner.stateui
 
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.model.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 
 
-sealed class RentalStatusRenterUiModel {
+sealed class OwnerRentalStatusUiModel {
 
     data class Request(
         val status: RentalStatus,
+        val isPending: Boolean,
         val isAccepted: Boolean,
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
-        val deposit: Int,
-    ): RentalStatusRenterUiModel()
+    ): OwnerRentalStatusUiModel()
 
     data class Paid(
         val status: RentalStatus,
         val daysUntilRental: Int,
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
-        val deposit: Int,
+        val isSendingPhotoRegistered: Boolean,
+        val isSendingTrackingNumRegistered: Boolean,
         val rentalTrackingNumber: String?
-    ): RentalStatusRenterUiModel()
+    ): OwnerRentalStatusUiModel()
 
     data class Renting(
         val status: RentingStatus,
         val isOverdue: Boolean,
-        val isReturnAvailable: Boolean,
         val daysFromReturnDate: Int,
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
         val deposit: Int,
-        val isReturnPhotoRegistered: Boolean,
-        val isReturnTrackingNumRegistered: Boolean,
         val rentalTrackingNumber: String?
-    ): RentalStatusRenterUiModel()
+    ): OwnerRentalStatusUiModel()
 
     data class Returned(
         val status: RentalStatus,
@@ -44,7 +42,7 @@ sealed class RentalStatusRenterUiModel {
         val deposit: Int,
         val rentalTrackingNumber: String?,
         val returnTrackingNumber: String?
-    ): RentalStatusRenterUiModel()
+    ): OwnerRentalStatusUiModel()
 
-    data object Unknown: RentalStatusRenterUiModel()
+    data object Unknown: OwnerRentalStatusUiModel()
 }
