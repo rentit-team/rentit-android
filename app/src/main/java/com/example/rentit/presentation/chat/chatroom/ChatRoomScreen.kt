@@ -69,7 +69,7 @@ import com.example.rentit.common.util.formatPrice
 import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.navigation.chatroom.navigateToRequestAcceptConfirm
-import com.example.rentit.presentation.chat.chatroom.requestaccept.RequestAcceptDialog
+import com.example.rentit.common.component.dialog.RequestAcceptDialog
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
@@ -175,7 +175,8 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
     }
     if (showAcceptDialog) {
         RequestAcceptDialog(
-            productPrice = productDetail?.product?.price ?: 0,
+            rentalPeriodText = "25.08.17 (목) ~ 25.08.20 (일) · 4일",      // 백엔드 데이터 누락,
+            expectedRevenue = productDetail?.product?.price ?: 0,
             onDismissRequest = { showAcceptDialog = false },
             onAcceptRequest = {
                 if(productId != null && chatRoomId != null && reservationId != null){

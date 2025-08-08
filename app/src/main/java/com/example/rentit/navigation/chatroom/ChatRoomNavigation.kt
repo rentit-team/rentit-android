@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.presentation.chat.chatroom.ChatroomScreen
-import com.example.rentit.presentation.chat.chatroom.requestaccept.confirm.RequestAcceptConfirmScreen
+import com.example.rentit.common.component.layout.RequestAcceptConfirmScreen
 
 fun NavHostController.navigateToChatRoom(
     productId: Int?,
@@ -38,5 +38,5 @@ fun NavGraphBuilder.chatRoomGraph(navHostController: NavHostController) {
             items.chatRoomId
         )
     }
-    composable<ChatRoomRoute.RequestAcceptConfirm> { RequestAcceptConfirmScreen(navHostController) }
+    composable<ChatRoomRoute.RequestAcceptConfirm> { RequestAcceptConfirmScreen { navHostController.popBackStack() } }
 }
