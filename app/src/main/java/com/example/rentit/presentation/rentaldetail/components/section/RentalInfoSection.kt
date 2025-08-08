@@ -15,12 +15,13 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.TitledContainer
 import com.example.rentit.common.component.RentalSummary
 import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.common.theme.AppBlack
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalInfoSection(
     title: String,
-    titleColor: Color,
+    titleColor: Color = AppBlack,
     subTitle: String? = null,
     subTitleColor: Color = Gray400,
     rentalInfo: RentalSummaryUiModel,
