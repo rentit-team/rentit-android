@@ -32,6 +32,8 @@ import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.presentation.pay.payresult.PayResultDialog
+import com.example.rentit.presentation.pay.payresult.PayResultDialogUiModel
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 
@@ -39,18 +41,22 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalPay
 @Composable
 fun PayScreen(
     navHostController: NavHostController,
-    payData: PayUiModel,
+    payModel: PayUiModel,
+    dialogModel: PayResultDialogUiModel,
+    isDialogVisible: Boolean,
     scrollState: ScrollState,
     onPayClick: () -> Unit,
+    onDialogClose: () -> Unit,
+    onDialogConfirm: () -> Unit,
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
             label = stringResource(R.string.screen_pay_price_label_basic_rental_fee),
-            price = payData.basicRentalFee
+            price = payModel.basicRentalFee
         ),
         PriceSummaryUiModel(
             label = stringResource(R.string.screen_pay_price_label_deposit),
-            price = payData.deposit
+            price = payModel.deposit
         )
     )
 
@@ -80,7 +86,7 @@ fun PayScreen(
             RentalInfoSection(
                 title = stringResource(R.string.screen_pay_rental_info_title),
                 titleColor = AppBlack,
-                rentalInfo = payData.rentalSummary,
+                rentalInfo = payModel.rentalSummary,
             )
 
             RentalPaymentSection(
@@ -92,6 +98,7 @@ fun PayScreen(
             PaymentGuide()
         }
     }
+    if(isDialogVisible) PayResultDialog(dialogModel, onDialogClose, onDialogConfirm)
 }
 
 @Composable
@@ -144,12 +151,21 @@ private fun Preview() {
         basicRentalFee = 90_000,
         deposit = 10_000 * 3
     )
+    val sampleDialog = PayResultDialogUiModel(
+        titleText = stringResource(R.string.dialog_pay_result_success_title),
+        contentText = stringResource(R.string.dialog_pay_result_failed_content)
+    )
 
     RentItTheme {
         PayScreen(
             navHostController = rememberNavController(),
-            sample,
-            rememberScrollState()
-        ) {}
+            payModel = sample,
+            dialogModel = sampleDialog,
+            isDialogVisible = false,
+            scrollState = rememberScrollState(),
+            onPayClick = { },
+            onDialogClose = { },
+            onDialogConfirm = { }
+        )
     }
 }

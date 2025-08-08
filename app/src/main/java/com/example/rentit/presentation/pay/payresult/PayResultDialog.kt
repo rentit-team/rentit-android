@@ -10,18 +10,19 @@ import com.example.rentit.common.theme.Gray800
 
 @Composable
 fun PayResultDialog(
-    dialogData: PayResultDialogUiModel,
+    model: PayResultDialogUiModel,
     onClose: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
     BaseDialog(
-        titleText = dialogData.titleText,
+        titleText = model.titleText,
         confirmText = stringResource(R.string.dialog_pay_result_btn_confirm),
+        isBackgroundClickable = false,
         onCloseRequest = onClose,
-        onConfirmRequest = onConfirm
+        onConfirmRequest = onConfirm,
     ) {
-        if (dialogData.contentText != null) {
-            Text(text = dialogData.contentText, style = MaterialTheme.typography.labelMedium, color = Gray800)
+        if (model.contentText != null) {
+            Text(text = model.contentText, style = MaterialTheme.typography.labelMedium, color = Gray800)
         }
     }
 }

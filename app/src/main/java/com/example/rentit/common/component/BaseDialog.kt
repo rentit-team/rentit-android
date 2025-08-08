@@ -37,6 +37,7 @@ fun BaseDialog(
     titleText: String,
     closeText: String? = null,
     confirmText: String,
+    isBackgroundClickable: Boolean = true,
     onCloseRequest: () -> Unit,
     onConfirmRequest: () -> Unit,
     content: @Composable ColumnScope.() -> Unit = {}
@@ -50,6 +51,7 @@ fun BaseDialog(
                 .background(Gray300.copy(alpha = 0.5f))
                 .screenHorizontalPadding()
                 .clickable(
+                    enabled = isBackgroundClickable,
                     // 터치 효과 제거
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }) { onCloseRequest() },
