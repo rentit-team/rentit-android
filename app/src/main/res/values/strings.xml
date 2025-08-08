@@ -202,6 +202,9 @@
     <string name="screen_rental_detail_owner_paid_sending_task_photo">발송 전 사진 등록</string>
     <string name="screen_rental_detail_owner_paid_sending_task_tracking_num">운송장 등록</string>
 
+    <string name="screen_rental_detail_owner_renting_overdue_info_reward_leading_text">지연 보상금</string>
+    <string name="screen_rental_detail_owner_renting_overdue_info_reward_tail_text">이 지급될 예정이에요.</string>
+
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 
     <string name="request_history_list_item_text_chat">채팅하기</string>

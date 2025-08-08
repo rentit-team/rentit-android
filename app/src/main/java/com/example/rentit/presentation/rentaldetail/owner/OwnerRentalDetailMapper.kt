@@ -39,7 +39,6 @@ fun RentalDetailResponseDto.toOwnerUiModel(): OwnerRentalStatusUiModel {
                 isAccepted = status == RentalStatus.ACCEPTED,
                 rentalSummary = rentalSummary,
                 basicRentalFee = basicRentalFee,
-                deposit = rental.depositAmount
             )
         }
 
@@ -49,7 +48,6 @@ fun RentalDetailResponseDto.toOwnerUiModel(): OwnerRentalStatusUiModel {
                 status = status,
                 daysUntilRental = daysUntilRental,
                 rentalSummary = rentalSummary,
-                deposit = rental.depositAmount,
                 basicRentalFee = basicRentalFee,
                 isSendingPhotoRegistered = rental.deliveryStatus.isPhotoRegistered,
                 isSendingTrackingNumRegistered = rental.deliveryStatus.isTrackingNumberRegistered,
@@ -59,22 +57,15 @@ fun RentalDetailResponseDto.toOwnerUiModel(): OwnerRentalStatusUiModel {
 
         RentalStatus.RENTING -> {
             val daysFromReturnDate = daysFromToday(rental.endDate)
-            val rentingStatus = when {
-                daysFromReturnDate >= 0 -> RentingStatus.RENTING_IN_USE
-                daysFromReturnDate == -1 -> RentingStatus.RENTING_RETURN_DAY
-                else -> RentingStatus.RENTING_OVERDUE
-            }
-            val isReturnAvailable = daysFromReturnDate <= -1
+            val rentingStatus = RentingStatus.fromDaysFromReturnDate(daysFromReturnDate)
+
             OwnerRentalStatusUiModel.Renting(
                 status = rentingStatus,
                 isOverdue = rentingStatus == RentingStatus.RENTING_OVERDUE,
-                isReturnAvailable = isReturnAvailable,
                 daysFromReturnDate = daysFromReturnDate,
                 rentalSummary = rentalSummary,
                 deposit = rental.depositAmount,
                 basicRentalFee = basicRentalFee,
-                isReturnPhotoRegistered = rental.returnStatus.isPhotoRegistered,
-                isReturnTrackingNumRegistered = rental.returnStatus.isTrackingNumberRegistered,
                 rentalTrackingNumber = rental.rentalTrackingNumber
             )
         }

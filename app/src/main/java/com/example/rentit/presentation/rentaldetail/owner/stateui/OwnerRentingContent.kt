@@ -3,25 +3,31 @@ package com.example.rentit.presentation.rentaldetail.owner.stateui
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.model.PriceSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
-import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.common.theme.PrimaryBlue500
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
 import kotlin.math.abs
 
 /**
- * 대여 상세(판매자)에서
+ * 대여 상세(대여자)에서
  * 대여중 상태(대여중, 반납 전, 반납 지연)를 나타내는 UI 컨텐츠
  */
 
@@ -30,45 +36,42 @@ import kotlin.math.abs
 fun OwnerRentingContent(
     rentingData: OwnerRentalStatusUiModel.Renting,
 ) {
-    val priceItems = listOf(
+    val priceItem = listOf(
         PriceSummaryUiModel(
-            label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_basic_rent),
+            label = stringResource(R.string.screen_rental_detail_owner_expected_price_label_basic_rent),
             price = rentingData.basicRentalFee
-        ),
-        PriceSummaryUiModel(
-            label = stringResource(R.string.screen_rental_detail_renter_charge_price_label_deposit),
-            price = rentingData.deposit
         )
     )
 
-    if (rentingData.status.noticeBannerStrRes != null) {
-        NoticeBanner(noticeText = AnnotatedString(stringResource(rentingData.status.noticeBannerStrRes)))
-    }
+    val formattedDeposit = formatPrice(rentingData.deposit)
 
     RentalInfoSection(
         title = stringResource(rentingData.status.strRes),
         titleColor = rentingData.status.textColor,
         subTitle = rentingData.status.subLabelStrRes?.let {
-            stringResource( it, abs(rentingData.daysFromReturnDate))
+            stringResource(it, abs(rentingData.daysFromReturnDate))
         },
         rentalInfo = rentingData.rentalSummary,
-    )
-
-    RentalTaskSection(
-        title = stringResource(R.string.screen_rental_detail_renter_return_task_title),
-        guideText = stringResource(R.string.screen_rental_detail_renter_return_task_info),
-        policyText = stringResource(R.string.screen_rental_detail_renter_return_task_policy),
-        photoTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_photo),
-        trackingNumTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_tracking_num),
-        isReturnAvailable = rentingData.isReturnAvailable,
-        isPhotoRegistered = rentingData.isReturnPhotoRegistered,
-        isTrackingNumRegistered = rentingData.isReturnTrackingNumRegistered
-    ) { }
+    ) {
+        if (rentingData.isOverdue) {
+            Text(
+                modifier = Modifier.padding(top = 16.dp),
+                text = buildAnnotatedString {
+                    append(stringResource(R.string.screen_rental_detail_owner_renting_overdue_info_reward_leading_text))
+                    withStyle(style = SpanStyle(color = PrimaryBlue500)) {
+                        append(" ${formattedDeposit}${stringResource(R.string.common_price_unit)}")
+                    }
+                    append(stringResource(R.string.screen_rental_detail_owner_renting_overdue_info_reward_tail_text))
+                },
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
+    }
 
     RentalPaymentSection(
-        title = stringResource(R.string.screen_rental_detail_renter_paid_price_title),
-        priceItems = priceItems,
-        totalLabel = stringResource(R.string.screen_rental_detail_renter_paid_price_label_total)
+        title = stringResource(R.string.screen_rental_detail_owner_expected_price_title),
+        priceItems = priceItem,
+        totalLabel = stringResource(R.string.screen_rental_detail_owner_expected_price_label_total)
     )
 
     RentalTrackingSection(
@@ -81,8 +84,8 @@ fun OwnerRentingContent(
 @Preview(showBackground = true)
 private fun Preview() {
     val examplePendingUiModel = OwnerRentalStatusUiModel.Renting(
-        status = RentingStatus.RENTING_RETURN_DAY,
-        isOverdue = false,
+        status = RentingStatus.RENTING_OVERDUE,
+        isOverdue = true,
         daysFromReturnDate = 3,
         rentalSummary = RentalSummaryUiModel(
             productTitle = "프리미엄 캠핑 텐트",
@@ -94,9 +97,6 @@ private fun Preview() {
         basicRentalFee = 90_000,
         deposit = 10_000 * 3,
         rentalTrackingNumber = null,
-        isReturnAvailable = false,
-        isReturnPhotoRegistered = true,
-        isReturnTrackingNumRegistered = false,
     )
     RentItTheme {
         Column {

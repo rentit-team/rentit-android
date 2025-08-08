@@ -13,7 +13,6 @@ sealed class OwnerRentalStatusUiModel {
         val isAccepted: Boolean,
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
-        val deposit: Int,
     ): OwnerRentalStatusUiModel()
 
     data class Paid(
@@ -21,7 +20,6 @@ sealed class OwnerRentalStatusUiModel {
         val daysUntilRental: Int,
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
-        val deposit: Int,
         val isSendingPhotoRegistered: Boolean,
         val isSendingTrackingNumRegistered: Boolean,
         val rentalTrackingNumber: String?
@@ -30,13 +28,10 @@ sealed class OwnerRentalStatusUiModel {
     data class Renting(
         val status: RentingStatus,
         val isOverdue: Boolean,
-        val isReturnAvailable: Boolean,
         val daysFromReturnDate: Int,
         val rentalSummary: RentalSummaryUiModel,
         val basicRentalFee: Int,
         val deposit: Int,
-        val isReturnPhotoRegistered: Boolean,
-        val isReturnTrackingNumRegistered: Boolean,
         val rentalTrackingNumber: String?
     ): OwnerRentalStatusUiModel()
 

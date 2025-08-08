@@ -99,7 +99,6 @@ private fun Preview() {
             totalPrice = 120_000
         ),
         basicRentalFee = 90_000,
-        deposit = 10_000 * 3,
         rentalTrackingNumber = null,
         isSendingPhotoRegistered = false,
         isSendingTrackingNumRegistered = false,
