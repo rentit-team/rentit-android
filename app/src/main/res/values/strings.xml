@@ -24,11 +24,12 @@
     <string name="common_tag_btn_icon_check_description">선택된 태그</string>
     <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
 
+    <string name="common_dialog_btn_close">닫기</string>
+
     <string name="common_dialog_accept_request_title">요청을 수락할까요?</string>
     <string name="common_dialog_accept_request_label_rental_period">대여 기간</string>
     <string name="common_dialog_accept_request_label_total_price">예상 수익</string>
     <string name="common_dialog_accept_request_btn_accept">수락하기</string>
-    <string name="common_dialog_accept_request_btn_cancel">닫기</string>
 
     <string name="util_formatted_period">%s (%s) ~ %s (%s) · %d일</string>
     <string name="util_error_rental_period_unavailable">기간 정보 없음</string>
@@ -144,8 +145,12 @@
     <string name="screen_rental_detail_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
     <string name="screen_rental_detail_subtitle_day_before_rent">· 대여 %d일전</string>
 
-    <string name="screen_rental_detail_unknown_dialog_title">대여 정보가 존재하지 않아요.</string>
-    <string name="screen_rental_detail_unknown_dialog_confirm_btn">확인</string>
+    <string name="dialog_rental_detail_unknown_title">대여 정보가 존재하지 않아요.</string>
+    <string name="dialog_rental_detail_unknown_confirm_btn">확인</string>
+
+    <string name="dialog_rental_detail_rental_cancel_title">대여를 취소할까요?</string>
+    <string name="dialog_rental_detail_rental_cancel_content">취소하면 이 거래가 없어져요.</string>
+    <string name="dialog_rental_detail_rental_cancel_btn_confirm">네, 취소할께요</string>
 
     <string name="screen_rental_detail_tracking_info_title">운송장 정보</string>
     <string name="screen_rental_detail_rental_tracking_num">대여 송장 번호</string>

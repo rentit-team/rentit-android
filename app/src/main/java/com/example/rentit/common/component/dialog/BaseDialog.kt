@@ -31,6 +31,8 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
 private val titleBottomPadding = 18.dp
+private val contentTopPadding = 8.dp
+private val contentBottomPadding = 16.dp
 private val dialogBoxRadius = 28.dp
 
 @Composable
@@ -76,6 +78,7 @@ fun BaseDialog(
 
                 if(!content.isNullOrEmpty()) {
                     Text(
+                        modifier = Modifier.padding(top  = contentTopPadding, bottom = contentBottomPadding),
                         text = content,
                         style = MaterialTheme.typography.bodyMedium,
                         color = Gray800
