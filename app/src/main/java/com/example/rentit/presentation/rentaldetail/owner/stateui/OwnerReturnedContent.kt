@@ -21,7 +21,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalTra
 import com.example.rentit.common.model.RentalSummaryUiModel
 
 /**
- * 대여 상세(판매자)에서
+ * 대여 상세(대여자)에서
  * 반납 완료 완료 상태를 나타내는 UI 컨텐츠
  */
 
@@ -32,11 +32,11 @@ fun OwnerReturnedContent(
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
-            label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_basic_rent),
+            label = stringResource(R.string.screen_rental_detail_owner_total_profit_price_label_basic_rent),
             price = returnedData.basicRentalFee
         ),
         PriceSummaryUiModel(
-            label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_deposit),
+            label = stringResource(R.string.screen_rental_detail_owner_total_profit_price_label_deposit),
             price = returnedData.deposit
         )
     )
@@ -55,9 +55,9 @@ fun OwnerReturnedContent(
     }
 
     RentalPaymentSection(
-        title = stringResource(R.string.screen_rental_detail_renter_total_paid_price_title),
+        title = stringResource(R.string.screen_rental_detail_owner_total_profit_price_title),
         priceItems = priceItems,
-        totalLabel = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_total)
+        totalLabel = stringResource(R.string.screen_rental_detail_owner_total_profit_price_label_total)
     )
 
     RentalTrackingSection(

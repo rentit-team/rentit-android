@@ -171,6 +171,11 @@
     <string name="screen_rental_detail_owner_expected_price_label_basic_rent">기본 대여료</string>
     <string name="screen_rental_detail_owner_expected_price_label_total">총합</string>
 
+    <string name="screen_rental_detail_owner_total_profit_price_title">정산 상세 내역</string>
+    <string name="screen_rental_detail_owner_total_profit_price_label_basic_rent">기본 대여료</string>
+    <string name="screen_rental_detail_owner_total_profit_price_label_deposit">지연 보상금</string>
+    <string name="screen_rental_detail_owner_total_profit_price_label_total">총 정산 금액</string>
+
     <string name="screen_rental_detail_renter_request_notice_pay">결제</string>
     <string name="screen_rental_detail_renter_request_notice_wait">를 기다리고 있어요!</string>
     <string name="screen_rental_detail_renter_request_btn_pay">결제하고 예약 확정하기</string>
