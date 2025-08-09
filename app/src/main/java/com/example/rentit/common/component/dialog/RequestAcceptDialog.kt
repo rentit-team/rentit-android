@@ -20,15 +20,15 @@ import com.example.rentit.common.util.formatPrice
 fun RequestAcceptDialog(
     rentalPeriodText: String,
     expectedRevenue: Int,
-    onDismissRequest: () -> Unit,
-    onAcceptRequest: () -> Unit,
+    onClose: () -> Unit,
+    onAccept: () -> Unit,
 ) {
     BaseDialog(
         title = stringResource(R.string.common_dialog_accept_request_title),
         confirmBtnText = stringResource(R.string.common_dialog_accept_request_btn_accept),
         closeBtnText = stringResource(R.string.common_dialog_btn_close),
-        onCloseRequest = onDismissRequest,
-        onConfirmRequest = onAcceptRequest
+        onCloseRequest = onClose,
+        onConfirmRequest = onAccept
     ) {
         Text(
             modifier = Modifier.padding(bottom = 12.dp),
@@ -65,7 +65,7 @@ private fun Preview() {
         RequestAcceptDialog(
             "25.08.17 (목) ~ 25.08.20 (일) · 4일",
             40000,
-            onDismissRequest = {},
-            onAcceptRequest = {})
+            onClose = {},
+            onAccept = {})
     }
 }

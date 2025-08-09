@@ -177,8 +177,8 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
         RequestAcceptDialog(
             rentalPeriodText = "25.08.17 (목) ~ 25.08.20 (일) · 4일",      // 백엔드 데이터 누락,
             expectedRevenue = productDetail?.product?.price ?: 0,
-            onDismissRequest = { showAcceptDialog = false },
-            onAcceptRequest = {
+            onClose = { showAcceptDialog = false },
+            onAccept = {
                 if(productId != null && chatRoomId != null && reservationId != null){
                     chatRoomViewModel.updateResvStatus(
                         chatRoomId,
