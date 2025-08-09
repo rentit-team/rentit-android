@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.chat.chatroom.requestaccept.confirm
+package com.example.rentit.common.component.layout
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -17,8 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -27,7 +25,7 @@ import com.example.rentit.common.theme.RentItTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestAcceptConfirmScreen(navHostController: NavHostController) {
+fun RequestAcceptConfirmScreen(onConfirm: () -> Unit) {
 
     Column(
         modifier = Modifier
@@ -54,7 +52,7 @@ fun RequestAcceptConfirmScreen(navHostController: NavHostController) {
             containerColor = PrimaryBlue500,
             contentColor = Color.White,
         ) {
-            navHostController.popBackStack()
+            onConfirm()
         }
     }
 }
@@ -64,6 +62,6 @@ fun RequestAcceptConfirmScreen(navHostController: NavHostController) {
 @Composable
 private fun Preview() {
     RentItTheme {
-        RequestAcceptConfirmScreen(rememberNavController())
+        RequestAcceptConfirmScreen {}
     }
 }
