@@ -81,7 +81,7 @@ fun DeliveryCompanyDropDown(
     onSelect: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val borderColor by remember(expanded) { mutableStateOf(if (expanded) PrimaryBlue500 else Gray200) }
+    val borderColor = if (expanded) PrimaryBlue500 else Gray200
     val selectedCompanyText = selectedCompany
         ?: stringResource(R.string.dialog_rental_detail_tracking_regs_dropdown_company_default_text)
 
