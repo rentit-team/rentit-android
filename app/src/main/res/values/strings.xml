@@ -152,6 +152,13 @@
     <string name="dialog_rental_detail_rental_cancel_content">취소하면 이 거래가 없어져요.</string>
     <string name="dialog_rental_detail_rental_cancel_btn_confirm">네, 취소할께요</string>
 
+    <string name="dialog_rental_detail_tracking_regs_title">운송장 등록</string>
+    <string name="dialog_rental_detail_tracking_regs_label_delivery_company">택배사를 선택해주세요.</string>
+    <string name="dialog_rental_detail_tracking_regs_label_tracking_num">송장 번호를 입력해주세요.</string>
+    <string name="dialog_rental_detail_tracking_regs_placeholder_tracking_num">12345678</string>
+    <string name="dialog_rental_detail_tracking_regs_btn_confirm">등록</string>
+    <string name="dialog_rental_detail_tracking_regs_dropdown_company_default_text">택배사 선택</string>
+
     <string name="screen_rental_detail_tracking_info_title">운송장 정보</string>
     <string name="screen_rental_detail_rental_tracking_num">대여 송장 번호</string>
     <string name="screen_rental_detail_returned_tracking_num">반납 송장 번호</string>
