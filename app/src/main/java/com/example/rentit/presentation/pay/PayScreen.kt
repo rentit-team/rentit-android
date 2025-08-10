@@ -66,12 +66,12 @@ fun PayScreen(
         },
         bottomBar = {
             CommonButton(
-                stringResource(R.string.screen_pay_btn_text),
-                PrimaryBlue500,
-                Color.White,
-                Modifier
+                modifier = Modifier
                     .screenHorizontalPadding()
                     .padding(bottom = 30.dp),
+                text = stringResource(R.string.screen_pay_btn_text),
+                containerColor = PrimaryBlue500,
+                contentColor = Color.White
             ) { onPayClick() }
         }
     ) {

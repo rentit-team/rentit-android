@@ -92,9 +92,9 @@ fun JoinScreen(navHostController: NavHostController, name: String?, email: Strin
             }
             Spacer(modifier = Modifier.weight(1f))
             CommonButton(
-                stringResource(R.string.screen_join_btn_text),
-                PrimaryBlue500,
-                Color.White
+                text = stringResource(R.string.screen_join_btn_text),
+                containerColor = PrimaryBlue500,
+                contentColor = Color.White
             ) {
                 if (nickname.value.isEmpty()) {
                     isButtonClicked.value = true
