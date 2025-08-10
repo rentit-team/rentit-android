@@ -12,8 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.theme.RentItTheme
@@ -32,9 +30,9 @@ import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterReturne
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRenterScreen(navHostController: NavHostController, uiModel: RenterRentalStatusUiModel, scrollState: ScrollState) {
+fun RentalDetailRenterScreen(uiModel: RenterRentalStatusUiModel, scrollState: ScrollState, onBackClick: () -> Unit) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), navHostController = navHostController) }
+        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title)) { onBackClick() } }
     ) {
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
@@ -47,7 +45,7 @@ fun RentalDetailRenterScreen(navHostController: NavHostController, uiModel: Rent
                 is RenterRentalStatusUiModel.Returned ->
                     RenterReturnedContent(uiModel)
                 is RenterRentalStatusUiModel.Unknown ->
-                    UnknownStatusDialog { navHostController.popBackStack() }
+                    UnknownStatusDialog { onBackClick() }
             }
         }
     }
@@ -88,9 +86,8 @@ private fun Preview() {
 
     RentItTheme {
         RentalDetailRenterScreen(
-            navHostController = rememberNavController(),
             sample2.toRenterUiModel(),
             rememberScrollState()
-        )
+        ) {}
     }
 }

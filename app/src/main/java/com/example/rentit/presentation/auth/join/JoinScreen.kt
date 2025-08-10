@@ -66,8 +66,7 @@ fun JoinScreen(navHostController: NavHostController, name: String?, email: Strin
     Column {
         CommonTopAppBar(
             title = stringResource(id = R.string.screen_join_title),
-            navHostController = navHostController
-        )
+        ) { navHostController.popBackStack() }
         Column(
             modifier = Modifier
                 .fillMaxSize()

@@ -66,7 +66,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
     }
 
     Scaffold(
-        topBar = { CommonTopAppBar(title = "요청 내역", navHostController = navHostController) }
+        topBar = { CommonTopAppBar(title = "요청 내역") { navHostController.popBackStack() } }
     ) {
         Column(
             modifier = Modifier.padding(it)

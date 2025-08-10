@@ -111,7 +111,7 @@ fun ProductDetailScreen(navHostController: NavHostController, productId: Int?) {
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { CommonTopAppBar(navHostController = navHostController) },
+        topBar = { CommonTopAppBar { navHostController.popBackStack() } },
         bottomBar = { PostBottomBar(navHostController, productId, productDetail?.price ?: 0, isMyProduct, requestHistory.size) },
         floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
     ) { innerPadding ->
