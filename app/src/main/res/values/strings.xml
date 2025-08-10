@@ -222,6 +222,7 @@
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_leading_text">지연 보상금</string>
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_tail_text">이 지급될 예정이에요.</string>
 
+    <string name="toast_camera_launcher_fail">"사진 촬영에 문제가 발생했어요. 잠시 후 다시 시도해 주세요."</string>
     <!-- 결제 화면 -->
     <string name="screen_pay_title">결제하기</string>
 
