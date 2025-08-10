@@ -63,9 +63,8 @@ fun PayScreen(
     Scaffold(
         topBar = {
             CommonTopAppBar(
-                title = stringResource(R.string.screen_pay_title),
-                navHostController = navHostController
-            )
+                title = stringResource(R.string.screen_pay_title)
+            ) { navHostController.popBackStack() }
         },
         bottomBar = {
             CommonButton(

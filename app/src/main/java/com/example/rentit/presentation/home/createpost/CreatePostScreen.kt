@@ -100,7 +100,7 @@ fun CreatePostScreen(navHostController: NavHostController) {
     val priceLimit = 5000000
 
     Scaffold(
-        topBar = { CommonTopAppBar(navHostController = navHostController) }
+        topBar = { CommonTopAppBar { navHostController.popBackStack() } }
     ) {
         Column(
             Modifier

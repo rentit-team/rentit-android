@@ -19,5 +19,5 @@ fun RentalDetailRoute(navHostController: NavHostController) {
 
     val scrollState = rememberScrollState()
 
-    RentalDetailRenterScreen(navHostController, uiModel, scrollState)
+    RentalDetailRenterScreen(uiModel, scrollState) { navHostController.popBackStack() }
 }

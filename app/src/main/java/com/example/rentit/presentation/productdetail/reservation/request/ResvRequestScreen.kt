@@ -80,9 +80,8 @@ fun ResvRequestScreen(navHostController: NavHostController, productId: Int?) {
     Scaffold(
         topBar = {
             CommonTopAppBar(
-                title = stringResource(id = R.string.screen_resv_request_app_bar_title),
-                navHostController = navHostController
-            )
+                title = stringResource(id = R.string.screen_resv_request_app_bar_title)
+            ) { navHostController.popBackStack() }
         }
     ) {
         Column(
