@@ -20,8 +20,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTopAppBar
@@ -40,11 +38,11 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalPay
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PayScreen(
-    navHostController: NavHostController,
     payModel: PayUiModel,
     dialogModel: PayResultDialogUiModel,
     isDialogVisible: Boolean,
     scrollState: ScrollState,
+    onBackClick: () -> Unit,
     onPayClick: () -> Unit,
     onDialogClose: () -> Unit,
     onDialogConfirm: () -> Unit,
@@ -64,7 +62,7 @@ fun PayScreen(
         topBar = {
             CommonTopAppBar(
                 title = stringResource(R.string.screen_pay_title)
-            ) { navHostController.popBackStack() }
+            ) { onBackClick() }
         },
         bottomBar = {
             CommonButton(
@@ -157,11 +155,11 @@ private fun Preview() {
 
     RentItTheme {
         PayScreen(
-            navHostController = rememberNavController(),
             payModel = sample,
             dialogModel = sampleDialog,
             isDialogVisible = false,
             scrollState = rememberScrollState(),
+            onBackClick = { },
             onPayClick = { },
             onDialogClose = { },
             onDialogConfirm = { }

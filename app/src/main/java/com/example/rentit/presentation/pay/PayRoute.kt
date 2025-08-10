@@ -23,11 +23,11 @@ fun PayRoute(navHostController: NavHostController, payInfo: PayUiModel) {
     val isDialogVisible = remember { mutableStateOf(false) }
 
     PayScreen(
-        navHostController = navHostController,
         payModel = payInfo,
         dialogModel = sampleDialogModel,
         isDialogVisible = isDialogVisible.value,
         scrollState = scrollState,
+        onBackClick = { navHostController.popBackStack() },
         onPayClick = { isDialogVisible.value = true },
         onDialogClose = { isDialogVisible.value = false },
         onDialogConfirm = { isDialogVisible.value = false }
