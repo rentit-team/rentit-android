@@ -222,6 +222,18 @@
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_leading_text">지연 보상금</string>
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_tail_text">이 지급될 예정이에요.</string>
 
+    <!-- 대여 전 사진 등록 -->
+    <string name="screen_photo_before_rent_title">대여 전 사진 등록</string>
+    <string name="screen_photo_before_rent_guide">제품 상태를 정확히 증명하기 위해,\n방향에서 사진을 촬영해주세요. (최소 %d장, 최대 %d장)</string>
+    <string name="screen_photo_before_rent_btn_registration">등록하기</string>
+    <string name="toast_take_photo_fail">사진 촬영 실패</string>
+
+    <string name="screen_photo_before_rent_take_photo_btn_content_description">사진 촬영하기</string>
+    <string name="screen_photo_before_rent_take_photo_text_max_photo_taken">6장의 사진을 모두 촬영했어요.</string>
+
+    <!-- 카메라 Launcher -->
+    <string name="toast_camera_launcher_fail">"사진 촬영에 문제가 발생했어요. 잠시 후 다시 시도해 주세요."</string>
+
     <!-- 결제 화면 -->
     <string name="screen_pay_title">결제하기</string>
 
@@ -260,6 +272,8 @@
     <string name="content_description_for_img_profile_placeholder">프로필 임시 이미지</string>
     <string name="content_description_for_img_empty_box">빈 박스 이미지</string>
     <string name="content_description_for_ic_check">확인 아이콘</string>
+    <string name="content_description_for_ic_camera">카메라 아이콘</string>
+    <string name="content_description_for_ic_x_delete">삭제 아이콘</string>
 
     <string name="error_common_server">일시적인 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</string>
     <string name="error_common_cant_find_product">상품 정보를 찾을 수 없어요.</string>
