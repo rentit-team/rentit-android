@@ -39,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,12 +49,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
@@ -213,18 +211,10 @@ private fun ProductInfo(productInfo: ProductDto) {
             .padding(bottom = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            modifier = Modifier
-                .size(60.dp)
-                .clip(RoundedCornerShape(15.dp)),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(productInfo.thumbnailImgUrl)
-                .error(R.drawable.img_thumbnail_placeholder)
-                .placeholder(R.drawable.img_thumbnail_placeholder)
-                .fallback(R.drawable.img_thumbnail_placeholder)
-                .build(),
-            contentDescription = stringResource(id = R.string.common_list_item_thumbnail_img_placeholder_description),
-            contentScale = ContentScale.Crop
+        LoadableUrlImage(
+            modifier = Modifier.size(60.dp).clip(RoundedCornerShape(15.dp)),
+            imgUrl = productInfo.thumbnailImgUrl,
+            defaultImageResId = R.drawable.img_thumbnail_placeholder,
         )
         Column(
             modifier = Modifier

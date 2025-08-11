@@ -13,13 +13,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.example.rentit.R
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
@@ -45,19 +42,12 @@ fun RentalSummary(
     totalPrice: Int,
 ) {
     Row(modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-        AsyncImage(
-            modifier = Modifier
-                .size(imageSize)
-                .clip(RoundedCornerShape(20.dp)),
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(thumbnailImgUrl)
-                .error(R.drawable.img_thumbnail_placeholder)
-                .placeholder(R.drawable.img_thumbnail_placeholder)
-                .fallback(R.drawable.img_thumbnail_placeholder)
-                .build(),
-            contentDescription = stringResource(id = R.string.common_list_item_thumbnail_img_placeholder_description),
-            contentScale = ContentScale.Crop
+        LoadableUrlImage(
+            modifier = Modifier.size(imageSize).clip(RoundedCornerShape(20.dp)),
+            imgUrl = thumbnailImgUrl,
+            defaultImageResId = R.drawable.img_thumbnail_placeholder,
         )
+
         Column(Modifier.padding(start = contentStartPadding)) {
             Text(text = productTitle, style = MaterialTheme.typography.labelMedium)
             Text(

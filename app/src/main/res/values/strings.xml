@@ -21,6 +21,7 @@
     <string name="common_price_unit">원</string>
     <string name="common_total">총</string>
     <string name="common_list_item_thumbnail_img_placeholder_description">임시 이미지</string>
+    <string name="common_loadable_uri_img_content_description">사진</string>
     <string name="common_tag_btn_icon_check_description">선택된 태그</string>
     <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
 
