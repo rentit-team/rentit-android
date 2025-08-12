@@ -20,7 +20,7 @@ fun PhotoBeforeReturnRoute() {
     )
 
     var currentPageIndex by remember { mutableIntStateOf(0) }
-    var takenPhotoUris by remember { mutableStateOf(Array(imgBeforeRentList.size) { Uri.EMPTY }) }
+    var takenPhotoUris by remember { mutableStateOf(List(imgBeforeRentList.size) { Uri.EMPTY }) }
     val takenPhotoCnt by remember(takenPhotoUris) { mutableIntStateOf(takenPhotoUris.count { it != Uri.EMPTY }) }
 
     val isLastPage = currentPageIndex == imgBeforeRentList.size - 1
@@ -28,7 +28,7 @@ fun PhotoBeforeReturnRoute() {
     val isBackAvailable = currentPageIndex > 0
 
     fun updatePhotoAtIndex(index: Int, uri: Uri) {
-        takenPhotoUris = takenPhotoUris.copyOf().apply { this[index] = uri }
+        takenPhotoUris = takenPhotoUris.toMutableList().apply { set(index, uri) }
     }
 
     val launchCamera = rememberTakePhotoLauncher { uri -> updatePhotoAtIndex(currentPageIndex, uri) }
