@@ -63,8 +63,7 @@ fun PhotoBeforeRentScreen(
 
             TakePhotoButton(
                 isMaxPhotoTaken = isMaxPhotoTaken,
-                onTakePhotoSuccess = onTakePhotoSuccess,
-                onTakePhotoFail = { Toast.makeText(context, context.getString(R.string.toast_take_photo_fail), Toast.LENGTH_SHORT).show() }
+                onTakePhotoSuccess = onTakePhotoSuccess
             )
 
             TakenPhotos(takenPhotoUris, onRemovePhoto)

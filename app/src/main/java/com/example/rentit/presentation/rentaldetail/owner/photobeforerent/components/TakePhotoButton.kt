@@ -28,8 +28,8 @@ import com.example.rentit.presentation.rentaldetail.components.rememberTakePhoto
 private const val boxHeightFraction = 0.4f
 
 @Composable
-fun TakePhotoButton(isMaxPhotoTaken: Boolean = false, onTakePhotoSuccess: (Uri) -> Unit, onTakePhotoFail: () -> Unit) {
-    val launchCameraWithNewPhotoUri = rememberTakePhotoLauncher(onTakePhotoSuccess, onTakePhotoFail)
+fun TakePhotoButton(isMaxPhotoTaken: Boolean = false, onTakePhotoSuccess: (Uri) -> Unit) {
+    val launchCameraWithNewPhotoUri = rememberTakePhotoLauncher(onTakePhotoSuccess)
     val btnContentDesc = stringResource(R.string.screen_photo_before_rent_take_photo_btn_content_description)
 
     Box(
@@ -63,7 +63,6 @@ fun TakePhotoButtonPreview() {
     RentItTheme {
         TakePhotoButton(
             onTakePhotoSuccess = {},
-            onTakePhotoFail = {}
         )
     }
 }

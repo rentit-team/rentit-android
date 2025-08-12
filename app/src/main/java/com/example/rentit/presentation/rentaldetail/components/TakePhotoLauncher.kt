@@ -18,11 +18,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-// 사진 촬영 후 결과를 받기 위한 Launcher
+/**
+ * 사진 촬영 후 결과를 받기 위한 Launcher
+ */
 @Composable
 fun rememberTakePhotoLauncher(
     onTakePhotoSuccess: (Uri) -> Unit,
-    onTakePhotoFail: () -> Unit
 ): () -> Unit {
     val context = LocalContext.current
     var photoUri by remember { mutableStateOf<Uri?>(null) }
@@ -32,8 +33,6 @@ fun rememberTakePhotoLauncher(
         val uri = photoUri
         if (success && uri != null) {
             onTakePhotoSuccess(uri)
-        } else {
-            onTakePhotoFail()
         }
     }
 

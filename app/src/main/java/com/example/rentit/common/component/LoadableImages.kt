@@ -14,7 +14,7 @@ import com.example.rentit.R
 
 @Composable
 fun LoadableUrlImage(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     imgUrl: String?,
     @DrawableRes defaultImageResId: Int,
     @StringRes defaultDescResId: Int = R.string.common_list_item_thumbnail_img_placeholder_description,
@@ -34,7 +34,7 @@ fun LoadableUrlImage(
 
 @Composable
 fun LoadableUriImage(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     imgUri: Uri?,
     @StringRes defaultDescResId: Int = R.string.common_loadable_uri_img_content_description,
 ) {
