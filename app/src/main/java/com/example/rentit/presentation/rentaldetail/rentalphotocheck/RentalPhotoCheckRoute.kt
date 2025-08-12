@@ -27,7 +27,7 @@ fun RentalPhotoCheckRoute() {
     var previewPhotoUrl by remember(currentPageIndex) { mutableStateOf(photoBeforeRentList.getOrNull(currentPageIndex)) }
 
     val totalPhotoCnt = minOf(photoBeforeRentList.size, photoAfterRentList.size)
-    val isNextAvailable = currentPageIndex < totalPhotoCnt
+    val isNextAvailable = currentPageIndex < totalPhotoCnt - 1
     val isBackAvailable = currentPageIndex > 0
 
 
