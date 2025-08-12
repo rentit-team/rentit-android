@@ -20,7 +20,7 @@
     <string name="common_price_unit_per_day">원/일</string>
     <string name="common_price_unit">원</string>
     <string name="common_total">총</string>
-    <string name="common_list_item_thumbnail_img_placeholder_description">임시 이미지</string>
+    <string name="common_img_placeholder_description">임시 이미지</string>
     <string name="common_loadable_uri_img_content_description">사진</string>
     <string name="common_tag_btn_icon_check_description">선택된 태그</string>
     <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
@@ -240,6 +240,16 @@
     <string name="screen_photo_before_return_btn_complete">완료</string>
     <string name="screen_photo_before_return_take_photo_btn_content_description">사진 촬영하기</string>
     <string name="screen_photo_before_return_taken_photo_content_description">촬영된 이미지</string>
+
+    <!-- 대여 전 후 사진 비교 -->
+    <string name="screen_rental_photo_check_title">대여 전 후 사진 (%d/%d)</string>
+    <string name="screen_rental_photo_check_info">대여 전/후 사진을 확인하세요.</string>
+    <string name="screen_rental_photo_check_photo_preview_content_description">사진 크게 보기</string>
+    <string name="screen_rental_photo_check_rental_before_label">대여 전</string>
+    <string name="screen_rental_photo_check_rental_after_label">대여 후</string>
+    <string name="screen_rental_photo_check_photo_box_content_description">%s 사진</string>
+    <string name="screen_rental_photo_check_btn_back">이전</string>
+    <string name="screen_rental_photo_check_btn_next">다음 (%d/%d)</string>
 
     <!-- 카메라 Launcher -->
     <string name="toast_camera_launcher_fail">"사진 촬영에 문제가 발생했어요. 잠시 후 다시 시도해 주세요."</string>
