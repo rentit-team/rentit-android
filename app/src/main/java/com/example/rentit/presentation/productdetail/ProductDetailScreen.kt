@@ -58,6 +58,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.theme.Gray100
@@ -161,15 +162,10 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
             state = pagerState,
             modifier = Modifier.fillMaxWidth()
         ) { page ->
-            AsyncImage(
-                modifier = Modifier
-                    .height(290.dp)
-                    .clickable { onClick },
-                placeholder = painterResource(id = R.drawable.img_placeholder),
-                error = painterResource(id = R.drawable.img_placeholder),
-                model = imgUrlList[page],
-                contentDescription = stringResource(id = R.string.screen_product_detail_img_description),
-                contentScale = ContentScale.Crop
+            LoadableUrlImage(
+                modifier = Modifier.height(290.dp),
+                imgUrl = imgUrlList[page],
+                defaultImageResId = R.drawable.img_placeholder,
             )
         }
         Row(

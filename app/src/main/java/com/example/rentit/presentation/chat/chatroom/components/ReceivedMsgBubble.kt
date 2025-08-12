@@ -18,15 +18,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.example.rentit.R
+import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
@@ -40,16 +37,13 @@ fun ReceivedMsgBubble(msg: String, sentAt: String, senderNickname: String) {
     val msgTime = formatDateTime(sentAt)
 
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
-        AsyncImage(
-            modifier = Modifier
-                .size(36.dp)
-                .clip(CircleShape),
-            model = "url",
-            placeholder = painterResource(id = R.drawable.img_profile_placeholder),
-            error = painterResource(id = R.drawable.img_profile_placeholder),
-            contentDescription = stringResource(id = R.string.content_description_for_img_profile_placeholder),
-            contentScale = ContentScale.Crop
+        LoadableUrlImage(
+            modifier = Modifier.size(36.dp).clip(CircleShape),
+            imgUrl = "url",
+            defaultImageResId = R.drawable.img_profile_placeholder,
+            defaultDescResId = R.string.content_description_for_img_profile_placeholder
         )
+
         Column(modifier = Modifier.padding(start = 8.dp)) {
             Text(
                 modifier = Modifier.padding(bottom = 6.dp),

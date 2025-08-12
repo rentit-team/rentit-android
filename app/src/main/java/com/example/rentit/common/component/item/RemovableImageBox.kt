@@ -17,18 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.RentItTheme
 import androidx.core.net.toUri
+import com.example.rentit.common.component.LoadableUriImage
 
 @Composable
 fun RemovableImageBox(width: Dp, aspectRatio: Float, imageUri: Uri, onImageRemoveClick: (Uri) -> Unit) {
@@ -37,11 +36,10 @@ fun RemovableImageBox(width: Dp, aspectRatio: Float, imageUri: Uri, onImageRemov
         .aspectRatio(aspectRatio)
         .clip(RoundedCornerShape(20.dp))
         .basicRoundedGrayBorder()) {
-        AsyncImage(
+        LoadableUriImage(
             modifier = Modifier.fillMaxWidth(),
-            model = imageUri,
-            contentDescription = stringResource(id = R.string.screen_product_create_selected_image_description),
-            contentScale = ContentScale.Crop
+            imgUri = imageUri,
+            defaultDescResId = R.string.screen_product_create_selected_image_description
         )
         IconButton(
             modifier = Modifier

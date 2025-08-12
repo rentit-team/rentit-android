@@ -30,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -43,9 +42,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import coil.compose.AsyncImage
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
+import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
@@ -138,16 +137,13 @@ fun ProfileSection() {
     Row(
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AsyncImage(
-            modifier = Modifier
-                .size(54.dp)
-                .clip(CircleShape),
-            model = "url",
-            placeholder = painterResource(id = R.drawable.img_profile_placeholder),
-            error = painterResource(id = R.drawable.img_profile_placeholder),
-            contentDescription = stringResource(id = R.string.content_description_for_img_profile_placeholder),
-            contentScale = ContentScale.Crop
+        LoadableUrlImage(
+            modifier = Modifier.size(54.dp).clip(CircleShape),
+            imgUrl = "url",
+            defaultImageResId = R.drawable.img_profile_placeholder,
+            defaultDescResId = R.string.content_description_for_img_profile_placeholder
         )
+
         Text(
             modifier = Modifier
                 .weight(1F)
