@@ -17,7 +17,7 @@ fun LoadableUrlImage(
     modifier: Modifier = Modifier,
     imgUrl: String?,
     @DrawableRes defaultImageResId: Int,
-    @StringRes defaultDescResId: Int = R.string.common_list_item_thumbnail_img_placeholder_description,
+    @StringRes defaultDescResId: Int = R.string.common_img_placeholder_description,
 ) {
     AsyncImage(
         modifier = modifier,
