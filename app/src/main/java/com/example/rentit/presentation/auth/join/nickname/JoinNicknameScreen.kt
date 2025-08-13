@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.auth.join
+package com.example.rentit.presentation.auth.join.nickname
 
 import android.util.Log
 import android.widget.Toast
@@ -42,9 +42,9 @@ import com.example.rentit.navigation.auth.navigateToLogin
 private const val TAG = "Join"
 
 @Composable
-fun JoinScreen(navHostController: NavHostController, name: String?, email: String?) {
+fun JoinNicknameScreen(navHostController: NavHostController, name: String?, email: String?) {
 
-    val joinViewModel: JoinViewModel = hiltViewModel()
+    val joinNicknameViewModel: JoinNicknameViewModel = hiltViewModel()
     val nickname = remember { mutableStateOf("") }
     val isButtonClicked = remember { mutableStateOf(false) }
     val context = LocalContext.current
@@ -60,7 +60,7 @@ fun JoinScreen(navHostController: NavHostController, name: String?, email: Strin
         }
     }
 
-    SignUpResultHandler(joinViewModel, navHostController)
+    SignUpResultHandler(joinNicknameViewModel, navHostController)
 
     Column {
         CommonTopAppBar(
@@ -100,7 +100,7 @@ fun JoinScreen(navHostController: NavHostController, name: String?, email: Strin
                 } else if(email == null){
                     navHostController.popBackStack()
                 } else {
-                    joinViewModel.onSignUp(name ?: "", email, nickname.value)
+                    joinNicknameViewModel.onSignUp(name ?: "", email, nickname.value)
                 }
             }
         }
@@ -124,9 +124,9 @@ fun HighlightedHeadline() {
 }
 
 @Composable
-fun SignUpResultHandler(joinViewModel: JoinViewModel, navHostController: NavHostController) {
+fun SignUpResultHandler(joinNicknameViewModel: JoinNicknameViewModel, navHostController: NavHostController) {
     val context = LocalContext.current
-    val signUpResult = joinViewModel.signUpResult.collectAsStateWithLifecycle()
+    val signUpResult = joinNicknameViewModel.signUpResult.collectAsStateWithLifecycle()
 
     LaunchedEffect(signUpResult) {
         signUpResult.value?.onSuccess {
@@ -146,6 +146,6 @@ fun SignUpResultHandler(joinViewModel: JoinViewModel, navHostController: NavHost
 @Composable
 fun JoinPreview() {
     RentItTheme {
-        JoinScreen(rememberNavController(), "", "")
+        JoinNicknameScreen(rememberNavController(), "", "")
     }
 }

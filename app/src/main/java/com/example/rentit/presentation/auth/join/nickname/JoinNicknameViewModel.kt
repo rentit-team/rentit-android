@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.auth.join
+package com.example.rentit.presentation.auth.join.nickname
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class JoinViewModel @Inject constructor(
+class JoinNicknameViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
 
