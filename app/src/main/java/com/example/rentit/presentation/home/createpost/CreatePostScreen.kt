@@ -58,6 +58,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
+import com.example.rentit.common.PRICE_LIMIT
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
@@ -69,13 +70,13 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
 import com.example.rentit.navigation.bottomtab.navigateToHome
 import com.example.rentit.presentation.home.createpost.categorytag.CategoryTagDrawer
 import com.example.rentit.presentation.home.createpost.components.RemovableTagButton
-import java.text.NumberFormat
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -85,14 +86,12 @@ fun CreatePostScreen(navHostController: NavHostController) {
     var showTagDrawer by remember { mutableStateOf(false) }
     var periodSliderPosition by remember { mutableStateOf(3F..15F) }
     var price by remember { mutableIntStateOf(0) }
-    var priceInput by remember { mutableStateOf(TextFieldValue()) }
+    var priceInput by remember { mutableStateOf(TextFieldValue("")) }
 
     val createPostViewModel: CreatePostViewModel = hiltViewModel()
     val categoryList by createPostViewModel.categoryList.collectAsStateWithLifecycle()
     val selectedCategoryList by createPostViewModel.selectedCategoryList.collectAsStateWithLifecycle()
     val selectedImgUriList by createPostViewModel.selectedImgUriList.collectAsStateWithLifecycle()
-
-    val priceLimit = 5000000
 
     Scaffold(
         topBar = { CommonTopAppBar { navHostController.popBackStack() } }
@@ -113,13 +112,13 @@ fun CreatePostScreen(navHostController: NavHostController) {
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
                 CommonTextField(
-                    value = TextFieldValue(titleText),
+                    value = titleText,
                     onValueChange = { value -> titleText = value },
                     placeholder = stringResource(id = R.string.screen_product_create_title_placeholder))
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_content_label)){
                 CommonTextField(
-                    value = TextFieldValue(contentText),
+                    value = contentText,
                     onValueChange = { value -> contentText = value },
                     placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
                     minLines = 4,
@@ -141,20 +140,14 @@ fun CreatePostScreen(navHostController: NavHostController) {
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_price_label)){
                 PriceInputSection(priceInput) { value ->
-                    val formatter = NumberFormat.getNumberInstance()
-                    if (value.isNotEmpty()) {
-                        price = formatter.parse(value)?.toInt() ?: 0
-                        if (price > priceLimit) {
-                            price = priceLimit
-                        }
-                        val formattedPrice = formatter.format(price)
-                        priceInput = TextFieldValue(
-                            text = formattedPrice,
-                            selection = TextRange(formattedPrice.length))
-                    } else {
-                        price = 0
-                        priceInput = TextFieldValue("")
-                    }
+                    val digitsOnly = value.text.filter { v -> v.isDigit() }
+                    price = digitsOnly.toIntOrNull()?.coerceAtMost(PRICE_LIMIT) ?: 0
+
+                    val formattedPrice = formatPrice(price)
+                    priceInput = priceInput.copy(
+                        text = formattedPrice,
+                        selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
+                    )
                 }
             }
             CommonButton(
@@ -214,12 +207,12 @@ fun ImageSelectSection(
             .aspectRatio(imageBoxAspectRatio)
             .basicRoundedGrayBorder()
             .clickable {
-            pickMultipleImage.launch(
-                PickVisualMediaRequest(
-                    PickVisualMedia.ImageOnly
+                pickMultipleImage.launch(
+                    PickVisualMediaRequest(
+                        PickVisualMedia.ImageOnly
+                    )
                 )
-            )
-        }) {
+            }) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -321,7 +314,7 @@ fun RentalPeriodSlider(sliderPosition: ClosedFloatingPointRange<Float>, onValueC
     }
 }
 @Composable
-fun PriceInputSection(priceInput: TextFieldValue, onValueChange: (String) -> Unit) {
+fun PriceInputSection(priceInput: TextFieldValue, onValueChange: (TextFieldValue) -> Unit) {
     Row(verticalAlignment = Alignment.CenterVertically) {
         CommonTextField(
             value = priceInput,

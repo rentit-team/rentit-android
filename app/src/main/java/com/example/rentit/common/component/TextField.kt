@@ -1,6 +1,7 @@
 package com.example.rentit.common.component
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -28,9 +29,19 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
+
+private object CommonTextFieldDefaults {
+    val BorderRadius = 20.dp
+    val InnerPaddingValue = PaddingValues(20.dp, 12.dp)
+    val BorderColorFocused = PrimaryBlue500
+    val BorderColorDefault = Gray200
+    val PlaceHolderTextColor = Gray400
+}
+
 @Composable
 fun CommonTextField(
-    value: TextFieldValue,
+    modifier: Modifier = Modifier,
+    value: String,
     onValueChange: (String) -> Unit,
     placeholder: String = "",
     minLines: Int = 1,
@@ -40,19 +51,19 @@ fun CommonTextField(
     imeAction: ImeAction = ImeAction.Done,
     textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
     placeholderAlignment: Alignment = Alignment.CenterStart,
-    modifier: Modifier = Modifier.fillMaxWidth(),
 ) {
-    var borderColor by remember { mutableStateOf(Gray200) }
+    var borderColor by remember { mutableStateOf(CommonTextFieldDefaults.BorderColorDefault) }
 
     BasicTextField(
-        value = value.text,
+        value = value,
         onValueChange = onValueChange,
         modifier = modifier
-            .clip(RoundedCornerShape(20.dp))  // 20dp 반경을 가진 둥근 모서리
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(CommonTextFieldDefaults.BorderRadius))
             .onFocusChanged {
-                borderColor = if(it.isFocused) PrimaryBlue500 else Gray200
+                borderColor = if (it.isFocused) CommonTextFieldDefaults.BorderColorFocused else CommonTextFieldDefaults.BorderColorDefault
             },
-        textStyle = textStyle,  // 텍스트 스타일
+        textStyle = textStyle,
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType,
             imeAction = imeAction  // 키보드 오른쪽 하단 버튼 설정
@@ -65,14 +76,69 @@ fun CommonTextField(
             Box(
                 modifier = Modifier
                     .basicRoundedGrayBorder(color = borderColor)
-                    .padding(20.dp, 12.dp),
+                    .padding(CommonTextFieldDefaults.InnerPaddingValue),
+                contentAlignment = placeholderAlignment
+            ) {
+                if (value.isEmpty()) {
+                    Text(
+                        text = placeholder,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = CommonTextFieldDefaults.PlaceHolderTextColor
+                    )
+                }
+                innerTextField()  // 실제 입력 텍스트를 보여주는 부분
+            }
+        }
+    )
+}
+
+
+@Composable
+fun CommonTextField(
+    modifier: Modifier = Modifier,
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    placeholder: String = "",
+    minLines: Int = 1,
+    maxLines: Int = 1,
+    isSingleLine: Boolean = true,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    imeAction: ImeAction = ImeAction.Done,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    placeholderAlignment: Alignment = Alignment.CenterStart,
+) {
+    var borderColor by remember { mutableStateOf(CommonTextFieldDefaults.BorderColorDefault) }
+
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(CommonTextFieldDefaults.BorderRadius))
+            .onFocusChanged {
+                borderColor = if (it.isFocused) CommonTextFieldDefaults.BorderColorFocused else CommonTextFieldDefaults.BorderColorDefault
+            },
+        textStyle = textStyle,
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = imeAction  // 키보드 오른쪽 하단 버튼 설정
+        ),
+        minLines = minLines,
+        maxLines = maxLines,
+        singleLine = isSingleLine,
+        decorationBox = { innerTextField ->
+            // 텍스트 필드 테두리와 배경 설정
+            Box(
+                modifier = Modifier
+                    .basicRoundedGrayBorder(color = borderColor)
+                    .padding(CommonTextFieldDefaults.InnerPaddingValue),
                 contentAlignment = placeholderAlignment
             ) {
                 if (value.text.isEmpty()) {
                     Text(
                         text = placeholder,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Gray400
+                        color = CommonTextFieldDefaults.PlaceHolderTextColor
                     )
                 }
                 innerTextField()  // 실제 입력 텍스트를 보여주는 부분
@@ -86,7 +152,7 @@ fun CommonTextField(
 fun PreviewBaseTextField() {
     RentItTheme {
         CommonTextField(
-            value = TextFieldValue(""),
+            value = "",
             onValueChange = { },
             placeholder = "Place Holder",
         )
