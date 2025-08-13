@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.rentit.presentation.auth.join.nickname.JoinNicknameScreen
+import com.example.rentit.presentation.auth.join.nickname.JoinNicknameRoute
 import com.example.rentit.presentation.auth.login.LoginScreen
 import com.example.rentit.presentation.main.MainView
 
@@ -49,7 +49,7 @@ fun NavGraphBuilder.authGraph(navHostController: NavHostController) {
 
     composable<AuthRoute.Join> { backStackEntry ->
         val items: AuthRoute.Join = backStackEntry.toRoute()
-        JoinNicknameScreen(navHostController, items.name, items.email)
+        JoinNicknameRoute(navHostController, items.name, items.email)
     }
 
     composable<AuthRoute.Main> { MainView() }
