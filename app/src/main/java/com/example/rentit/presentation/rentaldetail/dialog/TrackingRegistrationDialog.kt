@@ -23,7 +23,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
@@ -65,7 +64,7 @@ fun TrackingRegistrationDialog(
         )
         CommonTextField(
             modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
-            value = TextFieldValue(trackingNum),
+            value = trackingNum,
             onValueChange = onTrackingNumChange,
             placeholder = stringResource(R.string.dialog_rental_detail_tracking_regs_placeholder_tracking_num),
             keyboardType = KeyboardType.Number,
@@ -95,7 +94,7 @@ fun DeliveryCompanyDropDown(
     ) {
         BasicTextField(
             readOnly = true,
-            value = TextFieldValue(selectedCompanyText),
+            value = selectedCompanyText,
             onValueChange = {},
             modifier = Modifier.menuAnchor().fillMaxWidth(),
             decorationBox = { innerTextField ->
