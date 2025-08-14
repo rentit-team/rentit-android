@@ -157,6 +157,16 @@
     <string name="screen_mypage_my_rental_list_item_label_renting">대여중</string>
     <string name="screen_mypage_my_rental_list_item_label_request_at">요청일: </string>
 
+    <!-- 설정 -->
+    <string name="screen_setting_title">설정</string>
+    <string name="screen_setting_label_register_account">계좌 정보 등록</string>
+    <string name="screen_setting_label_transaction_proof">거래 증빙 서류 다운로드</string>
+    <string name="screen_setting_label_keyword_alert_setting">키워드 알림 설정</string>
+    <string name="screen_setting_label_safety_guide">거래 안전 가이드</string>
+    <string name="screen_setting_label_version_info">버전 정보</string>
+    <string name="screen_setting_label_logout">로그아웃</string>
+    <string name="screen_setting_description_clickable_list_item">%s 바로가기</string>
+
     <!-- 대여 상세 -->
     <string name="screen_rental_detail_task_check_box_icon_done">%s 완료</string>
     <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
