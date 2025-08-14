@@ -167,6 +167,10 @@
     <string name="screen_setting_label_logout">로그아웃</string>
     <string name="screen_setting_description_clickable_list_item">%s 바로가기</string>
 
+    <!-- 거래 증빙 서류 다운로드 -->
+    <string name="screen_transaction_proof_title">거래 증빙 서류 다운로드</string>
+    <string name="screen_transaction_proof_download_btn_description">%s부터 %s까지 %s 대여 내역에 대한 거래 증빙 서류 다운로드</string>
+
     <!-- 대여 상세 -->
     <string name="screen_rental_detail_task_check_box_icon_done">%s 완료</string>
     <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
@@ -324,6 +328,7 @@
     <string name="content_description_for_ic_check">확인 아이콘</string>
     <string name="content_description_for_ic_camera">카메라 아이콘</string>
     <string name="content_description_for_ic_x_delete">삭제 아이콘</string>
+    <string name="content_description_for_ic_download">다운로드 아이콘</string>
 
     <string name="error_common_server">일시적인 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</string>
     <string name="error_common_cant_find_product">상품 정보를 찾을 수 없어요.</string>
