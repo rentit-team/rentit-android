@@ -3,7 +3,6 @@ package com.example.rentit.presentation.mypage.setting.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,8 +17,7 @@ private val rowHeight = 65.dp
 
 /**
  * 설정 화면 List Item용 공통 Row
- *
- * 클릭, 패딩, contentDescription 처리 포함
+ * (클릭, contentDescription 처리 포함)
  */
 
 @Composable
