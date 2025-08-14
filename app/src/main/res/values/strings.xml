@@ -47,6 +47,14 @@
     <!-- 회원가입 -->
     <string name="screen_join_title">회원가입</string>
 
+    <string name="screen_join_phone_verification_title">전화번호 인증</string>
+    <string name="screen_join_phone_verification_guide">안전한 서비스 이용을 위해, 본인 인증이 필요해요.</string>
+    <string name="screen_join_phone_verification_placeholder_phone_number">휴대폰 11자리</string>
+    <string name="screen_join_phone_verification_btn_request_code">인증 요청</string>
+    <string name="screen_join_phone_verification_placeholder_code">인증번호 입력</string>
+    <string name="screen_join_phone_verification_error_invalid_code">입력하신 인증번호가 올바르지 않아요. 다시 시도해 주세요.</string>
+    <string name="screen_join_phone_verification_btn_check_code">인증번호 확인</string>
+
     <string name="screen_join_nickname_headline">에서 사용할\n닉네임을 정해주세요.</string>
     <string name="screen_join_nickname_empty_notification">닉네임을 1자 이상 입력해 주세요.</string>
     <string name="screen_join_nickname_error_email_null">회원가입을 진행할 수 없어요.</string>
