@@ -27,7 +27,7 @@ fun JoinNicknameRoute(navHostController: NavHostController, name: String?, email
 
     LaunchedEffect(email) {
         if(email == null) {
-            Toast.makeText(context, context.getString(R.string.screen_join_error_email_null), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.screen_join_nickname_error_email_null), Toast.LENGTH_SHORT).show()
             navHostController.popBackStack()
         }
     }
@@ -59,11 +59,11 @@ private fun SignUpResultHandler(joinNicknameViewModel: JoinNicknameViewModel, na
     LaunchedEffect(signUpResult) {
         signUpResult.value?.onSuccess {
             Log.d(TAG, "Sign Up Success")
-            Toast.makeText(context, context.getString(R.string.screen_join_toast_complete), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.screen_join_nickname_toast_complete), Toast.LENGTH_SHORT).show()
             navHostController.navigateToLogin()
         }?.onFailure { error ->
             Log.d(TAG, "${error.message}")
-            Toast.makeText(context, context.getString(R.string.screen_join_toast_fail), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.screen_join_nickname_toast_fail), Toast.LENGTH_SHORT).show()
             navHostController.navigateToLogin()
         }
 

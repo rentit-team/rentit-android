@@ -42,6 +42,7 @@ private object CommonTextFieldDefaults {
 fun CommonTextField(
     modifier: Modifier = Modifier,
     value: String,
+    enabled: Boolean = true,
     onValueChange: (String) -> Unit,
     placeholder: String = "",
     minLines: Int = 1,
@@ -57,6 +58,7 @@ fun CommonTextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
+        enabled = enabled,
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(CommonTextFieldDefaults.BorderRadius))
@@ -98,6 +100,7 @@ fun CommonTextField(
     modifier: Modifier = Modifier,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    enabled: Boolean = true,
     placeholder: String = "",
     minLines: Int = 1,
     maxLines: Int = 1,
@@ -112,6 +115,7 @@ fun CommonTextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
+        enabled = enabled,
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(CommonTextFieldDefaults.BorderRadius))

@@ -48,7 +48,7 @@ fun JoinNicknameScreen(
                 modifier = Modifier
                     .screenHorizontalPadding()
                     .paddingForBottomBarButton(),
-                text = stringResource(R.string.screen_join_btn_text),
+                text = stringResource(R.string.screen_join_nickname_btn_text),
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White
             ) { onCompleteClick() }
@@ -90,7 +90,7 @@ private fun HighlightedHeadline() {
             withStyle(style = SpanStyle(color = PrimaryBlue500)) {
                 append(stringResource(R.string.app_name))
             }
-            append(stringResource(R.string.screen_join_headline))
+            append(stringResource(R.string.screen_join_nickname_headline))
         },
         style = PretendardTextStyle.headline_bold,
         textAlign = TextAlign.Start

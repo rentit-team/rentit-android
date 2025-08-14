@@ -32,34 +32,51 @@
     <string name="common_dialog_accept_request_label_total_price">예상 수익</string>
     <string name="common_dialog_accept_request_btn_accept">수락하기</string>
 
+    <string name="common_calendar_left_chevron_description">다음달로 이동</string>
+    <string name="common_calendar_right_chevron_description">이전달로 이동</string>
+
     <string name="util_formatted_period">%s (%s) ~ %s (%s) · %d일</string>
     <string name="util_error_rental_period_unavailable">기간 정보 없음</string>
 
+    <!-- 로그인 -->
     <string name="screen_login_app_logo_description">랜팃 로고</string>
     <string name="screen_login_google_logo_description">구글 로고</string>
     <string name="screen_login_label">중고 거래와 렌탈의 새로운 기준</string>
     <string name="screen_login_google_login_btn_text">Google 계정으로 로그인</string>
 
+    <!-- 회원가입 -->
     <string name="screen_join_title">회원가입</string>
-    <string name="screen_join_btn_text">RentIt 시작하기</string>
-    <string name="screen_join_headline">에서 사용할\n닉네임을 정해주세요.</string>
-    <string name="screen_join_nickname_empty_notification">닉네임을 1자 이상 입력해 주세요.</string>
-    <string name="screen_join_error_email_null">회원가입을 진행할 수 없어요.</string>
-    <string name="screen_join_toast_complete">회원가입이 완료되었어요. 이제 로그인이 가능해요.</string>
-    <string name="screen_join_toast_fail">회원가입에 실패했어요. 잠시 후 다시 시도해주세요.</string>
 
+    <string name="screen_join_phone_verification_title">전화번호 인증</string>
+    <string name="screen_join_phone_verification_guide">안전한 서비스 이용을 위해, 본인 인증이 필요해요.</string>
+    <string name="screen_join_phone_verification_placeholder_phone_number">휴대폰 11자리</string>
+    <string name="screen_join_phone_verification_btn_request_code">인증 요청</string>
+    <string name="screen_join_phone_verification_placeholder_code">인증번호 입력</string>
+    <string name="screen_join_phone_verification_error_invalid_code">입력하신 인증번호가 올바르지 않아요. 다시 시도해 주세요.</string>
+    <string name="screen_join_phone_verification_btn_check_code">인증번호 확인</string>
+
+    <string name="screen_join_nickname_headline">에서 사용할\n닉네임을 정해주세요.</string>
+    <string name="screen_join_nickname_empty_notification">닉네임을 1자 이상 입력해 주세요.</string>
+    <string name="screen_join_nickname_error_email_null">회원가입을 진행할 수 없어요.</string>
+    <string name="screen_join_nickname_toast_complete">회원가입이 완료되었어요. 이제 로그인이 가능해요.</string>
+    <string name="screen_join_nickname_toast_fail">회원가입에 실패했어요. 잠시 후 다시 시도해주세요.</string>
+    <string name="screen_join_nickname_btn_text">RentIt 시작하기</string>
+
+    <!-- 게시글 리스트 아이템 -->
     <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
     <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
     <string name="product_list_item_period_text_less_than_day">%d일 이하</string>
     <string name="product_list_item_period_text_more_than_zero">0일 이상</string>
     <string name="product_list_item_period_btn_check_request">요청 확인하기</string>
 
+    <!-- 홈 -->
     <string name="screen_home_logo_img_placeholder_description">렌팃 로고</string>
     <string name="screen_home_search_img_placeholder_description">검색</string>
 
     <string name="screen_home_label_btn_filter_rent_possibility">대여 가능</string>
     <string name="screen_home_label_btn_filter_category">카테고리</string>
 
+    <!-- 게시글 상세 -->
     <string name="screen_product_detail_img_placeholder_description">상품 임시 이미지</string>
     <string name="screen_product_detail_img_description">상품 이미지</string>
     <string name="screen_product_like_icon_description">상품 좋아요</string>
@@ -69,20 +86,20 @@
     <string name="screen_product_btn_chatting">채팅하기</string>
     <string name="screen_product_btn_reserve">예약하기</string>
 
-    <string name="common_calendar_left_chevron_description">다음달로 이동</string>
-    <string name="common_calendar_right_chevron_description">이전달로 이동</string>
-
+    <!-- 대여 예약 요청 -->
     <string name="screen_resv_request_app_bar_title">예약 기간을 설정해주세요.</string>
     <string name="screen_resv_request_label_total_rental_fee">총 대여 비용</string>
     <string name="screen_resv_request_label_deposit">보증금</string>
     <string name="screen_resv_request_label_total_fee">합계</string>
     <string name="screen_resv_request_btn_resv_request">예약 요청</string>
 
+    <!-- 예약 요청 확인 -->
     <string name="screen_request_confirm_title">요청이 전달되었어요!</string>
     <string name="screen_request_confirm_resv_period">예약 기간</string>
     <string name="screen_request_confirm_total_price">총 금액</string>
     <string name="screen_request_confirm_btn_complete">완료</string>
 
+    <!-- 게시글 생성 -->
     <string name="screen_product_create_image_label">이미지</string>
     <string name="screen_product_create_add_image_text">+ 이미지 추가</string>
     <string name="screen_product_create_selected_image_description">선택된 이미지</string>
@@ -96,9 +113,11 @@
     <string name="screen_product_create_rental_period_text">최소 %d일 ~ 최대 %d일</string>
     <string name="screen_product_create_price_label">가격</string>
     <string name="screen_product_create_complete_btn_text">등록하기</string>
-    
+
+    <!-- 채팅 리스트 -->
     <string name="screen_chat_list_btn_up_to_date_order">최신순</string>
 
+    <!-- 채팅방 -->
     <string name="auto_msg_type_request_accept_title">[렌팃] 요청이 수락되었습니다.</string>
     <string name="auto_msg_type_request_accept_content">결제는 아래 버튼으로\n간편하게 진행하실 수 있어요 :)</string>
     <string name="auto_msg_type_request_accept_btn_text">결제 진행하기</string>
@@ -125,6 +144,7 @@
     <string name="screen_accept_confirm_title">요청이 수락되었어요!</string>
     <string name="screen_accept_confirm_btn_complete">완료</string>
 
+    <!-- 마이페이지 -->
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
     <string name="screen_mypage_info_text_start">내가 대여한 %s의 반납일이</string>
@@ -137,10 +157,10 @@
     <string name="screen_mypage_my_rental_list_item_label_renting">대여중</string>
     <string name="screen_mypage_my_rental_list_item_label_request_at">요청일: </string>
 
+    <!-- 대여 상세 -->
     <string name="screen_rental_detail_task_check_box_icon_done">%s 완료</string>
     <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
 
-    <!-- 대여 상세 -->
     <string name="screen_rental_detail_title">대여 상세</string>
     <string name="screen_rental_detail_request_btn_cancel_rent">대여 취소하기</string>
     <string name="screen_rental_detail_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
