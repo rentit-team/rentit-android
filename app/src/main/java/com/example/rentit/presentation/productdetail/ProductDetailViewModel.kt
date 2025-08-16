@@ -6,6 +6,7 @@ import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.data.user.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
-    private val repository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _productDetail = MutableStateFlow<Result<ProductDetailResponseDto>?>(null)
@@ -23,15 +25,17 @@ class ProductDetailViewModel @Inject constructor(
     private val _requestList =  MutableStateFlow<List<RequestInfoDto>>(emptyList())
     val requestList: StateFlow<List<RequestInfoDto>> = _requestList
 
+    fun getAuthUserIdFromPrefs(): Long = userRepository.getAuthUserIdFromPrefs()
+
     fun getProductDetail(productId: Int) {
         viewModelScope.launch {
-            _productDetail.value = repository.getProductDetail(productId)
+            _productDetail.value = productRepository.getProductDetail(productId)
         }
     }
 
     fun getProductRequestList(productId: Int){
         viewModelScope.launch {
-            repository.getProductRequestList(productId).onSuccess {
+            productRepository.getProductRequestList(productId).onSuccess {
                 _requestList.value = it.reservations.filter { data -> ResvStatus.isPending(data.status) }
             }
         }

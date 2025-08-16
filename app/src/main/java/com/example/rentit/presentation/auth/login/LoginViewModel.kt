@@ -56,4 +56,6 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun saveTokenFromPrefs(token:String) = repository.saveTokenToPrefs(token)
 }

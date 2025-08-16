@@ -25,7 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.storage.saveToken
 import com.example.rentit.data.user.model.GoogleSignInResult
 import com.example.rentit.navigation.auth.navigateToJoin
 import com.example.rentit.navigation.auth.navigateToMain
@@ -98,7 +97,7 @@ fun LoginResultHandler(navHostController: NavHostController, loginViewModel: Log
         googleLoginResult?.onSuccess { response ->
             if(response.data.isUserRegistered){
                 navHostController.navigateToMain()
-                saveToken(context, response.data.accessToken.token)
+                loginViewModel.saveTokenFromPrefs(response.data.accessToken.token)
             } else {
                 navHostController.navigateToJoin(userData?.name, userData?.email)
             }
