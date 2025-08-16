@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.enums.ResvStatus
-import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
@@ -15,6 +14,7 @@ import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.data.user.repository.UserRepository
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,11 +26,12 @@ import javax.inject.Inject
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
+    private val userRepository: UserRepository,
     private val chatRepository: ChatRepository,
     private val productRepository: ProductRepository
 ): ViewModel() {
 
-    private val myId: Long = getMyIdFromPrefs(context)
+    private val authUserId: Long = userRepository.getAuthUserIdFromPrefs()
 
     private val _productDetail = MutableStateFlow<ProductDetailResponseDto?>(null)
     val productDetail: StateFlow<ProductDetailResponseDto?> = _productDetail
@@ -71,7 +72,7 @@ class ChatRoomViewModel @Inject constructor(
                     _initialMessages.value =
                         detail.messages.map { ChatMessageUiModel(it.isMine, it.content, it.sentAt) }
                     _senderNickname.value =
-                        detail.chatRoom.participants.find { it.userId != myId }?.nickname
+                        detail.chatRoom.participants.find { it.userId != authUserId }?.nickname
                 }
                 .onFailure(onError)
         }
@@ -81,14 +82,14 @@ class ChatRoomViewModel @Inject constructor(
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
         val token = getToken(context) ?: return
         WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
-            val msg = ChatMessageUiModel(data.senderId == myId, data.content, data.sentAt)
+            val msg = ChatMessageUiModel(data.senderId == authUserId, data.content, data.sentAt)
             _realTimeMessages.value = listOf(msg) + _realTimeMessages.value
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(chatRoomId: String, message: String) {
-        WebSocketManager.sendMessage(chatRoomId, myId, message)
+        WebSocketManager.sendMessage(chatRoomId, authUserId, message)
     }
 
     fun disconnectWebSocket() {

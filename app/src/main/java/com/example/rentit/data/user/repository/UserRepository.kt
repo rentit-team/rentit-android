@@ -5,10 +5,12 @@ import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
+import com.example.rentit.data.user.local.UserPrefsDataSource
 import com.example.rentit.data.user.remote.UserRemoteDataSource
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
+    private val prefsDataSource: UserPrefsDataSource,
     private val remoteDataSource: UserRemoteDataSource
 ) {
     suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
@@ -138,4 +140,12 @@ class UserRepository @Inject constructor(
             Result.failure(e)
         }
     }
+
+    fun getAuthUserIdFromPrefs(): Long = prefsDataSource.getAuthUserIdFromPrefs()
+
+    fun saveAuthUserIdToPrefs(authUserId: Long) = prefsDataSource.saveAuthUserIdToPrefs(authUserId)
+
+    fun getTokenFromPrefs(): String? = prefsDataSource.getTokenFromPrefs()
+
+    fun saveTokenToPrefs(token: String) = prefsDataSource.saveTokenToPrefs(token)
 }

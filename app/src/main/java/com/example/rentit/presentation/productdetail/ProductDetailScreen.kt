@@ -60,7 +60,6 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.storage.getMyIdFromPrefs
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
@@ -87,8 +86,8 @@ fun ProductDetailScreen(navHostController: NavHostController, productId: Int?) {
     val productDetail = productDetailResult?.getOrNull()?.product
     val ownerId = productDetail?.owner?.userId ?: -1
 
-    val myId = getMyIdFromPrefs(LocalContext.current).toInt()
-    val isMyProduct = ownerId > -1 && myId == ownerId
+    val authUserId = productDetailViewModel.getAuthUserIdFromPrefs()
+    val isMyProduct = ownerId > -1 && authUserId.toInt() == ownerId
 
     val context = LocalContext.current
 
