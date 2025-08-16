@@ -1,13 +1,11 @@
 package com.example.rentit.presentation.chat.chatroom
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.enums.ResvStatus
-import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.repository.ChatRepository
@@ -17,7 +15,6 @@ import com.example.rentit.data.product.repository.ProductRepository
 import com.example.rentit.data.user.repository.UserRepository
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -25,7 +22,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val userRepository: UserRepository,
     private val chatRepository: ChatRepository,
     private val productRepository: ProductRepository
@@ -80,7 +76,7 @@ class ChatRoomViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
-        val token = getToken(context) ?: return
+        val token = userRepository.getTokenFromPrefs() ?: return
         WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
             val msg = ChatMessageUiModel(data.senderId == authUserId, data.content, data.sentAt)
             _realTimeMessages.value = listOf(msg) + _realTimeMessages.value

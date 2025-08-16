@@ -1,11 +1,9 @@
 package com.example.rentit.common.di
 
-import android.content.Context
-import com.example.rentit.common.storage.getToken
+import com.example.rentit.data.user.local.UserPrefsDataSource
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -25,12 +23,15 @@ object NetworkModule {
         }
 
     @Provides
-    fun provideOkHttpClient(@ApplicationContext context: Context, loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun provideOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        userPrefsDataSource: UserPrefsDataSource
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
             .addInterceptor {
                 val request = it.request().newBuilder()
-                    .addHeader("Authorization", "Bearer ${getToken(context)}")
+                    .addHeader("Authorization", "Bearer ${userPrefsDataSource.getTokenFromPrefs()}")
                     .build()
                 it.proceed(request)
             }
