@@ -8,7 +8,7 @@ import androidx.annotation.RequiresApi
 import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.navigation.AuthNavHost
-import com.example.rentit.presentation.main.MainView
+import com.example.rentit.presentation.main.MainRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                 if(accessToken.isNullOrEmpty()) {
                     AuthNavHost()
                 } else {
-                    MainView()
+                    MainRoute()
                 }
             }
         }

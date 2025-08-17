@@ -17,5 +17,9 @@ enum class BottomNavItem(
     MyPage(
         R.string.title_activity_my_page_tab, R.drawable.ic_user, R.drawable.ic_user_fill,
         BottomTabRoute.MyPage.route
-    )
+    );
+
+    fun isSelected(currentRoute: String?): Boolean = (screenRoute == currentRoute)
+
+    fun iconFor(currentRoute: String?): Int = if (isSelected(currentRoute)) iconSelected else icon
 }

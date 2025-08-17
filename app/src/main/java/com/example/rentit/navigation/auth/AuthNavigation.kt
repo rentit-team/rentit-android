@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.presentation.auth.join.nickname.JoinNicknameRoute
 import com.example.rentit.presentation.auth.login.LoginScreen
-import com.example.rentit.presentation.main.MainView
+import com.example.rentit.presentation.main.MainRoute
 
 fun NavHostController.navigateToLogin(
 ) {
@@ -52,5 +52,5 @@ fun NavGraphBuilder.authGraph(navHostController: NavHostController) {
         JoinNicknameRoute(navHostController, items.name, items.email)
     }
 
-    composable<AuthRoute.Main> { MainView() }
+    composable<AuthRoute.Main> { MainRoute() }
 }
