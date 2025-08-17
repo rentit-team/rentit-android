@@ -4,19 +4,22 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -25,6 +28,7 @@ import com.example.rentit.R
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.theme.White
 import com.example.rentit.navigation.MainNavHost
 
 
@@ -48,9 +52,9 @@ fun MainScreen(
 
 @Composable
 fun MainBottomBar(currentRoute: String?, onBottomItemClick: (String) -> Unit) {
-    BottomNavigation(backgroundColor = Color.White, modifier = Modifier.height(72.dp)) {
+    NavigationBar(modifier = Modifier.fillMaxHeight(0.1f), containerColor = Color.White) {
         BottomNavItem.entries.forEach { item ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 modifier = Modifier.fillMaxHeight(),
                 icon = {
                     Icon(
@@ -59,8 +63,11 @@ fun MainBottomBar(currentRoute: String?, onBottomItemClick: (String) -> Unit) {
                         modifier = Modifier.size(28.dp)
                     )
                 },
-                unselectedContentColor = Gray400,
-                selectedContentColor = PrimaryBlue500,
+                colors = NavigationBarItemDefaults.colors(
+                    unselectedIconColor = Gray400,
+                    selectedIconColor = PrimaryBlue500,
+                    indicatorColor = White
+                ),
                 selected = item.isSelected(currentRoute),
                 alwaysShowLabel = false,
                 onClick = { onBottomItemClick(item.screenRoute) },
@@ -71,14 +78,18 @@ fun MainBottomBar(currentRoute: String?, onBottomItemClick: (String) -> Unit) {
 
 @Composable
 fun CreatePostFloatingButton(onClick: () -> Unit) {
+    val contentDesc = stringResource(R.string.common_img_placeholder_description)
+
     FloatingActionButton(
-        backgroundColor = PrimaryBlue500,
+        modifier = Modifier.semantics { contentDescription = contentDesc },
+        shape = CircleShape,
+        containerColor = PrimaryBlue500,
         onClick = onClick,
     ) {
         Image(
             modifier = Modifier.padding(14.dp),
             painter = painterResource(id = R.drawable.ic_write),
-            contentDescription = "상품 등록하기"
+            contentDescription = null
         )
     }
 }
