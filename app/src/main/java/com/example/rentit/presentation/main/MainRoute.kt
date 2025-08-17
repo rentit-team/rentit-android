@@ -15,16 +15,16 @@ fun MainRoute() {
     val navHostController = rememberNavController()
     val navBackStackEntry by navHostController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    val showBottomBar = currentRoute in BottomNavItem.entries.map { it.screenRoute }
+
+    val showBottomBar = BottomNavItem.entries.any { it.screenRoute == currentRoute }
+    val isHome = currentRoute == BottomNavItem.Home.screenRoute
 
     MainScreen(
         navHostController = navHostController,
         currentRoute = currentRoute,
         showBottomBar = showBottomBar,
-        showCreatePostBtn = currentRoute == BottomNavItem.Home.screenRoute,
-        onBottomItemClick = { screenRoute ->
-            navHostController.navigateBottomTab(screenRoute)
-        },
-        onCreatePostClick = { navHostController.navigateToCreatePost() }
+        showCreatePostBtn = isHome,
+        onBottomItemClick = navHostController::navigateBottomTab,
+        onCreatePostClick = navHostController::navigateToCreatePost
     )
 }
