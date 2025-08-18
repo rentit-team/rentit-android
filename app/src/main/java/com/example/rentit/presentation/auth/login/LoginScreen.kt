@@ -27,7 +27,7 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.data.user.model.GoogleSignInResult
 import com.example.rentit.navigation.auth.navigateToJoin
-import com.example.rentit.navigation.auth.navigateToMain
+import com.example.rentit.navigation.bottomtab.navigateToHome
 import com.example.rentit.presentation.auth.login.components.GoogleLoginButton
 import java.net.URLEncoder
 
@@ -96,7 +96,7 @@ fun LoginResultHandler(navHostController: NavHostController, loginViewModel: Log
     LaunchedEffect(googleLoginResult) {
         googleLoginResult?.onSuccess { response ->
             if(response.data.isUserRegistered){
-                navHostController.navigateToMain()
+                navHostController.navigateToHome()
                 loginViewModel.saveTokenFromPrefs(response.data.accessToken.token)
             } else {
                 navHostController.navigateToJoin(userData?.name, userData?.email)

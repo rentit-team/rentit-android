@@ -15,7 +15,7 @@ fun NavHostController.navigateToLogin(
     navigate(
         route = AuthRoute.Login
     ) {
-        popUpTo(AuthRoute.Login){
+        popUpTo(graph.id){
             inclusive = true
         }
         launchSingleTop = true
@@ -31,17 +31,6 @@ fun NavHostController.navigateToJoin(
     )
 }
 
-fun NavHostController.navigateToMain(
-) {
-    navigate(
-        route = AuthRoute.Main
-    ) {
-        popUpTo(0){
-            inclusive = true
-        }
-    }
-}
-
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.authGraph(navHostController: NavHostController) {
@@ -51,6 +40,4 @@ fun NavGraphBuilder.authGraph(navHostController: NavHostController) {
         val items: AuthRoute.Join = backStackEntry.toRoute()
         JoinNicknameRoute(navHostController, items.name, items.email)
     }
-
-    composable<AuthRoute.Main> { MainView() }
 }
