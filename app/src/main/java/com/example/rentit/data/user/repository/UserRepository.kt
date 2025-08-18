@@ -148,4 +148,6 @@ class UserRepository @Inject constructor(
     fun getTokenFromPrefs(): String? = prefsDataSource.getTokenFromPrefs()
 
     fun saveTokenToPrefs(token: String) = prefsDataSource.saveTokenToPrefs(token)
+
+    fun clearPrefs() = prefsDataSource.clearPrefs()
 }

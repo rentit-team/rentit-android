@@ -11,7 +11,7 @@ import com.example.rentit.presentation.mypage.MyPageScreen
 
 fun NavHostController.navigateBottomTab(route: String) {
     navigate(route = route) {
-        popUpTo(graph.startDestinationId) {
+        popUpTo(BottomTabRoute.Home.route) {
             saveState = true
         }
         launchSingleTop = true
@@ -21,7 +21,7 @@ fun NavHostController.navigateBottomTab(route: String) {
 
 fun NavHostController.navigateToHome() {
     navigate(BottomTabRoute.Home.route) {
-        popUpTo(graph.startDestinationId){
+        popUpTo(graph.id){
             inclusive = true
         }
     }
