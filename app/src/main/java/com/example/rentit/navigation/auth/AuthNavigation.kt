@@ -8,7 +8,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.presentation.auth.join.nickname.JoinNicknameRoute
 import com.example.rentit.presentation.auth.login.LoginScreen
-import com.example.rentit.presentation.main.MainView
 
 fun NavHostController.navigateToLogin(
 ) {
