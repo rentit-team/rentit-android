@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.main.MainView
+import com.example.rentit.presentation.main.MainRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                MainView()
+                MainRoute()
             }
         }
     }
