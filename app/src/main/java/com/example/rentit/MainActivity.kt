@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import com.example.rentit.common.storage.getToken
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.AuthNavHost
 import com.example.rentit.presentation.main.MainRoute
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -19,12 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                val accessToken: String? = getToken(context = applicationContext)
-                if(accessToken.isNullOrEmpty()) {
-                    AuthNavHost()
-                } else {
-                    MainRoute()
-                }
+                MainRoute()
             }
         }
     }

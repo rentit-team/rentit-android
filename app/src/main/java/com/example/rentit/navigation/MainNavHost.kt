@@ -8,16 +8,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.example.rentit.navigation.bottomtab.BottomTabRoute
+import com.example.rentit.navigation.auth.authGraph
 import com.example.rentit.navigation.bottomtab.bottomTabGraph
 import com.example.rentit.navigation.chatroom.chatRoomGraph
 import com.example.rentit.navigation.createpost.createPostGraph
 import com.example.rentit.navigation.productdetail.productDetailGraph
+import com.example.rentit.navigation.splash.SplashRoute
+import com.example.rentit.navigation.splash.splashGraph
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavHost(navHostController: NavHostController, paddingValues: PaddingValues) {
-    NavHost(navController = navHostController, startDestination = BottomTabRoute.Home.route, modifier = Modifier.padding(paddingValues)){
+    NavHost(navController = navHostController, startDestination = SplashRoute.Splash, modifier = Modifier.padding(paddingValues)){
+        splashGraph(navHostController)
+        authGraph(navHostController)
         bottomTabGraph(navHostController)
         productDetailGraph(navHostController)
         chatRoomGraph(navHostController)
