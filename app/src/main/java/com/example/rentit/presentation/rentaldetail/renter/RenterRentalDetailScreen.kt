@@ -21,7 +21,6 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.RentalDto
 import com.example.rentit.data.rental.dto.RenterDto
 import com.example.rentit.data.rental.dto.ReturnStatusDto
-import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterPaidContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRequestContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
@@ -53,8 +52,7 @@ fun RentalDetailRenterScreen(
                     RenterRentingContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick)
                 is RenterRentalStatusUiModel.Returned ->
                     RenterReturnedContent(uiModel, onCheckPhotoClick)
-                is RenterRentalStatusUiModel.Unknown ->
-                    UnknownStatusDialog(onBackPressed)
+                is RenterRentalStatusUiModel.Unknown -> Unit
             }
         }
     }
