@@ -1,5 +1,7 @@
 package com.example.rentit.common.component.dialog
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,18 +10,21 @@ import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.model.RequestAcceptDialogUiModel
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.formatRentalPeriod
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestAcceptDialog(
-    rentalPeriodText: String,
-    expectedRevenue: Int,
+    uiModel: RequestAcceptDialogUiModel,
     onClose: () -> Unit,
     onAccept: () -> Unit,
 ) {
@@ -36,7 +41,7 @@ fun RequestAcceptDialog(
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = rentalPeriodText,
+            text = formatRentalPeriod(LocalContext.current, uiModel.startDate,uiModel.endDate),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray800
         )
@@ -51,20 +56,23 @@ fun RequestAcceptDialog(
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = "${formatPrice(expectedRevenue)} ${stringResource(R.string.common_price_unit)}",
+                text = "${formatPrice(uiModel.expectedRevenue)} ${stringResource(R.string.common_price_unit)}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
     RentItTheme {
         RequestAcceptDialog(
-            "25.08.17 (목) ~ 25.08.20 (일) · 4일",
-            40000,
+            RequestAcceptDialogUiModel(
+            "2025-08-17",
+            "2025-08-20",
+            40000),
             onClose = {},
             onAccept = {})
     }

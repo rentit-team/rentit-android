@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.model.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.repository.RentalRepository
 import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRentalStatusUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -53,6 +54,28 @@ class OwnerRentalDetailViewModel @Inject constructor(
 
     private fun showUnknownStatusDialog() {
         _uiState.value = _uiState.value.copy(showUnknownStatusDialog = true)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showRequestAcceptDialog() {
+        val requestData = _rentalDetailUiModel.value as? OwnerRentalStatusUiModel.Request ?: return
+
+        _uiState.value = _uiState.value.copy(
+            requestAcceptDialog = RequestAcceptDialogUiModel(
+                startDate = requestData.rentalSummary.startDate,
+                endDate = requestData.rentalSummary.endDate,
+                expectedRevenue = requestData.basicRentalFee
+            ),
+        )
+    }
+
+    fun dismissRequestAcceptDialog() {
+        _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
+    }
+
+    fun acceptRequest() {
+        /* 요청 수락 로직 추가, 성공 시 닫기 */
+        _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
     }
 
     fun showCancelDialog() {

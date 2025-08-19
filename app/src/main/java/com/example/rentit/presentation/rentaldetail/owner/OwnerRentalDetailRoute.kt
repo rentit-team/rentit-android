@@ -12,6 +12,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
+import com.example.rentit.common.component.dialog.RequestAcceptDialog
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
 import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
@@ -48,14 +49,22 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
     OwnerRentalDetailScreen(
         uiModel = rentalDetailUiModel,
         scrollState = scrollState,
-        isLoading = true,
+        isLoading = uiState.isLoading,
         onBackClick = { navHostController.popBackStack() },
-        onRequestResponseClick = {},
+        onRequestResponseClick = viewModel::showRequestAcceptDialog,
         onCancelRentClick = viewModel::showCancelDialog,
         onPhotoTaskClick = viewModel::navigateToPhotoBeforeRent,
         onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
         onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck
     )
+
+    uiState.requestAcceptDialog?.let {
+        RequestAcceptDialog(
+            uiModel = it,
+            onClose = viewModel::dismissRequestAcceptDialog,
+            onAccept = viewModel::acceptRequest,
+        )
+    }
 
     if(uiState.showCancelDialog){
         RentalCancelDialog(
