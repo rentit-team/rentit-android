@@ -14,14 +14,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.rental.dto.DeliveryStatus
-import com.example.rentit.data.rental.dto.Product
-import com.example.rentit.data.rental.dto.Rental
+import com.example.rentit.data.rental.dto.DeliveryStatusDto
+import com.example.rentit.data.rental.dto.ProductDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
-import com.example.rentit.data.rental.dto.Renter
-import com.example.rentit.data.rental.dto.ReturnStatus
-import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
+import com.example.rentit.data.rental.dto.RentalDto
+import com.example.rentit.data.rental.dto.RenterDto
+import com.example.rentit.data.rental.dto.ReturnStatusDto
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterPaidContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRequestContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
@@ -30,24 +30,34 @@ import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterReturne
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRenterScreen(uiModel: RenterRentalStatusUiModel, scrollState: ScrollState, onBackClick: () -> Unit) {
+fun RentalDetailRenterScreen(
+    uiModel: RenterRentalStatusUiModel,
+    scrollState: ScrollState,
+    isLoading: Boolean,
+    onBackPressed: () -> Unit,
+    onPayClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    onTrackingNumTaskClick: () -> Unit,
+    onPhotoTaskClick: () -> Unit,
+    onCheckPhotoClick: () -> Unit,
+) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title)) { onBackClick() } }
+        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), onBackClick = onBackPressed) }
     ) {
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
                 is RenterRentalStatusUiModel.Request ->
-                    RenterRequestContent(uiModel)
+                    RenterRequestContent(uiModel, onPayClick, onCancelClick)
                 is RenterRentalStatusUiModel.Paid ->
                     RenterPaidContent(uiModel)
                 is RenterRentalStatusUiModel.Renting ->
-                    RenterRentingContent(uiModel)
+                    RenterRentingContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick)
                 is RenterRentalStatusUiModel.Returned ->
-                    RenterReturnedContent(uiModel)
-                is RenterRentalStatusUiModel.Unknown ->
-                    UnknownStatusDialog { onBackClick() }
+                    RenterReturnedContent(uiModel, onCheckPhotoClick)
+                is RenterRentalStatusUiModel.Unknown -> Unit
             }
         }
+        LoadingScreen(isLoading)
     }
 }
 
@@ -56,11 +66,11 @@ fun RentalDetailRenterScreen(uiModel: RenterRentalStatusUiModel, scrollState: Sc
 @Preview(showBackground = true)
 private fun Preview() {
     val sample1 = RentalDetailResponseDto(
-        rental = Rental(
+        rental = RentalDto(
             reservationId = 1001,
-            renter = Renter(userId = 101, nickname = "김철수"),
+            renter = RenterDto(userId = 101, nickname = "김철수"),
             status = "RENTING",
-            product = Product(
+            product = ProductDto(
                 title = "캐논 EOS R6 카메라",
                 thumbnailImgUrl = "https://example.com/image/123.jpg"
             ),
@@ -70,8 +80,8 @@ private fun Preview() {
             depositAmount = 45000,
             rentalTrackingNumber = "1234567890",
             returnTrackingNumber = null,
-            deliveryStatus = DeliveryStatus(isPhotoRegistered = true, isTrackingNumberRegistered = true),
-            returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = false)
+            deliveryStatus = DeliveryStatusDto(isPhotoRegistered = true, isTrackingNumberRegistered = true),
+            returnStatus = ReturnStatusDto(isPhotoRegistered = false, isTrackingNumberRegistered = false)
         ),
         statusHistory = listOf(/* 생략 */)
     )
@@ -80,14 +90,21 @@ private fun Preview() {
         rental = sample1.rental.copy(
             status = "RETURNED",
             endDate = "2025-07-28",
-            returnStatus = ReturnStatus(isPhotoRegistered = false, isTrackingNumberRegistered = true)
+            returnStatus = ReturnStatusDto(isPhotoRegistered = false, isTrackingNumberRegistered = true)
         )
     )
 
     RentItTheme {
         RentalDetailRenterScreen(
-            sample2.toRenterUiModel(),
-            rememberScrollState()
-        ) {}
+            uiModel = sample2.toRenterUiModel(),
+            scrollState = rememberScrollState(),
+            isLoading = true,
+            onBackPressed =  { },
+            onPayClick = { },
+            onCancelClick = { },
+            onTrackingNumTaskClick = { },
+            onPhotoTaskClick = { },
+            onCheckPhotoClick = { }
+        )
     }
 }

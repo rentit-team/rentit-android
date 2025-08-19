@@ -35,6 +35,8 @@ import com.example.rentit.common.model.RentalSummaryUiModel
 @Composable
 fun RenterRequestContent(
     requestData: RenterRentalStatusUiModel.Request,
+    onPayClick: () -> Unit = {},
+    onCancelClick: () -> Unit = {},
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -66,8 +68,9 @@ fun RenterRequestContent(
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
                     .offset(y = 8.dp),
-                text = stringResource(R.string.screen_rental_detail_renter_request_btn_pay)
-            ) { }
+                text = stringResource(R.string.screen_rental_detail_renter_request_btn_pay),
+                onClick = onPayClick
+            )
         }
     }
 
@@ -81,8 +84,9 @@ fun RenterRequestContent(
         Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
             ArrowedTextButton(
                 modifier = Modifier.padding(vertical = 10.dp),
-                text = stringResource(R.string.screen_rental_detail_request_btn_cancel_rent)
-            ) { }
+                text = stringResource(R.string.screen_rental_detail_request_btn_cancel_rent),
+                onClick = onCancelClick
+            )
         }
     }
 }

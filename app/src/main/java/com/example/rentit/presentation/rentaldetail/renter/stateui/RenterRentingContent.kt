@@ -46,6 +46,8 @@ import kotlin.math.abs
 @Composable
 fun RenterRentingContent(
     rentingData: RenterRentalStatusUiModel.Renting,
+    onPhotoTaskClick: () -> Unit = {},
+    onTrackingNumTaskClick: () -> Unit = {},
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -79,7 +81,9 @@ fun RenterRentingContent(
         trackingNumTaskLabel = stringResource(R.string.screen_rental_detail_renter_return_task_tracking_num),
         isTaskAvailable = rentingData.isReturnAvailable,
         isPhotoRegistered = rentingData.isReturnPhotoRegistered,
-        isTrackingNumRegistered = rentingData.isReturnTrackingNumRegistered
+        isTrackingNumRegistered = rentingData.isReturnTrackingNumRegistered,
+        onPhotoTaskClick = onPhotoTaskClick,
+        onTrackingNumTaskClick = onTrackingNumTaskClick,
     ) { if (rentingData.isOverdue) {
             ReturnOverdueWarning(
                 rentingData.daysFromReturnDate,

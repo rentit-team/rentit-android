@@ -23,6 +23,8 @@ fun RentalTaskSection(
     isTaskAvailable: Boolean,
     isPhotoRegistered: Boolean,
     isTrackingNumRegistered: Boolean,
+    onPhotoTaskClick: () -> Unit = {},
+    onTrackingNumTaskClick: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     val returnRegCountText = listOf(isPhotoRegistered, isTrackingNumRegistered)
@@ -44,11 +46,13 @@ fun RentalTaskSection(
             taskText = photoTaskLabel,
             isTaskEnable = isTaskAvailable,
             isDone = isPhotoRegistered,
+            onClick = onPhotoTaskClick
         )
         TaskCheckBox(
             taskText = trackingNumTaskLabel,
             isTaskEnable = isTaskAvailable,
-            isDone = isTrackingNumRegistered
+            isDone = isTrackingNumRegistered,
+            onClick = onTrackingNumTaskClick
         )
         if (!policyText.isNullOrEmpty())
             Text(
