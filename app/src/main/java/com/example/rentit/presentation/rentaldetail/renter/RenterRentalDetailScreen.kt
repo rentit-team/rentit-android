@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto
 import com.example.rentit.data.rental.dto.ProductDto
@@ -32,6 +33,7 @@ import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterReturne
 fun RentalDetailRenterScreen(
     uiModel: RenterRentalStatusUiModel,
     scrollState: ScrollState,
+    isLoading: Boolean,
     onBackPressed: () -> Unit,
     onPayClick: () -> Unit,
     onCancelClick: () -> Unit,
@@ -55,6 +57,7 @@ fun RentalDetailRenterScreen(
                 is RenterRentalStatusUiModel.Unknown -> Unit
             }
         }
+        LoadingScreen(isLoading)
     }
 }
 
@@ -95,6 +98,7 @@ private fun Preview() {
         RentalDetailRenterScreen(
             uiModel = sample2.toRenterUiModel(),
             scrollState = rememberScrollState(),
+            isLoading = true,
             onBackPressed =  { },
             onPayClick = { },
             onCancelClick = { },

@@ -48,6 +48,7 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
     RentalDetailRenterScreen(
         uiModel = rentalDetailUiModel,
         scrollState = scrollState,
+        isLoading = uiState.isLoading,
         onBackPressed = { navHostController.popBackStack() },
         onPayClick = viewModel::navigateToPay,
         onCancelClick = viewModel::showCancelDialog,
