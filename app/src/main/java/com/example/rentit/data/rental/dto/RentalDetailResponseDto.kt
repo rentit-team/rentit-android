@@ -1,62 +1,100 @@
 package com.example.rentit.data.rental.dto
 
-import kotlinx.serialization.Serializable
+import com.google.gson.annotations.SerializedName
 
-@Serializable
 data class RentalDetailResponseDto(
-    val rental: Rental,
-    val statusHistory: List<StatusHistory>
+    @SerializedName("rental")
+    val rental: RentalDto,
+
+    @SerializedName("statusHistory")
+    val statusHistory: List<StatusHistoryDto>
 )
 
-@Serializable
-data class Rental(
-    val reservationId: Int,
-    val renter: Renter,
+data class RentalDto(
+    @SerializedName("reservationId")
+    val reservationId: Long,
+
+    @SerializedName("renter")
+    val renter: RenterDto,
+
+    @SerializedName("status")
     val status: String,
-    val product: Product,
+
+    @SerializedName("product")
+    val product: ProductDto,
+
+    @SerializedName("startDate")
     val startDate: String,
+
+    @SerializedName("endDate")
     val endDate: String,
+
+    @SerializedName("totalAmount")
     val totalAmount: Int,
+
+    @SerializedName("depositAmount")
     val depositAmount: Int,
-    val rentalTrackingNumber: String? = null,
-    val returnTrackingNumber: String? = null,
-    val deliveryStatus: DeliveryStatus,
-    val returnStatus: ReturnStatus
+
+    @SerializedName("rentalTrackingNumber")
+    val rentalTrackingNumber: String?,
+
+    @SerializedName("returnTrackingNumber")
+    val returnTrackingNumber: String?,
+
+    @SerializedName("deliveryStatus")
+    val deliveryStatus: DeliveryStatusDto,
+
+    @SerializedName("returnStatus")
+    val returnStatus: ReturnStatusDto
 )
 
-@Serializable
-data class Renter(
-    val userId: Int,
+data class RenterDto(
+    @SerializedName("userId")
+    val userId: Long,
+
+    @SerializedName("nickname")
     val nickname: String
 )
 
-@Serializable
-data class Product(
+data class ProductDto(
+    @SerializedName("title")
     val title: String,
-    val thumbnailImgUrl: String
+
+    @SerializedName("thumbnailImgUrl")
+    val thumbnailImgUrl: String?
 )
 
-@Serializable
-data class DeliveryStatus(
+data class DeliveryStatusDto(
+    @SerializedName("isPhotoRegistered")
     val isPhotoRegistered: Boolean,
+
+    @SerializedName("isTrackingNumberRegistered")
     val isTrackingNumberRegistered: Boolean
 )
 
-@Serializable
-data class ReturnStatus(
+data class ReturnStatusDto(
+    @SerializedName("isPhotoRegistered")
     val isPhotoRegistered: Boolean,
+
+    @SerializedName("isTrackingNumberRegistered")
     val isTrackingNumberRegistered: Boolean
 )
 
-@Serializable
-data class StatusHistory(
+data class StatusHistoryDto(
+    @SerializedName("status")
     val status: String,
+
+    @SerializedName("changedAt")
     val changedAt: String,
-    val changedBy: ChangedBy
+
+    @SerializedName("changedBy")
+    val changedBy: ChangedByDto
 )
 
-@Serializable
-data class ChangedBy(
-    val userId: Int? = null,
-    val nickname: String? = null
+data class ChangedByDto(
+    @SerializedName("userId")
+    val userId: Long,
+
+    @SerializedName("nickname")
+    val nickname: String
 )

@@ -1,35 +1,38 @@
-package com.example.rentit.presentation.rentaldetail
+package com.example.rentit.presentation.rentaldetail.renter
 
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import com.example.rentit.data.rental.dto.ChangedBy
-import com.example.rentit.data.rental.dto.DeliveryStatus
-import com.example.rentit.data.rental.dto.Product
-import com.example.rentit.data.rental.dto.Rental
+import androidx.lifecycle.viewModelScope
+import com.example.rentit.data.rental.dto.ChangedByDto
+import com.example.rentit.data.rental.dto.DeliveryStatusDto
+import com.example.rentit.data.rental.dto.ProductDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
-import com.example.rentit.data.rental.dto.Renter
-import com.example.rentit.data.rental.dto.ReturnStatus
-import com.example.rentit.data.rental.dto.StatusHistory
+import com.example.rentit.data.rental.dto.RentalDto
+import com.example.rentit.data.rental.dto.RenterDto
+import com.example.rentit.data.rental.dto.ReturnStatusDto
+import com.example.rentit.data.rental.dto.StatusHistoryDto
+import com.example.rentit.data.rental.repository.RentalRepository
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
-import com.example.rentit.presentation.rentaldetail.renter.toRenterUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RentalDetailViewModel @Inject constructor(
-): ViewModel() {
+class RenterRentalDetailViewModel @Inject constructor(
+    private val rentalRepository: RentalRepository,
+) : ViewModel() {
     private val sampleRentalDetail = RentalDetailResponseDto(
-        rental = Rental(
+        rental = RentalDto(
             reservationId = 1001,
-            renter = Renter(
+            renter = RenterDto(
                 userId = 101,
                 nickname = "김철수"
             ),
             status = "RENTING",
-            product = Product(
+            product = ProductDto(
                 title = "캐논 EOS R6 카메라",
                 thumbnailImgUrl = "https://example.com/image/123.jpg"
             ),
@@ -39,46 +42,22 @@ class RentalDetailViewModel @Inject constructor(
             depositAmount = 45000,
             rentalTrackingNumber = "1234567890",
             returnTrackingNumber = null,
-            deliveryStatus = DeliveryStatus(
+            deliveryStatus = DeliveryStatusDto(
                 isPhotoRegistered = true,
                 isTrackingNumberRegistered = true
             ),
-            returnStatus = ReturnStatus(
+            returnStatus = ReturnStatusDto(
                 isPhotoRegistered = false,
                 isTrackingNumberRegistered = false
             )
         ),
         statusHistory = listOf(
-            StatusHistory(
+            StatusHistoryDto(
                 status = "PENDING",
                 changedAt = "2025-03-25T09:00:00Z",
-                changedBy = ChangedBy(
+                changedBy = ChangedByDto(
                     userId = 1,
                     nickname = "김숙명"
-                )
-            ),
-            StatusHistory(
-                status = "ACCEPTED",
-                changedAt = "2025-03-25T10:00:00Z",
-                changedBy = ChangedBy(
-                    userId = 2,
-                    nickname = "홍길동"
-                )
-            ),
-            StatusHistory(
-                status = "COMPLETED",
-                changedAt = "2025-03-25T10:30:00Z",
-                changedBy = ChangedBy(
-                    userId = 1,
-                    nickname = "김숙명"
-                )
-            ),
-            StatusHistory(
-                status = "RENTING",
-                changedAt = "2025-04-15T00:00:00Z",
-                changedBy = ChangedBy(
-                    userId = 0,
-                    nickname = "SYSTEM"
                 )
             )
         )
@@ -90,4 +69,15 @@ class RentalDetailViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     val uiModel: StateFlow<RenterRentalStatusUiModel> = _uiModel
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getRentalDetail(productId: Int, reservationId: Int) {
+        viewModelScope.launch {
+            rentalRepository.getRentalDetail(productId, reservationId)
+                .onSuccess {
+                    _uiModel.value = it.toRenterUiModel()
+                }.onFailure {
+
+                }
+        }
+    }
 }
