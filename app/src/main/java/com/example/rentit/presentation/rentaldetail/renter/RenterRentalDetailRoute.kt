@@ -18,5 +18,14 @@ fun RenterRentalDetailRoute(navHostController: NavHostController) {
 
     val scrollState = rememberScrollState()
 
-    RentalDetailRenterScreen(uiModel, scrollState) { navHostController.popBackStack() }
+    RentalDetailRenterScreen(
+        uiModel = uiModel,
+        scrollState = scrollState,
+        onBackPressed =  { navHostController.popBackStack() },
+        onPayClick = { },
+        onCancelClick = { },
+        onTrackingNumTaskClick = { },
+        onPhotoTaskClick = { },
+        onCheckPhotoClick = { }
+    )
 }

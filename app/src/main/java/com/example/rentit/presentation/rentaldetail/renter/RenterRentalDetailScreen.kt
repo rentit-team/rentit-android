@@ -30,22 +30,31 @@ import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterReturne
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRenterScreen(uiModel: RenterRentalStatusUiModel, scrollState: ScrollState, onBackClick: () -> Unit) {
+fun RentalDetailRenterScreen(
+    uiModel: RenterRentalStatusUiModel,
+    scrollState: ScrollState,
+    onBackPressed: () -> Unit,
+    onPayClick: () -> Unit,
+    onCancelClick: () -> Unit,
+    onTrackingNumTaskClick: () -> Unit,
+    onPhotoTaskClick: () -> Unit,
+    onCheckPhotoClick: () -> Unit,
+) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title)) { onBackClick() } }
+        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), onBackClick = onBackPressed) }
     ) {
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
                 is RenterRentalStatusUiModel.Request ->
-                    RenterRequestContent(uiModel)
+                    RenterRequestContent(uiModel, onPayClick, onCancelClick)
                 is RenterRentalStatusUiModel.Paid ->
                     RenterPaidContent(uiModel)
                 is RenterRentalStatusUiModel.Renting ->
-                    RenterRentingContent(uiModel)
+                    RenterRentingContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick)
                 is RenterRentalStatusUiModel.Returned ->
-                    RenterReturnedContent(uiModel)
+                    RenterReturnedContent(uiModel, onCheckPhotoClick)
                 is RenterRentalStatusUiModel.Unknown ->
-                    UnknownStatusDialog { onBackClick() }
+                    UnknownStatusDialog(onBackPressed)
             }
         }
     }
@@ -86,8 +95,14 @@ private fun Preview() {
 
     RentItTheme {
         RentalDetailRenterScreen(
-            sample2.toRenterUiModel(),
-            rememberScrollState()
-        ) {}
+            uiModel = sample2.toRenterUiModel(),
+            scrollState = rememberScrollState(),
+            onBackPressed =  { },
+            onPayClick = { },
+            onCancelClick = { },
+            onTrackingNumTaskClick = { },
+            onPhotoTaskClick = { },
+            onCheckPhotoClick = { }
+        )
     }
 }
