@@ -29,6 +29,7 @@ import com.example.rentit.common.model.RentalSummaryUiModel
 @Composable
 fun OwnerReturnedContent(
     returnedData: OwnerRentalStatusUiModel.Returned,
+    onCheckPhotoClick: () -> Unit = {},
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -50,8 +51,9 @@ fun OwnerReturnedContent(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .offset(y = 8.dp),
-            text = stringResource(R.string.screen_rental_detail_returned_check_photo_btn)
-        ) { }
+            text = stringResource(R.string.screen_rental_detail_returned_check_photo_btn),
+            onClick = onCheckPhotoClick
+        )
     }
 
     RentalPaymentSection(

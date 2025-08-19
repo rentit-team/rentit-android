@@ -25,7 +25,7 @@ fun RentalTaskSection(
     isTrackingNumRegistered: Boolean,
     onPhotoTaskClick: () -> Unit = {},
     onTrackingNumTaskClick: () -> Unit = {},
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit = {}
 ) {
     val returnRegCountText = listOf(isPhotoRegistered, isTrackingNumRegistered)
         .count { it }

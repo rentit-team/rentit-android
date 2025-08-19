@@ -18,5 +18,15 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController) {
 
     val scrollState = rememberScrollState()
 
-    OwnerRentalDetailScreen(uiModel, scrollState) { navHostController.popBackStack() }
+    OwnerRentalDetailScreen(
+        uiModel = uiModel,
+        scrollState = scrollState,
+        isLoading = true,
+        onBackClick = { navHostController.popBackStack() },
+        onRequestResponseClick = { },
+        onCancelRentClick = { },
+        onPhotoTaskClick = { },
+        onTrackingNumTaskClick = { },
+        onCheckPhotoClick = { }
+    )
 }
