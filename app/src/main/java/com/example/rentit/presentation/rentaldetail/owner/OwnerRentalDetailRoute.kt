@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail
+package com.example.rentit.presentation.rentaldetail.owner
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -8,16 +8,15 @@ import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.rentit.presentation.rentaldetail.renter.RentalDetailRenterScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRoute(navHostController: NavHostController) {
+fun OwnerRentalDetailRoute(navHostController: NavHostController) {
 
-    val viewModel: RentalDetailViewModel = hiltViewModel()
+    val viewModel: OwnerRentalDetailViewModel = hiltViewModel()
     val uiModel by viewModel.uiModel.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
 
-    RentalDetailRenterScreen(uiModel, scrollState) { navHostController.popBackStack() }
+    OwnerRentalDetailScreen(uiModel, scrollState) { navHostController.popBackStack() }
 }
