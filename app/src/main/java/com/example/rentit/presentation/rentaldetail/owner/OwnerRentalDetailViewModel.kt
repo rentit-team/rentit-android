@@ -97,7 +97,7 @@ class OwnerRentalDetailViewModel @Inject constructor(
     }
 
     /** 운송장 등록 */
-    fun getCourierNames() {
+    private fun getCourierNames() {
         viewModelScope.launch {
             rentalRepository.getCourierNames()
                 .onSuccess {
@@ -111,8 +111,13 @@ class OwnerRentalDetailViewModel @Inject constructor(
         }
     }
 
+    fun showTrackingRegDialog() {
+        if(_uiState.value.trackingCourierNames.isEmpty()) getCourierNames()
+        _uiState.value = _uiState.value.copy(showTrackingRegDialog = true)
+    }
+
     fun dismissTrackingRegDialog() {
-        _uiState.value = _uiState.value.copy(trackingCourierNames = emptyList())
+        _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

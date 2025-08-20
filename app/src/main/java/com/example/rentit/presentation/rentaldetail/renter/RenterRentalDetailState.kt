@@ -6,6 +6,7 @@ data class RenterRentalDetailState(
     val trackingNumber: String = "",
     val trackingCourierNames: List<String> = emptyList(),
     val showTrackingNumberEmptyError: Boolean = false,
+    val showTrackingRegDialog: Boolean = false,
     val showCancelDialog: Boolean = false,
     val showUnknownStatusDialog: Boolean = false,
 )

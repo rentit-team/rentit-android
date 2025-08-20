@@ -66,7 +66,7 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
         onPayClick = viewModel::navigateToPay,
         onCancelRentClick = viewModel::showCancelDialog,
         onPhotoTaskClick = viewModel::navigateToPhotoBeforeReturn,
-        onTrackingNumTaskClick = viewModel::getCourierNames,
+        onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
         onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck
     )
 
@@ -77,7 +77,7 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
         )
     }
 
-    if(uiState.trackingCourierNames.isNotEmpty()){
+    if(uiState.showTrackingRegDialog && uiState.trackingCourierNames.isNotEmpty()){
         TrackingRegistrationDialog(
             courierNames = uiState.trackingCourierNames,
             selectedCourierName = uiState.selectedCourierName,
