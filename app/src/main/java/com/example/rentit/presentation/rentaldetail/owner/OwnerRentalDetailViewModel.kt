@@ -115,6 +115,7 @@ class OwnerRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(trackingCourierNames = emptyList())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun confirmTrackingReg(productId: Int, reservationId: Int) {
         viewModelScope.launch {
             registerTrackingUseCase(
@@ -126,6 +127,7 @@ class OwnerRentalDetailViewModel @Inject constructor(
             ).onSuccess {
                 dismissTrackingRegDialog()
                 toastTrackingRegistered()
+                getRentalDetail(productId, reservationId)
             }.onFailure { e -> handleTrackingError(e) }
         }
     }

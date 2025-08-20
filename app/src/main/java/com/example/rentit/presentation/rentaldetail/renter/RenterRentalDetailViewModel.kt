@@ -102,6 +102,7 @@ class RenterRentalDetailViewModel @Inject constructor(
             ).onSuccess {
                 dismissTrackingRegDialog()
                 toastTrackingRegistered()
+                getRentalDetail(productId, reservationId)
             }.onFailure { e -> handleTrackingError(e) }
         }
     }
