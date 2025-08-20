@@ -56,6 +56,7 @@ class OwnerRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showUnknownStatusDialog = true)
     }
 
+    /** 요청 수락 */
     @RequiresApi(Build.VERSION_CODES.O)
     fun showRequestAcceptDialog() {
         val requestData = _rentalDetailUiModel.value as? OwnerRentalStatusUiModel.Request ?: return
@@ -78,6 +79,7 @@ class OwnerRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
     }
 
+    /** 대여 취소 */
     fun showCancelDialog() {
         _uiState.value = _uiState.value.copy(showCancelDialog = true)
     }
@@ -91,19 +93,36 @@ class OwnerRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showCancelDialog = false)
     }
 
-    fun showTrackingRegDialog() {
-        _uiState.value = _uiState.value.copy(showTrackingRegDialog = true)
+    /** 운송장 등록 */
+    fun getCourierNames() {
+        viewModelScope.launch {
+            rentalRepository.getCourierNames()
+                .onSuccess {
+                    _uiState.value = _uiState.value.copy(trackingRegDialog = it.courierNames, selectedCourierName = it.courierNames.firstOrNull())
+                }.onFailure {
+                    _sideEffect.emit(OwnerRentalDetailSideEffect.ToastErrorGetCourierNames)
+                }
+        }
     }
 
     fun dismissTrackingRegDialog() {
-        _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
+        _uiState.value = _uiState.value.copy(trackingRegDialog = emptyList())
     }
 
     fun confirmTrackingReg() {
         /* 운송장 등록 로직 추가, 성공 시 닫기 */
-        _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
+        _uiState.value = _uiState.value.copy(trackingRegDialog = emptyList())
     }
 
+    fun changeSelectedCourierName(name: String) {
+        _uiState.value = _uiState.value.copy(selectedCourierName = name)
+    }
+
+    fun changeTrackingNumber(number: String) {
+        _uiState.value = _uiState.value.copy(trackingNumber = number)
+    }
+
+    /** 네비게이션 */
     fun navigateToPhotoBeforeRent() {
         viewModelScope.launch {
             _sideEffect.emit(OwnerRentalDetailSideEffect.NavigateToPhotoBeforeRent)

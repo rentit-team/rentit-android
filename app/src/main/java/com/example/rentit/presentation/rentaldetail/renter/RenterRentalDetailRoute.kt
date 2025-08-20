@@ -66,11 +66,11 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
 
     if(uiState.showTrackingRegDialog){
         TrackingRegistrationDialog(
-            companyList = emptyList(),
-            selectedCompany = "",
-            onSelectCompany = { },
-            trackingNum = "",
-            onTrackingNumChange = { },
+            courierNames = emptyList(),
+            selectedCourierName = "",
+            onSelectCourier = { },
+            trackingNumber = "",
+            onTrackingNumberChange = { },
             onClose = viewModel::dismissTrackingRegDialog,
             onConfirm = viewModel::confirmTrackingReg
         )
