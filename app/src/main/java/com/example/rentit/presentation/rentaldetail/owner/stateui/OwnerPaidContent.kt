@@ -35,6 +35,9 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalTas
 @Composable
 fun OwnerPaidContent(
     paidData: OwnerRentalStatusUiModel.Paid,
+    onPhotoTaskClick: () -> Unit = {},
+    onTrackingNumTaskClick: () -> Unit = {},
+    onCancelRentClick: () -> Unit = {},
 ) {
     val priceItem = listOf(
         PriceSummaryUiModel(
@@ -63,8 +66,10 @@ fun OwnerPaidContent(
         trackingNumTaskLabel = stringResource(R.string.screen_rental_detail_owner_paid_sending_task_tracking_num),
         isTaskAvailable = true,
         isPhotoRegistered = paidData.isSendingPhotoRegistered,
-        isTrackingNumRegistered = paidData.isSendingTrackingNumRegistered
-    ) { }
+        isTrackingNumRegistered = paidData.isSendingTrackingNumRegistered,
+        onPhotoTaskClick = onPhotoTaskClick,
+        onTrackingNumTaskClick = onTrackingNumTaskClick
+    )
 
     RentalPaymentSection(
         title = stringResource(R.string.screen_rental_detail_owner_expected_price_title),
@@ -79,8 +84,9 @@ fun OwnerPaidContent(
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
         ArrowedTextButton(
             modifier = Modifier.padding(vertical = 10.dp),
-            text = stringResource(R.string.screen_rental_detail_request_btn_cancel_rent)
-        ) { }
+            text = stringResource(R.string.screen_rental_detail_request_btn_cancel_rent),
+            onClick = onCancelRentClick
+        )
     }
 }
 

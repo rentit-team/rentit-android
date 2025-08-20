@@ -36,7 +36,7 @@ fun RentalDetailRenterScreen(
     isLoading: Boolean,
     onBackPressed: () -> Unit,
     onPayClick: () -> Unit,
-    onCancelClick: () -> Unit,
+    onCancelRentClick: () -> Unit,
     onTrackingNumTaskClick: () -> Unit,
     onPhotoTaskClick: () -> Unit,
     onCheckPhotoClick: () -> Unit,
@@ -47,7 +47,7 @@ fun RentalDetailRenterScreen(
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
                 is RenterRentalStatusUiModel.Request ->
-                    RenterRequestContent(uiModel, onPayClick, onCancelClick)
+                    RenterRequestContent(uiModel, onPayClick, onCancelRentClick)
                 is RenterRentalStatusUiModel.Paid ->
                     RenterPaidContent(uiModel)
                 is RenterRentalStatusUiModel.Renting ->
@@ -101,7 +101,7 @@ private fun Preview() {
             isLoading = true,
             onBackPressed =  { },
             onPayClick = { },
-            onCancelClick = { },
+            onCancelRentClick = { },
             onTrackingNumTaskClick = { },
             onPhotoTaskClick = { },
             onCheckPhotoClick = { }

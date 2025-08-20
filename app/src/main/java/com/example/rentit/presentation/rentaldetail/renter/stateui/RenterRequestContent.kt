@@ -36,7 +36,7 @@ import com.example.rentit.common.model.RentalSummaryUiModel
 fun RenterRequestContent(
     requestData: RenterRentalStatusUiModel.Request,
     onPayClick: () -> Unit = {},
-    onCancelClick: () -> Unit = {},
+    onCancelRentClick: () -> Unit = {},
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -85,7 +85,7 @@ fun RenterRequestContent(
             ArrowedTextButton(
                 modifier = Modifier.padding(vertical = 10.dp),
                 text = stringResource(R.string.screen_rental_detail_request_btn_cancel_rent),
-                onClick = onCancelClick
+                onClick = onCancelRentClick
             )
         }
     }
