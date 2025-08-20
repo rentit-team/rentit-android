@@ -183,20 +183,6 @@
     <string name="screen_rental_detail_returned_check_photo_btn">대여 전/후 사진 확인하기</string>
     <string name="screen_rental_detail_subtitle_day_before_rent">· 대여 %d일전</string>
 
-    <string name="dialog_rental_detail_unknown_title">대여 정보가 존재하지 않아요.</string>
-    <string name="dialog_rental_detail_unknown_confirm_btn">확인</string>
-
-    <string name="dialog_rental_detail_rental_cancel_title">대여를 취소할까요?</string>
-    <string name="dialog_rental_detail_rental_cancel_content">취소하면 이 거래가 없어져요.</string>
-    <string name="dialog_rental_detail_rental_cancel_btn_confirm">네, 취소할께요</string>
-
-    <string name="dialog_rental_detail_tracking_regs_title">운송장 등록</string>
-    <string name="dialog_rental_detail_tracking_regs_label_delivery_company">택배사를 선택해주세요.</string>
-    <string name="dialog_rental_detail_tracking_regs_label_tracking_num">송장 번호를 입력해주세요.</string>
-    <string name="dialog_rental_detail_tracking_regs_placeholder_tracking_num">12345678</string>
-    <string name="dialog_rental_detail_tracking_regs_btn_confirm">등록</string>
-    <string name="dialog_rental_detail_tracking_regs_dropdown_company_default_text">택배사 선택</string>
-
     <string name="screen_rental_detail_tracking_info_title">운송장 정보</string>
     <string name="screen_rental_detail_rental_tracking_num">대여 송장 번호</string>
     <string name="screen_rental_detail_returned_tracking_num">반납 송장 번호</string>
@@ -259,6 +245,26 @@
 
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_leading_text">지연 보상금</string>
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_tail_text">이 지급될 예정이에요.</string>
+
+    <!-- Unknown Dialog -->
+    <string name="dialog_rental_detail_unknown_title">대여 정보가 존재하지 않아요.</string>
+    <string name="dialog_rental_detail_unknown_confirm_btn">확인</string>
+
+    <!-- 대여 취소 Dialog -->
+    <string name="dialog_rental_detail_rental_cancel_title">대여를 취소할까요?</string>
+    <string name="dialog_rental_detail_rental_cancel_content">취소하면 이 거래가 없어져요.</string>
+    <string name="dialog_rental_detail_rental_cancel_btn_confirm">네, 취소할께요</string>
+
+    <!-- 운송장 등록 Dialog -->
+    <string name="dialog_rental_detail_tracking_regs_title">운송장 등록</string>
+    <string name="dialog_rental_detail_tracking_regs_text_error_empty_number">등록할 운송장 번호가 필요해요.</string>
+    <string name="dialog_rental_detail_tracking_regs_label_delivery_company">택배사를 선택해주세요.</string>
+    <string name="dialog_rental_detail_tracking_regs_label_tracking_num">송장 번호를 입력해주세요.</string>
+    <string name="dialog_rental_detail_tracking_regs_placeholder_tracking_num">12345678</string>
+    <string name="dialog_rental_detail_tracking_regs_btn_confirm">등록</string>
+    <string name="toast_error_get_courier_names">운송사 정보를 불러올 수 없어요. 잠시 후 다시 시도해주세요.</string>
+    <string name="toast_success_post_tracking_registration">운송장이 등록되었어요.</string>
+    <string name="toast_error_post_tracking_registration">등록에 실패했어요. 잠시후 다시 시도해주세요.</string>
 
     <!-- 대여 전 사진 등록 -->
     <string name="screen_photo_before_rent_title">대여 전 사진 등록</string>

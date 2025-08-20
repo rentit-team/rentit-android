@@ -29,17 +29,19 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
 fun TrackingRegistrationDialog(
-    companyList: List<String>,
-    selectedCompany: String?,
-    onSelectCompany: (String) -> Unit,
-    trackingNum: String,
-    onTrackingNumChange: (String) -> Unit,
+    courierNames: List<String>,
+    selectedCourierName: String,
+    trackingNumber: String,
+    showTrackingNumberEmptyError: Boolean = false,
+    onSelectCourier: (String) -> Unit,
+    onTrackingNumberChange: (String) -> Unit,
     onClose: () -> Unit,
     onConfirm: () -> Unit,
 ) {
@@ -55,7 +57,7 @@ fun TrackingRegistrationDialog(
             text = stringResource(R.string.dialog_rental_detail_tracking_regs_label_delivery_company),
             style = MaterialTheme.typography.bodyLarge
         )
-        DeliveryCompanyDropDown(companyList, selectedCompany, onSelectCompany)
+        DeliveryCompanyDropDown(courierNames, selectedCourierName, onSelectCourier)
 
         Text(
             modifier = Modifier.padding(top = 20.dp, bottom = 14.dp),
@@ -64,25 +66,31 @@ fun TrackingRegistrationDialog(
         )
         CommonTextField(
             modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
-            value = trackingNum,
-            onValueChange = onTrackingNumChange,
+            value = trackingNumber,
+            onValueChange = onTrackingNumberChange,
             placeholder = stringResource(R.string.dialog_rental_detail_tracking_regs_placeholder_tracking_num),
             keyboardType = KeyboardType.Number,
         )
+        if(showTrackingNumberEmptyError) {
+            Text(
+                modifier = Modifier.padding(bottom = 8.dp),
+                text = stringResource(R.string.dialog_rental_detail_tracking_regs_text_error_empty_number),
+                style = MaterialTheme.typography.labelMedium,
+                color = AppRed
+            )
+        }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeliveryCompanyDropDown(
-    companyList: List<String>,
-    selectedCompany: String?,
+    courierNames: List<String>,
+    selectedCourierName: String,
     onSelect: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     val borderColor = if (expanded) PrimaryBlue500 else Gray200
-    val selectedCompanyText = selectedCompany
-        ?: stringResource(R.string.dialog_rental_detail_tracking_regs_dropdown_company_default_text)
 
     ExposedDropdownMenuBox(
         modifier = Modifier
@@ -94,7 +102,7 @@ fun DeliveryCompanyDropDown(
     ) {
         BasicTextField(
             readOnly = true,
-            value = selectedCompanyText,
+            value = selectedCourierName,
             onValueChange = {},
             modifier = Modifier.menuAnchor().fillMaxWidth(),
             decorationBox = { innerTextField ->
@@ -113,7 +121,7 @@ fun DeliveryCompanyDropDown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            companyList.forEach {
+            courierNames.forEach {
                 DropdownMenuItem(
                     text = { Text(it) },
                     onClick = {
@@ -129,16 +137,16 @@ fun DeliveryCompanyDropDown(
 @Preview(showBackground = true, backgroundColor = Color.DKGRAY.toLong())
 @Composable
 fun TrackingRegistrationDialogPreview() {
-    var selectedCompany by remember { mutableStateOf<String?>(null) }
+    var selectedCompany by remember { mutableStateOf("") }
     var trackingNum by remember { mutableStateOf("") }
     val companyList = listOf("대한통운", "한진택배", "우체국택배")
     RentItTheme {
         TrackingRegistrationDialog(
-            companyList = companyList,
-            selectedCompany = selectedCompany,
-            onSelectCompany = { selectedCompany = it },
-            trackingNum = trackingNum,
-            onTrackingNumChange = { trackingNum = it },
+            courierNames = companyList,
+            selectedCourierName = selectedCompany,
+            onSelectCourier = { selectedCompany = it },
+            trackingNumber = trackingNum,
+            onTrackingNumberChange = { trackingNum = it },
             onClose = { },
             onConfirm = { },
         )

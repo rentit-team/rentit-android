@@ -4,7 +4,9 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.data.rental.repository.RentalRepository
+import com.example.rentit.data.rental.usecase.RegisterTrackingUseCase
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -17,6 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RenterRentalDetailViewModel @Inject constructor(
     private val rentalRepository: RentalRepository,
+    private val registerTrackingUseCase: RegisterTrackingUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RenterRentalDetailState())
@@ -54,6 +57,7 @@ class RenterRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showUnknownStatusDialog = true)
     }
 
+    /** 대여 취소 */
     fun showCancelDialog() {
         _uiState.value = _uiState.value.copy(showCancelDialog = true)
     }
@@ -67,7 +71,23 @@ class RenterRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showCancelDialog = false)
     }
 
+    /** 운송장 등록 */
+    private fun getCourierNames() {
+        viewModelScope.launch {
+            rentalRepository.getCourierNames()
+                .onSuccess {
+                    _uiState.value = _uiState.value.copy(
+                        trackingCourierNames = it.courierNames,
+                        selectedCourierName = it.courierNames.firstOrNull() ?: ""
+                    )
+                }.onFailure {
+                    _sideEffect.emit(RenterRentalDetailSideEffect.ToastErrorGetCourierNames)
+                }
+        }
+    }
+
     fun showTrackingRegDialog() {
+        if(_uiState.value.trackingCourierNames.isEmpty()) getCourierNames()
         _uiState.value = _uiState.value.copy(showTrackingRegDialog = true)
     }
 
@@ -75,11 +95,48 @@ class RenterRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
     }
 
-    fun confirmTrackingReg() {
-        /* 운송장 등록 로직 추가, 성공 시 닫기 */
-        _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun confirmTrackingReg(productId: Int, reservationId: Int) {
+        viewModelScope.launch {
+            registerTrackingUseCase(
+                productId = productId,
+                reservationId = reservationId,
+                type = TrackingRegistrationRequestType.RETURN,
+                courierName = _uiState.value.selectedCourierName,
+                trackingNumber = _uiState.value.trackingNumber
+            ).onSuccess {
+                dismissTrackingRegDialog()
+                toastTrackingRegistered()
+                getRentalDetail(productId, reservationId)
+            }.onFailure { e -> handleTrackingError(e) }
+        }
     }
 
+    private fun toastTrackingRegistered() {
+        viewModelScope.launch {
+            _sideEffect.emit(RenterRentalDetailSideEffect.ToastSuccessTrackingRegistration)
+        }
+    }
+
+    private fun handleTrackingError(e: Throwable) {
+        viewModelScope.launch {
+            when (e) {
+                is IllegalArgumentException -> _uiState.value = _uiState.value.copy(showTrackingNumberEmptyError = true)
+                else -> _sideEffect.emit(RenterRentalDetailSideEffect.ToastErrorTrackingRegistration)
+            }
+        }
+    }
+
+    fun changeSelectedCourierName(name: String) {
+        _uiState.value = _uiState.value.copy(selectedCourierName = name)
+    }
+
+    fun changeTrackingNumber(number: String) {
+        val showError = if(number.isNotBlank()) false else _uiState.value.showTrackingNumberEmptyError
+        _uiState.value = _uiState.value.copy(trackingNumber = number, showTrackingNumberEmptyError = showError)
+    }
+
+    /** 네비게이션 */
     fun navigateToPay() {
         viewModelScope.launch {
             _sideEffect.emit(RenterRentalDetailSideEffect.NavigateToPay)
