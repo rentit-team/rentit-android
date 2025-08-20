@@ -100,7 +100,7 @@ class OwnerRentalDetailViewModel @Inject constructor(
     }
 
     fun confirmTrackingReg() {
-        /* 대여 취소 로직 추가, 성공 시 닫기 */
+        /* 운송장 등록 로직 추가, 성공 시 닫기 */
         _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
     }
 
