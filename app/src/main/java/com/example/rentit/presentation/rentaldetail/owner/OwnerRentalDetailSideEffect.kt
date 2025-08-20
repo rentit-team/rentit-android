@@ -4,4 +4,6 @@ sealed class OwnerRentalDetailSideEffect {
     data object NavigateToPhotoBeforeRent: OwnerRentalDetailSideEffect()
     data object NavigateToRentalPhotoCheck: OwnerRentalDetailSideEffect()
     data object ToastErrorGetCourierNames: OwnerRentalDetailSideEffect()
+    data object ToastSuccessTrackingRegistration: OwnerRentalDetailSideEffect()
+    data object ToastErrorTrackingRegistration: OwnerRentalDetailSideEffect()
 }

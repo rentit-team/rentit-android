@@ -29,6 +29,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -36,9 +37,10 @@ import com.example.rentit.common.theme.RentItTheme
 @Composable
 fun TrackingRegistrationDialog(
     courierNames: List<String>,
-    selectedCourierName: String?,
-    onSelectCourier: (String) -> Unit,
+    selectedCourierName: String,
     trackingNumber: String,
+    showTrackingNumberEmptyError: Boolean = false,
+    onSelectCourier: (String) -> Unit,
     onTrackingNumberChange: (String) -> Unit,
     onClose: () -> Unit,
     onConfirm: () -> Unit,
@@ -69,6 +71,14 @@ fun TrackingRegistrationDialog(
             placeholder = stringResource(R.string.dialog_rental_detail_tracking_regs_placeholder_tracking_num),
             keyboardType = KeyboardType.Number,
         )
+        if(showTrackingNumberEmptyError) {
+            Text(
+                modifier = Modifier.padding(bottom = 8.dp),
+                text = stringResource(R.string.dialog_rental_detail_tracking_regs_text_error_empty_number),
+                style = MaterialTheme.typography.labelMedium,
+                color = AppRed
+            )
+        }
     }
 }
 
@@ -76,13 +86,11 @@ fun TrackingRegistrationDialog(
 @Composable
 fun DeliveryCompanyDropDown(
     courierNames: List<String>,
-    selectedCourierName: String?,
+    selectedCourierName: String,
     onSelect: (String) -> Unit,
 ) {
     var expanded by remember { mutableStateOf(false) }
     val borderColor = if (expanded) PrimaryBlue500 else Gray200
-    val selectedCompanyText = selectedCourierName
-        ?: stringResource(R.string.dialog_rental_detail_tracking_regs_dropdown_courier_unknown)
 
     ExposedDropdownMenuBox(
         modifier = Modifier
@@ -94,7 +102,7 @@ fun DeliveryCompanyDropDown(
     ) {
         BasicTextField(
             readOnly = true,
-            value = selectedCompanyText,
+            value = selectedCourierName,
             onValueChange = {},
             modifier = Modifier.menuAnchor().fillMaxWidth(),
             decorationBox = { innerTextField ->
@@ -129,7 +137,7 @@ fun DeliveryCompanyDropDown(
 @Preview(showBackground = true, backgroundColor = Color.DKGRAY.toLong())
 @Composable
 fun TrackingRegistrationDialogPreview() {
-    var selectedCompany by remember { mutableStateOf<String?>(null) }
+    var selectedCompany by remember { mutableStateOf("") }
     var trackingNum by remember { mutableStateOf("") }
     val companyList = listOf("대한통운", "한진택배", "우체국택배")
     RentItTheme {

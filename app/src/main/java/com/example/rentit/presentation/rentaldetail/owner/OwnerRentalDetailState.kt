@@ -4,10 +4,11 @@ import com.example.rentit.common.model.RequestAcceptDialogUiModel
 
 data class OwnerRentalDetailState(
     val isLoading: Boolean = false,
-    val selectedCourierName: String? = null,
+    val selectedCourierName: String = "",
     val trackingNumber: String = "",
     val requestAcceptDialog: RequestAcceptDialogUiModel? = null,
     val showCancelDialog: Boolean = false,
-    val trackingRegDialog: List<String> = emptyList(),
+    val trackingCourierNames: List<String> = emptyList(),
+    val showTrackingNumberEmptyError: Boolean = false,
     val showUnknownStatusDialog: Boolean = false,
 )

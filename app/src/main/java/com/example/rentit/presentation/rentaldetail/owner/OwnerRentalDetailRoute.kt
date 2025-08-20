@@ -47,6 +47,12 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
                     is OwnerRentalDetailSideEffect.ToastErrorGetCourierNames -> {
                         Toast.makeText(context, context.getString(R.string.toast_error_get_courier_names), Toast.LENGTH_SHORT).show()
                     }
+                    is OwnerRentalDetailSideEffect.ToastSuccessTrackingRegistration -> {
+                        Toast.makeText(context, context.getString(R.string.toast_success_post_tracking_registration), Toast.LENGTH_SHORT).show()
+                    }
+                    is OwnerRentalDetailSideEffect.ToastErrorTrackingRegistration -> {
+                        Toast.makeText(context, context.getString(R.string.toast_error_post_tracking_registration), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -80,15 +86,16 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
         )
     }
 
-    if(uiState.trackingRegDialog.isNotEmpty()){
+    if(uiState.trackingCourierNames.isNotEmpty()){
         TrackingRegistrationDialog(
-            courierNames = uiState.trackingRegDialog,
+            courierNames = uiState.trackingCourierNames,
             selectedCourierName = uiState.selectedCourierName,
-            onSelectCourier = viewModel::changeSelectedCourierName,
             trackingNumber = uiState.trackingNumber,
+            showTrackingNumberEmptyError = uiState.showTrackingNumberEmptyError,
+            onSelectCourier = viewModel::changeSelectedCourierName,
             onTrackingNumberChange = viewModel::changeTrackingNumber,
             onClose = viewModel::dismissTrackingRegDialog,
-            onConfirm = viewModel::confirmTrackingReg
+            onConfirm = { viewModel.confirmTrackingReg(productId, reservationId) }
         )
     }
 
