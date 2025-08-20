@@ -1,17 +1,20 @@
 package com.example.rentit.presentation.rentaldetail.renter
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
+import com.example.rentit.R
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
 import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
@@ -21,6 +24,7 @@ import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
 fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
     val viewModel: RenterRentalDetailViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val rentalDetailUiModel by viewModel.rentalDetailUiModel.collectAsStateWithLifecycle()
@@ -40,6 +44,15 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
                     is RenterRentalDetailSideEffect.NavigateToPay -> { println("NavigateToPay") }
                     is RenterRentalDetailSideEffect.NavigateToPhotoBeforeReturn -> { println("NavigateToPhotoBeforeReturn") }
                     is RenterRentalDetailSideEffect.NavigateToRentalPhotoCheck -> { println("NavigateToRentalPhotoCheck") }
+                    is RenterRentalDetailSideEffect.ToastErrorGetCourierNames -> {
+                        Toast.makeText(context, context.getString(R.string.toast_error_get_courier_names), Toast.LENGTH_SHORT).show()
+                    }
+                    is RenterRentalDetailSideEffect.ToastSuccessTrackingRegistration -> {
+                        Toast.makeText(context, context.getString(R.string.toast_success_post_tracking_registration), Toast.LENGTH_SHORT).show()
+                    }
+                    is RenterRentalDetailSideEffect.ToastErrorTrackingRegistration -> {
+                        Toast.makeText(context, context.getString(R.string.toast_error_post_tracking_registration), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -52,8 +65,8 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
         onBackPressed = { navHostController.popBackStack() },
         onPayClick = viewModel::navigateToPay,
         onCancelRentClick = viewModel::showCancelDialog,
-        onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
         onPhotoTaskClick = viewModel::navigateToPhotoBeforeReturn,
+        onTrackingNumTaskClick = viewModel::getCourierNames,
         onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck
     )
 
@@ -64,15 +77,16 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
         )
     }
 
-    if(uiState.showTrackingRegDialog){
+    if(uiState.trackingCourierNames.isNotEmpty()){
         TrackingRegistrationDialog(
-            courierNames = emptyList(),
-            selectedCourierName = "",
-            onSelectCourier = { },
-            trackingNumber = "",
-            onTrackingNumberChange = { },
+            courierNames = uiState.trackingCourierNames,
+            selectedCourierName = uiState.selectedCourierName,
+            trackingNumber = uiState.trackingNumber,
+            showTrackingNumberEmptyError = uiState.showTrackingNumberEmptyError,
+            onSelectCourier = viewModel::changeSelectedCourierName,
+            onTrackingNumberChange = viewModel::changeTrackingNumber,
             onClose = viewModel::dismissTrackingRegDialog,
-            onConfirm = viewModel::confirmTrackingReg
+            onConfirm = { viewModel.confirmTrackingReg(productId, reservationId) }
         )
     }
 
