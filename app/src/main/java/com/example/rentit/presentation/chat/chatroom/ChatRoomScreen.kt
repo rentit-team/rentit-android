@@ -57,8 +57,6 @@ import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
-import com.example.rentit.common.exception.product.NotProductOwnerException
-import com.example.rentit.common.exception.rental.RentalNotFoundException
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
@@ -68,6 +66,7 @@ import com.example.rentit.data.chat.dto.StatusHistoryDto
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.navigation.chatroom.navigateToRequestAcceptConfirm
 import com.example.rentit.common.component.dialog.RequestAcceptDialog
+import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.model.RequestAcceptDialogUiModel
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
@@ -182,20 +181,24 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
             onClose = { showAcceptDialog = false },
             onAccept = {
                 if(productId != null && chatRoomId != null && reservationId != null){
-                    chatRoomViewModel.updateResvStatus(
-                        chatRoomId,
-                        productId,
-                        reservationId,
-                        onSuccess = { navHostController.navigateToRequestAcceptConfirm() },
+                    chatRoomViewModel.acceptRentalRequest(chatRoomId, productId, reservationId,
+                        onSuccess = {
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.toast_accept_rental_success),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            navHostController.navigateToRequestAcceptConfirm()
+                        },
                         onError = {
-                            var errorMsg = context.getString(R.string.error_cant_process_accept_request)
                             when(it){
-                                is NotProductOwnerException -> errorMsg = context.getString(R.string.error_only_seller)
-                                is RentalNotFoundException -> errorMsg = context.getString(R.string.error_reservation_not_found)
-                                is ServerException -> errorMsg = context.getString(R.string.error_common_server)
-                                else -> Unit
+                                is MissingTokenException -> Unit /* 로그아웃 처리 */
+                                else -> Toast.makeText(
+                                    context,
+                                    context.getString(R.string.toast_accept_rental_failed),
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
@@ -216,7 +219,9 @@ private fun ProductInfo(productInfo: ProductDto) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         LoadableUrlImage(
-            modifier = Modifier.size(60.dp).clip(RoundedCornerShape(15.dp)),
+            modifier = Modifier
+                .size(60.dp)
+                .clip(RoundedCornerShape(15.dp)),
             imgUrl = productInfo.thumbnailImgUrl,
             defaultImageResId = R.drawable.img_thumbnail_placeholder,
         )
