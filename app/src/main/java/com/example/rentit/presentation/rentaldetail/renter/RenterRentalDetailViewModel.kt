@@ -4,9 +4,14 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.TrackingRegistrationRequestType
+import com.example.rentit.common.exception.MissingTokenException
+import com.example.rentit.common.exception.product.NotProductOwnerException
+import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.data.rental.repository.RentalRepository
 import com.example.rentit.data.rental.usecase.RegisterTrackingUseCase
+import com.example.rentit.presentation.rentaldetail.owner.OwnerRentalDetailSideEffect
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +24,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RenterRentalDetailViewModel @Inject constructor(
     private val rentalRepository: RentalRepository,
-    private val registerTrackingUseCase: RegisterTrackingUseCase
+    private val registerTrackingUseCase: RegisterTrackingUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RenterRentalDetailState())
@@ -66,9 +71,29 @@ class RenterRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showCancelDialog = false)
     }
 
-    fun confirmCancel() {
-        /* 대여 취소 로직 추가, 성공 시 닫기 */
-        _uiState.value = _uiState.value.copy(showCancelDialog = false)
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun confirmCancel(productId: Int, reservationId: Int) {
+        viewModelScope.launch {
+            rentalRepository.updateRentalStatus(
+                productId,
+                reservationId,
+                UpdateRentalStatusRequestDto(RentalStatus.CANCELED)
+            ).onSuccess {
+                dismissCancelDialog()
+                getRentalDetail(productId, reservationId)
+            }.onFailure { e ->
+                handleCancelError(e)
+            }
+        }
+    }
+
+    private fun handleCancelError(e: Throwable) {
+        viewModelScope.launch {
+            when(e) {
+                is MissingTokenException -> println("Logout") /* 로그아웃 수행 */
+                else -> _sideEffect.emit(RenterRentalDetailSideEffect.ToastCancelRentalFailed)
+            }
+        }
     }
 
     /** 운송장 등록 */

@@ -254,6 +254,7 @@
     <string name="dialog_rental_detail_rental_cancel_title">대여를 취소할까요?</string>
     <string name="dialog_rental_detail_rental_cancel_content">취소하면 이 거래가 없어져요.</string>
     <string name="dialog_rental_detail_rental_cancel_btn_confirm">네, 취소할께요</string>
+    <string name="toast_cancel_rental_failed">대여 취소에 실패했어요. 잠시 후 다시 시도해 주세요.</string>
 
     <!-- 운송장 등록 Dialog -->
     <string name="dialog_rental_detail_tracking_regs_title">운송장 등록</string>

@@ -6,4 +6,5 @@ sealed class OwnerRentalDetailSideEffect {
     data object ToastErrorGetCourierNames: OwnerRentalDetailSideEffect()
     data object ToastSuccessTrackingRegistration: OwnerRentalDetailSideEffect()
     data object ToastErrorTrackingRegistration: OwnerRentalDetailSideEffect()
+    data object ToastCancelRentalFailed: OwnerRentalDetailSideEffect()
 }
