@@ -7,6 +7,7 @@ data class PhotoBeforeReturnState(
     val beforePhotoUrls: List<String> = emptyList(),
     val takenPhotoUris: List<Uri> = emptyList(),
     val isUploadInProgress: Boolean = false,
+    val showPhotoLoadErrorDialog: Boolean = false,
 ) {
     val currentPageNumber
         get() = currentPageIndex + 1
