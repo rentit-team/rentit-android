@@ -2,7 +2,7 @@ package com.example.rentit.data.rental.repository
 
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.ServerException
-import com.example.rentit.common.exception.product.ResvNotFoundException
+import com.example.rentit.common.exception.rental.RentalNotFoundException
 import com.example.rentit.common.exception.rental.EmptyBodyException
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
@@ -54,7 +54,7 @@ class RentalRepository @Inject constructor(
             if (!response.isSuccessful) {
                 throw when (response.code()) {
                     401 -> MissingTokenException()
-                    404 -> ResvNotFoundException()
+                    404 -> RentalNotFoundException()
                     else -> ServerException()
                 }
             }

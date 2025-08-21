@@ -2,7 +2,7 @@ package com.example.rentit.data.product.repository
 
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.product.NotProductOwnerException
-import com.example.rentit.common.exception.product.ResvNotFoundException
+import com.example.rentit.common.exception.rental.RentalNotFoundException
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
@@ -204,7 +204,7 @@ class ProductRepository @Inject constructor(
             when(response.code()) {
                 200 -> Result.success(Unit)
                 403 -> Result.failure(NotProductOwnerException())
-                404 -> Result.failure(ResvNotFoundException())
+                404 -> Result.failure(RentalNotFoundException())
                 500 -> Result.failure(ServerException())
                 else -> Result.failure(Exception("Unexpected error"))
             }

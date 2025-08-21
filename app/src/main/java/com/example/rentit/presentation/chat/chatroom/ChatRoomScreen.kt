@@ -58,7 +58,7 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.product.NotProductOwnerException
-import com.example.rentit.common.exception.product.ResvNotFoundException
+import com.example.rentit.common.exception.rental.RentalNotFoundException
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
@@ -191,7 +191,7 @@ fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reserv
                             var errorMsg = context.getString(R.string.error_cant_process_accept_request)
                             when(it){
                                 is NotProductOwnerException -> errorMsg = context.getString(R.string.error_only_seller)
-                                is ResvNotFoundException -> errorMsg = context.getString(R.string.error_reservation_not_found)
+                                is RentalNotFoundException -> errorMsg = context.getString(R.string.error_reservation_not_found)
                                 is ServerException -> errorMsg = context.getString(R.string.error_common_server)
                                 else -> Unit
                             }
