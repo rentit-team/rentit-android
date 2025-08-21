@@ -6,7 +6,6 @@ import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.rental.RentalNotFoundException
 import com.example.rentit.common.exception.rental.EmptyBodyException
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
-import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto

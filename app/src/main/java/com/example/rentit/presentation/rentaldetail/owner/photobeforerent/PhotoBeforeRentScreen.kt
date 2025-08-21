@@ -73,6 +73,7 @@ fun PhotoBeforeRentScreen(
             PhotoBeforeRentGuide(minPhotoCnt, maxPhotoCnt)
 
             TakePhotoButton(
+                maxPhotoCnt = maxPhotoCnt,
                 isMaxPhotoTaken = isMaxPhotoTaken,
                 onTakePhoto = onTakePhoto
             )
@@ -97,7 +98,7 @@ fun PhotoBeforeRentGuide(minPhotoCnt: Int, maxPhotoCnt: Int) {
 }
 
 @Composable
-fun TakePhotoButton(isMaxPhotoTaken: Boolean = false, onTakePhoto: () -> Unit) {
+fun TakePhotoButton(maxPhotoCnt: Int, isMaxPhotoTaken: Boolean = false, onTakePhoto: () -> Unit) {
     val btnContentDesc = stringResource(R.string.screen_photo_before_rent_take_photo_btn_content_description)
 
     Box(
@@ -112,7 +113,7 @@ fun TakePhotoButton(isMaxPhotoTaken: Boolean = false, onTakePhoto: () -> Unit) {
     ) {
         if(isMaxPhotoTaken) {
             androidx.compose.material.Text(
-                stringResource(R.string.screen_photo_before_rent_take_photo_text_max_photo_taken),
+                stringResource(R.string.screen_photo_before_rent_take_photo_text_max_photo_taken, maxPhotoCnt),
                 color = Gray400
             )
         } else {

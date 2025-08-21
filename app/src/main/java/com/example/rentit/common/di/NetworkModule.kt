@@ -60,7 +60,9 @@ object NetworkModule {
         userPrefsDataSource: UserPrefsDataSource
     ): OkHttpClient =
         OkHttpClient.Builder()
-            .writeTimeout(90, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
             .addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC))
             .addInterceptor {
                 val request = it.request().newBuilder()
