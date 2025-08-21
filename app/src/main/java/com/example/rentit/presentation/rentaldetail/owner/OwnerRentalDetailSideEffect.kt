@@ -8,4 +8,6 @@ sealed class OwnerRentalDetailSideEffect {
     data object ToastErrorTrackingRegistration: OwnerRentalDetailSideEffect()
     data object ToastCancelRentalSuccess: OwnerRentalDetailSideEffect()
     data object ToastCancelRentalFailed: OwnerRentalDetailSideEffect()
+    data object ToastAcceptRentalSuccess: OwnerRentalDetailSideEffect()
+    data object ToastAcceptRentalFailed: OwnerRentalDetailSideEffect()
 }

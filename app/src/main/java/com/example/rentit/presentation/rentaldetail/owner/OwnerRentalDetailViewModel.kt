@@ -80,9 +80,37 @@ class OwnerRentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
     }
 
-    fun acceptRequest() {
-        /* 요청 수락 로직 추가, 성공 시 닫기 */
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun acceptRequest(productId: Int, reservationId: Int) {
+        viewModelScope.launch {
+            rentalRepository.updateRentalStatus(
+                productId,
+                reservationId,
+                UpdateRentalStatusRequestDto(RentalStatus.ACCEPTED)
+            ).onSuccess {
+                toastAcceptSuccess()
+                dismissRequestAcceptDialog()
+                getRentalDetail(productId, reservationId)
+            }.onFailure { e ->
+                handleAcceptError(e)
+            }
+        }
         _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
+    }
+
+    private fun toastAcceptSuccess() {
+        viewModelScope.launch {
+            _sideEffect.emit(OwnerRentalDetailSideEffect.ToastAcceptRentalSuccess)
+        }
+    }
+
+    private fun handleAcceptError(e: Throwable) {
+        viewModelScope.launch {
+            when(e) {
+                is MissingTokenException -> println("Logout") /* 로그아웃 수행 */
+                else -> _sideEffect.emit(OwnerRentalDetailSideEffect.ToastAcceptRentalFailed)
+            }
+        }
     }
 
     /** 대여 취소 */

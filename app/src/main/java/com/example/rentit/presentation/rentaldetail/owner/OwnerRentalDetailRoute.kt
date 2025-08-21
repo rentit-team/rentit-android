@@ -59,6 +59,13 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
                     is OwnerRentalDetailSideEffect.ToastCancelRentalFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_cancel_rental_failed), Toast.LENGTH_SHORT).show()
                     }
+                    is OwnerRentalDetailSideEffect.ToastAcceptRentalSuccess -> {
+                        Toast.makeText(context, context.getString(R.string.toast_accept_rental_success), Toast.LENGTH_SHORT).show()
+                    }
+                    is OwnerRentalDetailSideEffect.ToastAcceptRentalFailed -> {
+                        Toast.makeText(context, context.getString(R.string.toast_accept_rental_failed), Toast.LENGTH_SHORT).show()
+                    }
+
                 }
             }
         }
@@ -81,7 +88,7 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
         RequestAcceptDialog(
             uiModel = it,
             onClose = viewModel::dismissRequestAcceptDialog,
-            onAccept = viewModel::acceptRequest,
+            onAccept = { viewModel.acceptRequest(productId, reservationId) },
         )
     }
 
