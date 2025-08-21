@@ -1,29 +1,24 @@
 package com.example.rentit.presentation.rentaldetail.owner.photobeforerent
 
-import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-
-
-private const val minPhotoCnt = 2
-private const val maxPhotoCnt = 6
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.rentit.presentation.rentaldetail.components.rememberTakePhotoLauncher
 
 @Composable
 fun PhotoBeforeRentRoute() {
-    var takenPhotoUris by remember { mutableStateOf(listOf<Uri>()) }
-    val isMaxPhotoTaken = takenPhotoUris.size >= maxPhotoCnt
-    val isRegisterEnabled = takenPhotoUris.size >= minPhotoCnt
+    val viewModel: PhotoBeforeRentViewModel = hiltViewModel()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val takePhotoLauncher = rememberTakePhotoLauncher(viewModel::onTakePhotoSuccess)
 
     PhotoBeforeRentScreen(
-        minPhotoCnt = minPhotoCnt,
-        maxPhotoCnt = maxPhotoCnt,
-        isRegisterEnabled = isRegisterEnabled,
-        isMaxPhotoTaken = isMaxPhotoTaken,
-        takenPhotoUris = takenPhotoUris,
-        onTakePhotoSuccess = { uri -> takenPhotoUris = listOf(uri) + takenPhotoUris },
-        onRemovePhoto = { uri -> takenPhotoUris -= uri },
+        minPhotoCnt = uiState.minPhotoCnt,
+        maxPhotoCnt = uiState.maxPhotoCnt,
+        isRegisterEnabled = uiState.isRegisterEnabled,
+        isMaxPhotoTaken = uiState.isMaxPhotoTaken,
+        takenPhotoUris = uiState.takenPhotoUris,
+        onTakePhoto = { takePhotoLauncher() },
+        onRemovePhoto = viewModel::onRemovePhotoSuccess,
     )
 }
