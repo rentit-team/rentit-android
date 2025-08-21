@@ -50,6 +50,7 @@ fun PhotoBeforeRentScreen(
     takenPhotoUris: List<Uri>,
     onTakePhoto: () -> Unit,
     onRemovePhoto: (Uri) -> Unit,
+    onRegister: () -> Unit,
 ) {
     Scaffold(
         topBar = { CommonTopAppBar {} },
@@ -58,8 +59,9 @@ fun PhotoBeforeRentScreen(
                 text = stringResource(R.string.screen_photo_before_rent_btn_registration),
                 enabled = isRegisterEnabled,
                 containerColor = if (isRegisterEnabled) PrimaryBlue500 else Gray200,
-                contentColor = White
-            ) { }
+                contentColor = White,
+                onClick = onRegister
+            )
         }
     ) {
         Column(
@@ -149,6 +151,7 @@ fun PhotoBeforeRentScreenPreview() {
             takenPhotoUris = emptyList(),
             onTakePhoto = {},
             onRemovePhoto = {},
+            onRegister = {},
         )
     }
 }
