@@ -1,15 +1,18 @@
 package com.example.rentit.data.rental.repository
 
+import com.example.rentit.common.enums.PhotoRegistrationType
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.rental.RentalNotFoundException
 import com.example.rentit.common.exception.rental.EmptyBodyException
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
+import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.data.rental.remote.RentalRemoteDataSource
+import okhttp3.MultipartBody
 import javax.inject.Inject
 
 class RentalRepository @Inject constructor(
@@ -59,6 +62,17 @@ class RentalRepository @Inject constructor(
                 }
             }
             Unit
+        }
+    }
+
+    suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<PhotoRegistrationResponseDto> {
+        return runCatching {
+            val response = rentalRemoteDataSource.postPhotoRegistration(productId, reservationId, type, images)
+            if (response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                throw Exception()
+            }
         }
     }
 }
