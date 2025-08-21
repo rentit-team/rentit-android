@@ -280,10 +280,6 @@
     <string name="toast_photo_upload_success">사진이 성공적으로 업로드되었어요!</string>
     <string name="toast_photo_upload_failed">사진 업로드에 실패했어요. 다시 시도해주세요.</string>
 
-    <!-- 대여 전 사진 등록 불가 Dialog (이전 사진 불러오기 실패 시) -->
-    <string name="dialog_fetch_photos_failed_title">문제가 발생했어요.</string>
-    <string name="dialog_fetch_photos_failed_content">등록 화면을 불러오는 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.</string>
-
     <!-- 반납 전 사진 등록 -->
     <string name="screen_photo_before_return_title">반납 전 사진 등록 (%d/%d)</string>
     <string name="screen_photo_before_return_guide">제품 상태를 정확히 증명하기 위해,\n아래 사진을 참고해 같은 위치에서 촬영해 주세요.</string>
@@ -302,6 +298,10 @@
     <string name="screen_rental_photo_check_photo_box_content_description">%s 사진</string>
     <string name="screen_rental_photo_check_btn_back">이전</string>
     <string name="screen_rental_photo_check_btn_next">다음 (%d/%d)</string>
+
+    <!-- 사진 불러오기 실패 시 Dialog -->
+    <string name="dialog_fetch_photos_failed_title">문제가 발생했어요.</string>
+    <string name="dialog_fetch_photos_failed_content">화면을 불러오는 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.</string>
 
     <!-- 카메라 Launcher -->
     <string name="toast_camera_launcher_fail">"사진 촬영에 문제가 발생했어요. 잠시 후 다시 시도해 주세요."</string>

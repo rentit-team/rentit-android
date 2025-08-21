@@ -13,7 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.example.rentit.R
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.presentation.rentaldetail.components.rememberTakePhotoLauncher
-import com.example.rentit.presentation.rentaldetail.renter.photobeforereturn.dialog.PreviousPhotoLoadFailedDialog
+import com.example.rentit.presentation.rentaldetail.dialog.PhotoLoadFailedDialog
 
 @Composable
 fun PhotoBeforeReturnRoute(productId: Int, reservationId: Int) {
@@ -62,6 +62,6 @@ fun PhotoBeforeReturnRoute(productId: Int, reservationId: Int) {
 
     LoadingScreen(uiState.isUploadInProgress)
 
-    if(uiState.showPhotoLoadErrorDialog)
-        PreviousPhotoLoadFailedDialog(viewModel::closeAndNavigateBack)
+    if(uiState.showFailedPhotoLoadDialog)
+        PhotoLoadFailedDialog(viewModel::closeAndNavigateBack)
 }

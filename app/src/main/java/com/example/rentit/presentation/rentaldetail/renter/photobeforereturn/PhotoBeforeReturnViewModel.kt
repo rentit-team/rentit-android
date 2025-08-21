@@ -51,12 +51,12 @@ class PhotoBeforeReturnViewModel @Inject constructor(
 
     private fun handleFetchPhotoFailed() {
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(showPhotoLoadErrorDialog = true)
+            _uiState.value = _uiState.value.copy(showFailedPhotoLoadDialog = true)
         }
     }
 
     fun closeAndNavigateBack() {
-        _uiState.value = _uiState.value.copy(showPhotoLoadErrorDialog = false)
+        _uiState.value = _uiState.value.copy(showFailedPhotoLoadDialog = false)
         viewModelScope.launch {
             _sideEffect.emit(PhotoBeforeReturnSideEffect.PopBackToRentalDetail)
         }
