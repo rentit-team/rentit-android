@@ -9,6 +9,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -21,6 +23,8 @@ object NetworkModule {
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
+
+    /** Default OkHttpClient */
 
     @Provides
     fun provideOkHttpClient(
@@ -46,4 +50,40 @@ object NetworkModule {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
+    /** Photo Upload OkHttpClient */
+
+    @UploadOkHttpClient
+    @Provides
+    fun providePhotoUploadOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        userPrefsDataSource: UserPrefsDataSource
+    ): OkHttpClient =
+        OkHttpClient.Builder()
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC))
+            .addInterceptor {
+                val request = it.request().newBuilder()
+                    .addHeader("Authorization", "Bearer ${userPrefsDataSource.getTokenFromPrefs()}")
+                    .build()
+                it.proceed(request)
+            }
+            .build()
+
+    @UploadOkHttpClient
+    @Provides
+    fun providePhotoUploadRetrofit(
+        @UploadOkHttpClient client: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class UploadOkHttpClient

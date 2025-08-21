@@ -44,17 +44,18 @@ import com.example.rentit.common.theme.White
 @Composable
 fun PhotoBeforeReturnScreen(
     requiredPhotoCnt: Int,
-    currentPageNumber: Int = 0,
+    currentPageNumber: Int,
     takenPhotoCnt: Int,
     beforePhotoUrl: String,
     takenPhotoUri: Uri,
     isLastPage: Boolean,
+    isRegisterAvailable: Boolean,
     isNextAvailable: Boolean,
     isBackAvailable: Boolean,
     onPageNext: () -> Unit,
     onPageBack: () -> Unit,
     onTakePhoto: () -> Unit,
-    onComplete: () -> Unit
+    onRegister: () -> Unit
 ) {
     Scaffold(
         topBar = { CommonTopAppBar { } },
@@ -62,11 +63,12 @@ fun PhotoBeforeReturnScreen(
             currentPageNumber = currentPageNumber,
             totalPageCnt = requiredPhotoCnt,
             isLastPage = isLastPage,
+            isRegisterAvailable = isRegisterAvailable,
             isNextAvailable = isNextAvailable,
             isBackAvailable = isBackAvailable,
             onPageNext = onPageNext,
             onPageBack = onPageBack,
-            onComplete = onComplete,
+            onRegister = onRegister,
         ) }
     ) {
         Column(
@@ -110,11 +112,12 @@ private fun BottomButtons(
     currentPageNumber: Int,
     totalPageCnt: Int,
     isLastPage: Boolean,
+    isRegisterAvailable: Boolean,
     isNextAvailable: Boolean,
     isBackAvailable: Boolean,
     onPageBack: () -> Unit,
     onPageNext: () -> Unit,
-    onComplete: () -> Unit,
+    onRegister: () -> Unit,
 ) {
     val nextBtnText = stringResource(R.string.screen_photo_before_return_btn_next_with_index, currentPageNumber, totalPageCnt)
 
@@ -135,10 +138,10 @@ private fun BottomButtons(
         CommonButton(
             modifier = Modifier.weight(1f),
             text = if (isLastPage) stringResource(R.string.screen_photo_before_return_btn_complete) else nextBtnText,
-            enabled = isNextAvailable,
+            enabled = if(isLastPage) isRegisterAvailable else isNextAvailable,
             containerColor = if (isNextAvailable) PrimaryBlue500 else Gray200,
             contentColor = White,
-            onClick = if (isLastPage) onComplete else onPageNext
+            onClick = if (isLastPage) onRegister else onPageNext
         )
     }
 }
@@ -207,12 +210,13 @@ fun PhotoBeforeReturnScreenPreview() {
             beforePhotoUrl = dummyImgList[0],
             takenPhotoUri = Uri.EMPTY,
             isLastPage = false,
+            isRegisterAvailable = false,
             isNextAvailable = false,
             isBackAvailable = false,
             onPageNext = { },
             onPageBack = { },
             onTakePhoto = { },
-            onComplete = { },
+            onRegister = { },
         )
     }
 }

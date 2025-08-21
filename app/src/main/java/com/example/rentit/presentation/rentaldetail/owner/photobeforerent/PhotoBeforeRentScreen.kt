@@ -1,34 +1,45 @@
 package com.example.rentit.presentation.rentaldetail.owner.photobeforerent
 
 import android.net.Uri
-import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.item.RemovableImageBox
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
+import com.example.rentit.common.theme.Gray300
+import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.White
-import com.example.rentit.presentation.rentaldetail.owner.photobeforerent.components.TakePhotoButton
 
 @Composable
 fun PhotoBeforeRentScreen(
@@ -37,11 +48,10 @@ fun PhotoBeforeRentScreen(
     isRegisterEnabled: Boolean,
     isMaxPhotoTaken: Boolean,
     takenPhotoUris: List<Uri>,
-    onTakePhotoSuccess: (Uri) -> Unit,
+    onTakePhoto: () -> Unit,
     onRemovePhoto: (Uri) -> Unit,
+    onRegister: () -> Unit,
 ) {
-    val context = LocalContext.current
-
     Scaffold(
         topBar = { CommonTopAppBar {} },
         bottomBar = { CommonButton(
@@ -49,8 +59,9 @@ fun PhotoBeforeRentScreen(
                 text = stringResource(R.string.screen_photo_before_rent_btn_registration),
                 enabled = isRegisterEnabled,
                 containerColor = if (isRegisterEnabled) PrimaryBlue500 else Gray200,
-                contentColor = White
-            ) { }
+                contentColor = White,
+                onClick = onRegister
+            )
         }
     ) {
         Column(
@@ -62,8 +73,9 @@ fun PhotoBeforeRentScreen(
             PhotoBeforeRentGuide(minPhotoCnt, maxPhotoCnt)
 
             TakePhotoButton(
+                maxPhotoCnt = maxPhotoCnt,
                 isMaxPhotoTaken = isMaxPhotoTaken,
-                onTakePhotoSuccess = onTakePhotoSuccess
+                onTakePhoto = onTakePhoto
             )
 
             TakenPhotos(takenPhotoUris, onRemovePhoto)
@@ -86,6 +98,35 @@ fun PhotoBeforeRentGuide(minPhotoCnt: Int, maxPhotoCnt: Int) {
 }
 
 @Composable
+fun TakePhotoButton(maxPhotoCnt: Int, isMaxPhotoTaken: Boolean = false, onTakePhoto: () -> Unit) {
+    val btnContentDesc = stringResource(R.string.screen_photo_before_rent_take_photo_btn_content_description)
+
+    Box(
+        modifier = Modifier
+            .semantics { contentDescription = btnContentDesc }
+            .fillMaxWidth()
+            .fillMaxHeight(0.4f)
+            .clip(RoundedCornerShape(20.dp))
+            .basicRoundedGrayBorder()
+            .clickable(enabled = !isMaxPhotoTaken) { onTakePhoto() },
+        contentAlignment = Alignment.Center
+    ) {
+        if(isMaxPhotoTaken) {
+            androidx.compose.material.Text(
+                stringResource(R.string.screen_photo_before_rent_take_photo_text_max_photo_taken, maxPhotoCnt),
+                color = Gray400
+            )
+        } else {
+            Icon(
+                painter = painterResource(R.drawable.ic_camera),
+                contentDescription = stringResource(R.string.content_description_for_ic_camera),
+                tint = Gray300
+            )
+        }
+    }
+}
+
+@Composable
 fun TakenPhotos(photoList: List<Uri>, onRemoveClick: (Uri) -> Unit) {
     Row(
         Modifier
@@ -102,16 +143,16 @@ fun TakenPhotos(photoList: List<Uri>, onRemoveClick: (Uri) -> Unit) {
 @Composable
 @Preview(showBackground = true)
 fun PhotoBeforeRentScreenPreview() {
-    var takenPhotoUris = listOf<Uri>()
     RentItTheme {
         PhotoBeforeRentScreen(
             minPhotoCnt = 2,
             maxPhotoCnt = 6,
             isRegisterEnabled = true,
             isMaxPhotoTaken = true,
-            takenPhotoUris = takenPhotoUris,
-            onTakePhotoSuccess = { uri -> takenPhotoUris = listOf(uri) + takenPhotoUris },
-            onRemovePhoto = { uri -> takenPhotoUris -= uri },
+            takenPhotoUris = emptyList(),
+            onTakePhoto = {},
+            onRemovePhoto = {},
+            onRegister = {},
         )
     }
 }

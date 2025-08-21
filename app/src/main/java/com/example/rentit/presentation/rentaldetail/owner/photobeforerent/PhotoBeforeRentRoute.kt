@@ -1,29 +1,53 @@
 package com.example.rentit.presentation.rentaldetail.owner.photobeforerent
 
-import android.net.Uri
+import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-
-
-private const val minPhotoCnt = 2
-private const val maxPhotoCnt = 6
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
+import com.example.rentit.R
+import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.presentation.rentaldetail.components.rememberTakePhotoLauncher
 
 @Composable
-fun PhotoBeforeRentRoute() {
-    var takenPhotoUris by remember { mutableStateOf(listOf<Uri>()) }
-    val isMaxPhotoTaken = takenPhotoUris.size >= maxPhotoCnt
-    val isRegisterEnabled = takenPhotoUris.size >= minPhotoCnt
+fun PhotoBeforeRentRoute(productId: Int, reservationId: Int) {
+    val viewModel: PhotoBeforeRentViewModel = hiltViewModel()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val takePhotoLauncher = rememberTakePhotoLauncher(viewModel::onTakePhotoSuccess)
+
+    LaunchedEffect(Unit) {
+        lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            viewModel.sideEffect.collect { sideEffect ->
+                when (sideEffect) {
+                    PhotoBeforeRentSideEffect.PopBackToRentalDetail -> { println("pop back to rental detail") }
+                    PhotoBeforeRentSideEffect.ToastUploadSuccess -> {
+                        Toast.makeText(context, context.getString(R.string.toast_photo_upload_success), Toast.LENGTH_SHORT).show()
+                    }
+                    PhotoBeforeRentSideEffect.ToastUploadFailed -> {
+                        Toast.makeText(context, context.getString(R.string.toast_photo_upload_failed), Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
 
     PhotoBeforeRentScreen(
-        minPhotoCnt = minPhotoCnt,
-        maxPhotoCnt = maxPhotoCnt,
-        isRegisterEnabled = isRegisterEnabled,
-        isMaxPhotoTaken = isMaxPhotoTaken,
-        takenPhotoUris = takenPhotoUris,
-        onTakePhotoSuccess = { uri -> takenPhotoUris = listOf(uri) + takenPhotoUris },
-        onRemovePhoto = { uri -> takenPhotoUris -= uri },
+        minPhotoCnt = uiState.minPhotoCnt,
+        maxPhotoCnt = uiState.maxPhotoCnt,
+        isRegisterEnabled = uiState.isRegisterEnabled,
+        isMaxPhotoTaken = uiState.isMaxPhotoTaken,
+        takenPhotoUris = uiState.takenPhotoUris,
+        onTakePhoto = takePhotoLauncher,
+        onRemovePhoto = viewModel::onRemovePhotoSuccess,
+        onRegister = { viewModel.uploadPhotos(productId, reservationId) }
     )
+
+    LoadingScreen(uiState.isUploadInProgress)
 }

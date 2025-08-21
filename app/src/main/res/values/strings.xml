@@ -275,7 +275,10 @@
     <string name="toast_take_photo_fail">사진 촬영 실패</string>
 
     <string name="screen_photo_before_rent_take_photo_btn_content_description">사진 촬영하기</string>
-    <string name="screen_photo_before_rent_take_photo_text_max_photo_taken">6장의 사진을 모두 촬영했어요.</string>
+    <string name="screen_photo_before_rent_take_photo_text_max_photo_taken">%d장의 사진을 모두 촬영했어요.</string>
+
+    <string name="toast_photo_upload_success">사진이 성공적으로 업로드되었어요!</string>
+    <string name="toast_photo_upload_failed">사진 업로드에 실패했어요. 다시 시도해주세요.</string>
 
     <!-- 반납 전 사진 등록 -->
     <string name="screen_photo_before_return_title">반납 전 사진 등록 (%d/%d)</string>
