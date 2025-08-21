@@ -102,11 +102,18 @@ class OwnerRentalDetailViewModel @Inject constructor(
                 reservationId,
                 UpdateRentalStatusRequestDto(RentalStatus.CANCELED)
             ).onSuccess {
+                toastCancelSuccess()
                 dismissCancelDialog()
                 getRentalDetail(productId, reservationId)
             }.onFailure { e ->
                 handleCancelError(e)
             }
+        }
+    }
+
+    private fun toastCancelSuccess() {
+        viewModelScope.launch {
+            _sideEffect.emit(OwnerRentalDetailSideEffect.ToastCancelRentalSuccess)
         }
     }
 

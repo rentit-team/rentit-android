@@ -53,6 +53,9 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
                     is RenterRentalDetailSideEffect.ToastErrorTrackingRegistration -> {
                         Toast.makeText(context, context.getString(R.string.toast_error_post_tracking_registration), Toast.LENGTH_SHORT).show()
                     }
+                    is RenterRentalDetailSideEffect.ToastCancelRentalSuccess -> {
+                        Toast.makeText(context, context.getString(R.string.toast_cancel_rental_success), Toast.LENGTH_SHORT).show()
+                    }
                     is RenterRentalDetailSideEffect.ToastCancelRentalFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_cancel_rental_failed), Toast.LENGTH_SHORT).show()
                     }

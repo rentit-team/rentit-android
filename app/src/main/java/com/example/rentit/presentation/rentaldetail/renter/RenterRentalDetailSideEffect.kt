@@ -7,5 +7,6 @@ sealed class RenterRentalDetailSideEffect {
     data object ToastErrorGetCourierNames: RenterRentalDetailSideEffect()
     data object ToastSuccessTrackingRegistration: RenterRentalDetailSideEffect()
     data object ToastErrorTrackingRegistration: RenterRentalDetailSideEffect()
+    data object ToastCancelRentalSuccess: RenterRentalDetailSideEffect()
     data object ToastCancelRentalFailed: RenterRentalDetailSideEffect()
 }
