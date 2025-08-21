@@ -2,6 +2,7 @@ package com.example.rentit.data.rental.remote
 
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
+import com.example.rentit.data.rental.dto.RentalPhotoResponseDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
@@ -40,4 +41,11 @@ interface RentalApiService {
         @Path("reservationId") reservationId: Int,
         @Body request: UpdateRentalStatusRequestDto
     ): Response<Unit>
+
+    @GET("api/v1/products/{productId}/reservations/{reservationId}/photos")
+    @Headers("Content-Type: application/json")
+    suspend fun getRentalPhotos(
+        @Path("productId") productId: Int,
+        @Path("reservationId") reservationId: Int,
+    ): Response<RentalPhotoResponseDto>
 }

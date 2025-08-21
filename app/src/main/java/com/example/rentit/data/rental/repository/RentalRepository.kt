@@ -7,6 +7,7 @@ import com.example.rentit.common.exception.rental.RentalNotFoundException
 import com.example.rentit.common.exception.rental.EmptyBodyException
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
+import com.example.rentit.data.rental.dto.RentalPhotoResponseDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
@@ -71,6 +72,17 @@ class RentalRepository @Inject constructor(
                 throw Exception()
             }
             Unit
+        }
+    }
+
+    suspend fun getRentalPhotos(productId: Int, reservationId: Int): Result<RentalPhotoResponseDto> {
+        return runCatching {
+            val response = rentalRemoteDataSource.getRentalPhotos(productId, reservationId)
+            if (response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                throw ServerException()
+            }
         }
     }
 }
