@@ -4,6 +4,7 @@ import com.example.rentit.common.enums.PhotoRegistrationType
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
+import com.example.rentit.data.rental.dto.RentalPhotoResponseDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
@@ -31,5 +32,8 @@ class RentalRemoteDataSource @Inject constructor(
     }
     suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Response<PhotoRegistrationResponseDto> {
         return photoApiService.postPhotoRegistration(productId, reservationId, type, images)
+    }
+    suspend fun getRentalPhotos(productId: Int, reservationId: Int): Response<RentalPhotoResponseDto> {
+        return rentalApiService.getRentalPhotos(productId, reservationId)
     }
 }
