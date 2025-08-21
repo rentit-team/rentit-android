@@ -95,7 +95,6 @@ class OwnerRentalDetailViewModel @Inject constructor(
                 handleAcceptError(e)
             }
         }
-        _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
     }
 
     private fun toastAcceptSuccess() {
