@@ -65,14 +65,13 @@ class RentalRepository @Inject constructor(
         }
     }
 
-    suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<PhotoRegistrationResponseDto> {
+    suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<Unit> {
         return runCatching {
             val response = rentalRemoteDataSource.postPhotoRegistration(productId, reservationId, type, images)
-            if (response.isSuccessful) {
-                response.body() ?: throw EmptyBodyException()
-            } else {
+            if (!response.isSuccessful) {
                 throw Exception()
             }
+            Unit
         }
     }
 }
