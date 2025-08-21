@@ -42,12 +42,14 @@ class PhotoBeforeRentViewModel @Inject constructor(
     fun uploadPhotos(productId: Int, reservationId: Int, ) {
         val files = takePhotoFiles.map { fileToMultipart(it) }
         viewModelScope.launch {
+            setUploading(true)
             rentalRepository.postPhotoRegistration(productId, reservationId, PhotoRegistrationType.RENTAL_BEFORE, files)
                 .onSuccess {
                     handlePhotoUploadSuccess()
                 }.onFailure {
                     toastPhotoUploadFailed()
                 }
+            setUploading(false)
         }
     }
 
@@ -67,5 +69,9 @@ class PhotoBeforeRentViewModel @Inject constructor(
         viewModelScope.launch {
             _sideEffect.emit(PhotoBeforeRentSideEffect.ToastUploadFailed)
         }
+    }
+
+    private fun setUploading(isUploading: Boolean) {
+        _uiState.value = _uiState.value.copy(isUploadInProgress = isUploading)
     }
 }
