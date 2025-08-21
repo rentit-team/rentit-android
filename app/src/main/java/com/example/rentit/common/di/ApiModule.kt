@@ -2,6 +2,7 @@ package com.example.rentit.common.di
 
 import com.example.rentit.data.chat.remote.ChatApiService
 import com.example.rentit.data.product.remote.ProductApiService
+import com.example.rentit.data.rental.remote.PhotoUploadApiService
 import com.example.rentit.data.rental.remote.RentalApiService
 import com.example.rentit.data.user.remote.UserApiService
 import dagger.Module
@@ -31,5 +32,10 @@ object ApiModule {
     @Provides
     fun provideRentalApiService(retrofit: Retrofit): RentalApiService {
         return retrofit.create(RentalApiService::class.java)
+    }
+
+    @Provides
+    fun providePhotoUploadApiService(@UploadOkHttpClient retrofit: Retrofit): PhotoUploadApiService {
+        return retrofit.create(PhotoUploadApiService::class.java)
     }
 }

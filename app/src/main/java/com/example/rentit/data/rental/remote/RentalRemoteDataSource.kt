@@ -12,7 +12,8 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class RentalRemoteDataSource @Inject constructor(
-    private val rentalApiService: RentalApiService
+    private val rentalApiService: RentalApiService,
+    private val photoApiService: PhotoUploadApiService,
 ) {
     suspend fun getRentalDetail(productId: Int, reservationId: Int): Response<RentalDetailResponseDto> {
         return rentalApiService.getRentalDetail(productId, reservationId)
@@ -29,6 +30,6 @@ class RentalRemoteDataSource @Inject constructor(
         return rentalApiService.updateRentalStatus(productId, reservationId, request)
     }
     suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Response<PhotoRegistrationResponseDto> {
-        return rentalApiService.postPhotoRegistration(productId, reservationId, type, images)
+        return photoApiService.postPhotoRegistration(productId, reservationId, type, images)
     }
 }
