@@ -44,7 +44,7 @@ import com.example.rentit.common.theme.White
 @Composable
 fun PhotoBeforeReturnScreen(
     requiredPhotoCnt: Int,
-    currentPageNumber: Int = 0,
+    currentPageNumber: Int,
     takenPhotoCnt: Int,
     beforePhotoUrl: String,
     takenPhotoUri: Uri,

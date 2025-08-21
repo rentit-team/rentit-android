@@ -44,7 +44,7 @@ fun PhotoBeforeRentRoute(productId: Int, reservationId: Int) {
         isRegisterEnabled = uiState.isRegisterEnabled,
         isMaxPhotoTaken = uiState.isMaxPhotoTaken,
         takenPhotoUris = uiState.takenPhotoUris,
-        onTakePhoto = { takePhotoLauncher() },
+        onTakePhoto = takePhotoLauncher,
         onRemovePhoto = viewModel::onRemovePhotoSuccess,
         onRegister = { viewModel.uploadPhotos(productId, reservationId) }
     )
