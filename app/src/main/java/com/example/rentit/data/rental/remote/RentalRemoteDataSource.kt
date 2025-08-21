@@ -4,6 +4,7 @@ import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
+import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -20,5 +21,8 @@ class RentalRemoteDataSource @Inject constructor(
 
     suspend fun getCourierNames(): Response<CourierNamesResponseDto> {
         return rentalApiService.getCourierNames()
+    }
+    suspend fun updateRentalStatus(productId: Int, reservationId: Int, request: UpdateRentalStatusRequestDto): Response<Unit> {
+        return rentalApiService.updateRentalStatus(productId, reservationId, request)
     }
 }

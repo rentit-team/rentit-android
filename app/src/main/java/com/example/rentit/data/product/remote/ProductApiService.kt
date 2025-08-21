@@ -8,7 +8,6 @@ import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
-import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -16,7 +15,6 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Multipart
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
 import retrofit2.http.Path
@@ -52,12 +50,4 @@ interface ProductApiService {
     @GET("api/v1/products/{productId}/reservations")
     @Headers("Content-Type: application/json")
     suspend fun getProductRequestList(@Path("productId") productId: Int): Response<RequestHistoryResponseDto>
-
-    @PATCH("api/v1/products/{productId}/reservations/{reservationId}")
-    @Headers("Content-Type: application/json")
-    suspend fun updateResvStatus(
-        @Path("productId") productId: Int,
-        @Path("reservationId") reservationId: Int,
-        @Body request: UpdateResvStatusRequestDto
-    ): Response<Unit>
 }

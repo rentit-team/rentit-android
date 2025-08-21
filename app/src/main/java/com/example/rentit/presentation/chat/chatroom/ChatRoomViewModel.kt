@@ -5,13 +5,14 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.AutoMsgType
-import com.example.rentit.common.enums.ResvStatus
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
-import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
+import com.example.rentit.data.rental.repository.RentalRepository
 import com.example.rentit.data.user.repository.UserRepository
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +25,8 @@ import javax.inject.Inject
 class ChatRoomViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val chatRepository: ChatRepository,
-    private val productRepository: ProductRepository
+    private val productRepository: ProductRepository,
+    private val rentalRepository: RentalRepository
 ): ViewModel() {
 
     private val authUserId: Long = userRepository.getAuthUserIdFromPrefs()
@@ -104,18 +106,16 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun updateResvStatus(chatroomId: String, productId: Int, reservationId: Int, onSuccess: () -> Unit = {}, onError: (Throwable) -> Unit = {}) {
+    fun acceptRentalRequest(chatroomId: String, productId: Int, reservationId: Int, onSuccess: () -> Unit = {}, onError: (Throwable) -> Unit = {}) {
         viewModelScope.launch {
-            productRepository.updateResvStatus(
+            rentalRepository.updateRentalStatus(
                 productId,
                 reservationId,
-                UpdateResvStatusRequestDto(ResvStatus.ACCEPTED)
-            )
-                .onSuccess {
-                    onSuccess()
-                    sendMessage(chatroomId, AutoMsgType.REQUEST_ACCEPT.code)
-                }
-                .onFailure(onError)
+                UpdateRentalStatusRequestDto(RentalStatus.ACCEPTED)
+            ).onSuccess {
+                onSuccess()
+                sendMessage(chatroomId, AutoMsgType.REQUEST_ACCEPT.code)
+            }.onFailure(onError)
         }
     }
 }

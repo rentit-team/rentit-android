@@ -8,7 +8,6 @@ import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
-import com.example.rentit.data.product.dto.UpdateResvStatusRequestDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -38,8 +37,4 @@ class ProductRemoteDataSource @Inject constructor(
     suspend fun getProductRequestList(productId: Int): Response<RequestHistoryResponseDto> {
         return productApiService.getProductRequestList(productId)
     }
-    suspend fun updateResvStatus(productId: Int, reservationId: Int, request: UpdateResvStatusRequestDto): Response<Unit> {
-        return productApiService.updateResvStatus(productId, reservationId, request)
-    }
-
 }
