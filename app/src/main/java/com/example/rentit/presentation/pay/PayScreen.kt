@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTopAppBar
@@ -105,7 +106,8 @@ fun PaymentGuide() {
             modifier = if (hasBottomPadding) Modifier.padding(bottom = 4.dp) else Modifier,
             text = stringResource(textRes),
             style = MaterialTheme.typography.labelSmall,
-            color = Gray400
+            color = Gray400,
+            lineHeight = 15.sp
         )
     }
 
