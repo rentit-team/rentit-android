@@ -4,32 +4,26 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.res.stringResource
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import com.example.rentit.R
-import com.example.rentit.presentation.pay.payresult.PayResultDialogUiModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PayRoute(navHostController: NavHostController, payInfo: PayUiModel) {
 
-    val sampleDialogModel = PayResultDialogUiModel(
-        titleText = stringResource(R.string.dialog_pay_result_success_title),
-        contentText = stringResource(R.string.dialog_pay_result_failed_content)
-    )
+    val viewModel: PayViewModel = hiltViewModel()
+    val isDialogVisible by viewModel.isDialogVisible.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
-    val isDialogVisible = remember { mutableStateOf(false) }
 
     PayScreen(
         payModel = payInfo,
-        dialogModel = sampleDialogModel,
-        isDialogVisible = isDialogVisible.value,
+        isDialogVisible = isDialogVisible,
         scrollState = scrollState,
         onBackClick = { navHostController.popBackStack() },
-        onPayClick = { isDialogVisible.value = true },
-        onDialogClose = { isDialogVisible.value = false },
-        onDialogConfirm = { isDialogVisible.value = false }
+        onPayClick = { viewModel.setDialogVisibility(true) },
+        onDialogClose = { viewModel.setDialogVisibility(false) },
+        onDialogConfirm = { viewModel.setDialogVisibility(false) }
     )
 }

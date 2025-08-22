@@ -30,8 +30,7 @@ import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.pay.payresult.PayResultDialog
-import com.example.rentit.presentation.pay.payresult.PayResultDialogUiModel
+import com.example.rentit.presentation.pay.dialog.PayResultDialog
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 
@@ -39,7 +38,6 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalPay
 @Composable
 fun PayScreen(
     payModel: PayUiModel,
-    dialogModel: PayResultDialogUiModel,
     isDialogVisible: Boolean,
     scrollState: ScrollState,
     onBackClick: () -> Unit,
@@ -95,7 +93,7 @@ fun PayScreen(
             PaymentGuide()
         }
     }
-    if(isDialogVisible) PayResultDialog(dialogModel, onDialogClose, onDialogConfirm)
+    if(isDialogVisible) PayResultDialog(onDialogClose, onDialogConfirm)
 }
 
 @Composable
@@ -148,15 +146,10 @@ private fun Preview() {
         basicRentalFee = 90_000,
         deposit = 10_000 * 3
     )
-    val sampleDialog = PayResultDialogUiModel(
-        titleText = stringResource(R.string.dialog_pay_result_success_title),
-        contentText = stringResource(R.string.dialog_pay_result_failed_content)
-    )
 
     RentItTheme {
         PayScreen(
             payModel = sample,
-            dialogModel = sampleDialog,
             isDialogVisible = false,
             scrollState = rememberScrollState(),
             onBackClick = { },
