@@ -12,7 +12,6 @@ fun PayResultDialog(
 ) {
     BaseDialog(
         title = stringResource(R.string.dialog_pay_result_success_title),
-        content = stringResource(R.string.dialog_pay_result_failed_content),
         confirmBtnText = stringResource(R.string.dialog_pay_result_btn_confirm),
         isBackgroundClickable = false,
         onCloseRequest = onClose,
