@@ -42,7 +42,6 @@ class PayViewModel @Inject constructor(
             ).onSuccess {
                 setDialogVisibility(true)
             }.onFailure {
-                setDialogVisibility(true)
                 toastPayFailed()
             }
             setLoading(false)
