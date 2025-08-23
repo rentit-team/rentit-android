@@ -53,7 +53,6 @@ fun JoinPhoneVerificationRoute() {
             remainingMinutes = uiState.remainingMinutes,
             remainingSeconds = uiState.remainingSeconds,
             isRequestEnabled = uiState.isRequestEnabled,
-            isCodeFieldEnabled = uiState.isCodeFieldEnabled,
             isConfirmEnabled = uiState.isConfirmEnabled,
             showRemainingTime = uiState.showRemainingTime,
             showCodeError = uiState.showCodeError,

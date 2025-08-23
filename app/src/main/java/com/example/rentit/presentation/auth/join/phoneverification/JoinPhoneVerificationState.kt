@@ -8,7 +8,6 @@ data class JoinPhoneVerificationState(
     private val remainingTime: Int = 0,
     val showRemainingTime: Boolean = false,
     val showCodeError: Boolean = false,
-    val isCodeFieldEnabled: Boolean = false,
 ) {
     val isRequestEnabled: Boolean
         get() = phoneNumber.length == PHONE_NUMBER_TOTAL_LENGTH
