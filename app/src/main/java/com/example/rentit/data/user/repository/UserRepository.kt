@@ -1,10 +1,15 @@
 package com.example.rentit.data.user.repository
 
 import com.example.rentit.common.exception.ServerException
+import com.example.rentit.common.exception.rental.EmptyBodyException
+import com.example.rentit.common.exception.rental.TooManyRequestException
+import com.example.rentit.common.exception.rental.VerificationFailedException
+import com.example.rentit.common.exception.rental.VerificationRequestNotFoundException
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
+import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
 import com.example.rentit.data.user.local.UserPrefsDataSource
 import com.example.rentit.data.user.remote.UserRemoteDataSource
 import javax.inject.Inject
@@ -38,6 +43,30 @@ class UserRepository @Inject constructor(
             }
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    suspend fun sendPhoneCode(phoneNumber: String): Result<SendPhoneCodeResponseDto> {
+        return runCatching {
+            val response = remoteDataSource.sendPhoneCode(phoneNumber)
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                throw if (response.code() == 403) TooManyRequestException() else ServerException()
+            }
+        }
+    }
+
+    suspend fun verifyPhoneCode(phoneNumber: String, code: String): Result<Unit> {
+        return runCatching {
+            val response = remoteDataSource.verifyPhoneCode(phoneNumber, code)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    if (!it.verified) throw VerificationFailedException(it.error)
+                } ?: throw EmptyBodyException()
+            } else {
+                throw if (response.code() == 403) VerificationRequestNotFoundException() else ServerException()
+            }
         }
     }
 
