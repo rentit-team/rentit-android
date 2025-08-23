@@ -56,6 +56,7 @@
     <string name="screen_join_phone_verification_btn_request_code">인증 요청</string>
     <string name="screen_join_phone_verification_placeholder_code">인증번호 입력</string>
     <string name="screen_join_phone_verification_error_invalid_code">입력하신 인증번호가 올바르지 않아요. 다시 시도해 주세요.</string>
+    <string name="screen_join_phone_verification_text_remaining_time">인증 코드 만료까지 %d:%d</string>
     <string name="screen_join_phone_verification_btn_check_code">인증번호 확인</string>
 
     <string name="screen_join_nickname_headline">에서 사용할\n닉네임을 정해주세요.</string>

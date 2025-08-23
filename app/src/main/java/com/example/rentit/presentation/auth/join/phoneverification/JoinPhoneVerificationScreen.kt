@@ -40,9 +40,12 @@ const val PHONE_NUMBER_FIRST_SPLIT_MIN = 4
 fun JoinPhoneVerificationScreen(
     phoneNumber: String,
     code: String,
+    remainingMinutes: Int,
+    remainingSeconds: Int,
     isRequestEnabled: Boolean,
     isCodeFieldEnabled: Boolean,
     isConfirmEnabled: Boolean,
+    showRemainingTime: Boolean,
     showCodeError: Boolean,
     onBackPressed: () -> Unit,
     onPhoneNumberChange: (String) -> Unit,
@@ -79,6 +82,16 @@ fun JoinPhoneVerificationScreen(
                 onCodeChange = onCodeChange,
                 onRequestCode = onRequestCode
             )
+
+            if(showRemainingTime) {
+                InputErrorMessage(
+                    stringResource(
+                        R.string.screen_join_phone_verification_text_remaining_time,
+                        remainingMinutes,
+                        remainingSeconds
+                    )
+                )
+            }
 
             if (showCodeError) {
                 InputErrorMessage(stringResource(R.string.screen_join_phone_verification_error_invalid_code))
@@ -171,9 +184,12 @@ fun JoinPhoneVerificationScreenPreview() {
         JoinPhoneVerificationScreen(
             phoneNumber = "",
             code = "",
+            remainingMinutes = 0,
+            remainingSeconds = 0,
             isRequestEnabled = true,
             isCodeFieldEnabled = true,
             isConfirmEnabled = true,
+            showRemainingTime = true,
             showCodeError = true,
             onPhoneNumberChange = {},
             onCodeChange = {},

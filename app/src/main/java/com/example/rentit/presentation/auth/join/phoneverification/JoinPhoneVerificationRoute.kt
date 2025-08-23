@@ -50,9 +50,12 @@ fun JoinPhoneVerificationRoute() {
         JoinPhoneVerificationScreen(
             phoneNumber = uiState.phoneNumber,
             code = uiState.code,
+            remainingMinutes = uiState.remainingMinutes,
+            remainingSeconds = uiState.remainingSeconds,
             isRequestEnabled = uiState.isRequestEnabled,
             isCodeFieldEnabled = uiState.isCodeFieldEnabled,
             isConfirmEnabled = uiState.isConfirmEnabled,
+            showRemainingTime = uiState.showRemainingTime,
             showCodeError = uiState.showCodeError,
             onPhoneNumberChange = viewModel::changePhoneNumber,
             onCodeChange = viewModel::changeCode,
