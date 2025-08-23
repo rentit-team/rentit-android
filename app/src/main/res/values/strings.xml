@@ -304,7 +304,7 @@
     <string name="dialog_fetch_photos_failed_content">화면을 불러오는 중 문제가 발생했어요. 잠시 후 다시 시도해 주세요.</string>
 
     <!-- 카메라 Launcher -->
-    <string name="toast_camera_launcher_fail">"사진 촬영에 문제가 발생했어요. 잠시 후 다시 시도해 주세요."</string>
+    <string name="toast_camera_launcher_fail">사진 촬영에 문제가 발생했어요. 잠시 후 다시 시도해 주세요.</string>
 
     <!-- 결제 화면 -->
     <string name="screen_pay_title">결제하기</string>
@@ -325,9 +325,8 @@
     <string name="screen_pay_policy_tip_2">💡 결제 완료 시, 판매자에게 안내 메세지가 자동 발송됩니다.</string>
 
     <string name="dialog_pay_result_success_title">결제가 정상적으로 완료됐어요</string>
-    <string name="dialog_pay_result_failed_title">결제 처리 중 오류가 발생했습니다</string>
-    <string name="dialog_pay_result_failed_content">잠시 후 다시 시도해주세요.</string>
     <string name="dialog_pay_result_btn_confirm">완료</string>
+    <string name="toast_pay_result_failed">결제 처리 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.</string>
 
     <string name="error_mypage_new_chatroom">채팅방 생성에 실패했어요.</string>
 
