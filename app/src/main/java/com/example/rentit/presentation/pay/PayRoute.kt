@@ -24,8 +24,10 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val viewModel: PayViewModel = hiltViewModel()
+
     val isDialogVisible by viewModel.isDialogVisible.collectAsStateWithLifecycle()
     val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+
     val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {

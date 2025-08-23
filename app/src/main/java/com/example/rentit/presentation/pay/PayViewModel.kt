@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val MIN_LOADING_DURATION = 500L    // 즉시 전환 방지를 위한 최소 로딩
+
 @HiltViewModel
 class PayViewModel @Inject constructor(
     private val rentalRepository: RentalRepository
@@ -34,17 +36,20 @@ class PayViewModel @Inject constructor(
     fun updateStatusToPaid(productId: Int, reservationId: Int) {
         viewModelScope.launch {
             setLoading(true)
-            delay(500)     // 즉시 전환 방지를 위한 최소 로딩
-            rentalRepository.updateRentalStatus(
-                productId,
-                reservationId,
-                UpdateRentalStatusRequestDto(RentalStatus.PAID)
-            ).onSuccess {
-                setDialogVisibility(true)
-            }.onFailure {
-                toastPayFailed()
+            delay(MIN_LOADING_DURATION)
+            try {
+                rentalRepository.updateRentalStatus(
+                    productId,
+                    reservationId,
+                    UpdateRentalStatusRequestDto(RentalStatus.PAID)
+                ).onSuccess {
+                    setDialogVisibility(true)
+                }.onFailure {
+                    toastPayFailed()
+                }
+            } finally {
+                setLoading(false)
             }
-            setLoading(false)
         }
     }
 
@@ -61,8 +66,8 @@ class PayViewModel @Inject constructor(
     }
 
     fun onConfirmAndNavigateBack() {
-        navigateBackToRentalDetail()
         setDialogVisibility(false)
+        navigateBackToRentalDetail()
     }
 
     fun navigateBackToRentalDetail() {
