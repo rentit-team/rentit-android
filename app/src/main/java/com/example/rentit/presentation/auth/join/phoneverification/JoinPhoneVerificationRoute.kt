@@ -1,13 +1,16 @@
 package com.example.rentit.presentation.auth.join.phoneverification
 
+import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
 
 
@@ -15,6 +18,7 @@ import com.example.rentit.common.theme.RentItTheme
 fun JoinPhoneVerificationRoute() {
 
     val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
     val viewModel: JoinPhoneVerificationViewModel = hiltViewModel()
     val uiState by viewModel.state.collectAsStateWithLifecycle()
 
@@ -23,23 +27,29 @@ fun JoinPhoneVerificationRoute() {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
                     JoinPhoneVerificationSideEffect.NavigateBack -> {
+                        println("Navigate back")
+                        // TODO: Navigate back
+                    }
+
+                    JoinPhoneVerificationSideEffect.NavigateToNickname -> {
+                        println("NavigateToNickname")
                         // TODO: Navigate back
                     }
 
                     JoinPhoneVerificationSideEffect.ToastSendCodeFailed -> {
-                        // TODO: Toast send code failed
+                        Toast.makeText(context, context.getString(R.string.toast_send_code_fail), Toast.LENGTH_SHORT).show()
                     }
 
                     JoinPhoneVerificationSideEffect.ToastTooManyRequests -> {
-                        // TODO: Toast too many requests
+                        Toast.makeText(context, context.getString(R.string.toast_too_many_code_request), Toast.LENGTH_SHORT).show()
                     }
 
                     JoinPhoneVerificationSideEffect.ToastVerificationSuccess -> {
-                        // TODO: Toast verification success
+                        Toast.makeText(context, context.getString(R.string.toast_phone_verification_success), Toast.LENGTH_SHORT).show()
                     }
 
-                    JoinPhoneVerificationSideEffect.ToastRequestNotFound -> {
-                        // TODO: Toast request not found
+                    JoinPhoneVerificationSideEffect.ToastVerificationFailed -> {
+                        Toast.makeText(context, context.getString(R.string.toast_phone_verification_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -52,15 +62,15 @@ fun JoinPhoneVerificationRoute() {
             code = uiState.code,
             remainingMinutes = uiState.remainingMinutes,
             remainingSeconds = uiState.remainingSeconds,
+            errorMessageRes = uiState.errorMessageRes,
             isRequestEnabled = uiState.isRequestEnabled,
             isConfirmEnabled = uiState.isConfirmEnabled,
             showRemainingTime = uiState.showRemainingTime,
-            showCodeError = uiState.showCodeError,
             onPhoneNumberChange = viewModel::changePhoneNumber,
             onCodeChange = viewModel::changeCode,
-            onRequestCode = { },
-            onBackPressed = { },
-            onConfirm = { },
+            onRequestCode = viewModel::requestCode,
+            onBackPressed = viewModel::navigateBack,
+            onConfirm = viewModel::codeConfirm,
         )
     }
 }

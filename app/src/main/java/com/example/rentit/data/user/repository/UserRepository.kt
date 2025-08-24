@@ -62,7 +62,7 @@ class UserRepository @Inject constructor(
             val response = remoteDataSource.verifyPhoneCode(phoneNumber, code)
             if (response.isSuccessful) {
                 response.body()?.let {
-                    if (!it.verified) throw VerificationFailedException(it.error)
+                    if (!it.verified) throw VerificationFailedException(it.message)
                 } ?: throw EmptyBodyException()
             } else {
                 throw if (response.code() == 403) VerificationRequestNotFoundException() else ServerException()

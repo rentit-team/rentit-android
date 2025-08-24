@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.auth.join.phoneverification
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -42,10 +43,10 @@ fun JoinPhoneVerificationScreen(
     code: String,
     remainingMinutes: Int,
     remainingSeconds: Int,
+    @StringRes errorMessageRes: Int?,
     isRequestEnabled: Boolean,
     isConfirmEnabled: Boolean,
     showRemainingTime: Boolean,
-    showCodeError: Boolean,
     onBackPressed: () -> Unit,
     onPhoneNumberChange: (String) -> Unit,
     onCodeChange: (String) -> Unit,
@@ -91,8 +92,8 @@ fun JoinPhoneVerificationScreen(
                 )
             }
 
-            if (showCodeError) {
-                InputErrorMessage(stringResource(R.string.screen_join_phone_verification_error_invalid_code))
+            errorMessageRes?.let {
+                InputErrorMessage(stringResource(errorMessageRes))
             }
 
             Spacer(Modifier.weight(2f))
@@ -182,10 +183,10 @@ fun JoinPhoneVerificationScreenPreview() {
             code = "",
             remainingMinutes = 0,
             remainingSeconds = 0,
+            errorMessageRes = R.string.error_verification_fail,
             isRequestEnabled = true,
             isConfirmEnabled = true,
             showRemainingTime = true,
-            showCodeError = true,
             onPhoneNumberChange = {},
             onCodeChange = {},
             onRequestCode = {},

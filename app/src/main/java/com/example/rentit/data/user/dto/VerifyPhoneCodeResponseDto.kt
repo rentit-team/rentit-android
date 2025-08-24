@@ -6,9 +6,6 @@ data class VerifyPhoneCodeResponseDto(
     @SerializedName("message")
     val message: String,
 
-    @SerializedName("error")
-    val error: String,
-
     @SerializedName("verified")
     val verified: Boolean
 )
