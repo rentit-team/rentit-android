@@ -87,7 +87,7 @@ fun JoinPhoneVerificationScreen(
                     stringResource(
                         R.string.screen_join_phone_verification_text_remaining_time,
                         remainingMinutes,
-                        remainingSeconds
+                        "%02d".format(remainingSeconds)
                     )
                 )
             }
