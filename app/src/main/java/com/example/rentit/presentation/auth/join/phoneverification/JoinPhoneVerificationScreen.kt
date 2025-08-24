@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.auth.join.phoneverification
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -40,10 +41,12 @@ const val PHONE_NUMBER_FIRST_SPLIT_MIN = 4
 fun JoinPhoneVerificationScreen(
     phoneNumber: String,
     code: String,
+    remainingMinutes: Int,
+    remainingSeconds: Int,
+    @StringRes errorMessageRes: Int?,
     isRequestEnabled: Boolean,
-    isCodeFieldEnabled: Boolean,
     isConfirmEnabled: Boolean,
-    showCodeError: Boolean,
+    showRemainingTime: Boolean,
     onBackPressed: () -> Unit,
     onPhoneNumberChange: (String) -> Unit,
     onCodeChange: (String) -> Unit,
@@ -74,14 +77,23 @@ fun JoinPhoneVerificationScreen(
                 phoneNumber = phoneNumber,
                 code = code,
                 isRequestEnabled = isRequestEnabled,
-                isCodeFieldEnabled = isCodeFieldEnabled,
                 onPhoneNumberChange = onPhoneNumberChange,
                 onCodeChange = onCodeChange,
                 onRequestCode = onRequestCode
             )
 
-            if (showCodeError) {
-                InputErrorMessage(stringResource(R.string.screen_join_phone_verification_error_invalid_code))
+            if(showRemainingTime) {
+                InputErrorMessage(
+                    stringResource(
+                        R.string.screen_join_phone_verification_text_remaining_time,
+                        remainingMinutes,
+                        "%02d".format(remainingSeconds)
+                    )
+                )
+            }
+
+            errorMessageRes?.let {
+                InputErrorMessage(stringResource(errorMessageRes))
             }
 
             Spacer(Modifier.weight(2f))
@@ -108,7 +120,6 @@ private fun PhoneVerificationForm(
     phoneNumber: String,
     code: String,
     isRequestEnabled: Boolean = true,
-    isCodeFieldEnabled: Boolean = true,
     onPhoneNumberChange: (String) -> Unit = {},
     onCodeChange: (String) -> Unit = {},
     onRequestCode: () -> Unit = {},
@@ -139,7 +150,6 @@ private fun PhoneVerificationForm(
     CommonTextField(
         modifier = Modifier.padding(top = 10.dp),
         value = code,
-        enabled = isCodeFieldEnabled,
         onValueChange = onCodeChange,
         placeholder = stringResource(R.string.screen_join_phone_verification_placeholder_code),
         keyboardType = KeyboardType.Number,
@@ -171,10 +181,12 @@ fun JoinPhoneVerificationScreenPreview() {
         JoinPhoneVerificationScreen(
             phoneNumber = "",
             code = "",
+            remainingMinutes = 0,
+            remainingSeconds = 0,
+            errorMessageRes = R.string.error_verification_fail,
             isRequestEnabled = true,
-            isCodeFieldEnabled = true,
             isConfirmEnabled = true,
-            showCodeError = true,
+            showRemainingTime = true,
             onPhoneNumberChange = {},
             onCodeChange = {},
             onRequestCode = {},

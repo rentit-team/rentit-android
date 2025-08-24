@@ -50,14 +50,26 @@
     <!-- 회원가입 -->
     <string name="screen_join_title">회원가입</string>
 
+    <!-- 회원가입 - 휴대폰 인증 -->
     <string name="screen_join_phone_verification_title">전화번호 인증</string>
     <string name="screen_join_phone_verification_guide">안전한 서비스 이용을 위해, 본인 인증이 필요해요.</string>
     <string name="screen_join_phone_verification_placeholder_phone_number">휴대폰 11자리</string>
     <string name="screen_join_phone_verification_btn_request_code">인증 요청</string>
     <string name="screen_join_phone_verification_placeholder_code">인증번호 입력</string>
-    <string name="screen_join_phone_verification_error_invalid_code">입력하신 인증번호가 올바르지 않아요. 다시 시도해 주세요.</string>
+    <string name="screen_join_phone_verification_text_remaining_time">인증번호 만료까지 %d:%s</string>
     <string name="screen_join_phone_verification_btn_check_code">인증번호 확인</string>
 
+    <string name="error_code_expired">인증번호가 발급되지 않았거나 만료되었어요. 다시 요청해주세요.</string>
+    <string name="error_incorrect_code">잘못된 인증번호에요. 다시 입력해주세요.</string>
+    <string name="error_request_not_found">인증 요청 이력이 없어요. 인증번호를 먼저 요청해주세요.</string>
+    <string name="error_verification_fail">인증에 실패했어요. 다시 시도해주세요.</string>
+
+    <string name="toast_send_code_fail">인증번호 전송에 실패했어요. 잠시 후 다시 시도해주세요.</string>
+    <string name="toast_too_many_code_request">인증번호를 너무 많이 요청했어요. 1분 후 다시 시도해주세요.</string>
+    <string name="toast_phone_verification_success">인증이 완료되었어요.</string>
+    <string name="toast_phone_verification_failed">인증번호 확인에 실패했어요. 잠시 후 다시 시도해주세요.</string>
+
+    <!-- 회원가입 - 닉네임 설정 -->
     <string name="screen_join_nickname_headline">에서 사용할\n닉네임을 정해주세요.</string>
     <string name="screen_join_nickname_empty_notification">닉네임을 1자 이상 입력해 주세요.</string>
     <string name="screen_join_nickname_error_email_null">회원가입을 진행할 수 없어요.</string>
