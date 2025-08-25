@@ -10,12 +10,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.presentation.rentaldetail.components.rememberTakePhotoLauncher
 
 @Composable
-fun PhotoBeforeRentRoute(productId: Int, reservationId: Int) {
+fun PhotoBeforeRentRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
     val viewModel: PhotoBeforeRentViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current

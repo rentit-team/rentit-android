@@ -13,6 +13,7 @@ import com.example.rentit.navigation.bottomtab.bottomTabGraph
 import com.example.rentit.navigation.chatroom.chatRoomGraph
 import com.example.rentit.navigation.createpost.createPostGraph
 import com.example.rentit.navigation.productdetail.productDetailGraph
+import com.example.rentit.navigation.rentaldetail.rentalDetailGraph
 import com.example.rentit.navigation.splash.SplashRoute
 import com.example.rentit.navigation.splash.splashGraph
 
@@ -24,6 +25,7 @@ fun MainNavHost(navHostController: NavHostController, paddingValues: PaddingValu
         authGraph(navHostController)
         bottomTabGraph(navHostController)
         productDetailGraph(navHostController)
+        rentalDetailGraph(navHostController)
         chatRoomGraph(navHostController)
         createPostGraph(navHostController)
     }

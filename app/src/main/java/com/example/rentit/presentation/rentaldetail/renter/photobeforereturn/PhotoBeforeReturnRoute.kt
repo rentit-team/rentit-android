@@ -10,13 +10,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.presentation.rentaldetail.components.rememberTakePhotoLauncher
 import com.example.rentit.presentation.rentaldetail.dialog.PhotoLoadFailedDialog
 
 @Composable
-fun PhotoBeforeReturnRoute(productId: Int, reservationId: Int) {
+fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
 
     val viewModel: PhotoBeforeReturnViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
