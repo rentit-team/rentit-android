@@ -33,7 +33,9 @@ fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int,
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
-                    PhotoBeforeReturnSideEffect.PopBackToRentalDetail -> { println("pop back to rental detail") }
+                    PhotoBeforeReturnSideEffect.PopBackToRentalDetail -> {
+                        navHostController.popBackStack()
+                    }
                     PhotoBeforeReturnSideEffect.ToastUploadSuccess -> {
                         Toast.makeText(context, context.getString(R.string.toast_photo_upload_success), Toast.LENGTH_SHORT).show()
                     }

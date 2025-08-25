@@ -15,6 +15,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeReturn
+import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
 import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
@@ -41,22 +43,31 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect {
                 when(it) {
-                    is RenterRentalDetailSideEffect.NavigateToPay -> { println("NavigateToPay") }
-                    is RenterRentalDetailSideEffect.NavigateToPhotoBeforeReturn -> { println("NavigateToPhotoBeforeReturn") }
-                    is RenterRentalDetailSideEffect.NavigateToRentalPhotoCheck -> { println("NavigateToRentalPhotoCheck") }
-                    is RenterRentalDetailSideEffect.ToastErrorGetCourierNames -> {
+                    RenterRentalDetailSideEffect.NavigateBack -> {
+                        navHostController.popBackStack()
+                    }
+                    RenterRentalDetailSideEffect.NavigateToPay -> {
+                        println("NavigateToPay")
+                    }
+                    RenterRentalDetailSideEffect.NavigateToPhotoBeforeReturn -> {
+                        navHostController.navigateToPhotoBeforeReturn(productId, reservationId)
+                    }
+                    RenterRentalDetailSideEffect.NavigateToRentalPhotoCheck -> {
+                        navHostController.navigateToRentalPhotoCheck(productId, reservationId)
+                    }
+                    RenterRentalDetailSideEffect.ToastErrorGetCourierNames -> {
                         Toast.makeText(context, context.getString(R.string.toast_error_get_courier_names), Toast.LENGTH_SHORT).show()
                     }
-                    is RenterRentalDetailSideEffect.ToastSuccessTrackingRegistration -> {
+                    RenterRentalDetailSideEffect.ToastSuccessTrackingRegistration -> {
                         Toast.makeText(context, context.getString(R.string.toast_success_post_tracking_registration), Toast.LENGTH_SHORT).show()
                     }
-                    is RenterRentalDetailSideEffect.ToastErrorTrackingRegistration -> {
+                    RenterRentalDetailSideEffect.ToastErrorTrackingRegistration -> {
                         Toast.makeText(context, context.getString(R.string.toast_error_post_tracking_registration), Toast.LENGTH_SHORT).show()
                     }
-                    is RenterRentalDetailSideEffect.ToastCancelRentalSuccess -> {
+                    RenterRentalDetailSideEffect.ToastCancelRentalSuccess -> {
                         Toast.makeText(context, context.getString(R.string.toast_cancel_rental_success), Toast.LENGTH_SHORT).show()
                     }
-                    is RenterRentalDetailSideEffect.ToastCancelRentalFailed -> {
+                    RenterRentalDetailSideEffect.ToastCancelRentalFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_cancel_rental_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -68,7 +79,7 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
         uiModel = rentalDetailUiModel,
         scrollState = scrollState,
         isLoading = uiState.isLoading,
-        onBackPressed = { navHostController.popBackStack() },
+        onBackPressed = viewModel::navigateBack,
         onPayClick = viewModel::navigateToPay,
         onCancelRentClick = viewModel::showCancelDialog,
         onPhotoTaskClick = viewModel::navigateToPhotoBeforeReturn,
@@ -97,6 +108,6 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
     }
 
     if(uiState.showUnknownStatusDialog){
-        UnknownStatusDialog { navHostController.popBackStack() }
+        UnknownStatusDialog(viewModel::navigateBack)
     }
 }

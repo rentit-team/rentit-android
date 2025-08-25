@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.navigation.auth.navigateToJoinNickname
 
 
 @Composable
@@ -28,13 +29,11 @@ fun JoinPhoneVerificationRoute(navHostController: NavHostController, name: Strin
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
                     JoinPhoneVerificationSideEffect.NavigateBack -> {
-                        println("Navigate back")
-                        // TODO: Navigate back
+                        navHostController.popBackStack()
                     }
 
                     JoinPhoneVerificationSideEffect.NavigateToNickname -> {
-                        println("NavigateToNickname")
-                        // TODO: Navigate back
+                        navHostController.navigateToJoinNickname(name, email)
                     }
 
                     JoinPhoneVerificationSideEffect.ToastSendCodeFailed -> {

@@ -56,6 +56,7 @@ import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
 import com.example.rentit.common.component.ProductListItem
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
+import com.example.rentit.navigation.setting.navigateToSetting
 import com.example.rentit.presentation.mypage.components.MyRentalHistoryListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -79,7 +80,7 @@ fun MyPageScreen(navHostController: NavHostController) {
                 .padding(top = 40.dp)
                 .screenHorizontalPadding()
         ) {
-            TopSection()
+            TopSection(onSettingClick = navHostController::navigateToSetting)
             ProfileSection()
             InfoBox()
         }
@@ -94,7 +95,7 @@ fun MyPageScreen(navHostController: NavHostController) {
 }
 
 @Composable
-fun TopSection() {
+fun TopSection(onSettingClick: () -> Unit = {}) {
     Row(
         modifier = Modifier.padding(bottom = 35.dp), verticalAlignment = Alignment.CenterVertically
     ) {
@@ -121,7 +122,7 @@ fun TopSection() {
             }
 
         }
-        IconButton(modifier = Modifier.size(30.dp), onClick = { /*TODO*/ }) {
+        IconButton(modifier = Modifier.size(30.dp), onClick = onSettingClick) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_setting),
                 contentDescription = stringResource(

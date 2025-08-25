@@ -26,7 +26,7 @@ fun RentalPhotoCheckRoute(navHostController: NavHostController, productId: Int, 
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect { sideEffect ->
                 when (sideEffect) {
-                    RentalPhotoCheckSideEffect.PopBackToRentalDetail -> println("pop back to Rental Detail")
+                    RentalPhotoCheckSideEffect.PopBackToRentalDetail -> navHostController.popBackStack()
                 }
             }
         }

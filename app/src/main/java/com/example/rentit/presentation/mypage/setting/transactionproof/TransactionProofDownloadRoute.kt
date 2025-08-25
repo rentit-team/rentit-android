@@ -11,6 +11,9 @@ import com.example.rentit.common.theme.RentItTheme
 fun TransactionProofDownloadRoute(navHostController: NavHostController) {
 
     RentItTheme {
-        TransactionProofDownloadScreen(emptyList())
+        TransactionProofDownloadScreen(
+            emptyList(),
+            onBackPressed = navHostController::popBackStack
+        )
     }
 }

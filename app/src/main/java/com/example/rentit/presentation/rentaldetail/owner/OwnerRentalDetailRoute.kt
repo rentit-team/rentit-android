@@ -16,6 +16,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.dialog.RequestAcceptDialog
+import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeRent
+import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
 import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
@@ -42,30 +44,36 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect {
                 when(it) {
-                    is OwnerRentalDetailSideEffect.NavigateToPhotoBeforeRent -> { println("NavigateToPhotoBeforeRent") }
-                    is OwnerRentalDetailSideEffect.NavigateToRentalPhotoCheck -> { println("NavigateToRentalPhotoCheck") }
-                    is OwnerRentalDetailSideEffect.ToastErrorGetCourierNames -> {
+                    OwnerRentalDetailSideEffect.NavigateBack -> {
+                        navHostController.popBackStack()
+                    }
+                    OwnerRentalDetailSideEffect.NavigateToPhotoBeforeRent -> {
+                        navHostController.navigateToPhotoBeforeRent(productId, reservationId)
+                    }
+                    OwnerRentalDetailSideEffect.NavigateToRentalPhotoCheck -> {
+                        navHostController.navigateToRentalPhotoCheck(productId, reservationId)
+                    }
+                    OwnerRentalDetailSideEffect.ToastErrorGetCourierNames -> {
                         Toast.makeText(context, context.getString(R.string.toast_error_get_courier_names), Toast.LENGTH_SHORT).show()
                     }
-                    is OwnerRentalDetailSideEffect.ToastSuccessTrackingRegistration -> {
+                    OwnerRentalDetailSideEffect.ToastSuccessTrackingRegistration -> {
                         Toast.makeText(context, context.getString(R.string.toast_success_post_tracking_registration), Toast.LENGTH_SHORT).show()
                     }
-                    is OwnerRentalDetailSideEffect.ToastErrorTrackingRegistration -> {
+                    OwnerRentalDetailSideEffect.ToastErrorTrackingRegistration -> {
                         Toast.makeText(context, context.getString(R.string.toast_error_post_tracking_registration), Toast.LENGTH_SHORT).show()
                     }
-                    is OwnerRentalDetailSideEffect.ToastCancelRentalSuccess -> {
+                    OwnerRentalDetailSideEffect.ToastCancelRentalSuccess -> {
                         Toast.makeText(context, context.getString(R.string.toast_cancel_rental_success), Toast.LENGTH_SHORT).show()
                     }
-                    is OwnerRentalDetailSideEffect.ToastCancelRentalFailed -> {
+                    OwnerRentalDetailSideEffect.ToastCancelRentalFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_cancel_rental_failed), Toast.LENGTH_SHORT).show()
                     }
-                    is OwnerRentalDetailSideEffect.ToastAcceptRentalSuccess -> {
+                    OwnerRentalDetailSideEffect.ToastAcceptRentalSuccess -> {
                         Toast.makeText(context, context.getString(R.string.toast_accept_rental_success), Toast.LENGTH_SHORT).show()
                     }
-                    is OwnerRentalDetailSideEffect.ToastAcceptRentalFailed -> {
+                    OwnerRentalDetailSideEffect.ToastAcceptRentalFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_accept_rental_failed), Toast.LENGTH_SHORT).show()
                     }
-
                 }
             }
         }
@@ -76,7 +84,7 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
         uiModel = rentalDetailUiModel,
         scrollState = scrollState,
         isLoading = uiState.isLoading,
-        onBackClick = { navHostController.popBackStack() },
+        onBackClick = viewModel::navigateBack,
         onRequestResponseClick = viewModel::showRequestAcceptDialog,
         onCancelRentClick = viewModel::showCancelDialog,
         onPhotoTaskClick = viewModel::navigateToPhotoBeforeRent,
@@ -113,6 +121,6 @@ fun OwnerRentalDetailRoute(navHostController: NavHostController, productId: Int,
     }
 
     if(uiState.showUnknownStatusDialog){
-        UnknownStatusDialog { navHostController.popBackStack() }
+        UnknownStatusDialog(viewModel::navigateBack)
     }
 }

@@ -219,6 +219,11 @@ class OwnerRentalDetailViewModel @Inject constructor(
     }
 
     /** 네비게이션 */
+    fun navigateBack() {
+        viewModelScope.launch {
+            _sideEffect.emit(OwnerRentalDetailSideEffect.NavigateBack)
+        }
+    }
     fun navigateToPhotoBeforeRent() {
         viewModelScope.launch {
             _sideEffect.emit(OwnerRentalDetailSideEffect.NavigateToPhotoBeforeRent)
