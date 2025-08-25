@@ -10,12 +10,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
 
 
 @Composable
-fun JoinPhoneVerificationRoute() {
+fun JoinPhoneVerificationRoute(navHostController: NavHostController, name: String?, email: String?) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current

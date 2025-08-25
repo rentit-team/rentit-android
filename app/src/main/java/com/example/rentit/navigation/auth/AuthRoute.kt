@@ -7,8 +7,8 @@ sealed class AuthRoute {
     data object Login : AuthRoute()
 
     @Serializable
-    data class Join(val name: String?, val email: String?) : AuthRoute()
+    data class JoinPhoneVerification(val name: String?, val email: String?) : AuthRoute()
 
     @Serializable
-    data object Main : AuthRoute()
+    data class JoinNickname(val name: String?, val email: String?) : AuthRoute()
 }
