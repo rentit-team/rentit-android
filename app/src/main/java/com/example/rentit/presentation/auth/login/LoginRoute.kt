@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.BuildConfig
+import com.example.rentit.R
 import com.example.rentit.navigation.auth.navigateToJoinPhoneVerification
 import com.example.rentit.navigation.bottomtab.navigateToHome
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -39,16 +40,16 @@ fun LoginRoute(navHostController: NavHostController) {
                         navHostController.navigateToJoinPhoneVerification(sideEffect.name, sideEffect.email)
                     }
                     LoginSideEffect.ToastGoogleSignInError -> {
-                        Toast.makeText(context, "구글 로그인 중 오류가 발생했어요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.toast_google_sign_in_error), Toast.LENGTH_SHORT).show()
                     }
                     LoginSideEffect.ToastGoogleSignInFailed -> {
-                        Toast.makeText(context, "구글 로그인에 실패했어요. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.toast_google_sign_in_failed), Toast.LENGTH_SHORT).show()
                     }
                     is LoginSideEffect.ToastGreetingMessage -> {
-                        Toast.makeText(context, "반가워요, ${sideEffect.name}님!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.toast_greeting_message, sideEffect.name), Toast.LENGTH_SHORT).show()
                     }
                     LoginSideEffect.ToastLoginFailed -> {
-                        Toast.makeText(context, "로그인에 실패했어요. 다시 시도해주세요.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.toast_login_failed), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

@@ -46,6 +46,10 @@
     <string name="screen_login_google_logo_description">구글 로고</string>
     <string name="screen_login_label">중고 거래와 렌탈의 새로운 기준</string>
     <string name="screen_login_google_login_btn_text">Google 계정으로 로그인</string>
+    <string name="toast_google_sign_in_error">구글 로그인 중 오류가 발생했어요.</string>
+    <string name="toast_google_sign_in_failed">구글 로그인에 실패했어요. 다시 시도해주세요.</string>
+    <string name="toast_greeting_message">반가워요, %s님!</string>
+    <string name="toast_login_failed">로그인에 실패했어요. 다시 시도해주세요.</string>
 
     <!-- 회원가입 -->
     <string name="screen_join_title">회원가입</string>
