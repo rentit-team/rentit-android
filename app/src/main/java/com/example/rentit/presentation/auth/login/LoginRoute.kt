@@ -64,7 +64,6 @@ fun googleSignInLauncher(loginViewModel: LoginViewModel): ManagedActivityResultL
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         loginViewModel.handleGoogleSignInResult(
-            requestCode = 9001,
             data = result.data
         )
     }

@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import javax.inject.Inject
 
-private const val RC_SIGN_IN = 9001
 private const val TAG = "GoogleLogin"
 
 @HiltViewModel
@@ -56,9 +55,11 @@ class LoginViewModel @Inject constructor(
         _sideEffect.emit(LoginSideEffect.NavigateToHome)
     }
 
-    fun handleGoogleSignInResult(requestCode: Int, data: Intent?) {
-        if (requestCode != RC_SIGN_IN) return
+    private suspend fun emitLoginFailure() {
+        _sideEffect.emit(LoginSideEffect.ToastLoginFailed)
+    }
 
+    fun handleGoogleSignInResult(data: Intent?) {
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         try {
             val account = task.getResult(ApiException::class.java)
@@ -83,12 +84,6 @@ class LoginViewModel @Inject constructor(
     private fun emitGoogleSignInFailure(sideEffect: LoginSideEffect) {
         viewModelScope.launch {
             _sideEffect.emit(sideEffect)
-        }
-    }
-
-    private fun emitLoginFailure() {
-        viewModelScope.launch {
-            _sideEffect.emit(LoginSideEffect.ToastLoginFailed)
         }
     }
 
