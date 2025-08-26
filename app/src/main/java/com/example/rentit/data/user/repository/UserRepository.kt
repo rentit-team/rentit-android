@@ -19,30 +19,13 @@ class UserRepository @Inject constructor(
     private val remoteDataSource: UserRemoteDataSource
 ) {
     suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
-        return try {
+        return runCatching {
             val response = remoteDataSource.googleLogin(code, redirectUri)
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                409 -> {
-                    val errorMsg = response.errorBody()?.string() ?: "Client error"
-                    Result.failure(Exception("Client error: $errorMsg"))
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
-                }
+            if(response.isSuccessful) {
+                response.body() ?: throw Exception("Empty Body")
+            } else {
+                throw Exception(response.errorBody()?.string())
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
