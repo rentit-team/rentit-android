@@ -15,6 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeReturn
 import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
@@ -47,7 +48,7 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
                         navHostController.popBackStack()
                     }
                     RenterRentalDetailSideEffect.NavigateToPay -> {
-                        println("NavigateToPay")
+                        navHostController.navigateToPay(productId, reservationId)
                     }
                     RenterRentalDetailSideEffect.NavigateToPhotoBeforeReturn -> {
                         navHostController.navigateToPhotoBeforeReturn(productId, reservationId)
