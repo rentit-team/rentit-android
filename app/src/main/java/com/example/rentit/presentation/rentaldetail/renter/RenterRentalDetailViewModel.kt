@@ -167,6 +167,12 @@ class RenterRentalDetailViewModel @Inject constructor(
     }
 
     /** 네비게이션 */
+    fun navigateBack() {
+        viewModelScope.launch {
+            _sideEffect.emit(RenterRentalDetailSideEffect.NavigateBack)
+        }
+    }
+
     fun navigateToPay() {
         viewModelScope.launch {
             _sideEffect.emit(RenterRentalDetailSideEffect.NavigateToPay)
