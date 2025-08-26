@@ -5,6 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
+import com.example.rentit.common.model.RentalSummaryUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.data.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,14 +24,34 @@ class PayViewModel @Inject constructor(
     private val rentalRepository: RentalRepository
 ): ViewModel() {
 
-    private val _isDialogVisible = MutableStateFlow(false)
-    val isDialogVisible: StateFlow<Boolean> = _isDialogVisible
-
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    private val _uiState = MutableStateFlow(PayState())
+    val uiState: StateFlow<PayState> = _uiState
 
     private val _sideEffect = MutableSharedFlow<PaySideEffect>()
     val sideEffect: SharedFlow<PaySideEffect> = _sideEffect
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    suspend fun getPayInfo(productId: Int, reservationId: Int) {
+        setLoading(true)
+        rentalRepository.getRentalDetail(productId, reservationId)
+            .onSuccess {
+                val rental = it.rental
+                val rentalSummary = RentalSummaryUiModel(
+                    productTitle = rental.product.title,
+                    thumbnailImgUrl = rental.product.thumbnailImgUrl,
+                    startDate = rental.startDate,
+                    endDate = rental.endDate,
+                    totalPrice = rental.totalAmount
+                )
+                _uiState.value = _uiState.value.copy(
+                    rentalSummary = rentalSummary,
+                    depositAmount = rental.depositAmount
+                )
+            }.onFailure {
+                showLoadErrorDialog()
+            }
+        setLoading(false)
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateStatusToPaid(productId: Int, reservationId: Int) {
@@ -43,7 +64,7 @@ class PayViewModel @Inject constructor(
                     reservationId,
                     UpdateRentalStatusRequestDto(RentalStatus.PAID)
                 ).onSuccess {
-                    setDialogVisibility(true)
+                    showPayResultDialog()
                 }.onFailure {
                     toastPayFailed()
                 }
@@ -58,15 +79,28 @@ class PayViewModel @Inject constructor(
     }
 
     private fun setLoading(isLoading: Boolean) {
-        _isLoading.value = isLoading
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
-    fun setDialogVisibility(isVisible: Boolean) {
-        _isDialogVisible.value = isVisible
+    private fun showLoadErrorDialog() {
+        _uiState.value = _uiState.value.copy(showLoadErrorDialog = true)
+    }
+
+    fun dismissLoadErrorDialogAndNavigateBack() {
+        _uiState.value = _uiState.value.copy(showLoadErrorDialog = false)
+        navigateBackToRentalDetail()
+    }
+
+    fun showPayResultDialog() {
+        _uiState.value = _uiState.value.copy(showPayResultDialog = true)
+    }
+
+    private fun hidePayResultDialog() {
+        _uiState.value = _uiState.value.copy(showPayResultDialog = false)
     }
 
     fun onConfirmAndNavigateBack() {
-        setDialogVisibility(false)
+        hidePayResultDialog()
         navigateBackToRentalDetail()
     }
 

@@ -24,6 +24,8 @@ import androidx.compose.ui.unit.sp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.model.PriceSummaryUiModel
 import com.example.rentit.common.model.RentalSummaryUiModel
@@ -31,29 +33,33 @@ import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.pay.dialog.PayResultDialog
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PayScreen(
-    payModel: PayUiModel,
-    isDialogVisible: Boolean,
+    rentalSummary: RentalSummaryUiModel,
+    basicRentalFee: Int,
+    depositAmount: Int,
+    showLoadFailedDialog: Boolean,
+    showPayResultDialog: Boolean,
     scrollState: ScrollState,
+    isLoading: Boolean,
     onBackClick: () -> Unit,
     onPayClick: () -> Unit,
-    onDialogClose: () -> Unit,
-    onDialogConfirm: () -> Unit,
+    onLoadErrorDismiss: () -> Unit,
+    onPayResultDismiss: () -> Unit,
+    onPayResultConfirm: () -> Unit,
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
             label = stringResource(R.string.screen_pay_price_label_basic_rental_fee),
-            price = payModel.basicRentalFee
+            price = basicRentalFee
         ),
         PriceSummaryUiModel(
             label = stringResource(R.string.screen_pay_price_label_deposit),
-            price = payModel.deposit
+            price = depositAmount
         )
     )
 
@@ -82,7 +88,7 @@ fun PayScreen(
             RentalInfoSection(
                 title = stringResource(R.string.screen_pay_rental_info_title),
                 titleColor = AppBlack,
-                rentalInfo = payModel.rentalSummary,
+                rentalInfo = rentalSummary,
             )
 
             RentalPaymentSection(
@@ -90,11 +96,16 @@ fun PayScreen(
                 priceItems = priceItems,
                 totalLabel = stringResource(R.string.screen_pay_price_label_total)
             )
-
             PaymentGuide()
         }
     }
-    if(isDialogVisible) PayResultDialog(onDialogClose, onDialogConfirm)
+    if(showLoadFailedDialog) LoadErrorDialog(onLoadErrorDismiss)
+    if(showPayResultDialog) PayResultDialog(onPayResultDismiss, onPayResultConfirm)
+
+    // 로딩 상태
+    // 1. 최소 로딩: 결제가 너무 빨리 완료되므로 즉시 전환 방지를 위한 UX용
+    // 2. 데이터 로딩: 결제 정보를 가져올 때 표시
+    LoadingScreen(isLoading)
 }
 
 @Composable
@@ -133,31 +144,60 @@ fun PaymentGuide() {
     }
 }
 
+@Composable
+fun LoadErrorDialog(
+    onDismiss: () -> Unit = {},
+) {
+    BaseDialog(
+        title = stringResource(R.string.dialog_data_load_error_title),
+        content = stringResource(R.string.dialog_data_load_error_content),
+        confirmBtnText = stringResource(R.string.common_dialog_btn_close),
+        isBackgroundClickable = false,
+        onCloseRequest = onDismiss,
+        onConfirmRequest = onDismiss,
+    )
+}
+
+@Composable
+fun PayResultDialog(
+    onClose: () -> Unit = {},
+    onConfirm: () -> Unit = {},
+) {
+    BaseDialog(
+        title = stringResource(R.string.dialog_pay_result_success_title),
+        confirmBtnText = stringResource(R.string.dialog_pay_result_btn_confirm),
+        isBackgroundClickable = false,
+        onCloseRequest = onClose,
+        onConfirmRequest = onConfirm,
+    )
+}
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val sample = PayUiModel(
-        rentalSummary = RentalSummaryUiModel(
+    val sample = RentalSummaryUiModel(
             productTitle = "캐논 EOS 550D",
             thumbnailImgUrl = "",
             startDate = "2025-08-17",
             endDate = "2025-08-20",
             totalPrice = 10_000 * 6
-        ),
-        basicRentalFee = 90_000,
-        deposit = 10_000 * 3
-    )
+        )
 
     RentItTheme {
         PayScreen(
-            payModel = sample,
-            isDialogVisible = false,
+            showPayResultDialog = false,
+            showLoadFailedDialog = false,
             scrollState = rememberScrollState(),
+            isLoading = false,
             onBackClick = { },
             onPayClick = { },
-            onDialogClose = { },
-            onDialogConfirm = { }
+            onLoadErrorDismiss = { },
+            onPayResultDismiss = { },
+            onPayResultConfirm = { },
+            rentalSummary = sample,
+            basicRentalFee = 10000,
+            depositAmount = 5000,
         )
     }
 }
