@@ -7,14 +7,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.presentation.pay.PayRoute
-import com.example.rentit.presentation.pay.PayUiModel
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
-fun NavHostController.navigateToPay(productId: Int, reservationId: Int, payInfo: PayUiModel) {
-    val payInfoJson = Json.encodeToString(payInfo)
+fun NavHostController.navigateToPay(productId: Int, reservationId: Int) {
     navigate(
-        route = PayRoute.Pay(productId, reservationId, payInfoJson)
+        route = PayRoute.Pay(productId, reservationId)
     )
 }
 
@@ -22,7 +18,6 @@ fun NavHostController.navigateToPay(productId: Int, reservationId: Int, payInfo:
 fun NavGraphBuilder.payGraph(navHostController: NavHostController) {
     composable<PayRoute.Pay> { backStackEntry ->
         val items: PayRoute.Pay = backStackEntry.toRoute()
-        val payInfo = Json.decodeFromString<PayUiModel>(items.payInfoJson)
-        PayRoute(navHostController, items.productId, items.reservationId, payInfo)
+        PayRoute(navHostController, items.productId, items.reservationId)
     }
 }

@@ -9,4 +9,14 @@ data class RentalSummaryUiModel(
     val startDate: String,
     val endDate: String,
     val totalPrice: Int
-)
+) {
+    companion object {
+        val EMPTY = RentalSummaryUiModel(
+            productTitle = "",
+            thumbnailImgUrl = null,
+            startDate = "",
+            endDate = "",
+            totalPrice = 0
+        )
+    }
+}

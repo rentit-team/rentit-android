@@ -15,20 +15,22 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.component.layout.LoadingScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun PayRoute(navHostController: NavHostController, productId: Int, reservationId: Int, payInfo: PayUiModel) {
+fun PayRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val viewModel: PayViewModel = hiltViewModel()
 
-    val isDialogVisible by viewModel.isDialogVisible.collectAsStateWithLifecycle()
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
+
+    LaunchedEffect(Unit) {
+        viewModel.getPayInfo(productId, reservationId)
+    }
 
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -46,15 +48,17 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
     }
 
     PayScreen(
-        payModel = payInfo,
-        isDialogVisible = isDialogVisible,
+        rentalSummary = uiState.rentalSummary,
+        basicRentalFee = uiState.basicRentalFee,
+        depositAmount = uiState.depositAmount,
+        showPayResultDialog = uiState.showPayResultDialog,
+        showLoadFailedDialog = uiState.showLoadErrorDialog,
         scrollState = scrollState,
+        isLoading = uiState.isLoading,
         onBackClick = viewModel::navigateBackToRentalDetail,
         onPayClick = { viewModel.updateStatusToPaid(productId, reservationId) },
-        onDialogClose = { viewModel.setDialogVisibility(false) },
-        onDialogConfirm = viewModel::onConfirmAndNavigateBack
+        onLoadErrorDismiss = viewModel::dismissLoadErrorDialogAndNavigateBack,
+        onPayResultDismiss = viewModel::showPayResultDialog,
+        onPayResultConfirm = viewModel::onConfirmAndNavigateBack
     )
-
-    // 즉시 전환 방지를 위한 최소 로딩
-    LoadingScreen(isLoading)
 }
