@@ -49,7 +49,8 @@
     <string name="toast_google_sign_in_error">구글 로그인 중 오류가 발생했어요.</string>
     <string name="toast_google_sign_in_failed">구글 로그인에 실패했어요. 다시 시도해주세요.</string>
     <string name="toast_greeting_message">반가워요, %s님!</string>
-    <string name="toast_login_failed">로그인에 실패했어요. 다시 시도해주세요.</string>
+    <string name="toast_authentication_failed">로그인에 실패했어요. 다시 시도해주세요.</string>
+    <string name="toast_server_error">서버와 연결할 수 없어요. 잠시 후 다시 시도해 주세요.</string>
 
     <!-- 회원가입 -->
     <string name="screen_join_title">회원가입</string>

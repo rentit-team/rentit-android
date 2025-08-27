@@ -1,3 +1,3 @@
 package com.example.rentit.common.exception.rental
 
-class EmptyBodyException: Exception()
+class EmptyBodyException(message: String? = null): Exception(message)

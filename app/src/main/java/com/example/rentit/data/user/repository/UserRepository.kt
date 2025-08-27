@@ -5,6 +5,7 @@ import com.example.rentit.common.exception.rental.EmptyBodyException
 import com.example.rentit.common.exception.rental.TooManyRequestException
 import com.example.rentit.common.exception.rental.VerificationFailedException
 import com.example.rentit.common.exception.rental.VerificationRequestNotFoundException
+import com.example.rentit.common.exception.user.GoogleSsoFailedException
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
@@ -22,9 +23,10 @@ class UserRepository @Inject constructor(
         return runCatching {
             val response = remoteDataSource.googleLogin(code, redirectUri)
             if(response.isSuccessful) {
-                response.body() ?: throw Exception("Empty Body")
+                response.body() ?: throw EmptyBodyException("Empty response body")
             } else {
-                throw Exception(response.errorBody()?.string())
+                val errorMsg = response.errorBody()?.string() ?: "Client error"
+                throw if(response.code() == 409) GoogleSsoFailedException(errorMsg) else ServerException(errorMsg)
             }
         }
     }

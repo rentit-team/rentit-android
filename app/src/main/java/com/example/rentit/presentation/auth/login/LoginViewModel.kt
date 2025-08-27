@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.BuildConfig
+import com.example.rentit.common.exception.user.GoogleSsoFailedException
 import com.example.rentit.data.user.repository.UserRepository
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -40,7 +41,11 @@ class LoginViewModel @Inject constructor(
                 }
                 .onFailure {
                     Log.d(TAG, "로그인 실패: ${it.message}")
-                    emitLoginFailure()
+                    if (it is GoogleSsoFailedException) {
+                        emitAuthenticationFailure()
+                    } else {
+                        emitLoginServerError()
+                    }
                 }
         }
     }
@@ -55,8 +60,12 @@ class LoginViewModel @Inject constructor(
         _sideEffect.emit(LoginSideEffect.NavigateToHome)
     }
 
-    private suspend fun emitLoginFailure() {
-        _sideEffect.emit(LoginSideEffect.ToastLoginFailed)
+    private suspend fun emitLoginServerError() {
+        _sideEffect.emit(LoginSideEffect.ToastLoginServerError)
+    }
+
+    private suspend fun emitAuthenticationFailure() {
+        _sideEffect.emit(LoginSideEffect.ToastAuthenticationFailed)
     }
 
     fun handleGoogleSignInResult(data: Intent?) {
