@@ -38,13 +38,15 @@ class LoginViewModel @Inject constructor(
                         val email = it.data.user.email
                         handleUnregisteredUser(email, name)
                     }
+                    Log.d(TAG, "로그인 성공: $name")
                 }
-                .onFailure {
-                    Log.d(TAG, "로그인 실패: ${it.message}")
-                    if (it is GoogleSsoFailedException) {
+                .onFailure { e ->
+                    if (e is GoogleSsoFailedException) {
                         emitAuthenticationFailure()
+                        Log.w(TAG, "구글 SSO 충돌: $e")
                     } else {
                         emitLoginServerError()
+                        Log.e(TAG, "서버 에러", e)
                     }
                 }
         }
@@ -76,7 +78,7 @@ class LoginViewModel @Inject constructor(
 
             if(authCode.isNullOrEmpty()){
                 emitGoogleSignInFailure(LoginSideEffect.ToastGoogleSignInFailed)
-                Log.d(TAG, "GoogleSignIn 실패: 인증 코드 가져오기 실패")
+                Log.w(TAG, "GoogleSignIn 실패: 인증 코드 없음 (authCode=${authCode})")
                 return
             }
 
@@ -86,7 +88,7 @@ class LoginViewModel @Inject constructor(
 
         } catch (e: ApiException) {
             emitGoogleSignInFailure(LoginSideEffect.ToastGoogleSignInError)
-            Log.d(TAG, "GoogleSignIn 실패: ${e.message}")
+            Log.e(TAG, "GoogleSignIn 실패 ${e.statusCode}", e)
         }
     }
 
