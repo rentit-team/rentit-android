@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.home.createpost
+package com.example.rentit.presentation.main.createpost
 
 import android.content.Context
 import android.net.Uri

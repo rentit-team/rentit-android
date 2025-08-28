@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.home.createpost.categorytag
+package com.example.rentit.presentation.main.createpost.categorytag
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.CategoryDto
-import com.example.rentit.presentation.home.createpost.LabeledContent
-import com.example.rentit.presentation.home.createpost.components.TagButton
+import com.example.rentit.presentation.main.createpost.LabeledContent
+import com.example.rentit.presentation.main.createpost.components.TagButton
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
