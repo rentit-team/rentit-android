@@ -1,10 +1,12 @@
 package com.example.rentit.data.user.repository
 
+import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.rental.EmptyBodyException
 import com.example.rentit.common.exception.rental.TooManyRequestException
 import com.example.rentit.common.exception.rental.VerificationFailedException
 import com.example.rentit.common.exception.rental.VerificationRequestNotFoundException
+import com.example.rentit.common.exception.user.GoogleSsoFailedException
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
@@ -19,30 +21,14 @@ class UserRepository @Inject constructor(
     private val remoteDataSource: UserRemoteDataSource
 ) {
     suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
-        return try {
+        return runCatching {
             val response = remoteDataSource.googleLogin(code, redirectUri)
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                409 -> {
-                    val errorMsg = response.errorBody()?.string() ?: "Client error"
-                    Result.failure(Exception("Client error: $errorMsg"))
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
-                }
+            if (response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException("Empty response body")
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client error"
+                throw if (response.code() == 409) GoogleSsoFailedException(errorMsg) else ServerException(errorMsg)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
@@ -99,26 +85,14 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun getMyInfo(): Result<MyInfoResponseDto> {
-        return try {
+        return runCatching {
             val response = remoteDataSource.getMyInfo()
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
-                }
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException("Empty response body")
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client error"
+                throw if(response.code() == 401) MissingTokenException(errorMsg) else ServerException(errorMsg)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 

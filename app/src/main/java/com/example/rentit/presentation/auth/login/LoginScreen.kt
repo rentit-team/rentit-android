@@ -1,45 +1,35 @@
 package com.example.rentit.presentation.auth.login
 
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.data.user.model.GoogleSignInResult
-import com.example.rentit.navigation.auth.navigateToJoinPhoneVerification
-import com.example.rentit.navigation.bottomtab.navigateToHome
-import com.example.rentit.presentation.auth.login.components.GoogleLoginButton
-import java.net.URLEncoder
+import com.example.rentit.common.component.CommonBorders
+import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.PretendardTextStyle
+import com.example.rentit.common.theme.RentItTheme
 
-private const val TAG = "Login"
 
 @Composable
-fun LoginScreen(navHostController: NavHostController) {
-    val loginViewModel: LoginViewModel = hiltViewModel()
-
-    GoogleSignInStateHandler(loginViewModel)
-    LoginResultHandler(navHostController, loginViewModel)
-
+fun LoginScreen(onGoogleLoginClick: () -> Unit = {}) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,54 +49,44 @@ fun LoginScreen(navHostController: NavHostController) {
             text = stringResource(id = R.string.screen_login_label),
             style = MaterialTheme.typography.labelMedium
         )
-        GoogleLoginButton(loginViewModel)
+        GoogleLoginButton(onGoogleLoginClick)
     }
 }
 
 
 @Composable
-fun GoogleSignInStateHandler(loginViewModel: LoginViewModel) {
-    val googleSignInState by loginViewModel.googleSignInState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(googleSignInState) {
-        when (googleSignInState) {
-            is GoogleSignInResult.Success -> {
-                var authCode = (googleSignInState as GoogleSignInResult.Success).authCode
-                authCode = URLEncoder.encode(authCode, "UTF-8")
-                Log.d("GoogleSignInResult", "성공: $authCode")
-                loginViewModel.onGoogleLogin(authCode)
-            }
-
-            is GoogleSignInResult.Failure -> {
-                val errorMessage = (googleSignInState as GoogleSignInResult.Failure).message
-                Log.d("GoogleSignInResult", "실패: $errorMessage")
-            }
-
-            else -> Unit
+fun GoogleLoginButton(onGoogleLoginClick: () -> Unit){
+    OutlinedButton(
+        onClick = onGoogleLoginClick,
+        modifier = Modifier.width(250.dp).height(46.dp),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = Color.Transparent,
+            contentColor = AppBlack
+        ),
+        border = CommonBorders.mediumBorder()
+    ){
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier
+                    .height(20.dp)
+                    .padding(end = 12.dp),
+                painter = painterResource(id = R.drawable.logo_google),
+                contentDescription = stringResource(id = R.string.screen_login_google_logo_description)
+            )
+            Text(
+                text = stringResource(id = R.string.screen_login_google_login_btn_text),
+                style = PretendardTextStyle.body1_bold
+            )
         }
     }
 }
 
+@Preview
 @Composable
-fun LoginResultHandler(navHostController: NavHostController, loginViewModel: LoginViewModel) {
-    val context = LocalContext.current
-    val googleLoginResult by loginViewModel.googleLoginResult.collectAsStateWithLifecycle()
-    val userData by loginViewModel.userData.collectAsStateWithLifecycle()
-
-    LaunchedEffect(googleLoginResult) {
-        googleLoginResult?.onSuccess { response ->
-            if(response.data.isUserRegistered){
-                navHostController.navigateToHome()
-                loginViewModel.saveTokenFromPrefs(response.data.accessToken.token)
-            } else {
-                navHostController.navigateToJoinPhoneVerification(userData?.name, userData?.email)
-            }
-            Toast.makeText(context, "구글 데이터 전송 성공 [${userData?.name}/${userData?.email}]", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "${response.data}")
-        }?.onFailure { error ->
-
-            Toast.makeText(context, "구글 데이터 전송 실패: ${error.message}", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "${error.message}")
-        }
+fun LoginScreenPreview() {
+    RentItTheme {
+        LoginScreen()
     }
 }

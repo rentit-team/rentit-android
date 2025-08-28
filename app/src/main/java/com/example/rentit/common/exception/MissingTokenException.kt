@@ -1,3 +1,3 @@
 package com.example.rentit.common.exception
 
-class MissingTokenException: Exception()
+class MissingTokenException(message: String? = null): Exception(message)
