@@ -41,6 +41,11 @@
     <string name="util_formatted_period">%s (%s) ~ %s (%s) · %d일</string>
     <string name="util_error_rental_period_unavailable">기간 정보 없음</string>
 
+    <!-- 서버/네트워크 에러 Dialog -->
+    <string name="dialog_server_connect_error_title">서버와 연결할 수 없어요</string>
+    <string name="dialog_server_connect_error_content">서버와 연결에 실패했어요. 다시 시도해주세요.</string>
+    <string name="dialog_server_connect_error_retry_btn">재시도</string>
+
     <!-- 로그인 -->
     <string name="screen_login_app_logo_description">랜팃 로고</string>
     <string name="screen_login_google_logo_description">구글 로고</string>
