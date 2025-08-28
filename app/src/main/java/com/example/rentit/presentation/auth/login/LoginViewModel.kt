@@ -5,8 +5,10 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.BuildConfig
+import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.user.GoogleSsoFailedException
 import com.example.rentit.data.user.repository.UserRepository
+import com.example.rentit.data.user.usecase.InitializeAuthUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +22,8 @@ private const val TAG = "GoogleLogin"
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val repository: UserRepository
+    private val userRepository: UserRepository,
+    private val initializeAuthUseCase: InitializeAuthUseCase
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<LoginSideEffect>()
@@ -28,46 +31,54 @@ class LoginViewModel @Inject constructor(
 
     private fun loginWithGoogleAuthCode(authCode: String) {
         viewModelScope.launch {
-            repository.googleLogin(authCode, BuildConfig.GOOGLE_REDIRECT_URI)
+            userRepository.googleLogin(authCode, BuildConfig.GOOGLE_REDIRECT_URI)
                 .onSuccess {
-                    val name = it.data.user.name
+                    val userName = it.data.user.name
                     if(it.data.isUserRegistered){
-                        val token = it.data.accessToken.token
-                        handleRegisteredUser(token, name)
+                        handleAuthenticatedUser(it.data.accessToken.token, userName)
                     } else {
-                        val email = it.data.user.email
-                        handleUnregisteredUser(email, name)
+                        navigateToJoin(it.data.user.email, userName)
                     }
-                    Log.d(TAG, "로그인 성공: $name")
+                    Log.i(TAG, "로그인 성공: $userName")
                 }
                 .onFailure { e ->
                     if (e is GoogleSsoFailedException) {
-                        emitAuthenticationFailure()
+                        emitLoginFailure()
                         Log.w(TAG, "구글 SSO 충돌: $e")
                     } else {
                         emitLoginServerError()
-                        Log.e(TAG, "서버 에러", e)
+                        Log.e(TAG, "로그인 중 서버 에러", e)
                     }
                 }
         }
     }
 
-    private suspend fun handleUnregisteredUser(email: String, name: String) {
+    private suspend fun navigateToJoin(email: String, name: String) {
         _sideEffect.emit(LoginSideEffect.NavigateToJoin(email, name))
     }
 
-    private suspend fun handleRegisteredUser(token: String, name: String) {
-        saveTokenFromPrefs(token)
-        _sideEffect.emit(LoginSideEffect.ToastGreetingMessage(name))
-        _sideEffect.emit(LoginSideEffect.NavigateToHome)
+    private suspend fun handleAuthenticatedUser(token: String, name: String) {
+        initializeAuthUseCase.invoke(token)
+            .onSuccess {
+                _sideEffect.emit(LoginSideEffect.ToastGreetingMessage(name))
+                _sideEffect.emit(LoginSideEffect.NavigateToHome)
+            }.onFailure { e ->
+                if (e is MissingTokenException) {
+                    emitLoginFailure()
+                    Log.w(TAG, "유효하지 않은 토큰으로 사용자 정보 조회 실패: $e")
+                } else {
+                    emitLoginServerError()
+                    Log.e(TAG, "사용자 정보 조회 중 서버 에러", e)
+                }
+            }
     }
 
     private suspend fun emitLoginServerError() {
         _sideEffect.emit(LoginSideEffect.ToastLoginServerError)
     }
 
-    private suspend fun emitAuthenticationFailure() {
-        _sideEffect.emit(LoginSideEffect.ToastAuthenticationFailed)
+    private suspend fun emitLoginFailure() {
+        _sideEffect.emit(LoginSideEffect.ToastLoginFailed)
     }
 
     fun handleGoogleSignInResult(data: Intent?) {
@@ -84,7 +95,7 @@ class LoginViewModel @Inject constructor(
 
             val encodedAuthCode = URLEncoder.encode(authCode, "UTF-8")
             loginWithGoogleAuthCode(encodedAuthCode)
-            Log.d(TAG, "GoogleSignIn 성공: $authCode")
+            Log.i(TAG, "GoogleSignIn 성공: $authCode")
 
         } catch (e: ApiException) {
             emitGoogleSignInFailure(LoginSideEffect.ToastGoogleSignInError)
@@ -97,6 +108,4 @@ class LoginViewModel @Inject constructor(
             _sideEffect.emit(sideEffect)
         }
     }
-
-    private fun saveTokenFromPrefs(token:String) = repository.saveTokenToPrefs(token)
 }

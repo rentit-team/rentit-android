@@ -6,6 +6,6 @@ sealed class LoginSideEffect {
     data class ToastGreetingMessage(val name: String): LoginSideEffect()
     data object ToastGoogleSignInFailed: LoginSideEffect()
     data object ToastGoogleSignInError: LoginSideEffect()
-    data object ToastAuthenticationFailed: LoginSideEffect()
+    data object ToastLoginFailed: LoginSideEffect()
     data object ToastLoginServerError: LoginSideEffect()
 }

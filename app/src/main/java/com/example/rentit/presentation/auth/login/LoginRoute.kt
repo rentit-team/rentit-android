@@ -48,7 +48,7 @@ fun LoginRoute(navHostController: NavHostController) {
                     is LoginSideEffect.ToastGreetingMessage -> {
                         Toast.makeText(context, context.getString(R.string.toast_greeting_message, sideEffect.name), Toast.LENGTH_SHORT).show()
                     }
-                    LoginSideEffect.ToastAuthenticationFailed -> {
+                    LoginSideEffect.ToastLoginFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_authentication_failed), Toast.LENGTH_SHORT).show()
                     }
                     LoginSideEffect.ToastLoginServerError -> {

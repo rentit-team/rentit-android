@@ -1,5 +1,6 @@
 package com.example.rentit.data.user.repository
 
+import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.exception.rental.EmptyBodyException
 import com.example.rentit.common.exception.rental.TooManyRequestException
@@ -22,11 +23,11 @@ class UserRepository @Inject constructor(
     suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
         return runCatching {
             val response = remoteDataSource.googleLogin(code, redirectUri)
-            if(response.isSuccessful) {
+            if (response.isSuccessful) {
                 response.body() ?: throw EmptyBodyException("Empty response body")
             } else {
                 val errorMsg = response.errorBody()?.string() ?: "Client error"
-                throw if(response.code() == 409) GoogleSsoFailedException(errorMsg) else ServerException(errorMsg)
+                throw if (response.code() == 409) GoogleSsoFailedException(errorMsg) else ServerException(errorMsg)
             }
         }
     }
@@ -84,26 +85,14 @@ class UserRepository @Inject constructor(
     }
 
     suspend fun getMyInfo(): Result<MyInfoResponseDto> {
-        return try {
+        return runCatching {
             val response = remoteDataSource.getMyInfo()
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
-                }
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException("Empty response body")
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client error"
+                throw if(response.code() == 401) MissingTokenException(errorMsg) else ServerException(errorMsg)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
