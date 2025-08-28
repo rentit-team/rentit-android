@@ -101,6 +101,7 @@
     <string name="screen_main_btn_create_post_content_description">상품 등록</string>
 
     <!-- 게시글 리스트 아이템 -->
+    <string name="product_list_item_text_empty_category">카테고리 없음</string>
     <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
     <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
     <string name="product_list_item_period_text_less_than_day">%d일 이하</string>

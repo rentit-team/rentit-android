@@ -249,7 +249,17 @@ fun TabbedListSection(
         if (list.isNotEmpty()) {
             if (isFirstTabSelected) {
                 items(myProductList) {
-                    ProductListItem(it, true) { onItemClick(it.productId) }
+                    ProductListItem(
+                        title = it.title,
+                        price = it.price,
+                        thumbnailImgUrl = it.thumbnailImgUrl,
+                        minPeriod = it.period?.min,
+                        maxPeriod = it.period?.max,
+                        categories = emptyList(),
+                        status = it.status,
+                        createdAt = it.createdAt,
+                        showCheckRequest = true
+                    ) { onItemClick(it.productId) }
                 }
             } else {
                 items(myRentList) {

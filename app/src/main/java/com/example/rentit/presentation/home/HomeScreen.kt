@@ -24,15 +24,15 @@ import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.data.product.model.ProductWithCategory
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
-    sortedProducts: List<ProductDto> = emptyList(),
+    sortedProducts: List<ProductWithCategory> = emptyList(),
     isLoading: Boolean = false,
     showNetworkErrorDialog: Boolean = false,
     showServerErrorDialog: Boolean = false,
@@ -112,12 +112,21 @@ fun HomeOptionSection() {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeProductListSection(sortedProducts: List<ProductDto>, onProductClick: (Int) -> Unit) {
+fun HomeProductListSection(sortedProducts: List<ProductWithCategory>, onProductClick: (Int) -> Unit) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
     ) {
         items(sortedProducts, key = { it.productId }) { item ->
-            ProductListItem(item) { onProductClick(item.productId) }
+            ProductListItem(
+                price = item.price,
+                title = item.title,
+                thumbnailImgUrl = item.thumbnailImgUrl,
+                minPeriod = item.minPeriod,
+                maxPeriod = item.maxPeriod,
+                categories = item.categoryNames,
+                status = item.status,
+                createdAt = item.createdAt,
+            ) { onProductClick(item.productId) }
         }
     }
 }

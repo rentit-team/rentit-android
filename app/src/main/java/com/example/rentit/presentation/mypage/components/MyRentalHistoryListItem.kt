@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
@@ -102,7 +103,7 @@ fun PreviewRentalHistoryListItem() {
                 userId = 1,
                 nickname = "예준"
             ),
-            status = "AVAILABLE",
+            status = ProductStatus.AVAILABLE,
             categories = emptyList(),
             createdAt = "2025-03-22T12:00:00"
         ),

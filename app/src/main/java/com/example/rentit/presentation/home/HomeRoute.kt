@@ -13,11 +13,10 @@ import com.example.rentit.navigation.productdetail.navigateToProductDetail
 @Composable
 fun HomeRoute(navHostController: NavHostController) {
     val viewModel: HomeViewModel = hiltViewModel()
-    val productList by viewModel.productList.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
     HomeScreen(
-        sortedProducts = productList,
+        sortedProducts = uiState.productList,
         isLoading = uiState.isLoading,
         showNetworkErrorDialog = uiState.showNetworkErrorDialog,
         showServerErrorDialog = uiState.showServerErrorDialog,

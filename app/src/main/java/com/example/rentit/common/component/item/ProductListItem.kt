@@ -36,19 +36,32 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.data.product.dto.ProductDto
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onClick: () -> Unit) {
+fun ProductListItem(
+    title: String = "",
+    price: Int = 0,
+    thumbnailImgUrl: String? = null,
+    minPeriod: Int? = null ,
+    maxPeriod: Int? = null,
+    categories: List<String> = emptyList(),
+    status: ProductStatus,
+    createdAt: String,
+    showCheckRequest: Boolean = false,
+    onClick: () -> Unit = {}
+) {
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-    val localDateTime = LocalDateTime.parse(productInfo.createdAt, formatter)
-    val period = productInfo.period
+    val localDateTime = LocalDateTime.parse(createdAt, formatter)
 
-    val status = ProductStatus.entries.firstOrNull { it.name == productInfo.status }
-    val categoryText = productInfo.categories.joinToString("·") ?: ""
+    val categoryText =
+        if (categories.isNotEmpty()) {
+            categories.joinToString(" · ")
+        } else {
+            stringResource(R.string.product_list_item_text_empty_category)
+        }
 
     Box(
         modifier = Modifier
@@ -64,8 +77,10 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
             verticalAlignment = Alignment.CenterVertically
         ) {
             LoadableUrlImage(
-                modifier = Modifier.size(100.dp).clip(RoundedCornerShape(20.dp)),
-                imgUrl = productInfo.thumbnailImgUrl,
+                modifier = Modifier
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(20.dp)),
+                imgUrl = thumbnailImgUrl,
                 defaultImageResId = R.drawable.img_thumbnail_placeholder,
             )
             Column(
@@ -81,19 +96,21 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                     Text(
                         modifier = Modifier.width(160.dp),
                         maxLines = 1,
-                        text = productInfo.title,
+                        text = title,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.bodyLarge
                     )
                     Text(
-                        text = status?.label ?: "",
+                        text = status.label ?: "",
                         style = MaterialTheme.typography.labelMedium,
                         color = PrimaryBlue500
                     )
                 }
                 Text(
                     modifier = Modifier.padding(top = 4.dp, bottom = 18.dp),
-                    text = "카테고리",
+                    text = categoryText,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.labelMedium,
                     color = Gray400
                 )
@@ -104,23 +121,15 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = if (period != null) {
-                            if (period.min != null && period.max != null) stringResource(
-                                R.string.product_list_item_period_text_more_and_less_than_day,
-                                productInfo.period.min!!.toInt(),
-                                productInfo.period.max!!.toInt()
-                            )
-                            else if (period.min != null) stringResource(
-                                R.string.product_list_item_period_text_more_than_day,
-                                productInfo.period.min!!.toInt()
-                            )
-                            else if (period.max != null) stringResource(
-                                R.string.product_list_item_period_text_less_than_day,
-                                productInfo.period.max!!.toInt()
-                            )
-                            else stringResource(R.string.product_list_item_period_text_more_than_zero)
-                        } else {
-                            stringResource(R.string.product_list_item_period_text_more_than_zero)
+                        text = when {
+                            minPeriod != null && maxPeriod != null ->
+                                stringResource(R.string.product_list_item_period_text_more_and_less_than_day, minPeriod.toInt(), maxPeriod.toInt())
+                            minPeriod != null ->
+                                stringResource(R.string.product_list_item_period_text_more_than_day, minPeriod.toInt())
+                            maxPeriod != null ->
+                                stringResource(R.string.product_list_item_period_text_less_than_day, maxPeriod.toInt())
+                            else ->
+                                stringResource(R.string.product_list_item_period_text_more_than_zero)
                         },
                         style = MaterialTheme.typography.bodyLarge,
                         color = MaterialTheme.colorScheme.primary
@@ -138,10 +147,10 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = formatPrice(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
+                        text = formatPrice(price) + stringResource(R.string.common_price_unit_per_day),
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    if (isMyProduct) {
+                    if (showCheckRequest) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Text(
                                 modifier = Modifier.padding(end = 6.dp),
@@ -164,10 +173,14 @@ fun ProductListItem(productInfo: ProductDto, isMyProduct: Boolean = false, onCli
 }
 
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ProductListItemPreview() {
     RentItTheme {
-        //ProductListItem {}
+        ProductListItem(
+            status = ProductStatus.AVAILABLE,
+            createdAt = "2025-03-22T12:00:00",
+        )
     }
 }
