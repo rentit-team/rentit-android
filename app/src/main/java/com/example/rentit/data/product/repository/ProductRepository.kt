@@ -116,26 +116,14 @@ class ProductRepository @Inject constructor(
     }
 
     suspend fun getCategories(): Result<CategoryListResponseDto> {
-        return try {
+        return runCatching {
             val response = productRemoteDataSource.getCategories()
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
-                }
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client Error"
+                throw Exception(errorMsg)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
