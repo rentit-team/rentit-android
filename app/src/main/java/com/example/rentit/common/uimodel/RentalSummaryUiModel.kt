@@ -1,4 +1,4 @@
-package com.example.rentit.common.model
+package com.example.rentit.common.uimodel
 
 import kotlinx.serialization.Serializable
 

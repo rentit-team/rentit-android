@@ -1,7 +1,7 @@
 package com.example.rentit.presentation.rentaldetail.owner.stateui
 
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 
 

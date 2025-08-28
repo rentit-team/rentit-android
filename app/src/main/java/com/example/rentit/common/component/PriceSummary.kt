@@ -19,7 +19,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.presentation.rentaldetail.components.LabeledValue
-import com.example.rentit.common.model.PriceSummaryUiModel
+import com.example.rentit.common.uimodel.PriceSummaryUiModel
 
 /**
  * 비용 내역과 총합을 나타내는 UI 컴포넌트

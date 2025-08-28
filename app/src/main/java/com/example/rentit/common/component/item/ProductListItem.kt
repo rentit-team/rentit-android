@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.item
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -28,6 +28,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.basicListItemTopDivider
+import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500

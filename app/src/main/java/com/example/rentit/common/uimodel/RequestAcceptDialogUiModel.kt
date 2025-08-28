@@ -1,4 +1,4 @@
-package com.example.rentit.common.model
+package com.example.rentit.common.uimodel
 
 data class RequestAcceptDialogUiModel(
     val startDate: String,

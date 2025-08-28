@@ -1,6 +1,6 @@
 package com.example.rentit.presentation.rentaldetail.owner
 
-import com.example.rentit.common.model.RequestAcceptDialogUiModel
+import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 
 data class OwnerRentalDetailState(
     val isLoading: Boolean = false,

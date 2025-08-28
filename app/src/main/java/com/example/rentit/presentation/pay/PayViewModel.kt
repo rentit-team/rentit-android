@@ -5,7 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.data.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

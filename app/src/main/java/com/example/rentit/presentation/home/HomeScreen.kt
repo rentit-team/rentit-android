@@ -25,7 +25,7 @@ import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.common.component.ProductListItem
+import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 

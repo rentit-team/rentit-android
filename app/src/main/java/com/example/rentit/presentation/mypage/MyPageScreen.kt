@@ -54,7 +54,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
-import com.example.rentit.common.component.ProductListItem
+import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.setting.navigateToSetting
 import com.example.rentit.presentation.mypage.components.MyRentalHistoryListItem
