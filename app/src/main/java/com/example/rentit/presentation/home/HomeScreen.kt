@@ -26,12 +26,18 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.common.component.ProductListItem
+import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.layout.LoadingScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     sortedProducts: List<ProductDto> = emptyList(),
+    isLoading: Boolean = false,
+    showNetworkErrorDialog: Boolean = false,
+    showServerErrorDialog: Boolean = false,
     onProductClick: (Int) -> Unit = {},
+    onRetry: () -> Unit = {}
 ) {
     Column {
 
@@ -41,6 +47,12 @@ fun HomeScreen(
 
         HomeProductListSection(sortedProducts, onProductClick)
     }
+
+    LoadingScreen(isLoading)
+
+    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+
+    if(showServerErrorDialog) ServerErrorDialog(onRetry)
 }
 
 @Composable
@@ -108,6 +120,28 @@ fun HomeProductListSection(sortedProducts: List<ProductDto>, onProductClick: (In
             ProductListItem(item) { onProductClick(item.productId) }
         }
     }
+}
+
+@Composable
+fun NetworkErrorDialog(onRetry: () -> Unit = {}) {
+    BaseDialog(
+        title = stringResource(R.string.dialog_network_error_title),
+        content = stringResource(R.string.dialog_network_error_content),
+        confirmBtnText = stringResource(R.string.dialog_network_error_retry_btn),
+        isBackgroundClickable = false,
+        onConfirmRequest = onRetry,
+    )
+}
+
+@Composable
+fun ServerErrorDialog(onRetry: () -> Unit = {}) {
+    BaseDialog(
+        title = stringResource(R.string.dialog_server_error_title),
+        content = stringResource(R.string.dialog_server_error_content),
+        confirmBtnText = stringResource(R.string.dialog_server_error_retry_btn),
+        isBackgroundClickable = false,
+        onConfirmRequest = onRetry,
+    )
 }
 
 

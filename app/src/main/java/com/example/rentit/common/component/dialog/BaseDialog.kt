@@ -42,7 +42,7 @@ fun BaseDialog(
     closeBtnText: String? = null,
     confirmBtnText: String,
     isBackgroundClickable: Boolean = true,
-    onCloseRequest: () -> Unit,
+    onCloseRequest: () -> Unit = {},
     onConfirmRequest: () -> Unit,
     customContent: @Composable ColumnScope.() -> Unit = {}
 ) {
