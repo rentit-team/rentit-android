@@ -104,6 +104,9 @@
     <string name="screen_home_label_btn_filter_rent_possibility">대여 가능</string>
     <string name="screen_home_label_btn_filter_category">카테고리</string>
 
+    <string name="screen_home_filter_content_description_rental_possibility">대여 가능 여부 필터링 버튼</string>
+    <string name="screen_home_filter_content_description_category">카테고리 필터링 버튼</string>
+
     <!-- 게시글 상세 -->
     <string name="screen_product_detail_img_placeholder_description">상품 임시 이미지</string>
     <string name="screen_product_detail_img_description">상품 이미지</string>

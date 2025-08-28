@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -42,10 +44,10 @@ fun CommonButton(modifier: Modifier = Modifier, text: String, enabled: Boolean =
 }
 
 @Composable
-fun FilterButton(title: String, modifier: Modifier = Modifier, iconContent: @Composable () -> Unit = {}) {
+fun FilterButton(modifier: Modifier = Modifier, title: String, contentDesc: String = "", onClick: () -> Unit = {}, iconContent: @Composable () -> Unit = {}) {
     OutlinedButton(
-        modifier = modifier.height(30.dp),
-        onClick = { },
+        modifier = modifier.height(30.dp).semantics { contentDescription = contentDesc },
+        onClick = onClick,
         shape = RoundedCornerShape(20.dp),
         border = CommonBorders.basicBorder(),
         contentPadding = PaddingValues(0.dp)
@@ -68,7 +70,7 @@ fun ButtonPreview(){
     RentItTheme {
         Column(){
             CommonButton(text = "Button", containerColor = PrimaryBlue500, contentColor = Color.White) {}
-            FilterButton("Button") {}
+            FilterButton(title = "Button") {}
         }
     }
 }
