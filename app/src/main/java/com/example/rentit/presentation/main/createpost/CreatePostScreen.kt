@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.home.createpost
+package com.example.rentit.presentation.main.createpost
 
 import android.net.Uri
 import androidx.activity.compose.ManagedActivityResultLauncher
@@ -75,8 +75,8 @@ import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.PeriodDto
 import com.example.rentit.navigation.bottomtab.navigateToHome
-import com.example.rentit.presentation.home.createpost.categorytag.CategoryTagDrawer
-import com.example.rentit.presentation.home.createpost.components.RemovableTagButton
+import com.example.rentit.presentation.main.createpost.categorytag.CategoryTagDrawer
+import com.example.rentit.presentation.main.createpost.components.RemovableTagButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

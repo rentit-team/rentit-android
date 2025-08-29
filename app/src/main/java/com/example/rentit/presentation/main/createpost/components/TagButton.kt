@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.home.createpost.components
+package com.example.rentit.presentation.main.createpost.components
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row

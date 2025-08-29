@@ -46,6 +46,16 @@
     <string name="dialog_server_connect_error_content">서버와 연결에 실패했어요. 다시 시도해주세요.</string>
     <string name="dialog_server_connect_error_retry_btn">재시도</string>
 
+    <!-- 네트워크 에러 Dialog -->
+    <string name="dialog_network_error_title">인터넷 연결이 필요해요</string>
+    <string name="dialog_network_error_content">네트워크 상태를 확인한 후 다시 시도해주세요.</string>
+    <string name="dialog_network_error_retry_btn">재시도</string>
+
+    <!-- 서버 에러 Dialog -->
+    <string name="dialog_server_error_title">서버에 문제가 발생했어요</string>
+    <string name="dialog_server_error_content">잠시 후 다시 시도해주세요.</string>
+    <string name="dialog_server_error_retry_btn">재시도</string>
+
     <!-- 로그인 -->
     <string name="screen_login_app_logo_description">랜팃 로고</string>
     <string name="screen_login_google_logo_description">구글 로고</string>
@@ -91,6 +101,7 @@
     <string name="screen_main_btn_create_post_content_description">상품 등록</string>
 
     <!-- 게시글 리스트 아이템 -->
+    <string name="product_list_item_text_empty_category">카테고리 없음</string>
     <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
     <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
     <string name="product_list_item_period_text_less_than_day">%d일 이하</string>
@@ -103,6 +114,9 @@
 
     <string name="screen_home_label_btn_filter_rent_possibility">대여 가능</string>
     <string name="screen_home_label_btn_filter_category">카테고리</string>
+
+    <string name="screen_home_filter_content_description_rental_possibility">대여 가능 여부 필터링 버튼</string>
+    <string name="screen_home_filter_content_description_category">카테고리 필터링 버튼</string>
 
     <!-- 게시글 상세 -->
     <string name="screen_product_detail_img_placeholder_description">상품 임시 이미지</string>

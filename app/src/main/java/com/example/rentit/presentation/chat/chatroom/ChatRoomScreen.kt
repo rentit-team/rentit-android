@@ -67,7 +67,7 @@ import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.navigation.chatroom.navigateToRequestAcceptConfirm
 import com.example.rentit.common.component.dialog.RequestAcceptDialog
 import com.example.rentit.common.exception.MissingTokenException
-import com.example.rentit.common.model.RequestAcceptDialogUiModel
+import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel

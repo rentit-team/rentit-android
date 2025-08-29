@@ -1,5 +1,6 @@
 package com.example.rentit.data.product.dto
 
+import com.example.rentit.common.enums.ProductStatus
 import com.google.gson.annotations.SerializedName
 
 data class ProductListResponseDto(
@@ -39,10 +40,10 @@ data class ProductDto(
     val owner: OwnerDto,
 
     @SerializedName("categories")
-    val categories: List<String>,
+    val categories: List<Int>,
 
     @SerializedName("status")
-    val status: String,
+    val status: ProductStatus,
 
     @SerializedName("createdAt")
     val createdAt: String // or LocalDateTime if using a converter

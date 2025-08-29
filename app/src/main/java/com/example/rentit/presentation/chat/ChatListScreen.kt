@@ -90,7 +90,7 @@ fun OrderButtonSection() {
             .padding(top = 25.dp, bottom = 15.dp),
         horizontalArrangement = Arrangement.End
     ) {
-        FilterButton(stringResource(R.string.screen_chat_list_btn_up_to_date_order)) {}
+        FilterButton(title = stringResource(R.string.screen_chat_list_btn_up_to_date_order)) {}
     }
 }
 

@@ -27,13 +27,13 @@ import com.example.rentit.R
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.model.PriceSummaryUiModel
+import com.example.rentit.common.uimodel.PriceSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
-import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 import kotlin.math.abs
 

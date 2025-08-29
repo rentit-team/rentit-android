@@ -54,7 +54,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
-import com.example.rentit.common.component.ProductListItem
+import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.setting.navigateToSetting
 import com.example.rentit.presentation.mypage.components.MyRentalHistoryListItem
@@ -249,7 +249,17 @@ fun TabbedListSection(
         if (list.isNotEmpty()) {
             if (isFirstTabSelected) {
                 items(myProductList) {
-                    ProductListItem(it, true) { onItemClick(it.productId) }
+                    ProductListItem(
+                        title = it.title,
+                        price = it.price,
+                        thumbnailImgUrl = it.thumbnailImgUrl,
+                        minPeriod = it.period?.min,
+                        maxPeriod = it.period?.max,
+                        categories = emptyList(),
+                        status = it.status,
+                        createdAt = it.createdAt,
+                        showCheckRequest = true
+                    ) { onItemClick(it.productId) }
                 }
             } else {
                 items(myRentList) {

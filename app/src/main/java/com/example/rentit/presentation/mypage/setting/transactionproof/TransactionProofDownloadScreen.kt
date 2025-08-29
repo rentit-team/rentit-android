@@ -24,7 +24,7 @@ import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.RentalSummary
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.model.RentalSummaryUiModel
+import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.common.theme.RentItTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
