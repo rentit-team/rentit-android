@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.data.product.usecase.GetCategoryMapUseCase
@@ -10,6 +11,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
+
+private const val TAG = "Home"
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -41,16 +44,24 @@ class HomeViewModel @Inject constructor(
                     parentIdToNameCategoryMap = linkedMapOf(-1 to "") + it.filter { cate -> cate.value.isParent }
                         .mapValues { cate -> cate.value.name }
                 )
+                Log.i(TAG, "카테고리 맵 가져오기 성공: ${it.size}개 카테고리")
             }
-            .onFailure { e -> handleException(e) }
+            .onFailure { e ->
+                handleException(e)
+                Log.e(TAG, "카테고리 맵 가져오기 실패", e)
+            }
     }
 
     private suspend fun fetchProductList() {
         getProductListWithCategoryUseCase.invoke(_uiState.value.categoryMap)
             .onSuccess {
                 _uiState.value = _uiState.value.copy(productList = it)
+                Log.i(TAG, "상품 리스트 가져오기 성공: ${it.size}개 상품")
             }
-            .onFailure { e -> handleException(e) }
+            .onFailure { e ->
+                handleException(e)
+                Log.e(TAG, "상품 리스트 가져오기 실패", e)
+            }
     }
 
     fun toggleOnlyRentalAvailable() {
