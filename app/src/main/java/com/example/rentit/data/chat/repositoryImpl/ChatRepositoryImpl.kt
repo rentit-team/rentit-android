@@ -1,4 +1,4 @@
-package com.example.rentit.data.chat.repository
+package com.example.rentit.data.chat.repositoryImpl
 
 import android.util.Log
 import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
@@ -9,13 +9,15 @@ import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.dto.ChatListResponseDto
 import com.example.rentit.data.chat.dto.NewChatResponseDto
 import com.example.rentit.data.chat.remote.ChatRemoteDataSource
+import com.example.rentit.domain.chat.repository.ChatRepository
 import javax.inject.Inject
 
 private const val TAG = "ChatRepository"
 
-class ChatRepository @Inject constructor(
+class ChatRepositoryImpl @Inject constructor(
     private val chatRemoteDataSource: ChatRemoteDataSource,
-) {
+): ChatRepository {
+    override
     suspend fun getChatList(): Result<ChatListResponseDto> {
         return runCatching {
             val response = chatRemoteDataSource.getChatList()
@@ -33,6 +35,7 @@ class ChatRepository @Inject constructor(
         }
     }
 
+    override
     suspend fun getChatDetail(chatRoomMessageId: String, skip: Int, size: Int): Result<ChatDetailResponseDto> {
         return runCatching {
             val response = chatRemoteDataSource.getChatDetail(chatRoomMessageId, skip, size)
@@ -54,6 +57,7 @@ class ChatRepository @Inject constructor(
         }
     }
 
+    override
     suspend fun postNewChat(productId: Int): Result<NewChatResponseDto> {
         return runCatching {
             val response = chatRemoteDataSource.postNewChat(productId)

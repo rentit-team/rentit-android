@@ -1,4 +1,4 @@
-package com.example.rentit.data.product.model
+package com.example.rentit.domain.product.model
 
 data class Category (
     val name: String,

@@ -1,4 +1,4 @@
-package com.example.rentit.data.rental.repository
+package com.example.rentit.data.rental.repositoryImpl
 
 import com.example.rentit.common.enums.PhotoRegistrationType
 import com.example.rentit.common.exception.MissingTokenException
@@ -12,13 +12,14 @@ import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.data.rental.remote.RentalRemoteDataSource
+import com.example.rentit.domain.rental.repository.RentalRepository
 import okhttp3.MultipartBody
 import javax.inject.Inject
 
-class RentalRepository @Inject constructor(
+class RentalRepositoryImpl @Inject constructor(
     private val rentalRemoteDataSource: RentalRemoteDataSource
-){
-    suspend fun getRentalDetail(productId: Int, reservationId: Int): Result<RentalDetailResponseDto> {
+): RentalRepository {
+    override suspend fun getRentalDetail(productId: Int, reservationId: Int): Result<RentalDetailResponseDto> {
         return runCatching {
             val response = rentalRemoteDataSource.getRentalDetail(productId, reservationId)
             if (response.isSuccessful) {
@@ -29,7 +30,7 @@ class RentalRepository @Inject constructor(
         }
     }
 
-    suspend fun postTrackingRegistration(productId: Int, reservationId: Int, body: TrackingRegistrationRequestDto): Result<TrackingRegistrationResponseDto?> {
+    override suspend fun postTrackingRegistration(productId: Int, reservationId: Int, body: TrackingRegistrationRequestDto): Result<TrackingRegistrationResponseDto?> {
         return runCatching {
             val response = rentalRemoteDataSource.postTrackingRegistration(productId, reservationId, body)
             if (response.isSuccessful) {
@@ -40,7 +41,7 @@ class RentalRepository @Inject constructor(
         }
     }
 
-    suspend fun getCourierNames(): Result<CourierNamesResponseDto> {
+    override suspend fun getCourierNames(): Result<CourierNamesResponseDto> {
         return runCatching {
             val response = rentalRemoteDataSource.getCourierNames()
             if (response.isSuccessful) {
@@ -51,7 +52,7 @@ class RentalRepository @Inject constructor(
         }
     }
 
-    suspend fun updateRentalStatus(productId: Int, reservationId: Int, request: UpdateRentalStatusRequestDto): Result<Unit> {
+    override suspend fun updateRentalStatus(productId: Int, reservationId: Int, request: UpdateRentalStatusRequestDto): Result<Unit> {
         return runCatching {
             val response = rentalRemoteDataSource.updateRentalStatus(productId, reservationId, request)
             if (!response.isSuccessful) {
@@ -65,7 +66,7 @@ class RentalRepository @Inject constructor(
         }
     }
 
-    suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<Unit> {
+    override suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<Unit> {
         return runCatching {
             val response = rentalRemoteDataSource.postPhotoRegistration(productId, reservationId, type, images)
             if (!response.isSuccessful) {
@@ -75,7 +76,7 @@ class RentalRepository @Inject constructor(
         }
     }
 
-    suspend fun getRentalPhotos(productId: Int, reservationId: Int): Result<RentalPhotoResponseDto> {
+    override suspend fun getRentalPhotos(productId: Int, reservationId: Int): Result<RentalPhotoResponseDto> {
         return runCatching {
             val response = rentalRemoteDataSource.getRentalPhotos(productId, reservationId)
             if (response.isSuccessful) {

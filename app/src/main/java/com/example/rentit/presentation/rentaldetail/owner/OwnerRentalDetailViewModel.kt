@@ -9,8 +9,8 @@ import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.data.rental.repository.RentalRepository
 import com.example.rentit.data.rental.usecase.RegisterTrackingUseCase
+import com.example.rentit.domain.rental.repository.RentalRepository
 import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRentalStatusUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.data.product.dto.CategoryDto
 import com.example.rentit.data.product.dto.CreatePostRequestDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
-import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.domain.product.repository.ProductRepository
 import com.google.gson.Gson
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext

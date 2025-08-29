@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.exception.rental.TooManyRequestException
 import com.example.rentit.common.exception.rental.VerificationFailedException
 import com.example.rentit.common.exception.rental.VerificationRequestNotFoundException
-import com.example.rentit.data.user.repository.UserRepository
+import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.presentation.auth.join.phoneverification.model.VerificationError
 import com.example.rentit.presentation.auth.join.phoneverification.model.toUiMessage
 import dagger.hilt.android.lifecycle.HiltViewModel

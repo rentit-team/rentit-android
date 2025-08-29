@@ -2,7 +2,7 @@ package com.example.rentit.presentation.productdetail.rentalhistory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.domain.product.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

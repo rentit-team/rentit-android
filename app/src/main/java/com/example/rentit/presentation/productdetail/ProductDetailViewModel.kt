@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.RequestInfoDto
-import com.example.rentit.data.product.repository.ProductRepository
-import com.example.rentit.data.user.repository.UserRepository
+import com.example.rentit.domain.product.repository.ProductRepository
+import com.example.rentit.domain.user.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

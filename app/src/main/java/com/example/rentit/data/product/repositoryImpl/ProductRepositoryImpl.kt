@@ -1,4 +1,4 @@
-package com.example.rentit.data.product.repository
+package com.example.rentit.data.product.repositoryImpl
 
 import com.example.rentit.common.exception.ExpiredTokenException
 import com.example.rentit.common.exception.ServerException
@@ -12,14 +12,15 @@ import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
 import com.example.rentit.data.product.remote.ProductRemoteDataSource
+import com.example.rentit.domain.product.repository.ProductRepository
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import javax.inject.Inject
 
-class ProductRepository @Inject constructor(
+class ProductRepositoryImpl @Inject constructor(
     private val productRemoteDataSource: ProductRemoteDataSource
-) {
-    suspend fun getProductList(): Result<ProductListResponseDto> {
+): ProductRepository {
+    override suspend fun getProductList(): Result<ProductListResponseDto> {
         return runCatching {
             val response = productRemoteDataSource.getProductList()
             if(response.isSuccessful) {
@@ -35,7 +36,7 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun getProductDetail(productId: Int): Result<ProductDetailResponseDto> {
+    override suspend fun getProductDetail(productId: Int): Result<ProductDetailResponseDto> {
         return try {
             val response = productRemoteDataSource.getProductDetail(productId)
             when(response.code()) {
@@ -59,7 +60,7 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun getReservedDates(productId: Int): Result<ProductReservedDatesResponseDto> {
+    override suspend fun getReservedDates(productId: Int): Result<ProductReservedDatesResponseDto> {
         return try {
             val response = productRemoteDataSource.getReservedDates(productId)
             when(response.code()) {
@@ -83,7 +84,7 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun postResv(productId: Int, request: ResvRequestDto): Result<ResvResponseDto> {
+    override suspend fun postResv(productId: Int, request: ResvRequestDto): Result<ResvResponseDto> {
         return try {
             val response = productRemoteDataSource.postResv(productId, request)
             when(response.code()) {
@@ -115,7 +116,7 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun getCategories(): Result<CategoryListResponseDto> {
+    override suspend fun getCategories(): Result<CategoryListResponseDto> {
         return runCatching {
             val response = productRemoteDataSource.getCategories()
             if(response.isSuccessful) {
@@ -127,7 +128,7 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto> {
+    override suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto> {
         return try {
             val response = productRemoteDataSource.createPost(payLoad, thumbnailImg)
             when(response.code()) {
@@ -151,7 +152,7 @@ class ProductRepository @Inject constructor(
         }
     }
 
-    suspend fun getProductRequestList(productId: Int): Result<RequestHistoryResponseDto> {
+    override suspend fun getProductRequestList(productId: Int): Result<RequestHistoryResponseDto> {
         return try {
             val response = productRemoteDataSource.getProductRequestList(productId)
             when(response.code()) {

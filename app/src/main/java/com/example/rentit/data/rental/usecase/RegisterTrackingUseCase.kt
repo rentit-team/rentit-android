@@ -3,7 +3,7 @@ package com.example.rentit.data.rental.usecase
 import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
-import com.example.rentit.data.rental.repository.RentalRepository
+import com.example.rentit.domain.rental.repository.RentalRepository
 import javax.inject.Inject
 
 class RegisterTrackingUseCase @Inject constructor(

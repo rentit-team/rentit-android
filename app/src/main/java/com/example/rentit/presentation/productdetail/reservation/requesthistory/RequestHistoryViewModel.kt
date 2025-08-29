@@ -3,9 +3,9 @@ package com.example.rentit.presentation.productdetail.reservation.requesthistory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.ResvStatus
-import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.RequestInfoDto
-import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.domain.chat.repository.ChatRepository
+import com.example.rentit.domain.product.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

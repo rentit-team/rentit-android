@@ -46,7 +46,7 @@ import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.data.product.model.ProductWithCategory
+import com.example.rentit.domain.product.model.ProductWithCategory
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

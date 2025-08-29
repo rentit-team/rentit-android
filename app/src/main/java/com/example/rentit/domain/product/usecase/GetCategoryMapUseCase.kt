@@ -1,7 +1,7 @@
-package com.example.rentit.data.product.usecase
+package com.example.rentit.domain.product.usecase
 
-import com.example.rentit.data.product.model.Category
-import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.domain.product.model.Category
+import com.example.rentit.domain.product.repository.ProductRepository
 import javax.inject.Inject
 
 class GetCategoryMapUseCase @Inject constructor(

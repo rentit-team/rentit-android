@@ -1,6 +1,6 @@
-package com.example.rentit.data.user.usecase
+package com.example.rentit.domain.user.usecase
 
-import com.example.rentit.data.user.repository.UserRepository
+import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
 
 class InitializeAuthUseCase @Inject constructor(

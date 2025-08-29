@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.util.inclusiveDaysBetween
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
-import com.example.rentit.data.product.repository.ProductRepository
+import com.example.rentit.domain.product.repository.ProductRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
