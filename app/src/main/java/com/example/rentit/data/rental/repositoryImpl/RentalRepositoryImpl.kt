@@ -3,8 +3,8 @@ package com.example.rentit.data.rental.repositoryImpl
 import com.example.rentit.common.enums.PhotoRegistrationType
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.ServerException
-import com.example.rentit.common.exception.rental.RentalNotFoundException
-import com.example.rentit.common.exception.rental.EmptyBodyException
+import com.example.rentit.domain.rental.exception.RentalNotFoundException
+import com.example.rentit.domain.rental.exception.EmptyBodyException
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.RentalPhotoResponseDto

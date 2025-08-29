@@ -2,7 +2,7 @@ package com.example.rentit.data.product.repositoryImpl
 
 import com.example.rentit.common.exception.ExpiredTokenException
 import com.example.rentit.common.exception.ServerException
-import com.example.rentit.common.exception.rental.EmptyBodyException
+import com.example.rentit.domain.rental.exception.EmptyBodyException
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto

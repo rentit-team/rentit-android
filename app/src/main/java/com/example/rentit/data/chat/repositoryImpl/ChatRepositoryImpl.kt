@@ -1,10 +1,10 @@
 package com.example.rentit.data.chat.repositoryImpl
 
 import android.util.Log
-import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
+import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
-import com.example.rentit.common.exception.chat.ChatRoomAlreadyExistsException
-import com.example.rentit.common.exception.product.ResvByOwnerException
+import com.example.rentit.domain.chat.exception.ChatRoomAlreadyExistsException
+import com.example.rentit.domain.product.exception.ResvByOwnerException
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.dto.ChatListResponseDto
 import com.example.rentit.data.chat.dto.NewChatResponseDto

@@ -2,11 +2,11 @@ package com.example.rentit.data.user.repositoryImpl
 
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.ServerException
-import com.example.rentit.common.exception.rental.EmptyBodyException
-import com.example.rentit.common.exception.rental.TooManyRequestException
-import com.example.rentit.common.exception.rental.VerificationFailedException
-import com.example.rentit.common.exception.rental.VerificationRequestNotFoundException
-import com.example.rentit.common.exception.user.GoogleSsoFailedException
+import com.example.rentit.domain.rental.exception.EmptyBodyException
+import com.example.rentit.domain.rental.exception.TooManyRequestException
+import com.example.rentit.domain.rental.exception.VerificationFailedException
+import com.example.rentit.domain.rental.exception.VerificationRequestNotFoundException
+import com.example.rentit.domain.user.exception.GoogleSsoFailedException
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
