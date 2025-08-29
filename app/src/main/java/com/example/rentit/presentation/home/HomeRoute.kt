@@ -17,9 +17,13 @@ fun HomeRoute(navHostController: NavHostController) {
 
     HomeScreen(
         sortedProducts = uiState.productList,
+        parentCategoryNames = uiState.parentCategoryNames,
+        selectedCategoryName = uiState.selectedCategoryName,
+        onlyRentalAvailable = uiState.onlyRentalAvailable,
         isLoading = uiState.isLoading,
         showNetworkErrorDialog = uiState.showNetworkErrorDialog,
         showServerErrorDialog = uiState.showServerErrorDialog,
+        onSelectCategory = {},
         onProductClick = navHostController::navigateToProductDetail,
         onRetry = viewModel::retryFetchProductList
     )

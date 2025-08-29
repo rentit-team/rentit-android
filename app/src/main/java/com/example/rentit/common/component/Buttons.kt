@@ -20,6 +20,8 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
@@ -44,22 +46,32 @@ fun CommonButton(modifier: Modifier = Modifier, text: String, enabled: Boolean =
 }
 
 @Composable
-fun FilterButton(modifier: Modifier = Modifier, title: String, contentDesc: String = "", onClick: () -> Unit = {}, iconContent: @Composable () -> Unit = {}) {
+fun FilterButton(
+    modifier: Modifier = Modifier,
+    title: String,
+    contentDesc: String = "",
+    isSelected: Boolean = false,
+    onClick: () -> Unit = {},
+) {
+    val borderColor = if(isSelected) PrimaryBlue500 else Gray200
+    val textColor = if(isSelected) PrimaryBlue500 else AppBlack
+
     OutlinedButton(
         modifier = modifier.height(30.dp).semantics { contentDescription = contentDesc },
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
-        border = CommonBorders.basicBorder(),
+        border = CommonBorders.basicBorder(borderColor),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            androidx.compose.material.Text(
+            Text(
                 text = title,
-                style = MaterialTheme.typography.labelLarge)
-            iconContent()
+                style = MaterialTheme.typography.labelLarge,
+                color = textColor
+            )
         }
     }
 }

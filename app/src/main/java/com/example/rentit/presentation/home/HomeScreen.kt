@@ -8,34 +8,55 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
+import androidx.compose.material.Text
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
+import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.theme.Gray200
+import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.data.product.model.ProductWithCategory
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     sortedProducts: List<ProductWithCategory> = emptyList(),
+    parentCategoryNames: List<String> = emptyList(),
+    selectedCategoryName: String = "",
+    onlyRentalAvailable: Boolean = false,
     isLoading: Boolean = false,
     showNetworkErrorDialog: Boolean = false,
     showServerErrorDialog: Boolean = false,
+    onSelectCategory: (String) -> Unit = {},
     onProductClick: (Int) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
@@ -43,7 +64,7 @@ fun HomeScreen(
 
         HomeTopSection()
 
-        HomeOptionSection()
+        HomeOptionSection(parentCategoryNames, selectedCategoryName, onlyRentalAvailable, onSelectCategory)
 
         HomeProductListSection(sortedProducts, onProductClick)
     }
@@ -83,7 +104,12 @@ fun HomeTopSection(onSearchClick: () -> Unit = {}) {
 }
 
 @Composable
-fun HomeOptionSection() {
+fun HomeOptionSection(
+    parentCategoryList: List<String> = emptyList(),
+    selectedCategoryName: String = "",
+    onlyRentalAvailable: Boolean = false,
+    onSelectCategory: (String) -> Unit = {},
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,18 +121,14 @@ fun HomeOptionSection() {
         FilterButton(
             modifier = Modifier.padding(end = 9.dp),
             title = stringResource(R.string.screen_home_label_btn_filter_rent_possibility),
-            contentDesc = stringResource(R.string.screen_home_label_btn_filter_rent_possibility)
+            contentDesc = stringResource(R.string.screen_home_label_btn_filter_rent_possibility),
+            isSelected = onlyRentalAvailable
         )
-        FilterButton(
-            title = stringResource(R.string.screen_home_label_btn_filter_category),
-            contentDesc = stringResource(R.string.screen_home_filter_content_description_category)
-        ) {
-            Image(
-                modifier = Modifier.padding(start = 4.dp),
-                painter = painterResource(id = R.drawable.ic_chevron_down),
-                contentDescription = null
-            )
-        }
+        CategoryDropDown(
+            categoryNames = parentCategoryList,
+            selectedCategoryName = selectedCategoryName,
+            onSelect = onSelectCategory
+        )
     }
 }
 
@@ -151,6 +173,52 @@ fun ServerErrorDialog(onRetry: () -> Unit = {}) {
         isBackgroundClickable = false,
         onConfirmRequest = onRetry,
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CategoryDropDown(
+    categoryNames: List<String> = emptyList(),
+    selectedCategoryName: String = "",
+    onSelect: (String) -> Unit = {},
+) {
+    var expanded by remember { mutableStateOf(false) }
+    val borderColor = if (expanded) PrimaryBlue500 else Gray200
+
+    ExposedDropdownMenuBox(
+        modifier = Modifier
+            .height(30.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .basicRoundedGrayBorder(color = borderColor),
+        expanded = expanded,
+        onExpandedChange = { expanded = !expanded }
+    ) {
+        Row(
+            modifier = Modifier.menuAnchor().padding(12.dp, 6.dp).widthIn(min = 70.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = selectedCategoryName,
+                style = MaterialTheme.typography.labelLarge
+            )
+            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+        }
+        ExposedDropdownMenu(
+            expanded = expanded,
+            onDismissRequest = { expanded = false },
+        ) {
+            categoryNames.forEach {
+                DropdownMenuItem(
+                    text = { Text(it) },
+                    onClick = {
+                        onSelect(it)
+                        expanded = false
+                    }
+                )
+            }
+        }
+    }
 }
 
 
