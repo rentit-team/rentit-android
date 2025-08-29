@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -49,6 +51,7 @@ import com.example.rentit.data.product.model.ProductWithCategory
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
+    scrollState: LazyListState = rememberLazyListState(),
     sortedProducts: List<ProductWithCategory> = emptyList(),
     parentIdToNameCategoryMap: Map<Int, String> = emptyMap(),
     filterParentCategoryId: Int = -1,
@@ -73,7 +76,7 @@ fun HomeScreen(
             onSelectCategory
         )
 
-        HomeProductListSection(sortedProducts, onProductClick)
+        HomeProductListSection(scrollState, sortedProducts, onProductClick)
     }
 
     LoadingScreen(isLoading)
@@ -143,9 +146,14 @@ fun HomeFilterSection(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun HomeProductListSection(sortedProducts: List<ProductWithCategory>, onProductClick: (Int) -> Unit) {
+fun HomeProductListSection(
+    scrollState: LazyListState,
+    sortedProducts: List<ProductWithCategory>,
+    onProductClick: (Int) -> Unit,
+) {
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
+        state = scrollState
     ) {
         items(sortedProducts, key = { it.productId }) { item ->
             ProductListItem(
@@ -210,7 +218,7 @@ fun CategoryDropDown(
         onExpandedChange = { expanded = !expanded }
     ) {
         Row(
-            modifier = Modifier.menuAnchor().padding(12.dp, 6.dp).widthIn(min = 70.dp),
+            modifier = Modifier.menuAnchor().padding(12.dp, 6.dp).widthIn(min = 50.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -221,6 +229,7 @@ fun CategoryDropDown(
             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
         }
         ExposedDropdownMenu(
+            modifier = Modifier.widthIn(min = 140.dp),
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
