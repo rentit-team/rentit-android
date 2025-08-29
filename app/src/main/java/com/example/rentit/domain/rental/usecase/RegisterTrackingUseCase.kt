@@ -1,4 +1,4 @@
-package com.example.rentit.data.rental.usecase
+package com.example.rentit.domain.rental.usecase
 
 import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
