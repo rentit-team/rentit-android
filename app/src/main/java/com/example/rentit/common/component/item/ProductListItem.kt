@@ -103,7 +103,7 @@ fun ProductListItem(
                     Text(
                         text = status.label ?: "",
                         style = MaterialTheme.typography.labelMedium,
-                        color = PrimaryBlue500
+                        color = status.color
                     )
                 }
                 Text(
@@ -131,8 +131,8 @@ fun ProductListItem(
                             else ->
                                 stringResource(R.string.product_list_item_period_text_more_than_zero)
                         },
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.primary
+                        style = MaterialTheme.typography.labelLarge,
+                        color = PrimaryBlue500
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
