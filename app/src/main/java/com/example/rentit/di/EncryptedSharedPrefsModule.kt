@@ -1,4 +1,4 @@
-package com.example.rentit.common.di
+package com.example.rentit.di
 
 import android.content.Context
 import android.content.SharedPreferences

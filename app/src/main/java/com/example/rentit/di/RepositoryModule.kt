@@ -1,4 +1,4 @@
-package com.example.rentit.common.di
+package com.example.rentit.di
 
 import com.example.rentit.data.chat.repositoryImpl.ChatRepositoryImpl
 import com.example.rentit.data.product.repositoryImpl.ProductRepositoryImpl

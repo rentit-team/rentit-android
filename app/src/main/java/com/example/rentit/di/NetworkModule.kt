@@ -1,4 +1,4 @@
-package com.example.rentit.common.di
+package com.example.rentit.di
 
 import com.example.rentit.data.user.local.UserPrefsDataSource
 import dagger.Module
