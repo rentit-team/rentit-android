@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.exception.MissingTokenException
-import com.example.rentit.data.user.usecase.CheckUserSessionUseCase
+import com.example.rentit.domain.user.usecase.CheckUserSessionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

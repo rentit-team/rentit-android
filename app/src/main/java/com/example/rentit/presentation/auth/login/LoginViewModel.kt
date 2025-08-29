@@ -6,9 +6,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.BuildConfig
 import com.example.rentit.common.exception.MissingTokenException
-import com.example.rentit.common.exception.user.GoogleSsoFailedException
-import com.example.rentit.data.user.repository.UserRepository
-import com.example.rentit.data.user.usecase.InitializeAuthUseCase
+import com.example.rentit.domain.user.exception.GoogleSsoFailedException
+import com.example.rentit.domain.user.repository.UserRepository
+import com.example.rentit.domain.user.usecase.InitializeAuthUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel

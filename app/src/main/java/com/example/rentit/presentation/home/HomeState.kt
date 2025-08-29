@@ -1,8 +1,8 @@
 package com.example.rentit.presentation.home
 
 import com.example.rentit.common.enums.ProductStatus
-import com.example.rentit.data.product.model.Category
-import com.example.rentit.data.product.model.ProductWithCategory
+import com.example.rentit.domain.product.model.Category
+import com.example.rentit.domain.product.model.ProductWithCategory
 
 data class HomeState(
     val productList: List<ProductWithCategory> = emptyList(),

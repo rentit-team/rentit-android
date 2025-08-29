@@ -1,0 +1,13 @@
+package com.example.rentit.domain.chat.repository
+
+import com.example.rentit.data.chat.dto.ChatDetailResponseDto
+import com.example.rentit.data.chat.dto.ChatListResponseDto
+import com.example.rentit.data.chat.dto.NewChatResponseDto
+
+interface ChatRepository {
+    suspend fun getChatList(): Result<ChatListResponseDto>
+
+    suspend fun getChatDetail(chatRoomMessageId: String, skip: Int, size: Int): Result<ChatDetailResponseDto>
+
+    suspend fun postNewChat(productId: Int): Result<NewChatResponseDto>
+}

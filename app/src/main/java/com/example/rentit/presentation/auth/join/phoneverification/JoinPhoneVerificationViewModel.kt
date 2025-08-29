@@ -2,10 +2,10 @@ package com.example.rentit.presentation.auth.join.phoneverification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.exception.rental.TooManyRequestException
-import com.example.rentit.common.exception.rental.VerificationFailedException
-import com.example.rentit.common.exception.rental.VerificationRequestNotFoundException
-import com.example.rentit.data.user.repository.UserRepository
+import com.example.rentit.domain.rental.exception.TooManyRequestException
+import com.example.rentit.domain.rental.exception.VerificationFailedException
+import com.example.rentit.domain.rental.exception.VerificationRequestNotFoundException
+import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.presentation.auth.join.phoneverification.model.VerificationError
 import com.example.rentit.presentation.auth.join.phoneverification.model.toUiMessage
 import dagger.hilt.android.lifecycle.HiltViewModel

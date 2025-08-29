@@ -8,12 +8,12 @@ import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
-import com.example.rentit.data.chat.repository.ChatRepository
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
-import com.example.rentit.data.product.repository.ProductRepository
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.data.rental.repository.RentalRepository
-import com.example.rentit.data.user.repository.UserRepository
+import com.example.rentit.domain.chat.repository.ChatRepository
+import com.example.rentit.domain.product.repository.ProductRepository
+import com.example.rentit.domain.rental.repository.RentalRepository
+import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

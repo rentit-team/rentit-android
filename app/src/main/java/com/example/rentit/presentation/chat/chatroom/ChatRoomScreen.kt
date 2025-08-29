@@ -55,7 +55,7 @@ import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.exception.chat.ForbiddenChatAccessException
+import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400

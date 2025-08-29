@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.data.rental.repository.RentalRepository
+import com.example.rentit.domain.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
