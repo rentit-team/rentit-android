@@ -10,6 +10,7 @@ data class ProductWithCategory(
     val minPeriod: Int?,
     val maxPeriod: Int?,
     val status: ProductStatus,
+    val parentCategoryIds: List<Int>,
     val categoryNames: List<String>,
     val createdAt: String
 )

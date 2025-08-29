@@ -19,11 +19,15 @@ fun HomeRoute(navHostController: NavHostController) {
         sortedProducts = uiState.productList,
         parentCategoryNames = uiState.parentCategoryNames,
         selectedCategoryName = uiState.selectedCategoryName,
+        sortedProducts = uiState.filteredProductList,
+        parentIdToNameCategoryMap = uiState.parentIdToNameCategoryMap,
+        filterParentCategoryId = uiState.filterParentCategoryId,
         onlyRentalAvailable = uiState.onlyRentalAvailable,
         isLoading = uiState.isLoading,
         showNetworkErrorDialog = uiState.showNetworkErrorDialog,
         showServerErrorDialog = uiState.showServerErrorDialog,
-        onSelectCategory = {},
+        onToggleRentalAvailableFilter = viewModel::toggleOnlyRentalAvailable,
+        onSelectCategory = viewModel::filterByParentCategory,
         onProductClick = navHostController::navigateToProductDetail,
         onRetry = viewModel::retryFetchProductList
     )

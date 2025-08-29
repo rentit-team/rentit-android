@@ -50,13 +50,14 @@ import com.example.rentit.data.product.model.ProductWithCategory
 @Composable
 fun HomeScreen(
     sortedProducts: List<ProductWithCategory> = emptyList(),
-    parentCategoryNames: List<String> = emptyList(),
-    selectedCategoryName: String = "",
+    parentIdToNameCategoryMap: Map<Int, String> = emptyMap(),
+    filterParentCategoryId: Int = -1,
     onlyRentalAvailable: Boolean = false,
     isLoading: Boolean = false,
     showNetworkErrorDialog: Boolean = false,
     showServerErrorDialog: Boolean = false,
-    onSelectCategory: (String) -> Unit = {},
+    onToggleRentalAvailableFilter: () -> Unit = {},
+    onSelectCategory: (Int) -> Unit = {},
     onProductClick: (Int) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
@@ -64,7 +65,13 @@ fun HomeScreen(
 
         HomeTopSection()
 
-        HomeOptionSection(parentCategoryNames, selectedCategoryName, onlyRentalAvailable, onSelectCategory)
+        HomeFilterSection(
+            parentIdToNameCategoryMap,
+            filterParentCategoryId,
+            onlyRentalAvailable,
+            onToggleRentalAvailableFilter,
+            onSelectCategory
+        )
 
         HomeProductListSection(sortedProducts, onProductClick)
     }
@@ -104,11 +111,12 @@ fun HomeTopSection(onSearchClick: () -> Unit = {}) {
 }
 
 @Composable
-fun HomeOptionSection(
-    parentCategoryList: List<String> = emptyList(),
-    selectedCategoryName: String = "",
+fun HomeFilterSection(
+    parentIdToNameCategoryMap: Map<Int, String> = emptyMap(),
+    filterParentCategoryId: Int = -1,
     onlyRentalAvailable: Boolean = false,
-    onSelectCategory: (String) -> Unit = {},
+    onToggleRentalAvailableFilter: () -> Unit = {},
+    onSelectCategory: (Int) -> Unit = {},
 ) {
     Row(
         modifier = Modifier
@@ -122,11 +130,12 @@ fun HomeOptionSection(
             modifier = Modifier.padding(end = 9.dp),
             title = stringResource(R.string.screen_home_label_btn_filter_rent_possibility),
             contentDesc = stringResource(R.string.screen_home_label_btn_filter_rent_possibility),
-            isSelected = onlyRentalAvailable
+            isSelected = onlyRentalAvailable,
+            onClick = onToggleRentalAvailableFilter
         )
         CategoryDropDown(
-            categoryNames = parentCategoryList,
-            selectedCategoryName = selectedCategoryName,
+            categoryMap = parentIdToNameCategoryMap,
+            filterCategoryId = filterParentCategoryId,
             onSelect = onSelectCategory
         )
     }
@@ -178,12 +187,19 @@ fun ServerErrorDialog(onRetry: () -> Unit = {}) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CategoryDropDown(
-    categoryNames: List<String> = emptyList(),
-    selectedCategoryName: String = "",
-    onSelect: (String) -> Unit = {},
+    categoryMap: Map<Int, String> = emptyMap(),
+    filterCategoryId: Int = -1,
+    onSelect: (Int) -> Unit = {},
 ) {
     var expanded by remember { mutableStateOf(false) }
     val borderColor = if (expanded) PrimaryBlue500 else Gray200
+
+    val allText = stringResource(R.string.screen_home_label_btn_filter_category_all)
+    val rawName = categoryMap.getOrDefault(
+        filterCategoryId,
+        stringResource(R.string.screen_home_label_btn_filter_category_default)
+    )
+
 
     ExposedDropdownMenuBox(
         modifier = Modifier
@@ -199,7 +215,7 @@ fun CategoryDropDown(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = selectedCategoryName,
+                text = rawName.ifEmpty { allText },
                 style = MaterialTheme.typography.labelLarge
             )
             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
@@ -208,11 +224,11 @@ fun CategoryDropDown(
             expanded = expanded,
             onDismissRequest = { expanded = false },
         ) {
-            categoryNames.forEach {
+            categoryMap.forEach {
                 DropdownMenuItem(
-                    text = { Text(it) },
+                    text = { Text(it.value.ifEmpty { allText }) },
                     onClick = {
-                        onSelect(it)
+                        onSelect(it.key)
                         expanded = false
                     }
                 )
