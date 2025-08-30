@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.rentit.R
+import java.time.LocalDate
 
 /**
  * 주어진 시작일과 종료일을 'yy.MM.dd (요일) ~ yy.MM.dd (요일) · N일' 형식의 문자열로 변환
@@ -26,6 +27,24 @@ fun formatRentalPeriod(context: Context, startDateStr: String, endDateStr: Strin
         start.toShortFormat(),
         startDayOfWeekKor,
         end.toShortFormat(),
+        endDayOfWeekKor,
+        period
+    )
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun formatRentalPeriod(context: Context, startDate: LocalDate?, endDate: LocalDate?): String {
+    if(startDate == null || endDate == null) return context.getString(R.string.util_error_rental_period_unavailable)
+
+    val startDayOfWeekKor = startDate.dayOfWeek.getKorLabel()
+    val endDayOfWeekKor = endDate.dayOfWeek.getKorLabel()
+    val period = inclusiveDaysBetween(startDate, endDate)
+
+    return context.getString(
+        R.string.util_formatted_period,
+        startDate.toShortFormat(),
+        startDayOfWeekKor,
+        endDate.toShortFormat(),
         endDayOfWeekKor,
         period
     )

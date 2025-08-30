@@ -6,16 +6,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.rentit.presentation.chat.chatroom.ChatroomScreen
 import com.example.rentit.common.component.layout.RequestAcceptConfirmScreen
+import com.example.rentit.presentation.chat.chatroom.ChatroomRoute
 
 fun NavHostController.navigateToChatRoom(
-    productId: Int?,
-    reservationId: Int?,
-    chatRoomId: String?,
+    chatRoomId: String,
 ) {
     navigate(
-        route = ChatRoomRoute.ChatRoom(productId, reservationId, chatRoomId)
+        route = ChatRoomRoute.ChatRoom(chatRoomId)
     )
 }
 
@@ -31,10 +29,8 @@ fun NavHostController.navigateToRequestAcceptConfirm(
 fun NavGraphBuilder.chatRoomGraph(navHostController: NavHostController) {
     composable<ChatRoomRoute.ChatRoom> { backStackEntry ->
         val items: ChatRoomRoute.ChatRoom = backStackEntry.toRoute()
-        ChatroomScreen(
+        ChatroomRoute(
             navHostController,
-            items.productId,
-            items.reservationId,
             items.chatRoomId
         )
     }

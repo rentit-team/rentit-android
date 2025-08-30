@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicListItemTopDivider
+import com.example.rentit.common.component.formatPeriodText
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.theme.Gray400
@@ -121,16 +122,7 @@ fun ProductListItem(
                 ) {
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = when {
-                            minPeriod != null && maxPeriod != null ->
-                                stringResource(R.string.product_list_item_period_text_more_and_less_than_day, minPeriod.toInt(), maxPeriod.toInt())
-                            minPeriod != null ->
-                                stringResource(R.string.product_list_item_period_text_more_than_day, minPeriod.toInt())
-                            maxPeriod != null ->
-                                stringResource(R.string.product_list_item_period_text_less_than_day, maxPeriod.toInt())
-                            else ->
-                                stringResource(R.string.product_list_item_period_text_more_than_zero)
-                        },
+                        text = formatPeriodText(minPeriod, maxPeriod),
                         style = MaterialTheme.typography.labelLarge,
                         color = PrimaryBlue500
                     )
