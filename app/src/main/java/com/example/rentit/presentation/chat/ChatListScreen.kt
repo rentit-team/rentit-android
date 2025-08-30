@@ -33,6 +33,9 @@ import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicListItemTopDivider
+import com.example.rentit.common.component.dialog.NetworkErrorDialog
+import com.example.rentit.common.component.dialog.ServerErrorDialog
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.theme.Gray400
@@ -45,7 +48,11 @@ import java.time.OffsetDateTime
 @Composable
 fun ChatListScreen(
     chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
+    isLoading: Boolean = false,
+    showNetworkErrorDialog: Boolean = false,
+    showServerErrorDialog: Boolean = false,
     onItemClick: (String) -> Unit = {},
+    onRetry: () -> Unit = {},
 ) {
     Column(Modifier.fillMaxSize().padding(top = 45.dp)) {
 
@@ -53,6 +60,12 @@ fun ChatListScreen(
 
         ChatListSection(chatRoomSummaries, onItemClick)
     }
+
+    LoadingScreen(isLoading)
+
+    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+
+    if(showServerErrorDialog) ServerErrorDialog(onRetry)
 }
 
 @Composable

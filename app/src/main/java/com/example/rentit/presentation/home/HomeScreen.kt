@@ -42,7 +42,8 @@ import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.item.ProductListItem
-import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.dialog.NetworkErrorDialog
+import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -168,28 +169,6 @@ fun HomeProductListSection(
             ) { onProductClick(item.productId) }
         }
     }
-}
-
-@Composable
-fun NetworkErrorDialog(onRetry: () -> Unit = {}) {
-    BaseDialog(
-        title = stringResource(R.string.dialog_network_error_title),
-        content = stringResource(R.string.dialog_network_error_content),
-        confirmBtnText = stringResource(R.string.dialog_network_error_retry_btn),
-        isBackgroundClickable = false,
-        onConfirmRequest = onRetry,
-    )
-}
-
-@Composable
-fun ServerErrorDialog(onRetry: () -> Unit = {}) {
-    BaseDialog(
-        title = stringResource(R.string.dialog_server_error_title),
-        content = stringResource(R.string.dialog_server_error_content),
-        confirmBtnText = stringResource(R.string.dialog_server_error_retry_btn),
-        isBackgroundClickable = false,
-        onConfirmRequest = onRetry,
-    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
