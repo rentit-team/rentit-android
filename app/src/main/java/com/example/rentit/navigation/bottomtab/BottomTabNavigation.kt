@@ -5,7 +5,7 @@ import androidx.annotation.RequiresApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.rentit.presentation.chat.ChatListScreen
+import com.example.rentit.presentation.chat.ChatListRoute
 import com.example.rentit.presentation.home.HomeRoute
 import com.example.rentit.presentation.mypage.MyPageScreen
 
@@ -33,7 +33,7 @@ fun NavGraphBuilder.bottomTabGraph(navHostController: NavHostController) {
         HomeRoute(navHostController)
     }
     composable(BottomTabRoute.Chat.route) {
-        ChatListScreen(navHostController)
+        ChatListRoute(navHostController)
     }
     composable(BottomTabRoute.MyPage.route) {
         MyPageScreen(navHostController)
