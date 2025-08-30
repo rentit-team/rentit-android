@@ -10,7 +10,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray100
-import com.example.rentit.common.theme.Gray200
 
 @Composable
 fun CommonDivider(modifier: Modifier = Modifier) {
@@ -23,10 +22,11 @@ fun CommonDivider(modifier: Modifier = Modifier) {
 
 fun Modifier.basicListItemTopDivider(): Modifier {
     return this.then(Modifier.drawBehind {
+        val y = 0.5.dp.toPx()
         drawLine(
-            color = Gray200,
-            start = Offset(0f, 0f),
-            end = Offset(size.width, 0f),
+            color = Gray100,
+            start = Offset(0f, y),
+            end = Offset(size.width, y),
             strokeWidth = 1.dp.toPx()
         )
     })
