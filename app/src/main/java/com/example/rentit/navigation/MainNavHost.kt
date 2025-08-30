@@ -2,10 +2,12 @@ package com.example.rentit.navigation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.example.rentit.navigation.auth.authGraph
@@ -22,7 +24,11 @@ import com.example.rentit.navigation.splash.splashGraph
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavHost(navHostController: NavHostController, paddingValues: PaddingValues) {
-    NavHost(navController = navHostController, startDestination = SplashRoute.Splash, modifier = Modifier.padding(paddingValues)){
+    NavHost(
+        navController = navHostController,
+        startDestination = SplashRoute.Splash,
+        modifier = Modifier.padding(paddingValues).background(Color.White)
+    ) {
         splashGraph(navHostController)
         authGraph(navHostController)
         bottomTabGraph(navHostController)

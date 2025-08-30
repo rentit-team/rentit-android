@@ -1,104 +1,220 @@
 package com.example.rentit.presentation.chat
 
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
-import com.example.rentit.common.component.FilterButton
+import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.basicListItemTopDivider
+import com.example.rentit.common.component.dialog.NetworkErrorDialog
+import com.example.rentit.common.component.dialog.ServerErrorDialog
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.enums.AutoMsgType
+import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.navigation.chatroom.navigateToChatRoom
-import com.example.rentit.presentation.chat.components.ChatListItem
+import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
+import java.time.Duration
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListScreen(navHostController: NavHostController) {
-    val chatListViewModel: ChatListViewModel = hiltViewModel()
-    val chatList by chatListViewModel.chatList.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+fun ChatListScreen(
+    chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
+    isLoading: Boolean = false,
+    showNetworkErrorDialog: Boolean = false,
+    showServerErrorDialog: Boolean = false,
+    onItemClick: (String) -> Unit = {},
+    onRetry: () -> Unit = {},
+) {
+    Column(Modifier
+        .fillMaxSize()
+        .padding(top = 45.dp)
+        .background(Color.White)) {
 
-    // 최초 한 번만 호출
-    LaunchedEffect(Unit) {
-        chatListViewModel.getChatList {
-            Toast.makeText(
-                context,
-                context.getString(R.string.error_chat_list_load),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+        Text(
+            modifier = Modifier.screenHorizontalPadding(),
+            text = stringResource(id = R.string.title_activity_chat_tab)
+        )
+
+        Spacer(Modifier.height(20.dp))
+
+        ChatListSection(chatRoomSummaries, onItemClick)
     }
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(top = 45.dp)
-    ) {
-        Column(
+    LoadingScreen(isLoading)
+
+    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+
+    if(showServerErrorDialog) ServerErrorDialog(onRetry)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ChatListSection(chatRoomSummaries: List<ChatRoomSummaryModel>, onItemClick: (String) -> Unit) {
+    LazyColumn {
+        items(chatRoomSummaries) {
+            ChatListItem(
+                lastMessageTime = it.lastMessageTime,
+                lastMessage = it.lastMessage,
+                partnerNickname = it.partnerNickname,
+                productTitle = it.productTitle,
+                thumbnailImgUrl = it.thumbnailImgUrl
+            ) { onItemClick(it.chatRoomId) }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ChatListItem(
+    lastMessageTime: OffsetDateTime?,
+    lastMessage: String,
+    partnerNickname: String,
+    productTitle: String,
+    thumbnailImgUrl: String?,
+    onClick: () -> Unit
+) {
+    val formatLastMsgTime = lastMessageTime?.toChatTimeString() ?: ""
+
+    val lastMsg = when (lastMessage) {
+        AutoMsgType.REQUEST_ACCEPT.code -> stringResource(R.string.auto_msg_type_request_accept_title)
+        AutoMsgType.COMPLETE_PAY.code -> stringResource(R.string.auto_msg_type_pay_complete_title)
+        "" -> stringResource(R.string.screen_chat_list_empty_chat_message)
+        else -> lastMessage
+    }
+
+    val msgColor = if(lastMessage.isEmpty()) Gray400 else AppBlack
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .basicListItemTopDivider()
+            .clickable(onClick = onClick)
+    ){
+        Row(
             modifier = Modifier
                 .screenHorizontalPadding()
+                .padding(vertical = 22.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            TopSection()
-            OrderButtonSection()
-        }
-        LazyColumn {
-            items(chatList) {
-                ChatListItem(it) {
-                    navHostController.navigateToChatRoom(it.productId, it.reservationId, it.chatRoomId)
+            LoadableUrlImage(
+                modifier = Modifier.size(74.dp).clip(RoundedCornerShape(20.dp)),
+                imgUrl = thumbnailImgUrl,
+                defaultImageResId = R.drawable.img_thumbnail_placeholder,
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 18.dp)
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        maxLines = 1,
+                        text = partnerNickname,
+                        overflow = TextOverflow.Ellipsis,
+                        style = MaterialTheme.typography.labelLarge
+                    )
+                    Text(
+                        text = formatLastMsgTime,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = Gray400
+                    )
                 }
+                Text(
+                    modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
+                    text = productTitle,
+                )
+                Text(
+                    text = lastMsg,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = msgColor
+                )
             }
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun TopSection() {
-    Row {
-        Text(
-            text = stringResource(id = R.string.title_activity_chat_tab),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
+fun OffsetDateTime.toChatTimeString(): String {
+    val now = LocalDate.now()
+    val diffDays = Duration.between(this.toLocalDate().atStartOfDay(), now.atStartOfDay()).toDays()
 
-@Composable
-fun OrderButtonSection() {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 25.dp, bottom = 15.dp),
-        horizontalArrangement = Arrangement.End
-    ) {
-        FilterButton(title = stringResource(R.string.screen_chat_list_btn_up_to_date_order)) {}
+    return when {
+        diffDays == 0L -> {
+            val formatter = DateTimeFormatter.ofPattern("· a h:mm")
+            this.format(formatter)
+        }
+        diffDays in 1..29 -> stringResource(R.string.screen_chat_list_time_days_ago, diffDays)
+        diffDays > 29 -> stringResource(R.string.screen_chat_list_time_months_ago, diffDays / 30)
+        else -> ""
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-private fun Preview() {
+fun ChatListScreenPreview() {
     RentItTheme {
-        ChatListScreen(rememberNavController())
+        ChatListScreen(listOf(
+            ChatRoomSummaryModel(
+                chatRoomId = "1",
+                productTitle = "자전거 대여",
+                thumbnailImgUrl = "https://example.com/bike.jpg",
+                partnerNickname = "홍길동",
+                lastMessage = "오늘 자전거 반납 가능해요?",
+                lastMessageTime = OffsetDateTime.now().minusHours(2)
+            ),
+            ChatRoomSummaryModel(
+                chatRoomId = "3",
+                productTitle = "노트북 대여",
+                thumbnailImgUrl = null,
+                partnerNickname = "이영희",
+                lastMessage = "감사합니다!",
+                lastMessageTime = OffsetDateTime.now().minusDays(30)
+            ),
+            ChatRoomSummaryModel(
+                chatRoomId = "3",
+                productTitle = "노트북 대여",
+                thumbnailImgUrl = null,
+                partnerNickname = "이영희",
+                lastMessage = "",
+                lastMessageTime = null
+            )
+        ))
     }
 }
