@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -35,62 +37,73 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.AutoMsgType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
+import com.example.rentit.common.util.toShortFormat
+import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
 import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListScreen(
-    chatRoomSummaries: List<ChatRoomSummaryDto> = emptyList(),
-    onItemClick: (Int) -> Unit = {},
+    chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
+    onItemClick: (String) -> Unit = {},
 ) {
+    Column(Modifier.fillMaxSize().padding(top = 45.dp)) {
+
+        ChatListTopSection()
+
+        ChatListSection(chatRoomSummaries, onItemClick)
+    }
+}
+
+@Composable
+fun ChatListTopSection() {
     Column(
-        Modifier
-            .fillMaxSize()
-            .padding(top = 45.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .screenHorizontalPadding()
-        ) {
-            TopSection()
-            OrderButtonSection()
-        }
-        LazyColumn {
-            items(chatRoomSummaries) {
-                ChatListItem(it) { onItemClick(0) }
-            }
-        }
-    }
-}
-
-@Composable
-private fun TopSection() {
-    Row {
-        Text(
-            text = stringResource(id = R.string.title_activity_chat_tab),
-            style = MaterialTheme.typography.bodyLarge
-        )
-    }
-}
-
-@Composable
-fun OrderButtonSection() {
-    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 25.dp, bottom = 15.dp),
-        horizontalArrangement = Arrangement.End
+            .screenHorizontalPadding()
+            .padding(bottom = 15.dp)
     ) {
-        FilterButton(title = stringResource(R.string.screen_chat_list_btn_up_to_date_order)) {}
+
+        Text(stringResource(id = R.string.title_activity_chat_tab))
+
+        Spacer(modifier = Modifier.height(25.dp))
+
+        FilterButton(
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(bottom = 15.dp),
+            title = stringResource(R.string.screen_chat_list_btn_up_to_date_order)
+        ) {}
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListItem(data: ChatRoomSummaryDto, onClick: () -> Unit) {
-    val lastMessageTime = if(data.lastMessageTime != null) formatDateTime(data.lastMessageTime) else ""
+fun ChatListSection(chatRoomSummaries: List<ChatRoomSummaryModel>, onItemClick: (String) -> Unit) {
+    LazyColumn {
+        items(chatRoomSummaries) {
+            ChatListItem(
+                lastMessageTime = it.lastMessageTime,
+                lastMessage = it.lastMessage,
+                partnerNickname = it.partnerNickname,
+                productTitle = it.productTitle,
+                thumbnailImgUrl = it.thumbnailImgUrl
+            ) { onItemClick(it.chatRoomId) }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun ChatListItem(
+    lastMessageTime: OffsetDateTime?,
+    lastMessage: String,
+    partnerNickname: String,
+    productTitle: String,
+    thumbnailImgUrl: String?,
+    onClick: () -> Unit
+) {
+    val formatLastMsgTime = lastMessageTime?.toShortFormat() ?: ""
 
     Box(
         modifier = Modifier
@@ -107,7 +120,7 @@ fun ChatListItem(data: ChatRoomSummaryDto, onClick: () -> Unit) {
         ) {
             LoadableUrlImage(
                 modifier = Modifier.size(74.dp).clip(RoundedCornerShape(20.dp)),
-                imgUrl = "url",
+                imgUrl = thumbnailImgUrl,
                 defaultImageResId = R.drawable.img_thumbnail_placeholder,
             )
             Column(
@@ -123,40 +136,31 @@ fun ChatListItem(data: ChatRoomSummaryDto, onClick: () -> Unit) {
                     Text(
                         modifier = Modifier.width(160.dp),
                         maxLines = 1,
-                        text = data.partnerNickname,
+                        text = partnerNickname,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.labelLarge
                     )
                     Text(
-                        text = lastMessageTime,
+                        text = formatLastMsgTime,
                         style = MaterialTheme.typography.labelMedium,
                         color = Gray400
                     )
                 }
                 Text(
                     modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
-                    text = data.productTitle,
-                    style = MaterialTheme.typography.bodyLarge,
+                    text = productTitle,
                 )
                 Text(
-                    text = when (data.lastMessage) {
+                    text = when (lastMessage) {
                         AutoMsgType.REQUEST_ACCEPT.code -> stringResource(R.string.auto_msg_type_request_accept_title)
                         AutoMsgType.COMPLETE_PAY.code -> stringResource(R.string.auto_msg_type_pay_complete_title)
-                        else -> data.lastMessage
+                        else -> lastMessage
                     },
                     style = MaterialTheme.typography.labelMedium,
                 )
             }
         }
     }
-}
-
-// 시간대(Offset)을 포함한 ISO 8601 형식의 OffsetDateTime 포맷팅
-@RequiresApi(Build.VERSION_CODES.O)
-private fun formatDateTime(dateTimeString: String): String {
-    val offsetDateTime = OffsetDateTime.parse(dateTimeString)
-    val localDateTime = offsetDateTime.toLocalDateTime()
-    return localDateTime.format(DateTimeFormatter.ofPattern("yy.MM.dd"))
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

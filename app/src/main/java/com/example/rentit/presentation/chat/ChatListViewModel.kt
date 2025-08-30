@@ -1,30 +1,35 @@
 package com.example.rentit.presentation.chat
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.data.chat.dto.ChatRoomSummaryDto
-import com.example.rentit.domain.chat.repository.ChatRepository
+import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
+import com.example.rentit.domain.chat.usecase.GetChatRoomSummariesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatListViewModel @Inject constructor(
-    private val chatRepository: ChatRepository,
+    private val getChatRoomSummariesUseCase: GetChatRoomSummariesUseCase
 ) : ViewModel() {
 
-    private val _chatList = MutableStateFlow<List<ChatRoomSummaryDto>>(emptyList())
-    val chatList: StateFlow<List<ChatRoomSummaryDto>> = _chatList
+    private val _chatRoomSummaries = MutableStateFlow<List<ChatRoomSummaryModel>>(emptyList())
+    val chatRoomSummaries: StateFlow<List<ChatRoomSummaryModel>> = _chatRoomSummaries
 
-    fun getChatList(onError: (Throwable) -> Unit = {}) {
+    fun fetchChatRoomList() {
         viewModelScope.launch {
-            chatRepository.getChatList()
+            getChatRoomSummariesUseCase.invoke()
                 .onSuccess {
-                    _chatList.value = it.chatRooms
+                    _chatRoomSummaries.value = it
                 }
-                .onFailure(onError)
+                .onFailure { e ->
+
+                }
         }
     }
 }
