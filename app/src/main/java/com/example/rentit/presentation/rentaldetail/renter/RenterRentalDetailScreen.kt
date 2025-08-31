@@ -23,6 +23,7 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.RentalDto
 import com.example.rentit.data.rental.dto.RenterDto
 import com.example.rentit.data.rental.dto.ReturnStatusDto
+import com.example.rentit.data.rental.mapper.toRenterUiModel
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterPaidContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRequestContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
