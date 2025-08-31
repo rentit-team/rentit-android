@@ -9,9 +9,6 @@ data class ChatRoomState(
     val partnerNickname: String = "",
     val rentalSummary: RentalChatRoomSummaryModel? = null,
     val productSummary: ProductChatRoomSummaryModel? = null,
-    val initialMessages: List<ChatMessageModel> = emptyList(),
-    val realTimeMessages: List<ChatMessageModel> = emptyList(),
+    val messages: List<ChatMessageModel> = emptyList(),
     val isLoading: Boolean = false
-) {
-    val messages: List<ChatMessageModel> = realTimeMessages + initialMessages
-}
+)

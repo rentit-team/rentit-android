@@ -63,7 +63,7 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatroomScreen(
-    messageText: String,
+    messageText: TextFieldValue,
     partnerNickname: String?,
     messages: List<ChatMessageModel>,
     productSummary: ProductChatRoomSummaryModel?,
@@ -79,7 +79,7 @@ fun ChatroomScreen(
         topBar = { CommonTopAppBar(onBackClick = onBackClick) },
         bottomBar = {
             BottomInputBar(
-                textFieldValue = TextFieldValue(messageText),
+                value = messageText,
                 scrollState = inputScrollState,
                 onValueChange = onMessageChange,
                 onSend = onMessageSend
@@ -222,7 +222,7 @@ private fun ChatMsgList(
             .padding(horizontal = 15.dp),
         reverseLayout = true
     ) {
-        items(msgList) { msg ->
+        items(msgList, key = { it.messageId }) { msg ->
             if (msg.isMine) {
                 SentMsgBubble(msg.message, msg.sentAt)
             } else {
@@ -234,7 +234,7 @@ private fun ChatMsgList(
 
 @Composable
 private fun BottomInputBar(
-    textFieldValue: TextFieldValue,
+    value: TextFieldValue,
     scrollState: ScrollState,
     onValueChange: (TextFieldValue) -> Unit = {},
     onSend: () -> Unit = {},
@@ -249,7 +249,7 @@ private fun BottomInputBar(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         BasicTextField(
-            value = textFieldValue,
+            value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .clip(RoundedCornerShape(25.dp))
@@ -268,7 +268,7 @@ private fun BottomInputBar(
                         .padding(20.dp, 12.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    if (textFieldValue.text.isEmpty()) {
+                    if (value.text.isEmpty()) {
                         Text(
                             text = stringResource(R.string.screen_chatroom_input_placeholder),
                             style = MaterialTheme.typography.bodyMedium,
@@ -280,14 +280,11 @@ private fun BottomInputBar(
             }
         )
         IconButton(
-            modifier = Modifier
-                .weight(0.1F), onClick = { onSend() }) {
+            modifier = Modifier.weight(0.1F), onClick = onSend) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_send),
+                painter = painterResource(R.drawable.ic_send),
                 tint = Gray800,
-                contentDescription = stringResource(
-                    id = R.string.content_description_for_ic_send
-                )
+                contentDescription = stringResource(R.string.content_description_for_ic_send)
             )
         }
     }
@@ -300,16 +297,19 @@ fun ChatRoomScreenPreview() {
     // 샘플 메시지
     val sampleMessages = listOf(
         ChatMessageModel(
+            messageId = "01",
             isMine = true,
             message = "안녕하세요! 예약 확인 부탁드려요.",
             sentAt = "2025-03-25T09:00:00Z"
         ),
         ChatMessageModel(
+            messageId = "02",
             isMine = false,
             message = "네, 예약 확인되었습니다.",
             sentAt = "2025-03-25T09:00:00Z"
         ),
         ChatMessageModel(
+            messageId = "02",
             isMine = true,
             message = "감사합니다!",
             sentAt = "2025-03-25T09:00:00Z"
@@ -335,14 +335,14 @@ fun ChatRoomScreenPreview() {
     )
 
 // 샘플 파라미터
-    val samplePartnerNickname: String? = "홍길동"
+    val samplePartnerNickname = "홍길동"
     val sampleMessageInput = TextFieldValue("")
     val sampleScrollState = rememberScrollState()
 
 // ChatroomScreen 호출 예시
     RentItTheme {
         ChatroomScreen(
-            messageText = sampleMessageInput.text,
+            messageText = sampleMessageInput,
             partnerNickname = samplePartnerNickname,
             messages = sampleMessages,
             productSummary = sampleProduct,

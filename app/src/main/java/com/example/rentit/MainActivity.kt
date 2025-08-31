@@ -5,11 +5,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.navigation.compose.rememberNavController
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.chat.chatroom.ChatroomRoute
 import com.example.rentit.presentation.main.MainRoute
-import com.example.rentit.presentation.rentaldetail.owner.OwnerRentalDetailRoute
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             RentItTheme {
-                OwnerRentalDetailRoute(rememberNavController(), 21, 40)
+                MainRoute()
             }
         }
     }

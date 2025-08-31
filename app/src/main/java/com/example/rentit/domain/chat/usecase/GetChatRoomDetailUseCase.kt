@@ -36,6 +36,7 @@ class GetChatRoomDetailUseCase @Inject constructor(
                 partnerNickname = partner?.nickname ?: "",
                 messages = chatRoomDetail.messages.map {
                     ChatMessageModel(
+                        messageId = it.messageId,
                         isMine = it.sender.userId == authUserId,
                         message = it.content,
                         sentAt = it.sentAt

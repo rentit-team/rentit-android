@@ -2,7 +2,6 @@ package com.example.rentit.presentation.chat.chatroom
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.domain.chat.model.ChatMessageModel
@@ -35,7 +34,7 @@ class ChatRoomViewModel @Inject constructor(
             .onSuccess {
                 _uiState.value = _uiState.value.copy(
                     partnerNickname = it.partnerNickname,
-                    initialMessages = it.messages
+                    messages = it.messages
                 )
                 fetchRentalSummary(it.productId, it.reservationId)
                 fetchProductSummary(it.productId)
@@ -57,10 +56,6 @@ class ChatRoomViewModel @Inject constructor(
             }.onFailure { }
     }
 
-    fun updateMessageText(value: TextFieldValue) {
-        _uiState.value = _uiState.value.copy(messageText = value.text)
-    }
-
     private fun setIsLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
@@ -68,9 +63,14 @@ class ChatRoomViewModel @Inject constructor(
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
         val token = userRepository.getTokenFromPrefs() ?: return
         WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
-            val msg = ChatMessageModel(data.senderId == authUserId, data.content, data.sentAt)
-            val previousMessages = _uiState.value.realTimeMessages
-            _uiState.value = _uiState.value.copy(realTimeMessages = listOf(msg) + previousMessages)
+            val msg = ChatMessageModel(
+                data.messageId,
+                data.senderId == authUserId,
+                data.content,
+                data.sentAt
+            )
+            val previousMessages = _uiState.value.messages
+            _uiState.value = _uiState.value.copy(messages = listOf(msg) + previousMessages)
         }
     }
 
@@ -80,9 +80,10 @@ class ChatRoomViewModel @Inject constructor(
 
     fun disconnectWebSocket() {
         WebSocketManager.disconnect()
+        resetMessages()
     }
 
-    fun resetRealTimeMessages() {
-        _uiState.value = _uiState.value.copy(realTimeMessages = emptyList())
+    private fun resetMessages() {
+        _uiState.value = _uiState.value.copy(messages = emptyList())
     }
 }
