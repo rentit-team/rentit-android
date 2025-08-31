@@ -1,10 +1,10 @@
-package com.example.rentit.domain.chat.model
+package com.example.rentit.domain.rental.model
 
 import com.example.rentit.common.enums.RentalStatus
 import java.time.LocalDate
 
-data class ChatRentalSummaryModel (
-    val reservationId: Int,
+data class RentalChatRoomSummaryModel (
+    val reservationId: Long,
     val status: RentalStatus,
     val startDate: LocalDate,
     val endDate: LocalDate,

@@ -1,6 +1,7 @@
 package com.example.rentit.data.product.repositoryImpl
 
 import com.example.rentit.common.exception.ExpiredTokenException
+import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.domain.rental.exception.EmptyBodyException
 import com.example.rentit.data.product.dto.ResvRequestDto
@@ -37,26 +38,14 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getProductDetail(productId: Int): Result<ProductDetailResponseDto> {
-        return try {
+        return runCatching {
             val response = productRemoteDataSource.getProductDetail(productId)
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
-                }
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client Error"
+                throw if(response.code() == 401) MissingTokenException(errorMsg) else Exception(errorMsg)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 

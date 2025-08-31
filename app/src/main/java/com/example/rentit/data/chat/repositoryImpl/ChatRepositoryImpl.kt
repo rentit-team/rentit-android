@@ -32,23 +32,15 @@ class ChatRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getChatDetail(chatRoomMessageId: String, skip: Int, size: Int): Result<ChatDetailResponseDto> {
+    override suspend fun getChatDetail(chatRoomId: String, skip: Int, size: Int): Result<ChatDetailResponseDto> {
         return runCatching {
-            val response = chatRemoteDataSource.getChatDetail(chatRoomMessageId, skip, size)
-            when (response.code()) {
-                200 -> response.body() ?: throw Exception("Empty response body")
-                403 -> {
-                    Log.e(TAG, "Server error 403: ${response.errorBody()?.string()}")
-                    throw ForbiddenChatAccessException()
-                }
-                500 -> {
-                    Log.e(TAG, "Server error 500: ${response.errorBody()?.string()}")
-                    throw ServerException("Server error")
-                }
-                else -> {
-                    Log.e(TAG, "Unexpected error: code=${response.code()}, ${response.errorBody()?.string()}")
-                    throw Exception("Unexpected error")
-                }
+            val response = chatRemoteDataSource.getChatDetail(chatRoomId, skip, size)
+            val errorMsg = response.errorBody()?.string() ?: "Client Error"
+            when(response.code()) {
+                200 -> response.body() ?: throw EmptyBodyException()
+                401 -> throw MissingTokenException(errorMsg)
+                403 -> throw ForbiddenChatAccessException(errorMsg)
+                else -> throw Exception(errorMsg)
             }
         }
     }

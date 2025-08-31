@@ -1,8 +1,8 @@
-package com.example.rentit.domain.chat.model
+package com.example.rentit.domain.product.model
 
 import com.example.rentit.common.enums.ProductStatus
 
-data class ChatProductSummaryModel (
+data class ProductChatRoomSummaryModel (
     val thumbnailImgUrl: String?,
     val title: String,
     val status: ProductStatus,
