@@ -2,6 +2,7 @@ package com.example.rentit.presentation.chat.chatroom
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.domain.chat.model.ChatMessageModel
@@ -25,32 +26,51 @@ class ChatRoomViewModel @Inject constructor(
 
     private val authUserId: Long = userRepository.getAuthUserIdFromPrefs()
 
-    private val _realTimeMessages = MutableStateFlow<List<ChatMessageModel>>(emptyList())
-    val realTimeMessages: StateFlow<List<ChatMessageModel>> = _realTimeMessages
+    private val _uiState = MutableStateFlow(ChatRoomState())
+    val uiState: StateFlow<ChatRoomState> = _uiState
 
-    private suspend fun fetchChatDetail(chatRoomId: String) {
+    suspend fun fetchChatDetail(chatRoomId: String) {
+        setIsLoading(true)
         getChatRoomDetailUseCase(chatRoomId)
-            .onSuccess { println(it) }
-            .onFailure { }
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(
+                    partnerNickname = it.partnerNickname,
+                    initialMessages = it.messages
+                )
+                fetchRentalSummary(it.productId, it.reservationId)
+                fetchProductSummary(it.productId)
+            }.onFailure { }
+        setIsLoading(false)
     }
 
     private suspend fun fetchRentalSummary(productId: Int, reservationId: Int) {
         getChatRoomRentalSummaryUseCase(productId, reservationId)
-            .onSuccess { println(it) }
-            .onFailure { }
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(rentalSummary = it)
+            }.onFailure { }
     }
 
     private suspend fun fetchProductSummary(productId: Int) {
         getChatRoomProductSummaryUseCase(productId)
-            .onSuccess { println(it) }
-            .onFailure { }
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(productSummary = it)
+            }.onFailure { }
+    }
+
+    fun updateMessageText(value: TextFieldValue) {
+        _uiState.value = _uiState.value.copy(messageText = value.text)
+    }
+
+    private fun setIsLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
         val token = userRepository.getTokenFromPrefs() ?: return
         WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
             val msg = ChatMessageModel(data.senderId == authUserId, data.content, data.sentAt)
-            _realTimeMessages.value = listOf(msg) + _realTimeMessages.value
+            val previousMessages = _uiState.value.realTimeMessages
+            _uiState.value = _uiState.value.copy(realTimeMessages = listOf(msg) + previousMessages)
         }
     }
 
@@ -63,6 +83,6 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     fun resetRealTimeMessages() {
-        _realTimeMessages.value = emptyList()
+        _uiState.value = _uiState.value.copy(realTimeMessages = emptyList())
     }
 }

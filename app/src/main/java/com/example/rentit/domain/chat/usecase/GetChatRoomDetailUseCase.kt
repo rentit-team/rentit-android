@@ -30,8 +30,9 @@ class GetChatRoomDetailUseCase @Inject constructor(
             val partner = participants.find { it.userId != authUserId }
 
             ChatRoomDetailModel(
-                reservationId = chatRoomDetail.chatRoom.reservationId,
-                productId = chatRoomDetail.chatRoom.productId,
+                // TODO: 수정 필요 - 백엔드에서 productId와 reservationId 순서가 교차되어 있음
+                reservationId = chatRoomDetail.chatRoom.productId,
+                productId = chatRoomDetail.chatRoom.reservationId,
                 partnerNickname = partner?.nickname ?: "",
                 messages = chatRoomDetail.messages.map {
                     ChatMessageModel(

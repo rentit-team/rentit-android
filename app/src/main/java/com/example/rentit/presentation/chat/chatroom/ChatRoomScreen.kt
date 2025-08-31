@@ -42,6 +42,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.formatPeriodText
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
@@ -62,12 +63,13 @@ import java.time.LocalDate
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatroomScreen(
-    message: String,
+    messageText: String,
     partnerNickname: String?,
     messages: List<ChatMessageModel>,
-    productSummary: ProductChatRoomSummaryModel,
-    rentalSummary: RentalChatRoomSummaryModel,
+    productSummary: ProductChatRoomSummaryModel?,
+    rentalSummary: RentalChatRoomSummaryModel?,
     inputScrollState: ScrollState,
+    isLoading: Boolean,
     onBackClick: () -> Unit,
     onMessageChange: (TextFieldValue) -> Unit,
     onMessageSend: () -> Unit
@@ -77,38 +79,41 @@ fun ChatroomScreen(
         topBar = { CommonTopAppBar(onBackClick = onBackClick) },
         bottomBar = {
             BottomInputBar(
-                textFieldValue = TextFieldValue(message),
+                textFieldValue = TextFieldValue(messageText),
                 scrollState = inputScrollState,
                 onValueChange = onMessageChange,
                 onSend = onMessageSend
             )
         }
     ) {
-        Column(Modifier.padding(it)) {
+        if(productSummary != null && rentalSummary != null) {
+            Column(Modifier.padding(it)) {
 
-            // 상단 예약 관련 정보
-            ProductInfoSection(
-                thumbnailImgUrl = productSummary.thumbnailImgUrl,
-                title = productSummary.title,
-                status = productSummary.status,
-                price = productSummary.price,
-                minPeriod = productSummary.minPeriod,
-                maxPeriod = productSummary.maxPeriod
-            )
+                ProductInfoSection(
+                    thumbnailImgUrl = productSummary.thumbnailImgUrl,
+                    title = productSummary.title,
+                    status = productSummary.status,
+                    price = productSummary.price,
+                    minPeriod = productSummary.minPeriod,
+                    maxPeriod = productSummary.maxPeriod
+                )
 
-            RequestInfo(
-                status = rentalSummary.status,
-                startDate = rentalSummary.startDate,
-                endDate = rentalSummary.endDate,
-            )
+                RequestInfo(
+                    status = rentalSummary.status,
+                    startDate = rentalSummary.startDate,
+                    endDate = rentalSummary.endDate,
+                )
 
-            ChatMsgList(
-                Modifier.weight(1F),
-                partnerNickname,
-                messages,
-            )
+                ChatMsgList(
+                    Modifier.weight(1F),
+                    partnerNickname,
+                    messages,
+                )
+            }
         }
     }
+
+    LoadingScreen(isLoading)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -337,15 +342,16 @@ fun ChatRoomScreenPreview() {
 // ChatroomScreen 호출 예시
     RentItTheme {
         ChatroomScreen(
-            message = sampleMessageInput.text,
+            messageText = sampleMessageInput.text,
             partnerNickname = samplePartnerNickname,
             messages = sampleMessages,
             productSummary = sampleProduct,
             rentalSummary = sampleRental,
             inputScrollState = sampleScrollState,
+            isLoading = false,
             onBackClick = { },
             onMessageChange = { },
-            onMessageSend = { }
+            onMessageSend = { },
         )
     }
 }
