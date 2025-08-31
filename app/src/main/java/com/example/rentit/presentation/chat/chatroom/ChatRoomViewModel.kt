@@ -3,20 +3,23 @@ package com.example.rentit.presentation.chat.chatroom
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
+import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
+import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
+    private val getChatRoomProductSummaryUseCase: GetChatRoomProductSummaryUseCase,
     private val getChatRoomDetailUseCase: GetChatRoomDetailUseCase
 ): ViewModel() {
 
@@ -25,16 +28,24 @@ class ChatRoomViewModel @Inject constructor(
     private val _realTimeMessages = MutableStateFlow<List<ChatMessageUiModel>>(emptyList())
     val realTimeMessages: StateFlow<List<ChatMessageUiModel>> = _realTimeMessages
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getChatDetail(chatRoomId: String, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            getChatRoomDetailUseCase(chatRoomId)
-                .onSuccess { }
-                .onFailure(onError)
-        }
+    private suspend fun fetchChatDetail(chatRoomId: String) {
+        getChatRoomDetailUseCase(chatRoomId)
+            .onSuccess { println(it) }
+            .onFailure { }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private suspend fun fetchRentalSummary(productId: Int, reservationId: Int) {
+        getChatRoomRentalSummaryUseCase(productId, reservationId)
+            .onSuccess { println(it) }
+            .onFailure { }
+    }
+
+    private suspend fun fetchProductSummary(productId: Int) {
+        getChatRoomProductSummaryUseCase(productId)
+            .onSuccess { println(it) }
+            .onFailure { }
+    }
+
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
         val token = userRepository.getTokenFromPrefs() ?: return
         WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
@@ -43,7 +54,6 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(chatRoomId: String, message: String) {
         WebSocketManager.sendMessage(chatRoomId, authUserId, message)
     }

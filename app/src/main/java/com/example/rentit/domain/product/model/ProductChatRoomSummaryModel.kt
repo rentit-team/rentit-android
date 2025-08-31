@@ -7,6 +7,6 @@ data class ProductChatRoomSummaryModel (
     val title: String,
     val status: ProductStatus,
     val price: Int,
-    val minPeriod: Int,
-    val maxPeriod: Int,
+    val minPeriod: Int?,
+    val maxPeriod: Int?,
 )

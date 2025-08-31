@@ -118,8 +118,8 @@ private fun ProductInfoSection(
     title: String,
     status: ProductStatus,
     price: Int,
-    minPeriod: Int,
-    maxPeriod: Int,
+    minPeriod: Int?,
+    maxPeriod: Int?,
 ) {
     val priceText = formatPrice(price)
     val unitText = stringResource(R.string.common_price_unit_per_day)
