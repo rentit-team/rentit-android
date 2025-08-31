@@ -4,7 +4,7 @@ import com.example.rentit.common.enums.RentalStatus
 import java.time.LocalDate
 
 data class RentalChatRoomSummaryModel (
-    val reservationId: Long,
+    val reservationId: Int,
     val status: RentalStatus,
     val startDate: LocalDate,
     val endDate: LocalDate,

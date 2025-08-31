@@ -1,7 +1,6 @@
 package com.example.rentit.presentation.rentaldetail.owner
 
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.util.daysFromToday
@@ -10,13 +9,9 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRentalStatusUiModel
 
-private const val TAG = "RentalStatus"
-
 @RequiresApi(Build.VERSION_CODES.O)
 fun RentalDetailResponseDto.toOwnerUiModel(): OwnerRentalStatusUiModel {
-    val status = runCatching { RentalStatus.valueOf(rental.status) }
-        .onFailure { Log.w(TAG, "Unknown rental status: ${rental.status}")  }
-        .getOrNull()
+    val status = rental.status
 
     val rentalSummary = RentalSummaryUiModel(
         productTitle = rental.product.title,
@@ -78,7 +73,5 @@ fun RentalDetailResponseDto.toOwnerUiModel(): OwnerRentalStatusUiModel {
             rentalTrackingNumber = rental.rentalTrackingNumber,
             returnTrackingNumber = rental.returnTrackingNumber
         )
-
-        null -> OwnerRentalStatusUiModel.Unknown
     }
 }
