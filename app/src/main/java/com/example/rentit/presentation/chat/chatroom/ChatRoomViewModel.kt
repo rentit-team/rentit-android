@@ -4,11 +4,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.example.rentit.common.websocket.WebSocketManager
+import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
 import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
 import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
 import com.example.rentit.domain.user.repository.UserRepository
-import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,8 +25,8 @@ class ChatRoomViewModel @Inject constructor(
 
     private val authUserId: Long = userRepository.getAuthUserIdFromPrefs()
 
-    private val _realTimeMessages = MutableStateFlow<List<ChatMessageUiModel>>(emptyList())
-    val realTimeMessages: StateFlow<List<ChatMessageUiModel>> = _realTimeMessages
+    private val _realTimeMessages = MutableStateFlow<List<ChatMessageModel>>(emptyList())
+    val realTimeMessages: StateFlow<List<ChatMessageModel>> = _realTimeMessages
 
     private suspend fun fetchChatDetail(chatRoomId: String) {
         getChatRoomDetailUseCase(chatRoomId)
@@ -49,7 +49,7 @@ class ChatRoomViewModel @Inject constructor(
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
         val token = userRepository.getTokenFromPrefs() ?: return
         WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
-            val msg = ChatMessageUiModel(data.senderId == authUserId, data.content, data.sentAt)
+            val msg = ChatMessageModel(data.senderId == authUserId, data.content, data.sentAt)
             _realTimeMessages.value = listOf(msg) + _realTimeMessages.value
         }
     }

@@ -52,11 +52,11 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
 import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
-import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -64,7 +64,7 @@ import java.time.LocalDate
 fun ChatroomScreen(
     message: String,
     partnerNickname: String?,
-    messages: List<ChatMessageUiModel>,
+    messages: List<ChatMessageModel>,
     productSummary: ProductChatRoomSummaryModel,
     rentalSummary: RentalChatRoomSummaryModel,
     inputScrollState: ScrollState,
@@ -207,7 +207,7 @@ private fun RequestInfo(
 private fun ChatMsgList(
     modifier: Modifier,
     partnerNickname: String?,
-    msgList: List<ChatMessageUiModel>,
+    msgList: List<ChatMessageModel>,
 ) {
     val displayPartnerNickname = partnerNickname ?: stringResource(R.string.screen_chatroom_nickname_unknown)
     LazyColumn(
@@ -294,17 +294,17 @@ private fun BottomInputBar(
 fun ChatRoomScreenPreview() {
     // 샘플 메시지
     val sampleMessages = listOf(
-        ChatMessageUiModel(
+        ChatMessageModel(
             isMine = true,
             message = "안녕하세요! 예약 확인 부탁드려요.",
             sentAt = "2025-03-25T09:00:00Z"
         ),
-        ChatMessageUiModel(
+        ChatMessageModel(
             isMine = false,
             message = "네, 예약 확인되었습니다.",
             sentAt = "2025-03-25T09:00:00Z"
         ),
-        ChatMessageUiModel(
+        ChatMessageModel(
             isMine = true,
             message = "감사합니다!",
             sentAt = "2025-03-25T09:00:00Z"
