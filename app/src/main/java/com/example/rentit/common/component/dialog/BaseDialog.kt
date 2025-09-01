@@ -42,12 +42,12 @@ fun BaseDialog(
     closeBtnText: String? = null,
     confirmBtnText: String,
     isBackgroundClickable: Boolean = true,
-    onCloseRequest: () -> Unit = {},
+    onDismissRequest: () -> Unit,
     onConfirmRequest: () -> Unit,
     customContent: @Composable ColumnScope.() -> Unit = {}
 ) {
     Dialog(
-        onDismissRequest = onCloseRequest
+        onDismissRequest = onDismissRequest
     ) {
         Box(
             modifier = Modifier
@@ -58,7 +58,7 @@ fun BaseDialog(
                     enabled = isBackgroundClickable,
                     // 터치 효과 제거
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() }) { onCloseRequest() },
+                    interactionSource = remember { MutableInteractionSource() }) { onDismissRequest() },
             contentAlignment = Alignment.Center
         ) {
             Column(
@@ -93,7 +93,7 @@ fun BaseDialog(
                 ) {
                     if (!closeBtnText.isNullOrEmpty())
                         TextButton(
-                            onClick = onCloseRequest,
+                            onClick = onDismissRequest,
                         ) {
                             Text(closeBtnText)
                         }
@@ -122,7 +122,7 @@ private fun Preview() {
             content = "Dialog 세부 내용",
             closeBtnText = null,
             confirmBtnText = "확인",
-            onCloseRequest = {},
+            onDismissRequest = {},
             onConfirmRequest = {},
         )
     }

@@ -153,7 +153,7 @@ fun LoadErrorDialog(
         content = stringResource(R.string.dialog_data_load_error_content),
         confirmBtnText = stringResource(R.string.common_dialog_btn_close),
         isBackgroundClickable = false,
-        onCloseRequest = onDismiss,
+        onDismissRequest = onDismiss,
         onConfirmRequest = onDismiss,
     )
 }
@@ -167,7 +167,7 @@ fun PayResultDialog(
         title = stringResource(R.string.dialog_pay_result_success_title),
         confirmBtnText = stringResource(R.string.dialog_pay_result_btn_confirm),
         isBackgroundClickable = false,
-        onCloseRequest = onClose,
+        onDismissRequest = onClose,
         onConfirmRequest = onConfirm,
     )
 }

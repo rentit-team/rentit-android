@@ -20,6 +20,7 @@ fun ChatListRoute(navHostController: NavHostController) {
         isLoading = uiState.isLoading,
         showNetworkErrorDialog = uiState.showNetworkErrorDialog,
         showServerErrorDialog = uiState.showServerErrorDialog,
+        navigateBack = navHostController::popBackStack,
         onRetry = chatListViewModel::retryFetchChatRoomSummaries,
         onItemClick = { navHostController.navigateToChatRoom(it) }
     )

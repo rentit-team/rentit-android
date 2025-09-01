@@ -18,7 +18,7 @@ fun SplashScreen(
             content = stringResource(R.string.dialog_server_connect_error_content),
             confirmBtnText = stringResource(R.string.dialog_server_connect_error_retry_btn),
             isBackgroundClickable = false,
-            onCloseRequest = onRetry,
+            onDismissRequest = onRetry,
             onConfirmRequest = onRetry,
         )
     }

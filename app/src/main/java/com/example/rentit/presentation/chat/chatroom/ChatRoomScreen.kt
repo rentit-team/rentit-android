@@ -76,15 +76,15 @@ fun ChatroomScreen(
     showNetworkErrorDialog: Boolean = false,
     showServerErrorDialog: Boolean = false,
     showForbiddenChatAccessDialog: Boolean = false,
-    onBackClick: () -> Unit,
     onForbiddenDialogDismiss: () -> Unit,
     onRetry: () -> Unit,
     onMessageChange: (TextFieldValue) -> Unit,
-    onMessageSend: () -> Unit
+    onMessageSend: () -> Unit,
+    navigateBack: () -> Unit
 ) {
 
     Scaffold(
-        topBar = { CommonTopAppBar(onBackClick = onBackClick) },
+        topBar = { CommonTopAppBar(onBackClick = navigateBack) },
         bottomBar = {
             BottomInputBar(
                 value = messageText,
@@ -123,15 +123,16 @@ fun ChatroomScreen(
 
     LoadingScreen(isLoading)
 
-    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+    if(showNetworkErrorDialog) NetworkErrorDialog(navigateBack, onRetry)
 
-    if(showServerErrorDialog) ServerErrorDialog(onRetry)
+    if(showServerErrorDialog) ServerErrorDialog(navigateBack, onRetry)
 
     if(showForbiddenChatAccessDialog){
         BaseDialog(
             title = stringResource(R.string.dialog_forbidden_chat_access_title),
             confirmBtnText = stringResource(R.string.dialog_forbidden_chat_access_btn),
             isBackgroundClickable = false,
+            onDismissRequest = navigateBack,
             onConfirmRequest = onForbiddenDialogDismiss,
         )
     }
@@ -370,7 +371,7 @@ fun ChatRoomScreenPreview() {
             rentalSummary = sampleRental,
             inputScrollState = sampleScrollState,
             isLoading = false,
-            onBackClick = { },
+            navigateBack = { },
             onRetry = { },
             onMessageChange = { },
             onMessageSend = { },

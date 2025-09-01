@@ -53,6 +53,7 @@ fun ChatListScreen(
     showNetworkErrorDialog: Boolean = false,
     showServerErrorDialog: Boolean = false,
     onItemClick: (String) -> Unit = {},
+    navigateBack: () -> Unit = {},
     onRetry: () -> Unit = {},
 ) {
     Column(Modifier
@@ -72,9 +73,9 @@ fun ChatListScreen(
 
     LoadingScreen(isLoading)
 
-    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+    if(showNetworkErrorDialog) NetworkErrorDialog(navigateBack, onRetry)
 
-    if(showServerErrorDialog) ServerErrorDialog(onRetry)
+    if(showServerErrorDialog) ServerErrorDialog(navigateBack, onRetry)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
