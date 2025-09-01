@@ -25,14 +25,14 @@ import com.example.rentit.common.util.formatRentalPeriod
 @Composable
 fun RequestAcceptDialog(
     uiModel: RequestAcceptDialogUiModel,
-    onClose: () -> Unit,
+    onDismiss: () -> Unit,
     onAccept: () -> Unit,
 ) {
     BaseDialog(
         title = stringResource(R.string.common_dialog_accept_request_title),
         confirmBtnText = stringResource(R.string.common_dialog_accept_request_btn_accept),
         closeBtnText = stringResource(R.string.common_dialog_btn_close),
-        onCloseRequest = onClose,
+        onDismissRequest = onDismiss,
         onConfirmRequest = onAccept
     ) {
         Text(
@@ -73,7 +73,7 @@ private fun Preview() {
             "2025-08-17",
             "2025-08-20",
             40000),
-            onClose = {},
+            onDismiss = {},
             onAccept = {})
     }
 }

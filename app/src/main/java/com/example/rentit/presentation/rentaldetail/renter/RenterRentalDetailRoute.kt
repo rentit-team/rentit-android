@@ -90,7 +90,7 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
 
     if(uiState.showCancelDialog){
         RentalCancelDialog(
-            onClose = viewModel::dismissCancelDialog,
+            onDismiss = viewModel::dismissCancelDialog,
             onCancelAccept = { viewModel.confirmCancel(productId, reservationId) }
         )
     }
@@ -103,7 +103,7 @@ fun RenterRentalDetailRoute(navHostController: NavHostController, productId: Int
             showTrackingNumberEmptyError = uiState.showTrackingNumberEmptyError,
             onSelectCourier = viewModel::changeSelectedCourierName,
             onTrackingNumberChange = viewModel::changeTrackingNumber,
-            onClose = viewModel::dismissTrackingRegDialog,
+            onDismiss = viewModel::dismissTrackingRegDialog,
             onConfirm = { viewModel.confirmTrackingReg(productId, reservationId) }
         )
     }

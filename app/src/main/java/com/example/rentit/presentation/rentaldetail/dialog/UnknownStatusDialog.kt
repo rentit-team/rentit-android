@@ -10,7 +10,7 @@ fun UnknownStatusDialog(onDismiss: () -> Unit = {}) {
     BaseDialog(
         title = stringResource(R.string.dialog_rental_detail_unknown_title),
         confirmBtnText = stringResource(R.string.dialog_rental_detail_unknown_confirm_btn),
-        onCloseRequest = onDismiss,
+        onDismissRequest = onDismiss,
         onConfirmRequest = onDismiss
     )
 }

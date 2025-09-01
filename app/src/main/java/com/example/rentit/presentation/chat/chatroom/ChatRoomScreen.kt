@@ -132,6 +132,7 @@ fun ChatroomScreen(
             title = stringResource(R.string.dialog_forbidden_chat_access_title),
             confirmBtnText = stringResource(R.string.dialog_forbidden_chat_access_btn),
             isBackgroundClickable = false,
+            onDismissRequest = {},
             onConfirmRequest = onForbiddenDialogDismiss,
         )
     }

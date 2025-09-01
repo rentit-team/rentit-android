@@ -5,12 +5,13 @@ import androidx.compose.ui.res.stringResource
 import com.example.rentit.R
 
 @Composable
-fun ServerErrorDialog(onRetry: () -> Unit = {}) {
+fun ServerErrorDialog(navigateBack: () -> Unit = {}, onRetry: () -> Unit = {}) {
     BaseDialog(
         title = stringResource(R.string.dialog_server_error_title),
         content = stringResource(R.string.dialog_server_error_content),
         confirmBtnText = stringResource(R.string.dialog_server_error_retry_btn),
         isBackgroundClickable = false,
+        onDismissRequest = navigateBack,
         onConfirmRequest = onRetry,
     )
 }

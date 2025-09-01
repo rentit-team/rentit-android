@@ -42,14 +42,14 @@ fun TrackingRegistrationDialog(
     showTrackingNumberEmptyError: Boolean = false,
     onSelectCourier: (String) -> Unit,
     onTrackingNumberChange: (String) -> Unit,
-    onClose: () -> Unit,
+    onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
     BaseDialog(
         title = stringResource(R.string.dialog_rental_detail_tracking_regs_title),
         confirmBtnText = stringResource(R.string.dialog_rental_detail_tracking_regs_btn_confirm),
         closeBtnText = stringResource(R.string.common_dialog_btn_close),
-        onCloseRequest = onClose,
+        onDismissRequest = onDismiss,
         onConfirmRequest = onConfirm
     ) {
         Text(
@@ -147,7 +147,7 @@ fun TrackingRegistrationDialogPreview() {
             onSelectCourier = { selectedCompany = it },
             trackingNumber = trackingNum,
             onTrackingNumberChange = { trackingNum = it },
-            onClose = { },
+            onDismiss = { },
             onConfirm = { },
         )
     }

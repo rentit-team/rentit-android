@@ -15,7 +15,7 @@ fun PhotoLoadFailedDialog(onDismiss: () -> Unit = {}) {
     BaseDialog(
         title = stringResource(R.string.dialog_fetch_photos_failed_title),
         confirmBtnText = stringResource(R.string.dialog_rental_detail_unknown_confirm_btn),
-        onCloseRequest = onDismiss,
+        onDismissRequest = onDismiss,
         onConfirmRequest = onDismiss
     ) {
         Text(
