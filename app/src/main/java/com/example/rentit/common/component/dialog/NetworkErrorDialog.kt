@@ -5,7 +5,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.rentit.R
 
 @Composable
-fun NetworkErrorDialog(navigateBack: () -> Unit = {}, onRetry: () -> Unit = {}) {
+fun NetworkErrorDialog(navigateBack: () -> Unit, onRetry: () -> Unit) {
     BaseDialog(
         title = stringResource(R.string.dialog_network_error_title),
         content = stringResource(R.string.dialog_network_error_content),

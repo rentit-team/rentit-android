@@ -82,9 +82,9 @@ fun HomeScreen(
 
     LoadingScreen(isLoading)
 
-    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+    if(showNetworkErrorDialog) NetworkErrorDialog({}, onRetry)
 
-    if(showServerErrorDialog) ServerErrorDialog(onRetry)
+    if(showServerErrorDialog) ServerErrorDialog({}, onRetry)
 }
 
 @Composable

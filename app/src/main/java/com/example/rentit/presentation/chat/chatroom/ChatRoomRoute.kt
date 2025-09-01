@@ -51,10 +51,10 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
         showNetworkErrorDialog = uiState.showNetworkErrorDialog,
         showServerErrorDialog = uiState.showServerErrorDialog,
         showForbiddenChatAccessDialog = uiState.showForbiddenChatAccessDialog,
-        onBackClick = navHostController::popBackStack,
         onRetry = { viewModel.retryFetchChatRoomData(chatRoomId) },
         onForbiddenDialogDismiss = navHostController::popBackStack,
         onMessageChange = { messageValue = it },
-        onMessageSend = { viewModel.sendMessage(chatRoomId, messageValue.text) }
+        onMessageSend = { viewModel.sendMessage(chatRoomId, messageValue.text) },
+        navigateBack = navHostController::popBackStack
     )
 }

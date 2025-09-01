@@ -5,7 +5,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.rentit.R
 
 @Composable
-fun ServerErrorDialog(navigateBack: () -> Unit = {}, onRetry: () -> Unit = {}) {
+fun ServerErrorDialog(navigateBack: () -> Unit, onRetry: () -> Unit) {
     BaseDialog(
         title = stringResource(R.string.dialog_server_error_title),
         content = stringResource(R.string.dialog_server_error_content),
