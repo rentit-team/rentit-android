@@ -41,6 +41,9 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.dialog.NetworkErrorDialog
+import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.formatPeriodText
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -70,7 +73,12 @@ fun ChatroomScreen(
     rentalSummary: RentalChatRoomSummaryModel?,
     inputScrollState: ScrollState,
     isLoading: Boolean,
+    showNetworkErrorDialog: Boolean = false,
+    showServerErrorDialog: Boolean = false,
+    showForbiddenChatAccessDialog: Boolean = false,
     onBackClick: () -> Unit,
+    onForbiddenDialogDismiss: () -> Unit,
+    onRetry: () -> Unit,
     onMessageChange: (TextFieldValue) -> Unit,
     onMessageSend: () -> Unit
 ) {
@@ -114,6 +122,19 @@ fun ChatroomScreen(
     }
 
     LoadingScreen(isLoading)
+
+    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+
+    if(showServerErrorDialog) ServerErrorDialog(onRetry)
+
+    if(showForbiddenChatAccessDialog){
+        BaseDialog(
+            title = stringResource(R.string.dialog_forbidden_chat_access_title),
+            confirmBtnText = stringResource(R.string.dialog_forbidden_chat_access_btn),
+            isBackgroundClickable = false,
+            onConfirmRequest = onForbiddenDialogDismiss,
+        )
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -350,8 +371,10 @@ fun ChatRoomScreenPreview() {
             inputScrollState = sampleScrollState,
             isLoading = false,
             onBackClick = { },
+            onRetry = { },
             onMessageChange = { },
             onMessageSend = { },
+            onForbiddenDialogDismiss = { },
         )
     }
 }

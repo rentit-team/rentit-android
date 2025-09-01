@@ -25,7 +25,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
     var messageValue by remember { mutableStateOf(TextFieldValue("")) }
 
     LaunchedEffect(Unit) {
-        viewModel.fetchChatDetail(chatRoomId)
+        viewModel.fetchChatRoomData(chatRoomId)
         viewModel.connectWebSocket(chatRoomId, {})
     }
 
@@ -47,8 +47,13 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
         productSummary = uiState.productSummary,
         rentalSummary = uiState.rentalSummary,
         inputScrollState = inputScrollState,
-        onBackClick = {},
         isLoading = uiState.isLoading,
+        showNetworkErrorDialog = uiState.showNetworkErrorDialog,
+        showServerErrorDialog = uiState.showServerErrorDialog,
+        showForbiddenChatAccessDialog = uiState.showForbiddenChatAccessDialog,
+        onBackClick = navHostController::popBackStack,
+        onRetry = { viewModel.retryFetchChatRoomData(chatRoomId) },
+        onForbiddenDialogDismiss = navHostController::popBackStack,
         onMessageChange = { messageValue = it },
         onMessageSend = { viewModel.sendMessage(chatRoomId, messageValue.text) }
     )

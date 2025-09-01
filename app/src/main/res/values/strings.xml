@@ -186,6 +186,10 @@
     <string name="screen_accept_confirm_title">요청이 수락되었어요!</string>
     <string name="screen_accept_confirm_btn_complete">완료</string>
 
+    <!-- 채팅방 접근 불가 에러 Dialog -->
+    <string name="dialog_forbidden_chat_access_title">이 채팅방에 참여할 권한이 없어요.</string>
+    <string name="dialog_forbidden_chat_access_btn">확인</string>
+
     <!-- 마이페이지 -->
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>

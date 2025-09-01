@@ -10,5 +10,8 @@ data class ChatRoomState(
     val rentalSummary: RentalChatRoomSummaryModel? = null,
     val productSummary: ProductChatRoomSummaryModel? = null,
     val messages: List<ChatMessageModel> = emptyList(),
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val showServerErrorDialog: Boolean = false,
+    val showNetworkErrorDialog: Boolean = false,
+    val showForbiddenChatAccessDialog: Boolean = false
 )
