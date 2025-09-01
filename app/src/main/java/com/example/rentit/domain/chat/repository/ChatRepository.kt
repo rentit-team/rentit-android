@@ -7,7 +7,7 @@ import com.example.rentit.data.chat.dto.NewChatResponseDto
 interface ChatRepository {
     suspend fun getChatList(): Result<ChatListResponseDto>
 
-    suspend fun getChatDetail(chatRoomMessageId: String, skip: Int, size: Int): Result<ChatDetailResponseDto>
+    suspend fun getChatDetail(chatRoomId: String, skip: Int, size: Int): Result<ChatDetailResponseDto>
 
     suspend fun postNewChat(productId: Int): Result<NewChatResponseDto>
 }

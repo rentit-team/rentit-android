@@ -1,121 +1,119 @@
 package com.example.rentit.presentation.chat.chatroom
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.enums.AutoMsgType
-import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.websocket.WebSocketManager
-import com.example.rentit.data.chat.dto.ChatDetailResponseDto
-import com.example.rentit.data.product.dto.ProductDetailResponseDto
-import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.domain.chat.repository.ChatRepository
-import com.example.rentit.domain.product.repository.ProductRepository
-import com.example.rentit.domain.rental.repository.RentalRepository
+import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
+import com.example.rentit.domain.chat.model.ChatMessageModel
+import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
+import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
+import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
 import com.example.rentit.domain.user.repository.UserRepository
-import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
+private const val TAG = "ChatRoomViewModel"
+
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
     private val userRepository: UserRepository,
-    private val chatRepository: ChatRepository,
-    private val productRepository: ProductRepository,
-    private val rentalRepository: RentalRepository
+    private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
+    private val getChatRoomProductSummaryUseCase: GetChatRoomProductSummaryUseCase,
+    private val getChatRoomDetailUseCase: GetChatRoomDetailUseCase
 ): ViewModel() {
 
     private val authUserId: Long = userRepository.getAuthUserIdFromPrefs()
 
-    private val _productDetail = MutableStateFlow<ProductDetailResponseDto?>(null)
-    val productDetail: StateFlow<ProductDetailResponseDto?> = _productDetail
+    private val _uiState = MutableStateFlow(ChatRoomState())
+    val uiState: StateFlow<ChatRoomState> = _uiState
 
-    private val _chatDetail = MutableStateFlow<ChatDetailResponseDto?>(null)
-    val chatDetail: StateFlow<ChatDetailResponseDto?> = _chatDetail
+    private fun resetMessages() {
+        _uiState.value = _uiState.value.copy(messages = emptyList())
+    }
 
-    // 백엔드 오류로 인한 임시 요청 확인 처리
-    private val _isRequestAccepted = MutableStateFlow(false)
-    val isRequestAccepted: StateFlow<Boolean> = _isRequestAccepted
+    private fun showServerErrorDialog() {
+        _uiState.value = _uiState.value.copy(showServerErrorDialog = true)
+    }
 
-    private val _initialMessages = MutableStateFlow<List<ChatMessageUiModel>>(emptyList())
-    val initialMessages: StateFlow<List<ChatMessageUiModel>> = _initialMessages
+    private fun showNetworkErrorDialog() {
+        _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
+    }
 
-    private val _realTimeMessages = MutableStateFlow<List<ChatMessageUiModel>>(emptyList())
-    val realTimeMessages: StateFlow<List<ChatMessageUiModel>> = _realTimeMessages
+    private fun showForbiddenChatAccessDialog() {
+        _uiState.value = _uiState.value.copy(showForbiddenChatAccessDialog = true)
+    }
 
-    private val _senderNickname = MutableStateFlow<String?>(null)
-    val senderNickname: StateFlow<String?> = _senderNickname
+    private fun setIsLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
 
-    fun getProductDetail(productId: Int, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            productRepository.getProductDetail(productId)
-                .onSuccess {
-                    _productDetail.value = it
+    suspend fun fetchChatRoomData(chatRoomId: String) {
+        setIsLoading(true)
+        runCatching {
+            val chatRoomDetail = getChatRoomDetailUseCase(chatRoomId).getOrThrow()
+            val productSummary = getChatRoomProductSummaryUseCase(chatRoomDetail.productId).getOrThrow()
+            val rentalSummary = getChatRoomRentalSummaryUseCase(chatRoomDetail.productId,chatRoomDetail.reservationId).getOrThrow()
+            _uiState.value = _uiState.value.copy(
+                partnerNickname = chatRoomDetail.partnerNickname,
+                messages = chatRoomDetail.messages,
+                productSummary = productSummary,
+                rentalSummary = rentalSummary
+            )
+        }.onFailure { e ->
+            when (e) {
+                is IOException -> {
+                    Log.e(TAG, "네트워크 오류 발생", e)
+                    showNetworkErrorDialog()
                 }
-                .onFailure(onError)
+                is ForbiddenChatAccessException -> {
+                    Log.e(TAG, "채팅방 접근 권한 없음", e)
+                    showForbiddenChatAccessDialog()
+                }
+                else -> {
+                    Log.e(TAG, "서버 오류 발생", e)
+                    showServerErrorDialog()
+                }
+                // TODO: 토큰 에러 처리 필요 (리프레시 토큰으로 재발급 또는 로그인 화면 이동)
+            }
+        }
+        setIsLoading(false)
+    }
+
+    fun retryFetchChatRoomData(chatRoomId: String){
+        _uiState.value = _uiState.value.copy(showServerErrorDialog = false, showNetworkErrorDialog = false)
+        viewModelScope.launch {
+            fetchChatRoomData(chatRoomId)
         }
     }
 
-    fun getChatDetail(chatRoomMessageId: String, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            val skip = 0
-            val listSize = 30
-            chatRepository.getChatDetail(chatRoomMessageId, skip, listSize)
-                .onSuccess { detail ->
-                    _chatDetail.value = detail
-                    _initialMessages.value =
-                        detail.messages.map { ChatMessageUiModel(it.isMine, it.content, it.sentAt) }
-                    _senderNickname.value =
-                        detail.chatRoom.participants.find { it.userId != authUserId }?.nickname
-                }
-                .onFailure(onError)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
         val token = userRepository.getTokenFromPrefs() ?: return
         WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
-            val msg = ChatMessageUiModel(data.senderId == authUserId, data.content, data.sentAt)
-            _realTimeMessages.value = listOf(msg) + _realTimeMessages.value
+            val msg = ChatMessageModel(
+                data.messageId,
+                data.senderId == authUserId,
+                data.content,
+                data.sentAt
+            )
+            val previousMessages = _uiState.value.messages
+            _uiState.value = _uiState.value.copy(messages = listOf(msg) + previousMessages)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(chatRoomId: String, message: String) {
         WebSocketManager.sendMessage(chatRoomId, authUserId, message)
     }
 
     fun disconnectWebSocket() {
         WebSocketManager.disconnect()
-    }
-
-    fun resetRealTimeMessages() {
-        _realTimeMessages.value = emptyList()
-    }
-
-    // 백엔드 오류로 인한 임시 요청 확인 처리
-    fun checkRequestAccepted() {
-        if(_initialMessages.value.find { it.message == AutoMsgType.REQUEST_ACCEPT.code } != null) {
-            _isRequestAccepted.value = true
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun acceptRentalRequest(chatroomId: String, productId: Int, reservationId: Int, onSuccess: () -> Unit = {}, onError: (Throwable) -> Unit = {}) {
-        viewModelScope.launch {
-            rentalRepository.updateRentalStatus(
-                productId,
-                reservationId,
-                UpdateRentalStatusRequestDto(RentalStatus.ACCEPTED)
-            ).onSuccess {
-                onSuccess()
-                sendMessage(chatroomId, AutoMsgType.REQUEST_ACCEPT.code)
-            }.onFailure(onError)
-        }
+        resetMessages()
     }
 }

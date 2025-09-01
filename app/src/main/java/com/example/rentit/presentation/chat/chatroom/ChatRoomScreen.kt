@@ -1,17 +1,14 @@
 package com.example.rentit.presentation.chat.chatroom
 
 import android.os.Build
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -24,17 +21,11 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,173 +36,121 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.enums.ResvStatus
-import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.dialog.NetworkErrorDialog
+import com.example.rentit.common.component.dialog.ServerErrorDialog
+import com.example.rentit.common.component.formatPeriodText
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
-import com.example.rentit.common.exception.ServerException
+import com.example.rentit.common.enums.ProductStatus
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
+import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.data.chat.dto.StatusHistoryDto
-import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.navigation.chatroom.navigateToRequestAcceptConfirm
-import com.example.rentit.common.component.dialog.RequestAcceptDialog
-import com.example.rentit.common.exception.MissingTokenException
-import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
+import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.domain.chat.model.ChatMessageModel
+import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
+import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
-import com.example.rentit.presentation.chat.chatroom.model.ChatMessageUiModel
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatroomScreen(navHostController: NavHostController, productId: Int?, reservationId: Int?, chatRoomId: String?) {
-    val chatRoomViewModel: ChatRoomViewModel = hiltViewModel()
-    val productDetail by chatRoomViewModel.productDetail.collectAsStateWithLifecycle()
-    val chatDetail by chatRoomViewModel.chatDetail.collectAsStateWithLifecycle()
-    val context = LocalContext.current
+fun ChatroomScreen(
+    messageText: TextFieldValue,
+    partnerNickname: String?,
+    messages: List<ChatMessageModel>,
+    productSummary: ProductChatRoomSummaryModel?,
+    rentalSummary: RentalChatRoomSummaryModel?,
+    inputScrollState: ScrollState,
+    isLoading: Boolean,
+    showNetworkErrorDialog: Boolean = false,
+    showServerErrorDialog: Boolean = false,
+    showForbiddenChatAccessDialog: Boolean = false,
+    onBackClick: () -> Unit,
+    onForbiddenDialogDismiss: () -> Unit,
+    onRetry: () -> Unit,
+    onMessageChange: (TextFieldValue) -> Unit,
+    onMessageSend: () -> Unit
+) {
 
-    // 백엔드 오류로 인한 임시 요청 확인 처리
-    val isRequestAccepted by chatRoomViewModel.isRequestAccepted.collectAsStateWithLifecycle()
-
-    val senderNickname by chatRoomViewModel.senderNickname.collectAsStateWithLifecycle()
-    val initialMessages by chatRoomViewModel.initialMessages.collectAsStateWithLifecycle()
-    val realTimeMessages by chatRoomViewModel.realTimeMessages.collectAsStateWithLifecycle()
-
-    var textFieldValue by remember { mutableStateOf(TextFieldValue("")) }
-    val inputScrollState = rememberScrollState()
-    var showAcceptDialog by remember { mutableStateOf(false) }
-
-    val isCursorAtEnd = textFieldValue.selection.max == textFieldValue.text.length
-
-    // 백엔드 오류로 인한 임시 요청 확인 처리
-    LaunchedEffect(initialMessages + realTimeMessages) {
-        chatRoomViewModel.checkRequestAccepted()
-    }
-
-    LaunchedEffect(Unit) {
-        chatRoomViewModel.resetRealTimeMessages()
-        var errorMsg = context.getString(R.string.error_chat_unknown)
-        if (chatRoomId != null && productId != null) {
-            chatRoomViewModel.connectWebSocket(chatRoomId) {
-                Toast.makeText(context, context.getString(R.string.toast_chatroom_entered), Toast.LENGTH_SHORT).show()
-            }
-            chatRoomViewModel.getChatDetail(chatRoomId){
-                when(it){
-                    is ForbiddenChatAccessException -> errorMsg = context.getString(R.string.error_chat_access)
-                    is ServerException -> errorMsg = context.getString(R.string.error_common_server)
-                    else -> Unit
-                }
-                Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-                navHostController.popBackStack()
-            }
-            chatRoomViewModel.getProductDetail(productId){
-                Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-                navHostController.popBackStack()
-            }
-        } else {
-            Toast.makeText(context, errorMsg, Toast.LENGTH_SHORT).show()
-            navHostController.popBackStack()
-        }
-    }
-
-    LaunchedEffect(textFieldValue.text) {
-        if (isCursorAtEnd) {
-            inputScrollState.animateScrollTo(inputScrollState.maxValue)
-        }
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            chatRoomViewModel.disconnectWebSocket()
-        }
-    }
-
-    Column(Modifier.background(Color.White)) {
-        CommonTopAppBar { navHostController.popBackStack() }
-        // 상단 예약 관련 정보
-        productDetail?.let { ProductInfo(it.product) } ?: Column(Modifier
-            .fillMaxWidth()
-            .height(100.dp)) {}
-        chatDetail?.let { detail ->
-            detail.chatRoom.statusHistory.lastOrNull()?.let { statusInfo ->
-                RequestInfo(statusInfo)
-
-                // 백엔드 오류로 인한 임시 요청 확인 처리
-                if (ResvStatus.isPending(statusInfo.status) && !isRequestAccepted) {
-                    ResvActions(onAcceptAction = { showAcceptDialog = true })
-                }
-            }
-            ChatMsgList(
-                Modifier.weight(1F),
-                senderNickname ?: stringResource(R.string.screen_chatroom_nickname_unknown),
-                (realTimeMessages + initialMessages),
+    Scaffold(
+        topBar = { CommonTopAppBar(onBackClick = onBackClick) },
+        bottomBar = {
+            BottomInputBar(
+                value = messageText,
+                scrollState = inputScrollState,
+                onValueChange = onMessageChange,
+                onSend = onMessageSend
             )
-        } ?: Column(Modifier.weight(1F)){}
-        BottomInputBar(
-            textFieldValue = textFieldValue,
-            scrollState = inputScrollState,
-            onValueChange = { textFieldValue = it },
-            onSend = {
-                if (chatRoomId != null && textFieldValue.text.isNotEmpty()) {
-                    chatRoomViewModel.sendMessage(chatRoomId, textFieldValue.text)
-                    textFieldValue = TextFieldValue("")
-                }
+        }
+    ) {
+        if(productSummary != null && rentalSummary != null) {
+            Column(Modifier.padding(it)) {
+
+                ProductInfoSection(
+                    thumbnailImgUrl = productSummary.thumbnailImgUrl,
+                    title = productSummary.title,
+                    status = productSummary.status,
+                    price = productSummary.price,
+                    minPeriod = productSummary.minPeriod,
+                    maxPeriod = productSummary.maxPeriod
+                )
+
+                RequestInfo(
+                    status = rentalSummary.status,
+                    startDate = rentalSummary.startDate,
+                    endDate = rentalSummary.endDate,
+                )
+
+                ChatMsgList(
+                    Modifier.weight(1F),
+                    partnerNickname,
+                    messages,
+                )
             }
-        )
+        }
     }
-    if (showAcceptDialog) {
-        RequestAcceptDialog(
-            uiModel = RequestAcceptDialogUiModel(
-                "2025-08-17",
-                "2025-08-20",    // 백엔드 데이터 누락,
-                expectedRevenue = productDetail?.product?.price ?: 0
-            ),
-            onClose = { showAcceptDialog = false },
-            onAccept = {
-                if(productId != null && chatRoomId != null && reservationId != null){
-                    chatRoomViewModel.acceptRentalRequest(chatRoomId, productId, reservationId,
-                        onSuccess = {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.toast_accept_rental_success),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            navHostController.navigateToRequestAcceptConfirm()
-                        },
-                        onError = {
-                            when(it){
-                                is MissingTokenException -> Unit /* 로그아웃 처리 */
-                                else -> Toast.makeText(
-                                    context,
-                                    context.getString(R.string.toast_accept_rental_failed),
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-                    )
-                }
-            }
+
+    LoadingScreen(isLoading)
+
+    if(showNetworkErrorDialog) NetworkErrorDialog(onRetry)
+
+    if(showServerErrorDialog) ServerErrorDialog(onRetry)
+
+    if(showForbiddenChatAccessDialog){
+        BaseDialog(
+            title = stringResource(R.string.dialog_forbidden_chat_access_title),
+            confirmBtnText = stringResource(R.string.dialog_forbidden_chat_access_btn),
+            isBackgroundClickable = false,
+            onConfirmRequest = onForbiddenDialogDismiss,
         )
     }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun ProductInfo(productInfo: ProductDto) {
-    val lastMessageTime = formatDateTime(productInfo.createdAt)
-    val period = productInfo.period
+private fun ProductInfoSection(
+    thumbnailImgUrl: String?,
+    title: String,
+    status: ProductStatus,
+    price: Int,
+    minPeriod: Int?,
+    maxPeriod: Int?,
+) {
+    val priceText = formatPrice(price)
+    val unitText = stringResource(R.string.common_price_unit_per_day)
+    val periodText = formatPeriodText(minPeriod, maxPeriod)
+
     Row(
         modifier = Modifier
             .screenHorizontalPadding()
@@ -222,7 +161,7 @@ private fun ProductInfo(productInfo: ProductDto) {
             modifier = Modifier
                 .size(60.dp)
                 .clip(RoundedCornerShape(15.dp)),
-            imgUrl = productInfo.thumbnailImgUrl,
+            imgUrl = thumbnailImgUrl,
             defaultImageResId = R.drawable.img_thumbnail_placeholder,
         )
         Column(
@@ -232,63 +171,42 @@ private fun ProductInfo(productInfo: ProductDto) {
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
-                    modifier = Modifier.width(160.dp),
-                    maxLines = 1,
-                    text = productInfo.title,
-                    overflow = TextOverflow.Ellipsis,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                Text(
-                    text = if (period != null) {
-                        if (period.min != null && period.max != null) stringResource(
-                            R.string.product_list_item_period_text_more_and_less_than_day,
-                            period.min.toInt(),
-                            period.max.toInt()
-                        )
-                        else if (period.min != null) stringResource(
-                            R.string.product_list_item_period_text_more_than_day,
-                            period.min.toInt()
-                        )
-                        else if (period.max != null) stringResource(
-                            R.string.product_list_item_period_text_less_than_day,
-                            period.max.toInt()
-                        )
-                        else stringResource(R.string.product_list_item_period_text_more_than_zero)
-                    } else {
-                        stringResource(R.string.product_list_item_period_text_more_than_zero)
-                    },
+                    text = status.label ?: "",
                     style = MaterialTheme.typography.bodyLarge,
                     color = PrimaryBlue500
                 )
+                Text(
+                    modifier = Modifier.width(160.dp),
+                    maxLines = 1,
+                    text = title,
+                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.bodyLarge
+                )
             }
-            Row(
+            Text(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 14.dp),
-                verticalAlignment = Alignment.Bottom,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = formatPrice(productInfo.price) + stringResource(R.string.common_price_unit_per_day),
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = Gray400
-                )
-                Text(
-                    text = lastMessageTime,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = Gray400
-                )
-            }
+                .padding(top = 14.dp),
+                text = "$priceText$unitText ($periodText)",
+                style = MaterialTheme.typography.bodyLarge,
+                color = Gray400
+            )
         }
     }
 }
 
 // 요청 정보
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun RequestInfo(statusInfo: StatusHistoryDto) {
+private fun RequestInfo(
+    status: RentalStatus,
+    startDate: LocalDate?,
+    endDate: LocalDate?,
+) {
+    val periodText = formatRentalPeriod(LocalContext.current, startDate, endDate)
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -296,48 +214,16 @@ private fun RequestInfo(statusInfo: StatusHistoryDto) {
             .padding(bottom = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Row {
-            Text(
-                modifier = Modifier.padding(end = 6.dp),
-                text = stringResource(R.string.screen_chatroom_request_info_label),
-                style = MaterialTheme.typography.labelLarge,
-            )
-            ResvStatus.fromLabel(statusInfo.status)?.let {
-                Text(
-                    text = it.label,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = it.color
-                )
-            }
-        }
         Text(
-            text = "25.08.17 (목) ~ 25.08.20 (일) · 4일",      // 백엔드 데이터 누락
+            text = stringResource(status.strRes),
+            style = MaterialTheme.typography.labelLarge,
+            color = status.textColor
+        )
+        Text(
+            text = periodText,
             style = MaterialTheme.typography.labelMedium,
             color = Gray800
         )
-    }
-}
-
-// 거절하기 / 수락하기 버튼
-@Composable
-private fun ResvActions(onAcceptAction: () -> Unit = {}, onRejectAction: () -> Unit = {}) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .screenHorizontalPadding()
-            .padding(bottom = 14.dp),
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        ActionButton(
-            modifier = Modifier.weight(1F),
-            text = stringResource(R.string.screen_chatroom_request_action_btn_reject),
-            textColor = Gray400,
-        ) { onRejectAction() }
-        ActionButton(
-            modifier = Modifier.weight(1F),
-            text = stringResource(R.string.screen_chatroom_request_action_btn_accept),
-            textColor = PrimaryBlue500,
-        ) { onAcceptAction() }
     }
 }
 
@@ -346,9 +232,10 @@ private fun ResvActions(onAcceptAction: () -> Unit = {}, onRejectAction: () -> U
 @Composable
 private fun ChatMsgList(
     modifier: Modifier,
-    senderNickname: String,
-    msgList: List<ChatMessageUiModel>,
+    partnerNickname: String?,
+    msgList: List<ChatMessageModel>,
 ) {
+    val displayPartnerNickname = partnerNickname ?: stringResource(R.string.screen_chatroom_nickname_unknown)
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -356,11 +243,11 @@ private fun ChatMsgList(
             .padding(horizontal = 15.dp),
         reverseLayout = true
     ) {
-        items(msgList) { msg ->
+        items(msgList, key = { it.messageId }) { msg ->
             if (msg.isMine) {
                 SentMsgBubble(msg.message, msg.sentAt)
             } else {
-                ReceivedMsgBubble(msg.message, msg.sentAt, senderNickname)
+                ReceivedMsgBubble(msg.message, msg.sentAt, displayPartnerNickname)
             }
         }
     }
@@ -368,7 +255,7 @@ private fun ChatMsgList(
 
 @Composable
 private fun BottomInputBar(
-    textFieldValue: TextFieldValue,
+    value: TextFieldValue,
     scrollState: ScrollState,
     onValueChange: (TextFieldValue) -> Unit = {},
     onSend: () -> Unit = {},
@@ -383,7 +270,7 @@ private fun BottomInputBar(
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         BasicTextField(
-            value = textFieldValue,
+            value = value,
             onValueChange = onValueChange,
             modifier = Modifier
                 .clip(RoundedCornerShape(25.dp))
@@ -402,7 +289,7 @@ private fun BottomInputBar(
                         .padding(20.dp, 12.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
-                    if (textFieldValue.text.isEmpty()) {
+                    if (value.text.isEmpty()) {
                         Text(
                             text = stringResource(R.string.screen_chatroom_input_placeholder),
                             style = MaterialTheme.typography.bodyMedium,
@@ -414,41 +301,80 @@ private fun BottomInputBar(
             }
         )
         IconButton(
-            modifier = Modifier
-                .weight(0.1F), onClick = { onSend() }) {
+            modifier = Modifier.weight(0.1F), onClick = onSend) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_send),
+                painter = painterResource(R.drawable.ic_send),
                 tint = Gray800,
-                contentDescription = stringResource(
-                    id = R.string.content_description_for_ic_send
-                )
+                contentDescription = stringResource(R.string.content_description_for_ic_send)
             )
-
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun ActionButton(modifier: Modifier, text: String, textColor: Color, onClick: () -> Unit) {
-    OutlinedButton(
-        modifier = modifier.height(34.dp),
-        onClick = onClick,
-        shape = RoundedCornerShape(20.dp),
-        border = CommonBorders.basicBorder(),
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Text(
-            text = text,
-            color = textColor,
-            style = MaterialTheme.typography.bodyLarge
+@Preview
+fun ChatRoomScreenPreview() {
+    // 샘플 메시지
+    val sampleMessages = listOf(
+        ChatMessageModel(
+            messageId = "01",
+            isMine = true,
+            message = "안녕하세요! 예약 확인 부탁드려요.",
+            sentAt = "2025-03-25T09:00:00Z"
+        ),
+        ChatMessageModel(
+            messageId = "02",
+            isMine = false,
+            message = "네, 예약 확인되었습니다.",
+            sentAt = "2025-03-25T09:00:00Z"
+        ),
+        ChatMessageModel(
+            messageId = "02",
+            isMine = true,
+            message = "감사합니다!",
+            sentAt = "2025-03-25T09:00:00Z"
+        )
+    )
+
+// 샘플 상품 요약
+    val sampleProduct = ProductChatRoomSummaryModel(
+        thumbnailImgUrl = "https://example.com/product_thumbnail.jpg",
+        title = "캠핑용 텐트",
+        status = ProductStatus.AVAILABLE,
+        price = 50000,
+        minPeriod = 1,
+        maxPeriod = 7
+    )
+
+// 샘플 대여 요약
+    val sampleRental = RentalChatRoomSummaryModel(
+        reservationId = 12345,
+        status = RentalStatus.PENDING,
+        startDate = LocalDate.of(2025, 9, 1),
+        endDate = LocalDate.of(2025, 9, 5)
+    )
+
+// 샘플 파라미터
+    val samplePartnerNickname = "홍길동"
+    val sampleMessageInput = TextFieldValue("")
+    val sampleScrollState = rememberScrollState()
+
+// ChatroomScreen 호출 예시
+    RentItTheme {
+        ChatroomScreen(
+            messageText = sampleMessageInput,
+            partnerNickname = samplePartnerNickname,
+            messages = sampleMessages,
+            productSummary = sampleProduct,
+            rentalSummary = sampleRental,
+            inputScrollState = sampleScrollState,
+            isLoading = false,
+            onBackClick = { },
+            onRetry = { },
+            onMessageChange = { },
+            onMessageSend = { },
+            onForbiddenDialogDismiss = { },
         )
     }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-private fun formatDateTime(dateTimeString: String): String {
-    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-    val localDateTime = LocalDateTime.parse(dateTimeString, formatter)
-    val dateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
-    return localDateTime.format(dateFormatter)
 }

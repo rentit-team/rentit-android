@@ -1,5 +1,6 @@
 package com.example.rentit.data.rental.dto
 
+import com.example.rentit.common.enums.RentalStatus
 import com.google.gson.annotations.SerializedName
 
 data class RentalDetailResponseDto(
@@ -12,13 +13,13 @@ data class RentalDetailResponseDto(
 
 data class RentalDto(
     @SerializedName("reservationId")
-    val reservationId: Long,
+    val reservationId: Int,
 
     @SerializedName("renter")
     val renter: RenterDto,
 
     @SerializedName("status")
-    val status: String,
+    val status: RentalStatus,
 
     @SerializedName("product")
     val product: ProductDto,

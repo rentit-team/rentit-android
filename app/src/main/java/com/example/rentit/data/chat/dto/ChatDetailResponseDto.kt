@@ -20,6 +20,12 @@ data class ChatRoomDetailDto(
     @SerializedName("chatroomId")
     val chatroomId: String,
 
+    @SerializedName("reservationId")
+    val reservationId: Int,
+
+    @SerializedName("productId")
+    val productId: Int,
+
     @SerializedName("participants")
     val participants: List<ChatParticipantDto>,
 
@@ -82,7 +88,7 @@ data class ChatMessageDto(
 
 data class SenderDto(
     @SerializedName("userId")
-    val userId: Int,
+    val userId: Long,
 
     @SerializedName("nickname")
     val nickname: String

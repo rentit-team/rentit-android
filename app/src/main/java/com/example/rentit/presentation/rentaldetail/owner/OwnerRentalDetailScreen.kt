@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto
 import com.example.rentit.data.rental.dto.ProductDto
@@ -22,6 +23,7 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.RentalDto
 import com.example.rentit.data.rental.dto.RenterDto
 import com.example.rentit.data.rental.dto.ReturnStatusDto
+import com.example.rentit.data.rental.mapper.toOwnerUiModel
 import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerPaidContent
 import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRentalStatusUiModel
 import com.example.rentit.presentation.rentaldetail.owner.stateui.OwnerRentingContent
@@ -83,7 +85,7 @@ private fun Preview() {
         rental = RentalDto(
             reservationId = 1001,
             renter = RenterDto(userId = 101, nickname = "김철수"),
-            status = "RENTING",
+            status = RentalStatus.PENDING,
             product = ProductDto(
                 title = "캐논 EOS R6 카메라",
                 thumbnailImgUrl = "https://example.com/image/123.jpg"
@@ -102,7 +104,7 @@ private fun Preview() {
 
     val sample2 = sample1.copy(
         rental = sample1.rental.copy(
-            status = "RETURNED",
+            status = RentalStatus.RETURNED,
             endDate = "2025-07-28",
             returnStatus = ReturnStatusDto(isPhotoRegistered = false, isTrackingNumberRegistered = true)
         )

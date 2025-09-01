@@ -21,6 +21,6 @@ fun ChatListRoute(navHostController: NavHostController) {
         showNetworkErrorDialog = uiState.showNetworkErrorDialog,
         showServerErrorDialog = uiState.showServerErrorDialog,
         onRetry = chatListViewModel::retryFetchChatRoomSummaries,
-        onItemClick = { navHostController.navigateToChatRoom(null, null, it) }
+        onItemClick = { navHostController.navigateToChatRoom(it) }
     )
 }
