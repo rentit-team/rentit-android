@@ -1,6 +1,7 @@
 package com.example.rentit.presentation.chat
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
+
+private const val TAG = "ChatList"
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
@@ -31,14 +34,17 @@ class ChatListViewModel @Inject constructor(
             getChatRoomSummariesUseCase.invoke()
                 .onSuccess {
                     _uiState.value = _uiState.value.copy(chatRoomSummaries = it)
+                    Log.i(TAG, "채팅 리스트 가져오기 성공: 채팅방 ${it.size}개")
                 }
                 .onFailure { e ->
                     when (e) {
                         is IOException -> {
                             showNetworkErrorDialog()
+                            Log.e(TAG, "네트워크 에러: 채팅 리스트 가져오기 실패", e)
                         }
                         else -> {
                             showServerErrorDialog()
+                            Log.e(TAG, "채팅 리스트 가져오기 실패", e)
                         }
                         // TODO: 토큰 에러 처리 필요 (리프레시 토큰으로 재발급 또는 로그인 화면 이동)
                     }

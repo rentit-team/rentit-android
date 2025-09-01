@@ -16,7 +16,7 @@ class GetChatRoomSummariesUseCase @Inject constructor(
             val chatList = chatRepository.getChatList().getOrThrow().chatRooms
 
             chatList.map {
-                val localDateTime = OffsetDateTime.parse(it.lastMessageTime)
+                val localDateTime = it.lastMessageTime?.let { time -> OffsetDateTime.parse(time) }
                 ChatRoomSummaryModel(
                     chatRoomId = it.chatRoomId,
                     productTitle = it.productTitle,
