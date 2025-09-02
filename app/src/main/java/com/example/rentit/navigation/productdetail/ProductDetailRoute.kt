@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 sealed class ProductDetailRoute {
     @Serializable
-    data class ProductDetail(val productId: Int?) : ProductDetailRoute()
+    data class ProductDetail(val productId: Int) : ProductDetailRoute()
 
     @Serializable
     data class ResvRequest(val productId: Int?) : ProductDetailRoute()
