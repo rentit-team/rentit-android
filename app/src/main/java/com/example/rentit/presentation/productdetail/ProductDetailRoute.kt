@@ -45,7 +45,7 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         productId = 101,
         price = 50000,
         title = "Mountain Bike",
-        category = "Sports",
+        category = listOf("Sports"),
         content = "A sturdy mountain bike suitable for off-road trails.",
         createdAt = "2025-09-01T10:00:00",
         imgUrlList = listOf(

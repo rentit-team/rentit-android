@@ -101,7 +101,7 @@ fun ProductDetailScreen(
                     .verticalScroll(state = rememberScrollState())
             ) {
                 ImagePager(productDetail.imgUrlList, onFullImageShow)
-                PostHeader(productDetail.title, "카테고리", productDetail.createdAt.substring(0, 10))
+                PostHeader(productDetail.title, productDetail.category, productDetail.createdAt.substring(0, 10))
                 Text(
                     modifier = Modifier
                         .screenHorizontalPadding()
@@ -168,7 +168,7 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
 }
 
 @Composable
-fun FullImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
+fun FullImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
     val pagerState = rememberPagerState { imgUrlList.size }
     Box(modifier = Modifier
         .fillMaxSize()
@@ -200,7 +200,7 @@ fun FullImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
 
 
 @Composable
-fun PostHeader(title: String, category: String, creationDate: String) {
+fun PostHeader(title: String, category: List<String>, creationDate: String) {
     Row(Modifier
         .fillMaxWidth()
         .screenHorizontalPadding()
@@ -211,7 +211,7 @@ fun PostHeader(title: String, category: String, creationDate: String) {
             Text(text = title, style = MaterialTheme.typography.bodyLarge)
             Text(
                 modifier = Modifier.padding(top = 5.dp),
-                text = "$category · $creationDate",
+                text = "${category.joinToString(" · ") } $creationDate",
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
             )
@@ -314,7 +314,7 @@ private fun Preview() {
         productId = 101,
         price = 50_000,
         title = "Mountain Bike",
-        category = "Sports",
+        category = listOf("Sports"),
         content = "A sturdy mountain bike suitable for off-road trails.",
         createdAt = "2025-09-01T10:00:00",
         imgUrlList = listOf("sample.jpg")
