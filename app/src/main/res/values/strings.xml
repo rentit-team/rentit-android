@@ -125,10 +125,13 @@
     <string name="screen_product_detail_img_description">상품 이미지</string>
     <string name="screen_product_like_icon_description">상품 좋아요</string>
     <string name="screen_product_share_icon_description">상품 공유하기</string>
-    <string name="screen_product_btn_check_detail_of_use">대여 내역 확인</string>
+    <string name="screen_product_btn_check_detail_of_use">예약 가능일 확인</string>
     <string name="screen_product_btn_request">요청 %d건</string>
     <string name="screen_product_btn_chatting">채팅하기</string>
     <string name="screen_product_btn_reserve">예약하기</string>
+
+    <!-- 예약 가능일 확인 서랍 -->
+    <string name="drawer_rental_history_calendar_legend_text">예약할 수 없는 날은 노란 원으로 표시돼요.</string>
 
     <!-- 대여 예약 요청 -->
     <string name="screen_resv_request_app_bar_title">예약 기간을 설정해주세요.</string>
