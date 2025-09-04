@@ -2,42 +2,67 @@ package com.example.rentit.presentation.productdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.enums.ResvStatus
-import com.example.rentit.data.product.dto.ProductDetailResponseDto
-import com.example.rentit.data.product.dto.RequestInfoDto
-import com.example.rentit.domain.product.repository.ProductRepository
-import com.example.rentit.domain.user.repository.UserRepository
+import com.example.rentit.domain.product.usecase.GetProductDetailResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
-    private val productRepository: ProductRepository,
-    private val userRepository: UserRepository
+    private val getProductDetailResultUseCase: GetProductDetailResultUseCase
 ) : ViewModel() {
 
-    private val _productDetail = MutableStateFlow<Result<ProductDetailResponseDto>?>(null)
-    val productDetail: StateFlow<Result<ProductDetailResponseDto>?> = _productDetail
+    private val _uiState = MutableStateFlow(ProductDetailState())
+    val uiState: StateFlow<ProductDetailState> = _uiState
 
-    private val _requestList =  MutableStateFlow<List<RequestInfoDto>>(emptyList())
-    val requestList: StateFlow<List<RequestInfoDto>> = _requestList
+    private val _sideEffect = MutableSharedFlow<ProductDetailSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
-    fun getAuthUserIdFromPrefs(): Long = userRepository.getAuthUserIdFromPrefs()
-
-    fun getProductDetail(productId: Int) {
+    private fun requestNavigation(sideEffect: ProductDetailSideEffect) {
         viewModelScope.launch {
-            _productDetail.value = productRepository.getProductDetail(productId)
+            _sideEffect.emit(sideEffect)
         }
     }
 
-    fun getProductRequestList(productId: Int){
-        viewModelScope.launch {
-            productRepository.getProductRequestList(productId).onSuccess {
-                _requestList.value = it.reservations.filter { data -> ResvStatus.isPending(data.status) }
-            }
-        }
+    fun setLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    suspend fun getProductDetail(productId: Int) {
+        getProductDetailResultUseCase.invoke(productId)
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(
+                    productDetail = it.productDetail,
+                    requestCount = it.requestCount
+                )
+            }.onFailure { }
+    }
+
+    fun showBottomSheet() {
+        _uiState.value = _uiState.value.copy(showBottomSheet = true)
+    }
+
+    fun showFullImage() {
+        _uiState.value = _uiState.value.copy(showBottomSheet = true)
+    }
+
+    fun hideFullImage() {
+        _uiState.value = _uiState.value.copy(showBottomSheet = false)
+    }
+
+    fun onChattingClicked() {
+        requestNavigation(ProductDetailSideEffect.NavigateToChatting)
+    }
+
+    fun onResvRequestClicked() {
+        requestNavigation(ProductDetailSideEffect.NavigateToResvRequest)
+    }
+
+    fun onRentalHistoryClicked() {
+        requestNavigation(ProductDetailSideEffect.NavigateToRentalHistory)
     }
 }

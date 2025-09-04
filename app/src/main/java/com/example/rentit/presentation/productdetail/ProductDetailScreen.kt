@@ -64,63 +64,65 @@ import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistory
 @Composable
 fun ProductDetailScreen(
     productDetail: ProductDetailModel,
-    isMyProduct: Boolean,
-    requestCount: Int,
+    requestCount: Int?,
     sheetState: SheetState,
     showBottomSheet: Boolean,
     showFullImage: Boolean,
-    navigateToRentalHistory: () -> Unit,
-    navigateToChatting: () -> Unit,
-    navigateToResvRequest: () -> Unit,
-    navigateBack: () -> Unit,
+    onRentalHistoryClick: () -> Unit,
+    onChattingClick: () -> Unit,
+    onResvRequestClick: () -> Unit,
+    onBackClick: () -> Unit,
     onFullImageDismiss: () -> Unit,
     onFullImageShow: () -> Unit,
     onBottomSheetShow: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { CommonTopAppBar(onBackClick = navigateBack) },
+        topBar = { CommonTopAppBar(onBackClick = onBackClick) },
         bottomBar = {
             PostBottomBar(
                 price = productDetail.price,
-                isMyProduct = isMyProduct,
                 requestCount = requestCount,
-                onResvRequestClick = navigateToResvRequest,
-                onRentalHistoryClick = navigateToRentalHistory,
-                onChattingClick = navigateToChatting
+                onResvRequestClick = onResvRequestClick,
+                onRentalHistoryClick = onRentalHistoryClick,
+                onChattingClick = onChattingClick
             )
         },
         floatingActionButton = { UsageDetailButton(onBottomSheetShow) }
     ) { innerPadding ->
-        Box(
-            Modifier
-                .padding(innerPadding)
-                .fillMaxSize()) {
+        if(productDetail != ProductDetailModel.EMPTY) {
             Column(
                 modifier = Modifier
+                    .padding(innerPadding)
                     .verticalScroll(state = rememberScrollState())
             ) {
                 ImagePager(productDetail.imgUrlList, onFullImageShow)
-                PostHeader(productDetail.title, productDetail.category, productDetail.createdAt.substring(0, 10))
+                PostHeader(
+                    productDetail.title,
+                    productDetail.category,
+                    productDetail.createdAt.substring(0, 10)
+                )
                 Text(
                     modifier = Modifier
                         .screenHorizontalPadding()
-                        .fillMaxWidth(),
+                        .fillMaxSize(),
                     text = productDetail.content,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray800
                 )
-                if(showBottomSheet) {
-                    ModalBottomSheet(
-                        onDismissRequest = onFullImageDismiss,
-                        sheetState = sheetState
-                    ) {
-                        RentalHistoryBottomDrawer(productDetail.productId)
-                    }
-                }
             }
         }
     }
+
+    if(showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onFullImageDismiss,
+            sheetState = sheetState
+        ) {
+            RentalHistoryBottomDrawer(productDetail.productId)
+        }
+    }
+
     if(showFullImage) FullImagePager(productDetail.imgUrlList, onFullImageDismiss)
 }
 
@@ -235,8 +237,7 @@ fun PostHeader(title: String, category: List<String>, creationDate: String) {
 @Composable
 fun PostBottomBar(
     price: Int,
-    isMyProduct: Boolean,
-    requestCount: Int,
+    requestCount: Int?,
     onRentalHistoryClick: () -> Unit,
     onChattingClick: () -> Unit,
     onResvRequestClick: () -> Unit,
@@ -260,7 +261,7 @@ fun PostBottomBar(
             text = "$formattedPrice " + stringResource(id = R.string.common_price_unit_per_day),
             style = MaterialTheme.typography.bodyLarge
         )
-        if(isMyProduct) {
+        if(requestCount != null) {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount), onRentalHistoryClick)
         } else {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting), onChattingClick)
@@ -323,15 +324,14 @@ private fun Preview() {
     RentItTheme {
         ProductDetailScreen(
             productDetail = sampleProductDetail,
-            isMyProduct = false,
             requestCount = 2,
             showBottomSheet = false,
             sheetState = rememberModalBottomSheetState(),
             showFullImage = false,
-            navigateToRentalHistory = { /* TODO */ },
-            navigateToChatting = { /* TODO */ },
-            navigateToResvRequest = { /* TODO */ },
-            navigateBack = { /* TODO */ },
+            onRentalHistoryClick = { /* TODO */ },
+            onChattingClick = { /* TODO */ },
+            onResvRequestClick = { /* TODO */ },
+            onBackClick = { /* TODO */ },
             onFullImageDismiss = { /* TODO */ },
             onFullImageShow = { /* TODO */ },
             onBottomSheetShow = { /* TODO */ }
