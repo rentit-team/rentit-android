@@ -12,8 +12,10 @@ import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
 import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -33,6 +35,9 @@ class ChatRoomViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ChatRoomState())
     val uiState: StateFlow<ChatRoomState> = _uiState
 
+    private val _sideEffect = MutableSharedFlow<ChatRoomSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
+
     private fun resetMessages() {
         _uiState.value = _uiState.value.copy(messages = emptyList())
     }
@@ -51,6 +56,12 @@ class ChatRoomViewModel @Inject constructor(
 
     private fun setIsLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    private fun emitSideEffect(sideEffect: ChatRoomSideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(sideEffect)
+        }
     }
 
     suspend fun fetchChatRoomData(chatRoomId: String) {
@@ -92,18 +103,23 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
-        webSocketManager.connect(chatRoomId, onConnect,
+    fun connectWebSocket(chatRoomId: String) {
+        webSocketManager.connect(
+            chatroomId = chatRoomId,
             onMessageReceived = { message ->
                 val previousMessages = _uiState.value.messages
                 val newMessage = convertMessageUseCase.execute(message)
-                _uiState.value = _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
-            }
+                _uiState.value =
+                    _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
+            },
+            onError = { emitSideEffect(ChatRoomSideEffect.ToastChatDisconnect) }
         )
     }
 
     fun sendMessage(chatRoomId: String, message: String) {
-        webSocketManager.sendMessage(chatRoomId, message)
+        webSocketManager.sendMessage(chatRoomId, message,
+            onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
+        )
     }
 
     fun disconnectWebSocket() {

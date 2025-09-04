@@ -35,53 +35,56 @@ class WebSocketManagerImpl @Inject constructor(
         sendDisposable?.dispose()
     }
 
-    private fun subscribeLifeCycle(onConnect: () -> Unit) {
+    private fun subscribeLifeCycle(onError: (Throwable) -> Unit) {
         stompLifecycleDisposable = stompClient?.lifecycle()?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe { lifecycleEvent ->
                 when (lifecycleEvent.type) {
-                    LifecycleEvent.Type.OPENED -> {
-                        Log.i(TAG, "Stomp connection opened")
-                        onConnect()
+                    LifecycleEvent.Type.OPENED -> Log.i(TAG, "Stomp connection opened")
+                    LifecycleEvent.Type.CLOSED -> Log.i(TAG, "Stomp connection closed")
+                    LifecycleEvent.Type.ERROR -> {
+                        Log.e(TAG, "Stomp connection error", lifecycleEvent.exception)
+                        onError(lifecycleEvent.exception)
                     }
-                    LifecycleEvent.Type.CLOSED -> Log.d(TAG, "Stomp connection closed")
-                    LifecycleEvent.Type.ERROR -> Log.d(TAG, "Stomp error", lifecycleEvent.exception)
                     else -> { }
                 }
             }
     }
 
-    private fun subscribeTopic(chatroomId: String, onMessageReceived: (MessageResponseDto) -> Unit) {
+    private fun subscribeTopic(chatroomId: String, onMessageReceived: (MessageResponseDto) -> Unit, onError: (Throwable) -> Unit) {
         topicDisposable = stompClient?.topic("/topic/chatroom.$chatroomId")
             ?.observeOn(AndroidSchedulers.mainThread())
-            ?.subscribe { topicMessage ->
+            ?.subscribe ({ topicMessage ->
                 val json = topicMessage.payload
                 val response = Gson().fromJson(json, MessageResponseDto::class.java)
                 onMessageReceived(response)
-                Log.d(TAG, "Received message: $json")
-            }
+                Log.i(TAG, "Received message: $json")
+            }, { e ->
+                Log.e(TAG, "Error subscribing topic", e)
+                onError(e)
+            })
     }
 
-    override fun connect(chatroomId: String, onConnect: () -> Unit, onMessageReceived: (MessageResponseDto) -> Unit) {
+    override fun connect(chatroomId: String, onMessageReceived: (MessageResponseDto) -> Unit, onError: (Throwable) -> Unit) {
         val token = getToken()
 
         clearDisposable()
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL)
 
-        subscribeLifeCycle(onConnect)
+        subscribeLifeCycle(onError)
         stompClient?.connect(listOf(StompHeader("Authorization", "Bearer $token")))
-        subscribeTopic(chatroomId, onMessageReceived)
+        subscribeTopic(chatroomId, onMessageReceived, onError)
     }
 
-    override fun sendMessage(chatroomId: String, message: String) {
+    override fun sendMessage(chatroomId: String, message: String, onError: (Throwable) -> Unit) {
         val authUserId = getAuthUserId()
         val dto = MessageRequestDto(chatroomId, authUserId, message)
         val json = Gson().toJson(dto)
 
         sendDisposable = stompClient?.send("/app/chatroom.$chatroomId", json)
             ?.subscribe({
-                Log.d(TAG, "Message sent")
-            }, { throwable ->
-                Log.e(TAG, "Error sending message", throwable)
+                Log.i(TAG, "Message sent")
+            }, { e ->
+                onError(e)
             })
     }
 
@@ -89,6 +92,6 @@ class WebSocketManagerImpl @Inject constructor(
         clearDisposable()
         stompClient?.disconnect()
         stompClient = null
-        Log.d(TAG, "Disconnected from WebSocket")
+        Log.i(TAG, "Disconnected from WebSocket")
     }
 }
