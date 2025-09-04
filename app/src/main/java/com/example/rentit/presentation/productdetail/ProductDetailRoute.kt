@@ -1,18 +1,21 @@
 package com.example.rentit.presentation.productdetail
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
+import com.example.rentit.R
 import com.example.rentit.navigation.productdetail.navigateToResvRequest
 import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
 
@@ -21,6 +24,7 @@ import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
 @Composable
 fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
     val viewModel: ProductDetailViewModel = hiltViewModel()
+    val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -46,6 +50,9 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
                     ProductDetailSideEffect.NavigateToResvRequest -> {
                         navHostController.navigateToResvRequest(productId)
                     }
+                    ProductDetailSideEffect.ToastComingSoon -> {
+                        Toast.makeText(context, context.getString(R.string.common_toast_feat_coming_soon), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -63,6 +70,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         onBackClick = navHostController::popBackStack,
         onFullImageDismiss = viewModel::hideFullImage,
         onFullImageShow = viewModel::showFullImage,
-        onBottomSheetShow = viewModel::showBottomSheet
+        onBottomSheetShow = viewModel::showBottomSheet,
+        onLikeClick = viewModel::emitComingSoonToast,
+        onShareClick = viewModel::emitComingSoonToast
     )
 }

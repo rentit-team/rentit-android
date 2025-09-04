@@ -14,9 +14,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -26,6 +26,7 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
@@ -69,10 +70,12 @@ fun ProductDetailScreen(
     sheetState: SheetState,
     showBottomSheet: Boolean,
     showFullImage: Boolean,
+    onBackClick: () -> Unit,
+    onLikeClick: () -> Unit,
+    onShareClick: () -> Unit,
     onRentalHistoryClick: () -> Unit,
     onChattingClick: () -> Unit,
     onResvRequestClick: () -> Unit,
-    onBackClick: () -> Unit,
     onFullImageDismiss: () -> Unit,
     onFullImageShow: () -> Unit,
     onBottomSheetShow: () -> Unit
@@ -103,7 +106,9 @@ fun ProductDetailScreen(
                 PostHeader(
                     productDetail.title,
                     productDetail.category,
-                    productDetail.createdAt.substring(0, 10)
+                    productDetail.createdAt.substring(0, 10),
+                    onLikeClick = onLikeClick,
+                    onShareClick = onShareClick
                 )
                 Text(
                     modifier = Modifier
@@ -205,12 +210,13 @@ fun FullImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
 
 
 @Composable
-fun PostHeader(title: String, category: List<String>, creationDate: String) {
+fun PostHeader(title: String, category: List<String>, creationDate: String, onLikeClick: () -> Unit, onShareClick: () -> Unit) {
     Row(Modifier
         .fillMaxWidth()
         .screenHorizontalPadding()
         .padding(vertical = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
     ) {
         Column {
             Row(
@@ -226,18 +232,19 @@ fun PostHeader(title: String, category: List<String>, creationDate: String) {
                 color = Gray400
             )
         }
-        Row(modifier = Modifier.height(24.dp),
-            verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                modifier = Modifier.width(24.dp),
-                painter = painterResource(id = R.drawable.ic_like),
-                contentDescription = stringResource(id = R.string.screen_product_like_icon_description)
-            )
-            Image(
-                modifier = Modifier.padding(start = 12.dp),
-                painter = painterResource(id = R.drawable.ic_share),
-                contentDescription = stringResource(id = R.string.screen_product_share_icon_description)
-            )
+        Row(modifier = Modifier.offset(x = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onLikeClick) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_like),
+                    contentDescription = stringResource(id = R.string.screen_product_like_icon_description)
+                )
+            }
+            IconButton(onShareClick) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_share),
+                    contentDescription = stringResource(id = R.string.screen_product_share_icon_description)
+                )
+            }
         }
     }
 }
@@ -350,13 +357,15 @@ private fun Preview() {
             showBottomSheet = false,
             sheetState = rememberModalBottomSheetState(),
             showFullImage = false,
-            onRentalHistoryClick = { /* TODO */ },
-            onChattingClick = { /* TODO */ },
-            onResvRequestClick = { /* TODO */ },
-            onBackClick = { /* TODO */ },
-            onFullImageDismiss = { /* TODO */ },
-            onFullImageShow = { /* TODO */ },
-            onBottomSheetShow = { /* TODO */ }
+            onRentalHistoryClick = { },
+            onChattingClick = { },
+            onResvRequestClick = { },
+            onBackClick = { },
+            onFullImageDismiss = { },
+            onFullImageShow = { },
+            onBottomSheetShow = { },
+            onLikeClick = { },
+            onShareClick = { }
         )
     }
 }

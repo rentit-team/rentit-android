@@ -47,11 +47,11 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     fun showFullImage() {
-        _uiState.value = _uiState.value.copy(showBottomSheet = true)
+        _uiState.value = _uiState.value.copy(showFullImage = true)
     }
 
     fun hideFullImage() {
-        _uiState.value = _uiState.value.copy(showBottomSheet = false)
+        _uiState.value = _uiState.value.copy(showFullImage = false)
     }
 
     fun onChattingClicked() {
@@ -64,5 +64,11 @@ class ProductDetailViewModel @Inject constructor(
 
     fun onRentalHistoryClicked() {
         requestNavigation(ProductDetailSideEffect.NavigateToRentalHistory)
+    }
+
+    fun emitComingSoonToast() {
+        viewModelScope.launch {
+            _sideEffect.emit(ProductDetailSideEffect.ToastComingSoon)
+        }
     }
 }

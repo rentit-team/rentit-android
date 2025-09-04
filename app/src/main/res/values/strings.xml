@@ -27,6 +27,8 @@
 
     <string name="common_dialog_btn_close">닫기</string>
 
+    <string name="common_toast_feat_coming_soon">이 기능은 곧 제공될 예정이에요.</string>
+
     <!-- 상품 최대/최소 대여 기간 표시 -->
     <string name="common_rental_period_min_max">%d일 ~ %d일</string>
     <string name="common_rental_period_min">%d일 이상</string>
