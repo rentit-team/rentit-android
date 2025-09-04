@@ -78,7 +78,8 @@ fun ProductDetailScreen(
     onResvRequestClick: () -> Unit,
     onFullImageDismiss: () -> Unit,
     onFullImageShow: () -> Unit,
-    onBottomSheetShow: () -> Unit
+    onBottomSheetShow: () -> Unit,
+    onBottomSheetDismiss: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -124,7 +125,7 @@ fun ProductDetailScreen(
 
     if(showBottomSheet) {
         ModalBottomSheet(
-            onDismissRequest = onFullImageDismiss,
+            onDismissRequest = onBottomSheetDismiss,
             sheetState = sheetState
         ) {
             RentalHistoryBottomDrawer(productDetail.productId)
@@ -363,6 +364,7 @@ private fun Preview() {
             onBackClick = { },
             onFullImageDismiss = { },
             onFullImageShow = { },
+            onBottomSheetDismiss = { },
             onBottomSheetShow = { },
             onLikeClick = { },
             onShareClick = { }

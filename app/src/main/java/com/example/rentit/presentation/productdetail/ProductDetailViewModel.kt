@@ -46,6 +46,10 @@ class ProductDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showBottomSheet = true)
     }
 
+    fun hideBottomSheet() {
+        _uiState.value = _uiState.value.copy(showBottomSheet = false)
+    }
+
     fun showFullImage() {
         _uiState.value = _uiState.value.copy(showFullImage = true)
     }

@@ -71,6 +71,7 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         onFullImageDismiss = viewModel::hideFullImage,
         onFullImageShow = viewModel::showFullImage,
         onBottomSheetShow = viewModel::showBottomSheet,
+        onBottomSheetDismiss = viewModel::hideBottomSheet,
         onLikeClick = viewModel::emitComingSoonToast,
         onShareClick = viewModel::emitComingSoonToast
     )
