@@ -1,10 +1,7 @@
 package com.example.rentit.presentation.productdetail
 
 import android.os.Build
-import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,12 +10,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -28,17 +26,14 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -46,19 +41,15 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
 import com.example.rentit.R
+import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.formatPeriodTextWithLabel
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
@@ -67,83 +58,81 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.navigation.productdetail.navigateToResvRequest
-import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
+import com.example.rentit.domain.product.model.ProductDetailModel
 import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryBottomDrawer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProductDetailScreen(navHostController: NavHostController, productId: Int?) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    var showBottomSheet by remember { mutableStateOf(false) }
-    var showFullImage by remember { mutableStateOf(false) }
-
-    val productDetailViewModel: ProductDetailViewModel = hiltViewModel()
-    val productDetailResult by productDetailViewModel.productDetail.collectAsStateWithLifecycle()
-    val requestHistory by productDetailViewModel.requestList.collectAsStateWithLifecycle()
-
-    val productDetail = productDetailResult?.getOrNull()?.product
-    val ownerId = productDetail?.owner?.userId ?: -1
-
-    val authUserId = productDetailViewModel.getAuthUserIdFromPrefs()
-    val isMyProduct = ownerId > -1 && authUserId.toInt() == ownerId
-
-    val context = LocalContext.current
-
-    LaunchedEffect(productId) {
-        if(productId == null) {
-            Toast.makeText(context, context.getString(R.string.error_common_cant_find_product), Toast.LENGTH_SHORT).show()
-            navHostController.popBackStack()
-        } else {
-            productDetailViewModel.getProductDetail(productId)
-            if(isMyProduct)
-                productDetailViewModel.getProductRequestList(productId)
-        }
-    }
-
-    /* productDetail 로딩 실패 시 UI 필요 */
-
-    /*val imgUrlList = listOf(
-        "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/14Fa/image/joib7vCDm4iIP7rNJR2ojev0A20.jpg",
-        "https://media.istockphoto.com/id/520700958/ko/%EC%82%AC%EC%A7%84/%EC%95%84%EB%A6%84%EB%8B%A4%EC%9A%B4-%EA%BD%83-%EB%B0%B0%EA%B2%BD%EA%B8%B0%EC%88%A0.jpg?s=612x612&w=0&k=20&c=gJx5-O9U1qXKZqKwv4KunrBae7RDNRcdse1nOdSk_0w="
-        )*/
-
+fun ProductDetailScreen(
+    productDetail: ProductDetailModel,
+    requestCount: Int?,
+    sheetState: SheetState,
+    showBottomSheet: Boolean,
+    showFullImage: Boolean,
+    onBackClick: () -> Unit,
+    onLikeClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onRentalHistoryClick: () -> Unit,
+    onChattingClick: () -> Unit,
+    onResvRequestClick: () -> Unit,
+    onFullImageDismiss: () -> Unit,
+    onFullImageShow: () -> Unit,
+    onBottomSheetShow: () -> Unit,
+    onBottomSheetDismiss: () -> Unit
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { CommonTopAppBar { navHostController.popBackStack() } },
-        bottomBar = { PostBottomBar(navHostController, productId, productDetail?.price ?: 0, isMyProduct, requestHistory.size) },
-        floatingActionButton = { UsageDetailButton { showBottomSheet = true } }
+        topBar = { CommonTopAppBar(onBackClick = onBackClick) },
+        bottomBar = {
+            PostBottomBar(
+                price = productDetail.price,
+                minPeriod = productDetail.minPeriod,
+                maxPeriod = productDetail.maxPeriod,
+                requestCount = requestCount,
+                onResvRequestClick = onResvRequestClick,
+                onRentalHistoryClick = onRentalHistoryClick,
+                onChattingClick = onChattingClick
+            )
+        },
+        floatingActionButton = { UsageDetailButton(onBottomSheetShow) }
     ) { innerPadding ->
-        Box(
-            Modifier
-                .padding(innerPadding)
-                .fillMaxSize()) {
+        if(productDetail != ProductDetailModel.EMPTY) {
             Column(
                 modifier = Modifier
+                    .padding(innerPadding)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                ImagePager(listOf(productDetail?.thumbnailImgUrl)) { showFullImage = true; Log.d("CLICKED", "showFullImage");}
-                PostHeader(productDetail?.title ?: "" , "카테고리",
-                    "${productDetail?.createdAt?.substring(0, 10)}"
+                ImagePager(productDetail.imgUrlList, onFullImageShow)
+                PostHeader(
+                    productDetail.title,
+                    productDetail.category,
+                    productDetail.createdAt.substring(0, 10),
+                    onLikeClick = onLikeClick,
+                    onShareClick = onShareClick
                 )
                 Text(
                     modifier = Modifier
                         .screenHorizontalPadding()
-                        .fillMaxWidth(),
-                    text = productDetail?.description ?: "",
+                        .fillMaxSize(),
+                    text = productDetail.content,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Gray800
                 )
-                if(showBottomSheet) {
-                    ModalBottomSheet(onDismissRequest = { showBottomSheet = false }, sheetState = sheetState) {
-                        RentalHistoryBottomDrawer(productId ?: -1)
-                    }
-                }
             }
         }
     }
-    //if(showFullImage) FullImagePager(imgUrlList) { showFullImage = false }
+
+    if(showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onBottomSheetDismiss,
+            sheetState = sheetState
+        ) {
+            RentalHistoryBottomDrawer(productDetail.productId)
+        }
+    }
+
+    if(showFullImage) FullImagePager(productDetail.imgUrlList, onFullImageDismiss)
 }
 
 @Composable
@@ -159,7 +148,9 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
         val pagerState = rememberPagerState { imgUrlList.size }
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onClick() }
         ) { page ->
             LoadableUrlImage(
                 modifier = Modifier.height(290.dp),
@@ -188,29 +179,30 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
 }
 
 @Composable
-fun FullImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
+fun FullImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
     val pagerState = rememberPagerState { imgUrlList.size }
     Box(modifier = Modifier
         .fillMaxSize()
-        .background(color = Color(0, 0, 0, 180))) {
+        .background(color = Color.Black.copy(alpha = 0.5f))) {
         Image(
             modifier = Modifier
                 .align(Alignment.TopEnd)
                 .padding(20.dp)
-                .clickable { onClick },
+                .clickable { onClick() },
             painter = painterResource(id = R.drawable.ic_x),
             contentDescription = "닫기",
-            colorFilter = ColorFilter.tint(Color.White),)
+            colorFilter = ColorFilter.tint(Color.White)
+        )
         HorizontalPager(
             state = pagerState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
         ) { page ->
-            AsyncImage(
-                modifier = Modifier
-                    .height(290.dp),
-                placeholder = painterResource(id = R.drawable.img_placeholder),
-                model = imgUrlList[page],
-                contentDescription = stringResource(id = R.string.screen_product_detail_img_description),
+            LoadableUrlImage(
+                modifier = Modifier.fillMaxHeight(0.7f),
+                imgUrl = imgUrlList[page],
+                defaultImageResId = R.drawable.img_placeholder,
+                defaultDescResId = R.string.screen_product_detail_img_description,
                 contentScale = ContentScale.FillWidth
             )
         }
@@ -219,66 +211,89 @@ fun FullImagePager(imgUrlList: List<String>, onClick: () -> Unit) {
 
 
 @Composable
-fun PostHeader(title: String, category: String, creationDate: String) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .screenHorizontalPadding()
-            .padding(top = 16.dp, bottom = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween
+fun PostHeader(title: String, category: List<String>, creationDate: String, onLikeClick: () -> Unit, onShareClick: () -> Unit) {
+    Row(Modifier
+        .fillMaxWidth()
+        .screenHorizontalPadding()
+        .padding(vertical = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.Bottom
     ) {
         Column {
-            Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            }
             Text(
                 modifier = Modifier.padding(top = 5.dp),
-                text = "$category · $creationDate",
+                text = "${category.joinToString(" · ") }  $creationDate",
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
             )
         }
-        Row(modifier = Modifier.height(24.dp),
-            verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                modifier = Modifier.width(24.dp),
-                painter = painterResource(id = R.drawable.ic_like),
-                contentDescription = stringResource(id = R.string.screen_product_like_icon_description)
-            )
-            Image(
-                modifier = Modifier.padding(start = 12.dp),
-                painter = painterResource(id = R.drawable.ic_share),
-                contentDescription = stringResource(id = R.string.screen_product_share_icon_description)
-            )
+        Row(modifier = Modifier.offset(x = 10.dp), verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onLikeClick) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_like),
+                    contentDescription = stringResource(id = R.string.screen_product_like_icon_description)
+                )
+            }
+            IconButton(onShareClick) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_share),
+                    contentDescription = stringResource(id = R.string.screen_product_share_icon_description)
+                )
+            }
         }
     }
 }
 
 @Composable
-fun PostBottomBar(navHostController: NavHostController, productId: Int?, price: Int, isMyProduct: Boolean, requestCount: Int) {
+fun PostBottomBar(
+    price: Int,
+    minPeriod: Int?,
+    maxPeriod: Int?,
+    requestCount: Int?,
+    onRentalHistoryClick: () -> Unit,
+    onChattingClick: () -> Unit,
+    onResvRequestClick: () -> Unit,
+) {
     val formattedPrice = formatPrice(price)
     // Shadow for bottom bar
     Box(modifier = Modifier
         .fillMaxWidth()
         .height(8.dp)
         .background(
-            brush = Brush.verticalGradient(
-                colors = listOf(Color.Transparent, Gray100)
-            )
-        ))
+            brush = Brush.verticalGradient(colors = listOf(Color.Transparent, Gray100))
+        )
+    )
     Row(modifier = Modifier
         .fillMaxWidth()
         .screenHorizontalPadding()
         .padding(vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically) {
-        Text(
+        Column(
             modifier = Modifier.weight(1F),
-            text = "$formattedPrice " + stringResource(id = R.string.common_price_unit_per_day),
-            style = MaterialTheme.typography.titleLarge
-        )
-        if(isMyProduct) {
-            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount)) { navHostController.navigateToResvRequestHistory(productId) }
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = formatPeriodTextWithLabel(minPeriod, maxPeriod),
+                style = MaterialTheme.typography.labelLarge,
+                color = PrimaryBlue500
+            )
+            Text(
+                text = "$formattedPrice " + stringResource(id = R.string.common_price_unit_per_day),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+        if(requestCount != null) {
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount), onRentalHistoryClick)
         } else {
-            MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting)) {}
-            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve)) { navHostController.navigateToResvRequest(productId) }
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting), onChattingClick)
+            MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve), onResvRequestClick)
         }
     }
 }
@@ -299,31 +314,60 @@ fun UsageDetailButton(onClick: () -> Unit) {
 }
 
 @Composable
-fun MiniButton(isBgColorWhite: Boolean, text: String, onClick: () -> Unit) {
+fun MiniButton(isOutlinedButton: Boolean, text: String, onClick: () -> Unit) {
     OutlinedButton(
         onClick = onClick,
         modifier = Modifier
             .height(38.dp)
             .padding(start = 9.dp),
-        border = if(isBgColorWhite) BorderStroke(1.dp, Gray200) else null,
+        border = if(isOutlinedButton) CommonBorders.basicBorder() else null,
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = if(isBgColorWhite) Color.White else PrimaryBlue500
+            containerColor = if(isOutlinedButton) Color.White else PrimaryBlue500
         ),
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.bodyLarge,
-            color = if(isBgColorWhite) PrimaryBlue500 else Color.White
+            color = if(isOutlinedButton) PrimaryBlue500 else Color.White
         )
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun Preview() {
+
+    val sampleProductDetail = ProductDetailModel(
+        productId = 101,
+        price = 50_000,
+        title = "Mountain Bike",
+        category = listOf("Sports"),
+        content = "A sturdy mountain bike suitable for off-road trails.",
+        createdAt = "2025-09-01T10:00:00",
+        imgUrlList = listOf("sample.jpg"),
+        minPeriod = 3,
+        maxPeriod = 5
+    )
+
     RentItTheme {
-        ProductDetailScreen(rememberNavController(), hiltViewModel())
+        ProductDetailScreen(
+            productDetail = sampleProductDetail,
+            requestCount = 2,
+            showBottomSheet = false,
+            sheetState = rememberModalBottomSheetState(),
+            showFullImage = false,
+            onRentalHistoryClick = { },
+            onChattingClick = { },
+            onResvRequestClick = { },
+            onBackClick = { },
+            onFullImageDismiss = { },
+            onFullImageShow = { },
+            onBottomSheetDismiss = { },
+            onBottomSheetShow = { },
+            onLikeClick = { },
+            onShareClick = { }
+        )
     }
 }

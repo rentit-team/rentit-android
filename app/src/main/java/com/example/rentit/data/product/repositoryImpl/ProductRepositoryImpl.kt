@@ -13,6 +13,7 @@ import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
 import com.example.rentit.data.product.remote.ProductRemoteDataSource
+import com.example.rentit.domain.product.exception.AccessNotAllowedException
 import com.example.rentit.domain.product.repository.ProductRepository
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -142,29 +143,19 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getProductRequestList(productId: Int): Result<RequestHistoryResponseDto> {
-        return try {
+        return runCatching {
             val response = productRemoteDataSource.getProductRequestList(productId)
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                403 -> {
-                    Result.failure(Exception("Renter is not allowed to access reservation list"))
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
+            if(response.isSuccessful){
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client Error"
+                throw when(response.code()) {
+                    401 -> MissingTokenException(errorMsg)
+                    403 -> AccessNotAllowedException(errorMsg)
+                    500 -> ServerException(errorMsg)
+                    else -> Exception(errorMsg)
                 }
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 }

@@ -18,6 +18,7 @@ fun LoadableUrlImage(
     imgUrl: String?,
     @DrawableRes defaultImageResId: Int,
     @StringRes defaultDescResId: Int = R.string.common_img_placeholder_description,
+    contentScale: ContentScale = ContentScale.Crop
 ) {
     AsyncImage(
         modifier = modifier,
@@ -28,7 +29,7 @@ fun LoadableUrlImage(
             .fallback(defaultImageResId)
             .build(),
         contentDescription = stringResource(id = defaultDescResId),
-        contentScale = ContentScale.Crop
+        contentScale = contentScale
     )
 }
 

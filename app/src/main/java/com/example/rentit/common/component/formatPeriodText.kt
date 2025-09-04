@@ -9,17 +9,37 @@ fun formatPeriodText(minPeriod: Int?, maxPeriod: Int?): String {
     return when {
         minPeriod != null && maxPeriod != null -> {
             stringResource(
-                R.string.product_list_item_period_text_more_and_less_than_day,
-                minPeriod.toInt(),
-                maxPeriod.toInt()
+                R.string.common_rental_period_min_max,
+                minPeriod,
+                maxPeriod
             )
         }
         minPeriod != null -> {
-            stringResource(R.string.product_list_item_period_text_more_than_day, minPeriod)
+            stringResource(R.string.common_rental_period_min, minPeriod)
         }
         maxPeriod != null -> {
-            stringResource(R.string.product_list_item_period_text_less_than_day, maxPeriod)
+            stringResource(R.string.common_rental_period_max, maxPeriod)
         }
-        else -> stringResource(R.string.product_list_item_period_text_more_than_zero)
+        else -> stringResource(R.string.common_rental_period_default)
+    }
+}
+
+@Composable
+fun formatPeriodTextWithLabel(minPeriod: Int?, maxPeriod: Int?): String {
+    return when {
+        minPeriod != null && maxPeriod != null -> {
+            stringResource(
+                R.string.common_rental_period_min_max_label,
+                minPeriod,
+                maxPeriod
+            )
+        }
+        minPeriod != null -> {
+            stringResource(R.string.common_rental_period_min_label, minPeriod)
+        }
+        maxPeriod != null -> {
+            stringResource(R.string.common_rental_period_max_label, maxPeriod)
+        }
+        else -> stringResource(R.string.common_rental_period_default_label)
     }
 }

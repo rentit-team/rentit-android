@@ -62,7 +62,7 @@ data class PeriodDto(
 
 data class OwnerDto(
     @SerializedName("userId")
-    val userId: Int,
+    val userId: Long,
 
     @SerializedName("nickname")
     val nickname: String

@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.rentit.presentation.productdetail.rentalhistory.components.RentalHistoryCalendar
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.presentation.productdetail.rentalhistory.components.CalendarLegend
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -25,17 +27,13 @@ fun RentalHistoryBottomDrawer(productId: Int) {
         rentalHistoryViewModel.getReservedDates(productId)
     }
 
-    Column(modifier = Modifier.fillMaxHeight(0.85f)) {
+    Column(
+        modifier = Modifier.fillMaxHeight(0.7f),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CalendarLegend()
         RentalHistoryCalendar(yearMonth = YearMonth.now(), reservedDateList)
-
-        // 대여 이력 리스트 표시 여부 결정 후 추가 또는 삭제 예정
-        /*LazyColumn(modifier = Modifier.padding(bottom = 25.dp)) {
-            this.items(reservedDateList) {
-                UsageListItem()
-            }
-        }*/
     }
-
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

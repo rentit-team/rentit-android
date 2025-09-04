@@ -27,6 +27,18 @@
 
     <string name="common_dialog_btn_close">닫기</string>
 
+    <string name="common_toast_feat_coming_soon">이 기능은 곧 제공될 예정이에요.</string>
+
+    <!-- 상품 최대/최소 대여 기간 표시 -->
+    <string name="common_rental_period_min_max">%d일 ~ %d일</string>
+    <string name="common_rental_period_min">%d일 이상</string>
+    <string name="common_rental_period_max">%d일 이하</string>
+    <string name="common_rental_period_default">0일 이상</string>
+    <string name="common_rental_period_min_max_label">최소 %d일 ~ 최대 %d일</string>
+    <string name="common_rental_period_min_label">최소 %d일 이상</string>
+    <string name="common_rental_period_max_label">최대 %d일 이하</string>
+    <string name="common_rental_period_default_label">최소 0일 이상</string>
+
     <!-- 요청 승인 Dialog -->
     <string name="common_dialog_accept_request_title">요청을 수락할까요?</string>
     <string name="common_dialog_accept_request_label_rental_period">대여 기간</string>
@@ -102,10 +114,6 @@
 
     <!-- 게시글 리스트 아이템 -->
     <string name="product_list_item_text_empty_category">카테고리 없음</string>
-    <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
-    <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
-    <string name="product_list_item_period_text_less_than_day">%d일 이하</string>
-    <string name="product_list_item_period_text_more_than_zero">0일 이상</string>
     <string name="product_list_item_period_btn_check_request">요청 확인하기</string>
 
     <!-- 홈 -->
@@ -125,10 +133,13 @@
     <string name="screen_product_detail_img_description">상품 이미지</string>
     <string name="screen_product_like_icon_description">상품 좋아요</string>
     <string name="screen_product_share_icon_description">상품 공유하기</string>
-    <string name="screen_product_btn_check_detail_of_use">대여 내역 확인</string>
+    <string name="screen_product_btn_check_detail_of_use">예약 가능일 확인</string>
     <string name="screen_product_btn_request">요청 %d건</string>
     <string name="screen_product_btn_chatting">채팅하기</string>
     <string name="screen_product_btn_reserve">예약하기</string>
+
+    <!-- 예약 가능일 확인 서랍 -->
+    <string name="drawer_rental_history_calendar_legend_text">예약할 수 없는 날은 노란 원으로 표시돼요.</string>
 
     <!-- 대여 예약 요청 -->
     <string name="screen_resv_request_app_bar_title">예약 기간을 설정해주세요.</string>
