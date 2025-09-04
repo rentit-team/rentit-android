@@ -3,7 +3,6 @@ package com.example.rentit.presentation.productdetail.reservation.requesthistory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.product.repository.ProductRepository
