@@ -81,7 +81,7 @@ class WebSocketManagerImpl @Inject constructor(
 
     override fun sendMessage(chatroomId: String, message: String) {
         val authUserId = getAuthUserId()
-        val dto = MessageRequestDto(authUserId, message)
+        val dto = MessageRequestDto(chatroomId, authUserId, message)
         val json = Gson().toJson(dto)
 
         sendDisposable = stompClient?.send("/app/chatroom.$chatroomId", json)
