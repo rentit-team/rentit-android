@@ -8,13 +8,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -71,6 +74,7 @@ fun ChatroomScreen(
     messages: List<ChatMessageModel>,
     productSummary: ProductChatRoomSummaryModel?,
     rentalSummary: RentalChatRoomSummaryModel?,
+    messageScrollState: LazyListState,
     inputScrollState: ScrollState,
     isLoading: Boolean,
     showNetworkErrorDialog: Boolean = false,
@@ -82,7 +86,6 @@ fun ChatroomScreen(
     onMessageSend: () -> Unit,
     navigateBack: () -> Unit
 ) {
-
     Scaffold(
         topBar = { CommonTopAppBar(onBackClick = navigateBack) },
         bottomBar = {
@@ -96,7 +99,6 @@ fun ChatroomScreen(
     ) {
         if(productSummary != null && rentalSummary != null) {
             Column(Modifier.padding(it)) {
-
                 ProductInfoSection(
                     thumbnailImgUrl = productSummary.thumbnailImgUrl,
                     title = productSummary.title,
@@ -112,10 +114,11 @@ fun ChatroomScreen(
                     endDate = rentalSummary.endDate,
                 )
 
-                ChatMsgList(
-                    Modifier.weight(1F),
-                    partnerNickname,
-                    messages,
+                ChatMessageList(
+                    modifier = Modifier.weight(1f),
+                    messageScrollState = messageScrollState,
+                    partnerNickname = partnerNickname,
+                    messageList = messages
                 )
             }
         }
@@ -231,10 +234,11 @@ private fun RequestInfo(
 // 채팅 메세지 리스트
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun ChatMsgList(
+private fun ChatMessageList(
     modifier: Modifier,
+    messageScrollState: LazyListState,
     partnerNickname: String?,
-    msgList: List<ChatMessageModel>,
+    messageList: List<ChatMessageModel>,
 ) {
     val displayPartnerNickname = partnerNickname ?: stringResource(R.string.screen_chatroom_nickname_unknown)
     LazyColumn(
@@ -242,9 +246,10 @@ private fun ChatMsgList(
             .fillMaxWidth()
             .background(Gray100)
             .padding(horizontal = 15.dp),
-        reverseLayout = true
+        reverseLayout = true,
+        state = messageScrollState
     ) {
-        items(msgList, key = { it.messageId }) { msg ->
+        items(messageList, key = { it.messageId }) { msg ->
             if (msg.isMine) {
                 SentMsgBubble(msg.message, msg.sentAt)
             } else {
@@ -369,6 +374,7 @@ fun ChatRoomScreenPreview() {
             messages = sampleMessages,
             productSummary = sampleProduct,
             rentalSummary = sampleRental,
+            messageScrollState = rememberLazyListState(),
             inputScrollState = sampleScrollState,
             isLoading = false,
             navigateBack = { },

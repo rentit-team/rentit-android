@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.data.chat.dto.MessageResponseDto
 import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
 import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
@@ -64,6 +65,14 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
+    private fun onMessageReceived(message: MessageResponseDto) {
+        val previousMessages = _uiState.value.messages
+        val newMessage = convertMessageUseCase.execute(message)
+
+        _uiState.value = _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
+        emitSideEffect(ChatRoomSideEffect.MessageReceived)
+    }
+
     suspend fun fetchChatRoomData(chatRoomId: String) {
         setIsLoading(true)
         runCatching {
@@ -106,21 +115,18 @@ class ChatRoomViewModel @Inject constructor(
     fun connectWebSocket(chatRoomId: String) {
         webSocketManager.connect(
             chatroomId = chatRoomId,
-            onMessageReceived = { message ->
-                val previousMessages = _uiState.value.messages
-                val newMessage = convertMessageUseCase.execute(message)
-                _uiState.value =
-                    _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
-            },
+            onMessageReceived = ::onMessageReceived,
             onError = { emitSideEffect(ChatRoomSideEffect.ToastChatDisconnect) }
         )
     }
 
     fun sendMessage(chatRoomId: String, message: String) {
-        webSocketManager.sendMessage(chatRoomId, message,
-            onSuccess = { emitSideEffect(ChatRoomSideEffect.MessageSendSuccess) },
-            onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
-        )
+        if(message.isNotBlank()){
+            webSocketManager.sendMessage(chatRoomId, message,
+                onSuccess = { emitSideEffect(ChatRoomSideEffect.MessageSendSuccess) },
+                onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
+            )
+        }
     }
 
     fun disconnectWebSocket() {

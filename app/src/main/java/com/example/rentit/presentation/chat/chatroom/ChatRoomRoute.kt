@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -31,6 +32,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val inputScrollState = rememberScrollState()
+    val messageScrollState = rememberLazyListState()
     var messageValue by remember { mutableStateOf(TextFieldValue("")) }
 
     LaunchedEffect(Unit) {
@@ -50,6 +52,11 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
                     }
                     ChatRoomSideEffect.MessageSendSuccess -> {
                         messageValue = TextFieldValue("")
+                    }
+                    ChatRoomSideEffect.MessageReceived -> {
+                        if(uiState.messages.isNotEmpty()) {
+                            messageScrollState.animateScrollToItem(0)
+                        }
                     }
                 }
             }
@@ -73,6 +80,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
         messages = uiState.messages,
         productSummary = uiState.productSummary,
         rentalSummary = uiState.rentalSummary,
+        messageScrollState = messageScrollState,
         inputScrollState = inputScrollState,
         isLoading = uiState.isLoading,
         showNetworkErrorDialog = uiState.showNetworkErrorDialog,
