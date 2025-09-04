@@ -3,7 +3,6 @@ package com.example.rentit.data.chat.websocketImpl
 import android.util.Log
 import com.example.rentit.data.chat.dto.MessageRequestDto
 import com.example.rentit.data.chat.dto.MessageResponseDto
-import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.user.repository.UserRepository
 import com.google.gson.Gson
