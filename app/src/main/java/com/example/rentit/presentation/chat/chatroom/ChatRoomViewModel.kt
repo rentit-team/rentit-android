@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
+import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
 import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
@@ -23,6 +24,7 @@ private const val TAG = "ChatRoomViewModel"
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
     private val webSocketManager: WebSocketManager,
+    private val convertMessageUseCase: ConvertMessageUseCase,
     private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
     private val getChatRoomProductSummaryUseCase: GetChatRoomProductSummaryUseCase,
     private val getChatRoomDetailUseCase: GetChatRoomDetailUseCase
@@ -91,12 +93,11 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
-        webSocketManager.connect(
-            chatRoomId,
-            onConnect,
+        webSocketManager.connect(chatRoomId, onConnect,
             onMessageReceived = { message ->
                 val previousMessages = _uiState.value.messages
-                _uiState.value = _uiState.value.copy(messages = listOf(message) + previousMessages)
+                val newMessage = convertMessageUseCase.execute(message)
+                _uiState.value = _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
             }
         )
     }

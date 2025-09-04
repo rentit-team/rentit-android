@@ -50,25 +50,18 @@ class WebSocketManagerImpl @Inject constructor(
             }
     }
 
-    private fun subscribeTopic(chatroomId: String, onMessageReceived: (ChatMessageModel) -> Unit) {
-        val authUserId = getAuthUserId()
+    private fun subscribeTopic(chatroomId: String, onMessageReceived: (MessageResponseDto) -> Unit) {
         topicDisposable = stompClient?.topic("/topic/chatroom.$chatroomId")
             ?.observeOn(AndroidSchedulers.mainThread())
             ?.subscribe { topicMessage ->
                 val json = topicMessage.payload
                 val response = Gson().fromJson(json, MessageResponseDto::class.java)
-                val chatMessageModel = ChatMessageModel(
-                    response.messageId,
-                    response.senderId == authUserId,
-                    response.content,
-                    response.sentAt
-                )
-                onMessageReceived(chatMessageModel)
+                onMessageReceived(response)
                 Log.d(TAG, "Received message: $json")
             }
     }
 
-    override fun connect(chatroomId: String, onConnect: () -> Unit, onMessageReceived: (ChatMessageModel) -> Unit) {
+    override fun connect(chatroomId: String, onConnect: () -> Unit, onMessageReceived: (MessageResponseDto) -> Unit) {
         val token = getToken()
 
         clearDisposable()
