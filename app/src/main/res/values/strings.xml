@@ -197,6 +197,9 @@
     <string name="screen_accept_confirm_title">요청이 수락되었어요!</string>
     <string name="screen_accept_confirm_btn_complete">완료</string>
 
+    <string name="toast_chat_disconnect">채팅 연결이 끊겼어요. 다시 접속해 주세요.</string>
+    <string name="toast_chat_message_send_failed">메시지 전송에 실패했어요. 다시 시도해주세요.</string>
+
     <!-- 채팅방 접근 불가 에러 Dialog -->
     <string name="dialog_forbidden_chat_access_title">이 채팅방에 참여할 권한이 없어요.</string>
     <string name="dialog_forbidden_chat_access_btn">확인</string>

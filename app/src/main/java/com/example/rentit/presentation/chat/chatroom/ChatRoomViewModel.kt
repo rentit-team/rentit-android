@@ -5,16 +5,17 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.websocket.WebSocketManager
 import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
-import com.example.rentit.domain.chat.model.ChatMessageModel
+import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
+import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
 import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
-import com.example.rentit.domain.user.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -24,16 +25,18 @@ private const val TAG = "ChatRoomViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
-    private val userRepository: UserRepository,
+    private val webSocketManager: WebSocketManager,
+    private val convertMessageUseCase: ConvertMessageUseCase,
     private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
     private val getChatRoomProductSummaryUseCase: GetChatRoomProductSummaryUseCase,
     private val getChatRoomDetailUseCase: GetChatRoomDetailUseCase
 ): ViewModel() {
 
-    private val authUserId: Long = userRepository.getAuthUserIdFromPrefs()
-
     private val _uiState = MutableStateFlow(ChatRoomState())
     val uiState: StateFlow<ChatRoomState> = _uiState
+
+    private val _sideEffect = MutableSharedFlow<ChatRoomSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
     private fun resetMessages() {
         _uiState.value = _uiState.value.copy(messages = emptyList())
@@ -53,6 +56,12 @@ class ChatRoomViewModel @Inject constructor(
 
     private fun setIsLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    private fun emitSideEffect(sideEffect: ChatRoomSideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(sideEffect)
+        }
     }
 
     suspend fun fetchChatRoomData(chatRoomId: String) {
@@ -94,26 +103,27 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    fun connectWebSocket(chatRoomId: String, onConnect: () -> Unit) {
-        val token = userRepository.getTokenFromPrefs() ?: return
-        WebSocketManager.connect(chatRoomId, token, onConnect) { data ->
-            val msg = ChatMessageModel(
-                data.messageId,
-                data.senderId == authUserId,
-                data.content,
-                data.sentAt
-            )
-            val previousMessages = _uiState.value.messages
-            _uiState.value = _uiState.value.copy(messages = listOf(msg) + previousMessages)
-        }
+    fun connectWebSocket(chatRoomId: String) {
+        webSocketManager.connect(
+            chatroomId = chatRoomId,
+            onMessageReceived = { message ->
+                val previousMessages = _uiState.value.messages
+                val newMessage = convertMessageUseCase.execute(message)
+                _uiState.value =
+                    _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
+            },
+            onError = { emitSideEffect(ChatRoomSideEffect.ToastChatDisconnect) }
+        )
     }
 
     fun sendMessage(chatRoomId: String, message: String) {
-        WebSocketManager.sendMessage(chatRoomId, authUserId, message)
+        webSocketManager.sendMessage(chatRoomId, message,
+            onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
+        )
     }
 
     fun disconnectWebSocket() {
-        WebSocketManager.disconnect()
+        webSocketManager.disconnect()
         resetMessages()
     }
 }
