@@ -16,9 +16,5 @@ enum class ResvStatus(val label: String, val color: Color) {
         fun fromLabel(key: String): ResvStatus? {
             return entries.find { it.name == key }
         }
-
-        fun isPending(key: String): Boolean {
-            return entries.find { it.name == key } == PENDING
-        }
     }
 }

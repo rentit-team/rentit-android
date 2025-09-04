@@ -1,5 +1,6 @@
 package com.example.rentit.data.product.dto
 
+import com.example.rentit.common.enums.RentalStatus
 import com.google.gson.annotations.SerializedName
 
 data class RequestHistoryResponseDto(
@@ -21,7 +22,7 @@ data class RequestInfoDto(
     val endDate: String,
 
     @SerializedName("status")
-    val status: String,
+    val status: RentalStatus,
 
     @SerializedName("requestedAt")
     val requestedAt: String,

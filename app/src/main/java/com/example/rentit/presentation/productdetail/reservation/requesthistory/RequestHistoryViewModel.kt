@@ -2,6 +2,7 @@ package com.example.rentit.presentation.productdetail.reservation.requesthistory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.ResvStatus
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.domain.chat.repository.ChatRepository
@@ -24,7 +25,7 @@ class RequestHistoryViewModel @Inject constructor(
     fun getProductRequestList(productId: Int){
         viewModelScope.launch {
             productRepository.getProductRequestList(productId).onSuccess {
-                _requestList.value = it.reservations.filter { data -> ResvStatus.isPending(data.status) }
+                _requestList.value = it.reservations.filter { data -> data.status == RentalStatus.PENDING }
             }
         }
     }
