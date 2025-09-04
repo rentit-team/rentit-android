@@ -118,6 +118,7 @@ class ChatRoomViewModel @Inject constructor(
 
     fun sendMessage(chatRoomId: String, message: String) {
         webSocketManager.sendMessage(chatRoomId, message,
+            onSuccess = { emitSideEffect(ChatRoomSideEffect.MessageSendSuccess) },
             onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
         )
     }

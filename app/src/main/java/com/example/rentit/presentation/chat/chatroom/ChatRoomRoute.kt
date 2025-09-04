@@ -48,6 +48,9 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
                     ChatRoomSideEffect.ToastMessageSendFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_chat_message_send_failed), Toast.LENGTH_SHORT).show()
                     }
+                    ChatRoomSideEffect.MessageSendSuccess -> {
+                        messageValue = TextFieldValue("")
+                    }
                 }
             }
         }
