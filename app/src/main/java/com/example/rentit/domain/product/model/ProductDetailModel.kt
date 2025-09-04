@@ -3,6 +3,8 @@ package com.example.rentit.domain.product.model
 data class ProductDetailModel(
     val productId: Int,
     val price: Int,
+    val minPeriod: Int?,
+    val maxPeriod: Int?,
     val title: String,
     val category: List<String>,
     val content: String,
@@ -13,6 +15,8 @@ data class ProductDetailModel(
         val EMPTY = ProductDetailModel(
             productId = 0,
             price = 0,
+            minPeriod = null,
+            maxPeriod = null,
             title = "",
             category = emptyList(),
             content = "",

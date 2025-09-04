@@ -48,6 +48,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.formatPeriodTextWithLabel
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
@@ -82,6 +83,8 @@ fun ProductDetailScreen(
         bottomBar = {
             PostBottomBar(
                 price = productDetail.price,
+                minPeriod = productDetail.minPeriod,
+                maxPeriod = productDetail.maxPeriod,
                 requestCount = requestCount,
                 onResvRequestClick = onResvRequestClick,
                 onRentalHistoryClick = onRentalHistoryClick,
@@ -210,10 +213,15 @@ fun PostHeader(title: String, category: List<String>, creationDate: String) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Column {
-            Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            }
             Text(
                 modifier = Modifier.padding(top = 5.dp),
-                text = "${category.joinToString(" · ") } $creationDate",
+                text = "${category.joinToString(" · ") }  $creationDate",
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
             )
@@ -237,6 +245,8 @@ fun PostHeader(title: String, category: List<String>, creationDate: String) {
 @Composable
 fun PostBottomBar(
     price: Int,
+    minPeriod: Int?,
+    maxPeriod: Int?,
     requestCount: Int?,
     onRentalHistoryClick: () -> Unit,
     onChattingClick: () -> Unit,
@@ -256,11 +266,21 @@ fun PostBottomBar(
         .screenHorizontalPadding()
         .padding(vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically) {
-        Text(
+        Column(
             modifier = Modifier.weight(1F),
-            text = "$formattedPrice " + stringResource(id = R.string.common_price_unit_per_day),
-            style = MaterialTheme.typography.bodyLarge
-        )
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.spacedBy(2.dp)
+        ) {
+            Text(
+                text = formatPeriodTextWithLabel(minPeriod, maxPeriod),
+                style = MaterialTheme.typography.labelLarge,
+                color = PrimaryBlue500
+            )
+            Text(
+                text = "$formattedPrice " + stringResource(id = R.string.common_price_unit_per_day),
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
         if(requestCount != null) {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount), onRentalHistoryClick)
         } else {
@@ -318,7 +338,9 @@ private fun Preview() {
         category = listOf("Sports"),
         content = "A sturdy mountain bike suitable for off-road trails.",
         createdAt = "2025-09-01T10:00:00",
-        imgUrlList = listOf("sample.jpg")
+        imgUrlList = listOf("sample.jpg"),
+        minPeriod = 3,
+        maxPeriod = 5
     )
 
     RentItTheme {

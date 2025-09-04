@@ -27,6 +27,16 @@
 
     <string name="common_dialog_btn_close">닫기</string>
 
+    <!-- 상품 최대/최소 대여 기간 표시 -->
+    <string name="common_rental_period_min_max">%d일 ~ %d일</string>
+    <string name="common_rental_period_min">%d일 이상</string>
+    <string name="common_rental_period_max">%d일 이하</string>
+    <string name="common_rental_period_default">0일 이상</string>
+    <string name="common_rental_period_min_max_label">최소 %d일 ~ 최대 %d일</string>
+    <string name="common_rental_period_min_label">최소 %d일 이상</string>
+    <string name="common_rental_period_max_label">최대 %d일 이하</string>
+    <string name="common_rental_period_default_label">최소 0일 이상</string>
+
     <!-- 요청 승인 Dialog -->
     <string name="common_dialog_accept_request_title">요청을 수락할까요?</string>
     <string name="common_dialog_accept_request_label_rental_period">대여 기간</string>
@@ -102,10 +112,6 @@
 
     <!-- 게시글 리스트 아이템 -->
     <string name="product_list_item_text_empty_category">카테고리 없음</string>
-    <string name="product_list_item_period_text_more_and_less_than_day">%d일 ~ %d일</string>
-    <string name="product_list_item_period_text_more_than_day">%d일 이상</string>
-    <string name="product_list_item_period_text_less_than_day">%d일 이하</string>
-    <string name="product_list_item_period_text_more_than_zero">0일 이상</string>
     <string name="product_list_item_period_btn_check_request">요청 확인하기</string>
 
     <!-- 홈 -->

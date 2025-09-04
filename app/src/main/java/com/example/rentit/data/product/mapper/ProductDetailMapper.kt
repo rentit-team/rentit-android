@@ -12,5 +12,7 @@ fun ProductDto.toProductDetailModel(categoryMap: Map<Int, Category>) =
         category = categories.mapNotNull { categoryMap[it]?.name },
         content = description,
         createdAt = createdAt,
-        imgUrlList = listOfNotNull(thumbnailImgUrl) // 서버에서 아직 이미지 여러 장을 지원하지 않음
+        imgUrlList = listOfNotNull(thumbnailImgUrl), // 서버에서 아직 이미지 여러 장을 지원하지 않음
+        minPeriod = period?.min,
+        maxPeriod = period?.max
     )
