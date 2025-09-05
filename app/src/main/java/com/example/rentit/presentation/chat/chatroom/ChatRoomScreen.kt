@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -64,6 +63,8 @@ import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
 import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
+import com.example.rentit.presentation.chat.chatroom.components.ReceivedMessageBubble
+import com.example.rentit.presentation.chat.chatroom.components.SentMessageBubble
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -251,9 +252,9 @@ private fun ChatMessageList(
     ) {
         items(messageList, key = { it.messageId }) { msg ->
             if (msg.isMine) {
-                SentMsgBubble(msg.message, msg.sentAt)
+                SentMessageBubble(msg.message, msg.sentAt)
             } else {
-                ReceivedMsgBubble(msg.message, msg.sentAt, displayPartnerNickname)
+                ReceivedMessageBubble(msg.message, msg.sentAt, displayPartnerNickname, onPayClick)
             }
         }
     }

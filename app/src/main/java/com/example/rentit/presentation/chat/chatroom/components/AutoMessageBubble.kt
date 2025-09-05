@@ -25,7 +25,7 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.enums.AutoMsgType
+import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -33,17 +33,17 @@ import com.example.rentit.common.theme.RentItTheme
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun AutoMsgBubble(isSender: Boolean, type: AutoMsgType, onPayClick: () -> Unit = {}) {
+fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -> Unit = {}) {
     var title = ""
     var content = ""
     var btnText = ""
     when (type) {
-        AutoMsgType.REQUEST_ACCEPT -> {
+        AutoMessageType.REQUEST_ACCEPT -> {
             title = stringResource(R.string.auto_msg_type_request_accept_title)
             content = stringResource(R.string.auto_msg_type_request_accept_content)
             btnText = stringResource(R.string.auto_msg_type_request_accept_btn_text)
         }
-        AutoMsgType.COMPLETE_PAY -> {
+        AutoMessageType.COMPLETE_PAY -> {
             title = stringResource(R.string.auto_msg_type_pay_complete_title)
             content = stringResource(R.string.auto_msg_type_pay_complete_content)
         }
@@ -70,7 +70,7 @@ fun AutoMsgBubble(isSender: Boolean, type: AutoMsgType, onPayClick: () -> Unit =
                 style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple),
                 color = if(isSender) Color.White else AppBlack
             )
-            if(type == AutoMsgType.REQUEST_ACCEPT){
+            if(type == AutoMessageType.REQUEST_ACCEPT){
                 Button(
                     onClick = onPayClick,
                     modifier = Modifier
@@ -98,6 +98,6 @@ fun AutoMsgBubble(isSender: Boolean, type: AutoMsgType, onPayClick: () -> Unit =
 @Composable
 private fun Preview() {
     RentItTheme {
-        AutoMsgBubble(true, AutoMsgType.COMPLETE_PAY)
+        AutoMessageBubble(true, AutoMessageType.COMPLETE_PAY)
     }
 }

@@ -24,7 +24,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.enums.AutoMsgType
+import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.White
@@ -33,7 +33,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ReceivedMsgBubble(msg: String, sentAt: String, senderNickname: String) {
+fun ReceivedMessageBubble(msg: String, sentAt: String, senderNickname: String, onPayClick: () -> Unit = {}) {
     val msgTime = formatDateTime(sentAt)
 
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
@@ -52,11 +52,11 @@ fun ReceivedMsgBubble(msg: String, sentAt: String, senderNickname: String) {
             )
             Row(verticalAlignment = Alignment.Bottom) {
                 when (msg) {
-                    AutoMsgType.REQUEST_ACCEPT.code -> {
-                        AutoMsgBubble(false, AutoMsgType.REQUEST_ACCEPT, onPayClick = {})
+                    AutoMessageType.REQUEST_ACCEPT.code -> {
+                        AutoMessageBubble(false, AutoMessageType.REQUEST_ACCEPT, onPayClick = onPayClick)
                     }
-                    AutoMsgType.COMPLETE_PAY.code -> {
-                        AutoMsgBubble(false, AutoMsgType.COMPLETE_PAY)
+                    AutoMessageType.COMPLETE_PAY.code -> {
+                        AutoMessageBubble(false, AutoMessageType.COMPLETE_PAY)
                     }
                     else -> {
                         Box(
@@ -95,6 +95,6 @@ private fun formatDateTime(dateTimeString: String): String {
 @Composable
 private fun Preview() {
     RentItTheme {
-        ReceivedMsgBubble("메세지 샘플", "2025-03-25T09:30:00Z", "홍길동")
+        ReceivedMessageBubble("메세지 샘플", "2025-03-25T09:30:00Z", "홍길동")
     }
 }

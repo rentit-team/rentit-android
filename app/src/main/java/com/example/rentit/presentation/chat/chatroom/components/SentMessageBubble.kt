@@ -21,7 +21,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rentit.common.enums.AutoMsgType
+import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -30,7 +30,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun SentMsgBubble(msg: String, sentAt: String) {
+fun SentMessageBubble(msg: String, sentAt: String) {
     val msgTime = formatDateTime(sentAt)
 
     Row(
@@ -47,11 +47,11 @@ fun SentMsgBubble(msg: String, sentAt: String) {
             color = Gray400
         )
         when (msg) {
-            AutoMsgType.REQUEST_ACCEPT.code -> {
-                AutoMsgBubble(true, AutoMsgType.REQUEST_ACCEPT)
+            AutoMessageType.REQUEST_ACCEPT.code -> {
+                AutoMessageBubble(true, AutoMessageType.REQUEST_ACCEPT)
             }
-            AutoMsgType.COMPLETE_PAY.code -> {
-                AutoMsgBubble(true, AutoMsgType.COMPLETE_PAY)
+            AutoMessageType.COMPLETE_PAY.code -> {
+                AutoMessageBubble(true, AutoMessageType.COMPLETE_PAY)
             }
             else -> {
                 Box(
@@ -84,6 +84,6 @@ private fun formatDateTime(dateTimeString: String): String {
 @Composable
 private fun Preview() {
     RentItTheme {
-        SentMsgBubble("메세지 샘플", "2025-03-25T09:30:00Z")
+        SentMessageBubble("메세지 샘플", "2025-03-25T09:30:00Z")
     }
 }

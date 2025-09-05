@@ -35,7 +35,7 @@ import com.example.rentit.common.component.dialog.NetworkErrorDialog
 import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.enums.AutoMsgType
+import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
@@ -107,8 +107,8 @@ fun ChatListItem(
     val formatLastMsgTime = lastMessageTime?.toChatTimeString() ?: ""
 
     val lastMsg = when (lastMessage) {
-        AutoMsgType.REQUEST_ACCEPT.code -> stringResource(R.string.auto_msg_type_request_accept_title)
-        AutoMsgType.COMPLETE_PAY.code -> stringResource(R.string.auto_msg_type_pay_complete_title)
+        AutoMessageType.REQUEST_ACCEPT.code -> stringResource(R.string.auto_msg_type_request_accept_title)
+        AutoMessageType.COMPLETE_PAY.code -> stringResource(R.string.auto_msg_type_pay_complete_title)
         "" -> stringResource(R.string.screen_chat_list_empty_chat_message)
         else -> lastMessage
     }
