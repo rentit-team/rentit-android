@@ -24,7 +24,6 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
-import com.example.rentit.navigation.rentaldetail.navigateToOwnerRentalDetail
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
