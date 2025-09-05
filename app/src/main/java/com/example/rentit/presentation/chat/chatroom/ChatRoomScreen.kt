@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -82,6 +83,8 @@ fun ChatroomScreen(
     onForbiddenDialogDismiss: () -> Unit,
     onRetry: () -> Unit,
     onPayClick: () -> Unit,
+    onProductSectionClick: () -> Unit,
+    onRentalSectionClick: () -> Unit,
     onMessageChange: (TextFieldValue) -> Unit,
     onMessageSend: () -> Unit,
     navigateBack: () -> Unit
@@ -105,13 +108,15 @@ fun ChatroomScreen(
                     status = productSummary.status,
                     price = productSummary.price,
                     minPeriod = productSummary.minPeriod,
-                    maxPeriod = productSummary.maxPeriod
+                    maxPeriod = productSummary.maxPeriod,
+                    onSectionClick = onProductSectionClick
                 )
 
                 RequestInfo(
                     status = rentalSummary.status,
                     startDate = rentalSummary.startDate,
                     endDate = rentalSummary.endDate,
+                    onSectionClick = onRentalSectionClick,
                 )
 
                 ChatMessageList(
@@ -151,6 +156,7 @@ private fun ProductInfoSection(
     price: Int,
     minPeriod: Int?,
     maxPeriod: Int?,
+    onSectionClick: () -> Unit
 ) {
     val priceText = formatPrice(price)
     val unitText = stringResource(R.string.common_price_unit_per_day)
@@ -159,7 +165,8 @@ private fun ProductInfoSection(
     Row(
         modifier = Modifier
             .screenHorizontalPadding()
-            .padding(bottom = 20.dp),
+            .padding(bottom = 20.dp)
+            .clickable { onSectionClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         LoadableUrlImage(
@@ -209,6 +216,7 @@ private fun RequestInfo(
     status: RentalStatus,
     startDate: LocalDate?,
     endDate: LocalDate?,
+    onSectionClick: () -> Unit
 ) {
     val periodText = formatRentalPeriod(LocalContext.current, startDate, endDate)
 
@@ -216,7 +224,8 @@ private fun RequestInfo(
         modifier = Modifier
             .fillMaxWidth()
             .screenHorizontalPadding()
-            .padding(bottom = 20.dp),
+            .padding(bottom = 20.dp)
+            .clickable { onSectionClick() },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
@@ -384,6 +393,8 @@ fun ChatRoomScreenPreview() {
             navigateBack = { },
             onRetry = { },
             onPayClick = { },
+            onProductSectionClick = { },
+            onRentalSectionClick = { },
             onMessageChange = { },
             onMessageSend = { },
             onForbiddenDialogDismiss = { },

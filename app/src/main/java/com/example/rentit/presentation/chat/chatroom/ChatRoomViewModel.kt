@@ -108,7 +108,7 @@ class ChatRoomViewModel @Inject constructor(
         setIsLoading(false)
     }
 
-    fun onPayClick() {
+    fun onPayClicked() {
         val productId = _uiState.value.productSummary?.productId
         val reservationId = _uiState.value.rentalSummary?.reservationId
         val rentalStatus = _uiState.value.rentalSummary?.status
@@ -129,6 +129,21 @@ class ChatRoomViewModel @Inject constructor(
             PaymentValidationResult.ProductNotFound -> {
                 emitSideEffect(ChatRoomSideEffect.ToastPaymentProductNotFound)
             }
+        }
+    }
+
+    fun onProductSectionClicked() {
+        val productId = _uiState.value.productSummary?.productId
+        if (productId != null) {
+            emitSideEffect(ChatRoomSideEffect.NavigateToProductDetail(productId))
+        }
+    }
+
+    fun onRentalSectionClicked() {
+        val reservationId = _uiState.value.rentalSummary?.reservationId
+        val productId = _uiState.value.productSummary?.productId
+        if (reservationId != null && productId != null) {
+            emitSideEffect(ChatRoomSideEffect.NavigateToRentalDetail(productId, reservationId))
         }
     }
 

@@ -23,6 +23,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.navigation.pay.navigateToPay
+import com.example.rentit.navigation.productdetail.navigateToProductDetail
+import com.example.rentit.navigation.rentaldetail.navigateToOwnerRentalDetail
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -62,6 +64,12 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
                     is ChatRoomSideEffect.NavigateToPay -> {
                         navHostController.navigateToPay(sideEffect.productId, sideEffect.reservationId)
                     }
+                    is ChatRoomSideEffect.NavigateToProductDetail -> {
+                        navHostController.navigateToProductDetail(sideEffect.productId)
+                    }
+                    is ChatRoomSideEffect.NavigateToRentalDetail -> {
+                        // TODO: 대여 상세로 이동
+                    }
                     ChatRoomSideEffect.ToastPaymentInvalidStatus -> {
                         Toast.makeText(context, context.getString(R.string.toast_payment_invalid_status), Toast.LENGTH_SHORT).show()
                     }
@@ -100,7 +108,9 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
         showServerErrorDialog = uiState.showServerErrorDialog,
         showForbiddenChatAccessDialog = uiState.showForbiddenChatAccessDialog,
         onRetry = { viewModel.retryFetchChatRoomData(chatRoomId) },
-        onPayClick = viewModel::onPayClick,
+        onPayClick = viewModel::onPayClicked,
+        onProductSectionClick = viewModel::onProductSectionClicked,
+        onRentalSectionClick = viewModel::onRentalSectionClicked,
         onForbiddenDialogDismiss = navHostController::popBackStack,
         onMessageChange = { messageValue = it },
         onMessageSend = { viewModel.sendMessage(chatRoomId, messageValue.text) },
