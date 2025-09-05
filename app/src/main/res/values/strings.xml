@@ -201,7 +201,7 @@
     <string name="toast_chat_message_send_failed">메시지 전송에 실패했어요. 다시 시도해주세요.</string>
 
     <string name="toast_payment_not_renter">예약자가 아니면 결제를 진행할 수 없어요.</string>
-    <string name="toast_payment_invalid_status">예약이 승인된 경우만 결제가 가능해요.</string>
+    <string name="toast_payment_invalid_status">요청 수락 상태에서만 결제가 가능해요.</string>
     <string name="toast_payment_product_not_found">예약이 존재하지 않아요.</string>
 
     <!-- 채팅방 접근 불가 에러 Dialog -->

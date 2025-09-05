@@ -34,6 +34,7 @@ import com.example.rentit.common.theme.RentItTheme
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -> Unit = {}) {
+    val isPayButtonAvailable = !isSender
     var title = ""
     var content = ""
     var btnText = ""
@@ -73,13 +74,16 @@ fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -
             if(type == AutoMessageType.REQUEST_ACCEPT){
                 Button(
                     onClick = onPayClick,
+                    enabled = isPayButtonAvailable,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp)
+                        .clip(RoundedCornerShape(20.dp))
+                        .background(Color.White)
                         .height(34.dp),
                     colors = ButtonDefaults.buttonColors(
                         contentColor = AppBlack,
-                        containerColor = if(isSender) Color.White else Gray100,
+                        containerColor = Gray100,
                     ),
                     contentPadding = PaddingValues(0.dp)
                 ) {
