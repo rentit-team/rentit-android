@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -59,8 +62,8 @@ import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
 import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
-import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
-import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
+import com.example.rentit.presentation.chat.chatroom.components.ReceivedMessageBubble
+import com.example.rentit.presentation.chat.chatroom.components.SentMessageBubble
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -71,6 +74,7 @@ fun ChatroomScreen(
     messages: List<ChatMessageModel>,
     productSummary: ProductChatRoomSummaryModel?,
     rentalSummary: RentalChatRoomSummaryModel?,
+    messageScrollState: LazyListState,
     inputScrollState: ScrollState,
     isLoading: Boolean,
     showNetworkErrorDialog: Boolean = false,
@@ -78,11 +82,13 @@ fun ChatroomScreen(
     showForbiddenChatAccessDialog: Boolean = false,
     onForbiddenDialogDismiss: () -> Unit,
     onRetry: () -> Unit,
+    onPayClick: () -> Unit,
+    onProductSectionClick: () -> Unit,
+    onRentalSectionClick: () -> Unit,
     onMessageChange: (TextFieldValue) -> Unit,
     onMessageSend: () -> Unit,
     navigateBack: () -> Unit
 ) {
-
     Scaffold(
         topBar = { CommonTopAppBar(onBackClick = navigateBack) },
         bottomBar = {
@@ -96,26 +102,29 @@ fun ChatroomScreen(
     ) {
         if(productSummary != null && rentalSummary != null) {
             Column(Modifier.padding(it)) {
-
                 ProductInfoSection(
                     thumbnailImgUrl = productSummary.thumbnailImgUrl,
                     title = productSummary.title,
                     status = productSummary.status,
                     price = productSummary.price,
                     minPeriod = productSummary.minPeriod,
-                    maxPeriod = productSummary.maxPeriod
+                    maxPeriod = productSummary.maxPeriod,
+                    onSectionClick = onProductSectionClick
                 )
 
                 RequestInfo(
                     status = rentalSummary.status,
                     startDate = rentalSummary.startDate,
                     endDate = rentalSummary.endDate,
+                    onSectionClick = onRentalSectionClick,
                 )
 
-                ChatMsgList(
-                    Modifier.weight(1F),
-                    partnerNickname,
-                    messages,
+                ChatMessageList(
+                    modifier = Modifier.weight(1f),
+                    messageScrollState = messageScrollState,
+                    partnerNickname = partnerNickname,
+                    messageList = messages,
+                    onPayClick = onPayClick
                 )
             }
         }
@@ -147,6 +156,7 @@ private fun ProductInfoSection(
     price: Int,
     minPeriod: Int?,
     maxPeriod: Int?,
+    onSectionClick: () -> Unit
 ) {
     val priceText = formatPrice(price)
     val unitText = stringResource(R.string.common_price_unit_per_day)
@@ -155,7 +165,8 @@ private fun ProductInfoSection(
     Row(
         modifier = Modifier
             .screenHorizontalPadding()
-            .padding(bottom = 20.dp),
+            .padding(bottom = 20.dp)
+            .clickable { onSectionClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         LoadableUrlImage(
@@ -205,6 +216,7 @@ private fun RequestInfo(
     status: RentalStatus,
     startDate: LocalDate?,
     endDate: LocalDate?,
+    onSectionClick: () -> Unit
 ) {
     val periodText = formatRentalPeriod(LocalContext.current, startDate, endDate)
 
@@ -212,7 +224,8 @@ private fun RequestInfo(
         modifier = Modifier
             .fillMaxWidth()
             .screenHorizontalPadding()
-            .padding(bottom = 20.dp),
+            .padding(bottom = 20.dp)
+            .clickable { onSectionClick() },
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
@@ -231,10 +244,12 @@ private fun RequestInfo(
 // 채팅 메세지 리스트
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun ChatMsgList(
+private fun ChatMessageList(
     modifier: Modifier,
+    messageScrollState: LazyListState,
     partnerNickname: String?,
-    msgList: List<ChatMessageModel>,
+    messageList: List<ChatMessageModel>,
+    onPayClick: () -> Unit
 ) {
     val displayPartnerNickname = partnerNickname ?: stringResource(R.string.screen_chatroom_nickname_unknown)
     LazyColumn(
@@ -242,13 +257,14 @@ private fun ChatMsgList(
             .fillMaxWidth()
             .background(Gray100)
             .padding(horizontal = 15.dp),
-        reverseLayout = true
+        reverseLayout = true,
+        state = messageScrollState
     ) {
-        items(msgList, key = { it.messageId }) { msg ->
+        items(messageList, key = { it.messageId }) { msg ->
             if (msg.isMine) {
-                SentMsgBubble(msg.message, msg.sentAt)
+                SentMessageBubble(msg.message, msg.sentAt)
             } else {
-                ReceivedMsgBubble(msg.message, msg.sentAt, displayPartnerNickname)
+                ReceivedMessageBubble(msg.message, msg.sentAt, displayPartnerNickname, onPayClick)
             }
         }
     }
@@ -345,7 +361,8 @@ fun ChatRoomScreenPreview() {
         status = ProductStatus.AVAILABLE,
         price = 50000,
         minPeriod = 1,
-        maxPeriod = 7
+        maxPeriod = 7,
+        productId = 0
     )
 
 // 샘플 대여 요약
@@ -353,7 +370,8 @@ fun ChatRoomScreenPreview() {
         reservationId = 12345,
         status = RentalStatus.PENDING,
         startDate = LocalDate.of(2025, 9, 1),
-        endDate = LocalDate.of(2025, 9, 5)
+        endDate = LocalDate.of(2025, 9, 5),
+        renterId = 0
     )
 
 // 샘플 파라미터
@@ -369,10 +387,14 @@ fun ChatRoomScreenPreview() {
             messages = sampleMessages,
             productSummary = sampleProduct,
             rentalSummary = sampleRental,
+            messageScrollState = rememberLazyListState(),
             inputScrollState = sampleScrollState,
             isLoading = false,
             navigateBack = { },
             onRetry = { },
+            onPayClick = { },
+            onProductSectionClick = { },
+            onRentalSectionClick = { },
             onMessageChange = { },
             onMessageSend = { },
             onForbiddenDialogDismiss = { },

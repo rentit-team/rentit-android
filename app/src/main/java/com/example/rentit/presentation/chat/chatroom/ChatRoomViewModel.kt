@@ -5,11 +5,14 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.data.chat.dto.MessageResponseDto
 import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
 import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
 import com.example.rentit.domain.chat.websocket.WebSocketManager
+import com.example.rentit.domain.product.model.PaymentValidationResult
 import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
+import com.example.rentit.domain.product.usecase.ValidatePaymentProcessUseCase
 import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,6 +30,7 @@ private const val TAG = "ChatRoomViewModel"
 class ChatRoomViewModel @Inject constructor(
     private val webSocketManager: WebSocketManager,
     private val convertMessageUseCase: ConvertMessageUseCase,
+    private val validatePaymentProcessUseCase: ValidatePaymentProcessUseCase,
     private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
     private val getChatRoomProductSummaryUseCase: GetChatRoomProductSummaryUseCase,
     private val getChatRoomDetailUseCase: GetChatRoomDetailUseCase
@@ -64,6 +68,14 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
+    private fun onMessageReceived(message: MessageResponseDto) {
+        val previousMessages = _uiState.value.messages
+        val newMessage = convertMessageUseCase.execute(message)
+
+        _uiState.value = _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
+        emitSideEffect(ChatRoomSideEffect.MessageReceived)
+    }
+
     suspend fun fetchChatRoomData(chatRoomId: String) {
         setIsLoading(true)
         runCatching {
@@ -96,6 +108,45 @@ class ChatRoomViewModel @Inject constructor(
         setIsLoading(false)
     }
 
+    fun onPayClicked() {
+        val productId = _uiState.value.productSummary?.productId
+        val reservationId = _uiState.value.rentalSummary?.reservationId
+        val rentalStatus = _uiState.value.rentalSummary?.status
+        val renterId = _uiState.value.rentalSummary?.renterId
+
+        val validationResult = validatePaymentProcessUseCase(productId, reservationId, renterId, rentalStatus)
+
+        when (validationResult) {
+            PaymentValidationResult.Success -> {
+                emitSideEffect(ChatRoomSideEffect.NavigateToPay(productId!!, reservationId!!))
+            }
+            PaymentValidationResult.InvalidStatus -> {
+                emitSideEffect(ChatRoomSideEffect.ToastPaymentInvalidStatus)
+            }
+            PaymentValidationResult.NotRenter -> {
+                emitSideEffect(ChatRoomSideEffect.ToastPaymentNotRenter)
+            }
+            PaymentValidationResult.ProductNotFound -> {
+                emitSideEffect(ChatRoomSideEffect.ToastPaymentProductNotFound)
+            }
+        }
+    }
+
+    fun onProductSectionClicked() {
+        val productId = _uiState.value.productSummary?.productId
+        if (productId != null) {
+            emitSideEffect(ChatRoomSideEffect.NavigateToProductDetail(productId))
+        }
+    }
+
+    fun onRentalSectionClicked() {
+        val reservationId = _uiState.value.rentalSummary?.reservationId
+        val productId = _uiState.value.productSummary?.productId
+        if (reservationId != null && productId != null) {
+            emitSideEffect(ChatRoomSideEffect.NavigateToRentalDetail(productId, reservationId))
+        }
+    }
+
     fun retryFetchChatRoomData(chatRoomId: String){
         _uiState.value = _uiState.value.copy(showServerErrorDialog = false, showNetworkErrorDialog = false)
         viewModelScope.launch {
@@ -106,20 +157,18 @@ class ChatRoomViewModel @Inject constructor(
     fun connectWebSocket(chatRoomId: String) {
         webSocketManager.connect(
             chatroomId = chatRoomId,
-            onMessageReceived = { message ->
-                val previousMessages = _uiState.value.messages
-                val newMessage = convertMessageUseCase.execute(message)
-                _uiState.value =
-                    _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
-            },
+            onMessageReceived = ::onMessageReceived,
             onError = { emitSideEffect(ChatRoomSideEffect.ToastChatDisconnect) }
         )
     }
 
     fun sendMessage(chatRoomId: String, message: String) {
-        webSocketManager.sendMessage(chatRoomId, message,
-            onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
-        )
+        if(message.isNotBlank()){
+            webSocketManager.sendMessage(chatRoomId, message,
+                onSuccess = { emitSideEffect(ChatRoomSideEffect.MessageSendSuccess) },
+                onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
+            )
+        }
     }
 
     fun disconnectWebSocket() {

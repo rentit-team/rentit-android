@@ -5,6 +5,7 @@ import java.time.LocalDate
 
 data class RentalChatRoomSummaryModel (
     val reservationId: Int,
+    val renterId: Long,
     val status: RentalStatus,
     val startDate: LocalDate,
     val endDate: LocalDate,

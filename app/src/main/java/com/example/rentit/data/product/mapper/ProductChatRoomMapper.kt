@@ -5,6 +5,7 @@ import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
 
 fun ProductDto.toChatRoomSummaryModel() =
     ProductChatRoomSummaryModel(
+        productId = productId,
         thumbnailImgUrl = thumbnailImgUrl,
         status = status,
         title = title,
