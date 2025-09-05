@@ -61,8 +61,6 @@ import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
 import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
-import com.example.rentit.presentation.chat.chatroom.components.ReceivedMsgBubble
-import com.example.rentit.presentation.chat.chatroom.components.SentMsgBubble
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMessageBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMessageBubble
 import java.time.LocalDate
@@ -83,6 +81,7 @@ fun ChatroomScreen(
     showForbiddenChatAccessDialog: Boolean = false,
     onForbiddenDialogDismiss: () -> Unit,
     onRetry: () -> Unit,
+    onPayClick: () -> Unit,
     onMessageChange: (TextFieldValue) -> Unit,
     onMessageSend: () -> Unit,
     navigateBack: () -> Unit
@@ -119,7 +118,8 @@ fun ChatroomScreen(
                     modifier = Modifier.weight(1f),
                     messageScrollState = messageScrollState,
                     partnerNickname = partnerNickname,
-                    messageList = messages
+                    messageList = messages,
+                    onPayClick = onPayClick
                 )
             }
         }
@@ -240,6 +240,7 @@ private fun ChatMessageList(
     messageScrollState: LazyListState,
     partnerNickname: String?,
     messageList: List<ChatMessageModel>,
+    onPayClick: () -> Unit
 ) {
     val displayPartnerNickname = partnerNickname ?: stringResource(R.string.screen_chatroom_nickname_unknown)
     LazyColumn(
@@ -351,7 +352,8 @@ fun ChatRoomScreenPreview() {
         status = ProductStatus.AVAILABLE,
         price = 50000,
         minPeriod = 1,
-        maxPeriod = 7
+        maxPeriod = 7,
+        productId = 0
     )
 
 // 샘플 대여 요약
@@ -359,7 +361,8 @@ fun ChatRoomScreenPreview() {
         reservationId = 12345,
         status = RentalStatus.PENDING,
         startDate = LocalDate.of(2025, 9, 1),
-        endDate = LocalDate.of(2025, 9, 5)
+        endDate = LocalDate.of(2025, 9, 5),
+        renterId = 0
     )
 
 // 샘플 파라미터
@@ -380,6 +383,7 @@ fun ChatRoomScreenPreview() {
             isLoading = false,
             navigateBack = { },
             onRetry = { },
+            onPayClick = { },
             onMessageChange = { },
             onMessageSend = { },
             onForbiddenDialogDismiss = { },

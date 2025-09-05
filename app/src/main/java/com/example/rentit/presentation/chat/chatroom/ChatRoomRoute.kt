@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.navigation.pay.navigateToPay
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -58,6 +59,18 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
                             messageScrollState.animateScrollToItem(0)
                         }
                     }
+                    is ChatRoomSideEffect.NavigateToPay -> {
+                        navHostController.navigateToPay(sideEffect.productId, sideEffect.reservationId)
+                    }
+                    ChatRoomSideEffect.ToastPaymentInvalidStatus -> {
+                        Toast.makeText(context, context.getString(R.string.toast_payment_invalid_status), Toast.LENGTH_SHORT).show()
+                    }
+                    ChatRoomSideEffect.ToastPaymentNotRenter -> {
+                        Toast.makeText(context, context.getString(R.string.toast_payment_not_renter), Toast.LENGTH_SHORT).show()
+                    }
+                    ChatRoomSideEffect.ToastPaymentProductNotFound -> {
+                        Toast.makeText(context, context.getString(R.string.toast_payment_product_not_found), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -87,6 +100,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
         showServerErrorDialog = uiState.showServerErrorDialog,
         showForbiddenChatAccessDialog = uiState.showForbiddenChatAccessDialog,
         onRetry = { viewModel.retryFetchChatRoomData(chatRoomId) },
+        onPayClick = viewModel::onPayClick,
         onForbiddenDialogDismiss = navHostController::popBackStack,
         onMessageChange = { messageValue = it },
         onMessageSend = { viewModel.sendMessage(chatRoomId, messageValue.text) },

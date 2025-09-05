@@ -10,6 +10,7 @@ import java.time.LocalDate
 fun RentalDto.toChatRoomSummaryModel() =
     RentalChatRoomSummaryModel(
         reservationId = reservationId,
+        renterId = renter.userId,
         status = status,
         startDate = LocalDate.parse(startDate),
         endDate = LocalDate.parse(endDate)

@@ -10,7 +10,9 @@ import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
 import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
 import com.example.rentit.domain.chat.websocket.WebSocketManager
+import com.example.rentit.domain.product.model.PaymentValidationResult
 import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
+import com.example.rentit.domain.product.usecase.ValidatePaymentProcessUseCase
 import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -28,6 +30,7 @@ private const val TAG = "ChatRoomViewModel"
 class ChatRoomViewModel @Inject constructor(
     private val webSocketManager: WebSocketManager,
     private val convertMessageUseCase: ConvertMessageUseCase,
+    private val validatePaymentProcessUseCase: ValidatePaymentProcessUseCase,
     private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
     private val getChatRoomProductSummaryUseCase: GetChatRoomProductSummaryUseCase,
     private val getChatRoomDetailUseCase: GetChatRoomDetailUseCase
@@ -103,6 +106,30 @@ class ChatRoomViewModel @Inject constructor(
             }
         }
         setIsLoading(false)
+    }
+
+    fun onPayClick() {
+        val productId = _uiState.value.productSummary?.productId
+        val reservationId = _uiState.value.rentalSummary?.reservationId
+        val rentalStatus = _uiState.value.rentalSummary?.status
+        val renterId = _uiState.value.rentalSummary?.renterId
+
+        val validationResult = validatePaymentProcessUseCase(productId, reservationId, renterId, rentalStatus)
+
+        when (validationResult) {
+            PaymentValidationResult.Success -> {
+                emitSideEffect(ChatRoomSideEffect.NavigateToPay(productId!!, reservationId!!))
+            }
+            PaymentValidationResult.InvalidStatus -> {
+                emitSideEffect(ChatRoomSideEffect.ToastPaymentInvalidStatus)
+            }
+            PaymentValidationResult.NotRenter -> {
+                emitSideEffect(ChatRoomSideEffect.ToastPaymentNotRenter)
+            }
+            PaymentValidationResult.ProductNotFound -> {
+                emitSideEffect(ChatRoomSideEffect.ToastPaymentProductNotFound)
+            }
+        }
     }
 
     fun retryFetchChatRoomData(chatRoomId: String){

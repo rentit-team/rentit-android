@@ -5,4 +5,8 @@ sealed class ChatRoomSideEffect {
     data object MessageReceived : ChatRoomSideEffect()
     data object ToastChatDisconnect : ChatRoomSideEffect()
     data object ToastMessageSendFailed : ChatRoomSideEffect()
+    data object ToastPaymentInvalidStatus : ChatRoomSideEffect()
+    data object ToastPaymentNotRenter : ChatRoomSideEffect()
+    data object ToastPaymentProductNotFound : ChatRoomSideEffect()
+    data class NavigateToPay(val productId: Int, val reservationId: Int) : ChatRoomSideEffect()
 }
