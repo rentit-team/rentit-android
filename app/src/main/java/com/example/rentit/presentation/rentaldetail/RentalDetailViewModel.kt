@@ -10,10 +10,10 @@ import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.data.rental.mapper.toUiModel
+import com.example.rentit.data.rental.mapper.toModel
 import com.example.rentit.domain.rental.repository.RentalRepository
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase
-import com.example.rentit.presentation.rentaldetail.model.RentalStatusUiModel
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -38,9 +38,9 @@ class RentalDetailViewModel @Inject constructor(
         viewModelScope.launch {
             rentalRepository.getRentalDetail(productId, reservationId)
                 .onSuccess {
-                    val uiModel = it.toUiModel()
-                    if (uiModel != RentalStatusUiModel.Unknown) {
-                        _uiState.value = _uiState.value.copy(rentalStatusUiModel = uiModel)
+                    val uiModel = it.toModel()
+                    if (uiModel != RentalDetailStatusModel.Unknown) {
+                        _uiState.value = _uiState.value.copy(rentalDetailStatusModel = uiModel)
                         // TODO: User의 Role 확인
                     } else {
                         showUnknownStatusDialog()
@@ -63,7 +63,7 @@ class RentalDetailViewModel @Inject constructor(
     @RequiresApi(Build.VERSION_CODES.O)
     fun showRequestAcceptDialog() {
         val requestData =
-            _uiState.value.rentalStatusUiModel as? RentalStatusUiModel.Request ?: return
+            _uiState.value.rentalDetailStatusModel as? RentalDetailStatusModel.Request ?: return
         _uiState.value = _uiState.value.copy(
             requestAcceptDialog = RequestAcceptDialogUiModel(
                 startDate = requestData.rentalSummary.startDate,

@@ -6,11 +6,11 @@ import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.model.RentalStatusUiModel
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 
 @RequiresApi(Build.VERSION_CODES.O)
-fun RentalDetailResponseDto.toUiModel(): RentalStatusUiModel {
+fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
     val status = rental.status
 
     val rentalSummary = RentalSummaryUiModel(
@@ -28,7 +28,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusUiModel {
         RentalStatus.ACCEPTED,
         RentalStatus.REJECTED,
         RentalStatus.CANCELED -> {
-            val request = RentalStatusUiModel.Request(
+            val request = RentalDetailStatusModel.Request(
                 status = status,
                 rentalSummary = rentalSummary,
                 basicRentalFee = basicRentalFee,
@@ -41,7 +41,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusUiModel {
 
         RentalStatus.PAID -> {
             val daysUntilRental = daysFromToday(rental.startDate)
-            RentalStatusUiModel.Paid(
+            RentalDetailStatusModel.Paid(
                 status = status,
                 rentalSummary = rentalSummary,
                 daysUntilRental = daysUntilRental,
@@ -58,7 +58,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusUiModel {
             val rentingStatus = RentingStatus.fromDaysFromReturnDate(daysFromReturnDate)
             val isReturnAvailable = daysFromReturnDate <= -1
 
-            RentalStatusUiModel.Renting(
+            RentalDetailStatusModel.Renting(
                 status = rentingStatus,
                 rentalSummary = rentalSummary,
                 daysFromReturnDate = daysFromReturnDate,
@@ -72,7 +72,7 @@ fun RentalDetailResponseDto.toUiModel(): RentalStatusUiModel {
             )
         }
 
-        RentalStatus.RETURNED -> RentalStatusUiModel.Returned(
+        RentalStatus.RETURNED -> RentalDetailStatusModel.Returned(
             status = status,
             rentalSummary = rentalSummary,
             basicRentalFee = basicRentalFee,

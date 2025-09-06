@@ -6,21 +6,14 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.rentit.presentation.rentaldetail.owner.OwnerRentalDetailRoute
+import com.example.rentit.presentation.rentaldetail.RentalDetailRoute
 import com.example.rentit.presentation.rentaldetail.owner.photobeforerent.PhotoBeforeRentRoute
 import com.example.rentit.presentation.rentaldetail.rentalphotocheck.RentalPhotoCheckRoute
-import com.example.rentit.presentation.rentaldetail.renter.RenterRentalDetailRoute
 import com.example.rentit.presentation.rentaldetail.renter.photobeforereturn.PhotoBeforeReturnRoute
 
-fun NavHostController.navigateToOwnerRentalDetail(productId: Int, reservationId: Int) {
+fun NavHostController.navigateToRentalDetail(productId: Int, reservationId: Int) {
     navigate(
-        route = RentalDetailRoute.OwnerRentalDetail(productId, reservationId)
-    )
-}
-
-fun NavHostController.navigateToRenterRentalDetail(productId: Int, reservationId: Int) {
-    navigate(
-        route = RentalDetailRoute.RenterRentalDetail(productId, reservationId)
+        route = RentalDetailRoute.RentalDetail(productId, reservationId)
     )
 }
 
@@ -44,13 +37,9 @@ fun NavHostController.navigateToPhotoBeforeReturn(productId: Int, reservationId:
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.rentalDetailGraph(navHostController: NavHostController) {
-    composable<RentalDetailRoute.OwnerRentalDetail> { backStackEntry ->
-        val items: RentalDetailRoute.OwnerRentalDetail = backStackEntry.toRoute()
-        OwnerRentalDetailRoute(navHostController, items.productId, items.reservationId)
-    }
-    composable<RentalDetailRoute.RenterRentalDetail> { backStackEntry ->
-        val items: RentalDetailRoute.RenterRentalDetail = backStackEntry.toRoute()
-        RenterRentalDetailRoute(navHostController, items.productId, items.reservationId)
+    composable<RentalDetailRoute.RentalDetail> { backStackEntry ->
+        val items: RentalDetailRoute.RentalDetail = backStackEntry.toRoute()
+        RentalDetailRoute(navHostController, items.productId, items.reservationId)
     }
     composable<RentalDetailRoute.RentalPhotoCheck> { backStackEntry ->
         val items: RentalDetailRoute.RentalPhotoCheck = backStackEntry.toRoute()

@@ -1,10 +1,11 @@
-package com.example.rentit.presentation.rentaldetail.model
+package com.example.rentit.domain.rental.model
 
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 
 
-sealed class RentalStatusUiModel {
+sealed class RentalDetailStatusModel {
 
     data class Request(
         val status: RentalStatus,
@@ -13,7 +14,7 @@ sealed class RentalStatusUiModel {
         val deposit: Int,
         val isPending: Boolean,
         val isAccepted: Boolean
-    ): RentalStatusUiModel()
+    ): RentalDetailStatusModel()
 
     data class Paid(
         val status: RentalStatus,
@@ -24,7 +25,7 @@ sealed class RentalStatusUiModel {
         val rentalTrackingNumber: String?,
         val isSendingPhotoRegistered: Boolean,
         val isSendingTrackingNumRegistered: Boolean
-    ): RentalStatusUiModel()
+    ): RentalDetailStatusModel()
 
     data class Renting(
         val status: RentingStatus,
@@ -37,7 +38,7 @@ sealed class RentalStatusUiModel {
         val isReturnAvailable: Boolean,
         val isReturnPhotoRegistered: Boolean,
         val isReturnTrackingNumRegistered: Boolean
-    ): RentalStatusUiModel()
+    ): RentalDetailStatusModel()
 
     data class Returned(
         val status: RentalStatus,
@@ -46,7 +47,7 @@ sealed class RentalStatusUiModel {
         val deposit: Int,
         val rentalTrackingNumber: String?,
         val returnTrackingNumber: String?
-    ): RentalStatusUiModel()
+    ): RentalDetailStatusModel()
 
-    data object Unknown: RentalStatusUiModel()
+    data object Unknown: RentalDetailStatusModel()
 }
