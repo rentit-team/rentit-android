@@ -30,6 +30,12 @@ class ResvRequestViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<ResvRequestSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
+    private fun emitSideEffect(sideEffect: ResvRequestSideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(sideEffect)
+        }
+    }
+
     fun setRentalStartDate(date: LocalDate?) {
         _uiState.value = _uiState.value.copy(rentalStartDate = date)
     }
@@ -42,20 +48,41 @@ class ResvRequestViewModel @Inject constructor(
         viewModelScope.launch {
             productRepository.getProductDetail(productId)
                 .onSuccess {
-                }.onFailure {  }
+                    _uiState.value = _uiState.value.copy(
+                        rentalPrice = it.product.price,
+                        deposit = it.product.price * DEFAULT_DEPOSIT_DAYS,
+                        minPeriod = it.product.period?.min,
+                        maxPeriod = it.product.period?.max
+                    )
+                }.onFailure { }
         }
     }
 
     fun getReservedDates(productId: Int) {
         viewModelScope.launch {
-            productRepository.getReservedDates(productId).onSuccess {
-            }
+            productRepository.getReservedDates(productId)
+                .onSuccess {
+                    _uiState.value = _uiState.value.copy(reservedDateList = it.disabledDates)
+                }.onFailure { }
         }
     }
 
     fun postResv(productId: Int){
-        val request = ResvRequestDto(_uiState.value.rentalStartDate.toString(), _uiState.value.rentalEndDate.toString())
+        val startDate = _uiState.value.rentalStartDate.toString()
+        val endDate = _uiState.value.rentalEndDate.toString()
+        val totalPrice = _uiState.value.totalPrice
+
+        val request = ResvRequestDto(startDate, endDate)
+
         viewModelScope.launch {
+            productRepository.postResv(productId, request)
+                .onSuccess {
+                    emitSideEffect(ResvRequestSideEffect.NavigateToResvRequestComplete(
+                        rentalStartDate = startDate,
+                        rentalEndDate = endDate,
+                        totalPrice = totalPrice
+                    ))
+                }.onFailure { }
         }
     }
 }

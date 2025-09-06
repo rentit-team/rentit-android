@@ -12,6 +12,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.navigation.productdetail.navigateToResvRequestComplete
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -30,15 +31,19 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
 
     LaunchedEffect(Unit) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.sideEffect.collect { sideEffect -> }
+            viewModel.sideEffect.collect { sideEffect ->
+                when (sideEffect) {
+                    is ResvRequestSideEffect.NavigateToResvRequestComplete -> {
+                        navHostController.navigateToResvRequestComplete(
+                            rentalStartDate = sideEffect.rentalStartDate,
+                            rentalEndDate = sideEffect.rentalEndDate,
+                            formattedTotalPrice = formatPrice(sideEffect.totalPrice)
+                        )
+                    }
+                }
+            }
         }
     }
-
-    navHostController.navigateToResvRequestComplete(
-        rentalStartDate = uiState.rentalStartDate.toString(),
-        rentalEndDate = uiState.rentalEndDate.toString(),
-        formattedTotalPrice = ""
-    )
 
     ResvRequestScreen(
         rentalStartDate = uiState.rentalStartDate,

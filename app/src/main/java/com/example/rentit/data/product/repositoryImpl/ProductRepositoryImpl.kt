@@ -14,6 +14,8 @@ import com.example.rentit.data.product.dto.ProductListResponseDto
 import com.example.rentit.data.product.dto.RequestHistoryResponseDto
 import com.example.rentit.data.product.remote.ProductRemoteDataSource
 import com.example.rentit.domain.product.exception.AccessNotAllowedException
+import com.example.rentit.domain.product.exception.ResvAlreadyExistException
+import com.example.rentit.domain.product.exception.ResvByOwnerException
 import com.example.rentit.domain.product.repository.ProductRepository
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -51,58 +53,35 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getReservedDates(productId: Int): Result<ProductReservedDatesResponseDto> {
-        return try {
+        return runCatching {
             val response = productRemoteDataSource.getReservedDates(productId)
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client Error"
+                when(response.code()) {
+                    401 -> throw MissingTokenException(errorMsg)
+                    500 -> throw ServerException(errorMsg)
+                    else -> throw Exception(errorMsg)
                 }
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
     override suspend fun postResv(productId: Int, request: ResvRequestDto): Result<ResvResponseDto> {
-        return try {
+        return runCatching {
             val response = productRemoteDataSource.postResv(productId, request)
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                // 판매자가 요청한 경우
-                403 -> {
-                    Result.failure(Exception("판매자가 예약 요청을 거절했어요"))
-                }
-                // 이미 동일 기간의 예약이 1건 이상 존재하는 경우
-                409 -> {
-                    Result.failure(Exception("선택하신 날짜는 이미 예약되었어요"))
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client Error"
+                throw when(response.code()) {
+                    403 -> ResvByOwnerException(errorMsg)   // 판매자가 요청한 경우
+                    409 -> ResvAlreadyExistException(errorMsg)  // 이미 동일 기간의 예약이 1건 이상 존재하는 경우
+                    500 -> ServerException(errorMsg)
+                    else -> Exception(errorMsg)
                 }
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
