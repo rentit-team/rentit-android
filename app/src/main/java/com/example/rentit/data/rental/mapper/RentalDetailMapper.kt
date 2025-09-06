@@ -1,0 +1,84 @@
+package com.example.rentit.data.rental.mapper
+
+import android.os.Build
+import androidx.annotation.RequiresApi
+import com.example.rentit.common.enums.RentalStatus
+import com.example.rentit.common.util.daysFromToday
+import com.example.rentit.data.rental.dto.RentalDetailResponseDto
+import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentalStatusUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentingStatus
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun RentalDetailResponseDto.toUiModel(): RentalStatusUiModel {
+    val status = rental.status
+
+    val rentalSummary = RentalSummaryUiModel(
+        productTitle = rental.product.title,
+        thumbnailImgUrl = rental.product.thumbnailImgUrl,
+        startDate = rental.startDate,
+        endDate = rental.endDate,
+        totalPrice = rental.totalAmount,
+    )
+
+    val basicRentalFee = rental.totalAmount - rental.depositAmount
+
+    return when (status) {
+        RentalStatus.PENDING,
+        RentalStatus.ACCEPTED,
+        RentalStatus.REJECTED,
+        RentalStatus.CANCELED -> {
+            val request = RentalStatusUiModel.Request(
+                status = status,
+                rentalSummary = rentalSummary,
+                basicRentalFee = basicRentalFee,
+                deposit = rental.depositAmount,
+                isPending = status == RentalStatus.PENDING,
+                isAccepted = status == RentalStatus.ACCEPTED
+            )
+            request
+        }
+
+        RentalStatus.PAID -> {
+            val daysUntilRental = daysFromToday(rental.startDate)
+            RentalStatusUiModel.Paid(
+                status = status,
+                rentalSummary = rentalSummary,
+                daysUntilRental = daysUntilRental,
+                basicRentalFee = basicRentalFee,
+                deposit = rental.depositAmount,
+                rentalTrackingNumber = rental.rentalTrackingNumber,
+                isSendingPhotoRegistered = rental.deliveryStatus.isPhotoRegistered,
+                isSendingTrackingNumRegistered = rental.deliveryStatus.isTrackingNumberRegistered
+            )
+        }
+
+        RentalStatus.RENTING -> {
+            val daysFromReturnDate = daysFromToday(rental.endDate)
+            val rentingStatus = RentingStatus.fromDaysFromReturnDate(daysFromReturnDate)
+            val isReturnAvailable = daysFromReturnDate <= -1
+
+            RentalStatusUiModel.Renting(
+                status = rentingStatus,
+                rentalSummary = rentalSummary,
+                daysFromReturnDate = daysFromReturnDate,
+                basicRentalFee = basicRentalFee,
+                deposit = rental.depositAmount,
+                rentalTrackingNumber = rental.rentalTrackingNumber,
+                isOverdue = rentingStatus == RentingStatus.RENTING_OVERDUE,
+                isReturnAvailable = isReturnAvailable,
+                isReturnPhotoRegistered = rental.returnStatus.isPhotoRegistered,
+                isReturnTrackingNumRegistered = rental.returnStatus.isTrackingNumberRegistered,
+            )
+        }
+
+        RentalStatus.RETURNED -> RentalStatusUiModel.Returned(
+            status = status,
+            rentalSummary = rentalSummary,
+            basicRentalFee = basicRentalFee,
+            deposit = rental.depositAmount,
+            rentalTrackingNumber = rental.rentalTrackingNumber,
+            returnTrackingNumber = rental.returnTrackingNumber
+        )
+    }
+}

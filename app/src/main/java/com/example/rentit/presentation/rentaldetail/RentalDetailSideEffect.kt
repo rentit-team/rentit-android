@@ -1,0 +1,16 @@
+package com.example.rentit.presentation.rentaldetail
+
+sealed class RentalDetailSideEffect {
+    data object NavigateBack: RentalDetailSideEffect()
+    data object NavigateToPay: RentalDetailSideEffect()
+    data object NavigateToPhotoBeforeRent: RentalDetailSideEffect()
+    data object NavigateToPhotoBeforeReturn: RentalDetailSideEffect()
+    data object NavigateToRentalPhotoCheck: RentalDetailSideEffect()
+    data object ToastErrorGetCourierNames: RentalDetailSideEffect()
+    data object ToastSuccessTrackingRegistration: RentalDetailSideEffect()
+    data object ToastErrorTrackingRegistration: RentalDetailSideEffect()
+    data object ToastCancelRentalSuccess: RentalDetailSideEffect()
+    data object ToastCancelRentalFailed: RentalDetailSideEffect()
+    data object ToastAcceptRentalSuccess: RentalDetailSideEffect()
+    data object ToastAcceptRentalFailed: RentalDetailSideEffect()
+}
