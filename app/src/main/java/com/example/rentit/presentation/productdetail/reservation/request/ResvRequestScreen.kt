@@ -40,7 +40,7 @@ import java.time.LocalDate
 fun ResvRequestScreen(
     rentalStartDate: LocalDate? = null,
     rentalEndDate: LocalDate? = null,
-    rentalPeriod: Int = 0,
+    selectedPeriod: Int = 0,
     reservedDateList: List<String> = emptyList(),
     minPeriod: Int? = null,
     maxPeriod: Int? = null,
@@ -79,7 +79,7 @@ fun ResvRequestScreen(
                 modifier = Modifier.padding(top = 10.dp, bottom = 8.dp),
                 rentalStartDate = rentalStartDate,
                 rentalEndDate = rentalEndDate,
-                rentalPeriod = rentalPeriod,
+                selectedPeriod = selectedPeriod,
                 disabledDates = reservedDateList,
                 setRentalStartDate = onSetRentalStartDate,
                 setRentalEndDate = onSetRentalEndDate
@@ -173,7 +173,7 @@ fun ResvRequestScreenPreview() {
         ResvRequestScreen(
             rentalStartDate = LocalDate.now(),
             rentalEndDate = LocalDate.now(),
-            rentalPeriod = 5, // 대여일수
+            selectedPeriod = 5, // 대여일수
             reservedDateList = listOf("2025-09-12", "2025-09-13"), // 이미 예약된 날짜
             rentalPrice = 90_000,
             totalPrice = 120_000,

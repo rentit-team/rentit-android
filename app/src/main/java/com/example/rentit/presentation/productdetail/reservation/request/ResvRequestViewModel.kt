@@ -5,10 +5,10 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.exception.MissingTokenException
-import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.domain.product.exception.AccessNotAllowedException
 import com.example.rentit.domain.product.exception.ResvAlreadyExistException
 import com.example.rentit.domain.product.repository.ProductRepository
+import com.example.rentit.domain.product.usecase.PostResvRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +26,7 @@ private const val DEFAULT_DEPOSIT_DAYS = 3 // 기본 보증금 계산 기준 일
 @HiltViewModel
 class ResvRequestViewModel @Inject constructor(
     private val productRepository: ProductRepository,
+    private val postResvRequestUseCase: PostResvRequestUseCase
 ): ViewModel() {
 
     private val _uiState =  MutableStateFlow(ResvRequestState())
@@ -54,6 +55,9 @@ class ResvRequestViewModel @Inject constructor(
             }
             is ResvAlreadyExistException -> {
                 _uiState.value = _uiState.value.copy(showResvAlreadyExistDialog = true)
+            }
+            is IllegalArgumentException -> {
+                emitSideEffect(ResvRequestSideEffect.ToastInvalidPeriod)
             }
             is IOException -> {
                 _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
@@ -103,19 +107,28 @@ class ResvRequestViewModel @Inject constructor(
     fun postResv(productId: Int){
         val startDate = _uiState.value.rentalStartDate.toString()
         val endDate = _uiState.value.rentalEndDate.toString()
+        val selectedPeriod = _uiState.value.selectedPeriod
+        val minPeriod = _uiState.value.minPeriod
+        val maxPeriod = _uiState.value.maxPeriod
         val totalPrice = _uiState.value.totalPrice
 
-        val request = ResvRequestDto(startDate, endDate)
-
         viewModelScope.launch {
-            productRepository.postResv(productId, request)
-                .onSuccess {
-                    emitSideEffect(ResvRequestSideEffect.NavigateToResvRequestComplete(
+            postResvRequestUseCase(
+                productId = productId,
+                minPeriod = minPeriod,
+                maxPeriod = maxPeriod,
+                selectedPeriod = selectedPeriod,
+                startDate = startDate,
+                endDate = endDate
+            ).onSuccess {
+                emitSideEffect(
+                    ResvRequestSideEffect.NavigateToResvRequestComplete(
                         rentalStartDate = startDate,
                         rentalEndDate = endDate,
                         totalPrice = totalPrice
-                    ))
-                }.onFailure { e -> handleFailure(e) }
+                    )
+                )
+            }.onFailure { e -> handleFailure(e) }
         }
     }
 

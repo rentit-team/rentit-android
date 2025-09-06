@@ -21,9 +21,9 @@ data class ResvRequestState(
     val showAccessNotAllowedDialog: Boolean = false,
     val showResvAlreadyExistDialog: Boolean = false
 ) {
-    val rentalPeriod: Int
+    val selectedPeriod: Int
         get() = inclusiveDaysBetween(rentalStartDate, rentalEndDate)
 
     val totalPrice: Int
-        get() = rentalPrice * rentalPeriod + deposit
+        get() = rentalPrice * selectedPeriod + deposit
 }

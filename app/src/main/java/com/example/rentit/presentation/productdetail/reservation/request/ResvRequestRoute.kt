@@ -1,11 +1,13 @@
 package com.example.rentit.presentation.productdetail.reservation.request
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -26,6 +28,7 @@ import com.example.rentit.navigation.productdetail.navigateToResvRequestComplete
 fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
     val viewModel: ResvRequestViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
+    val context = LocalContext.current
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -44,6 +47,9 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
                             formattedTotalPrice = formatPrice(sideEffect.totalPrice)
                         )
                     }
+                    ResvRequestSideEffect.ToastInvalidPeriod -> {
+                        Toast.makeText(context, R.string.toast_invalid_period, Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -56,7 +62,7 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
     ResvRequestScreen(
         rentalStartDate = uiState.rentalStartDate,
         rentalEndDate = uiState.rentalEndDate,
-        rentalPeriod = uiState.rentalPeriod,
+        selectedPeriod = uiState.selectedPeriod,
         reservedDateList = uiState.reservedDateList,
         minPeriod = uiState.minPeriod,
         maxPeriod = uiState.maxPeriod,

@@ -6,4 +6,5 @@ sealed class ResvRequestSideEffect {
         val rentalEndDate: String,
         val totalPrice: Int
     ): ResvRequestSideEffect()
+    data object ToastInvalidPeriod: ResvRequestSideEffect()
 }
