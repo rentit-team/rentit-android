@@ -86,8 +86,6 @@ fun CalendarDate(
     }
 
     Column(
-        modifier = Modifier
-            .padding(bottom = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         repeat(weeksInMonth) {

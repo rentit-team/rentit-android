@@ -82,6 +82,7 @@ fun DateRangePicker(
             }
         }
         Column(modifier = Modifier
+            .padding(top = 20.dp)
             .fillMaxWidth()
             .screenHorizontalPadding(), horizontalAlignment = Alignment.CenterHorizontally) {
             Row(verticalAlignment = Alignment.CenterVertically) {

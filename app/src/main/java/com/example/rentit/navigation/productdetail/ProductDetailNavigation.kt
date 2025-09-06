@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.presentation.productdetail.ProductDetailRoute
-import com.example.rentit.presentation.productdetail.reservation.request.ResvRequestScreen
+import com.example.rentit.presentation.productdetail.reservation.request.ResvRequestRoute
 import com.example.rentit.presentation.productdetail.reservation.request.complete.ResvRequestCompleteScreen
 import com.example.rentit.presentation.productdetail.reservation.requesthistory.RequestHistoryScreen
 
@@ -17,7 +17,7 @@ fun NavHostController.navigateToProductDetail(productId: Int) {
     )
 }
 
-fun NavHostController.navigateToResvRequest(productId: Int?) {
+fun NavHostController.navigateToResvRequest(productId: Int) {
     navigate(
         route = ProductDetailRoute.ResvRequest(productId)
     )
@@ -51,7 +51,7 @@ fun NavGraphBuilder.productDetailGraph(navHostController: NavHostController) {
     }
     composable<ProductDetailRoute.ResvRequest> { backStackEntry ->
         val items: ProductDetailRoute.ResvRequest = backStackEntry.toRoute()
-        ResvRequestScreen(navHostController, items.productId)
+        ResvRequestRoute(navHostController, items.productId)
     }
     composable<ProductDetailRoute.ResvRequestComplete> { backStackEntry ->
         val items: ProductDetailRoute.ResvRequestComplete = backStackEntry.toRoute()
