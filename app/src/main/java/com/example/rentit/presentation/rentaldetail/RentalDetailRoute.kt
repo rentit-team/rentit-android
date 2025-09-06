@@ -21,6 +21,7 @@ import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeRent
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeReturn
 import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
+import com.example.rentit.presentation.rentaldetail.dialog.ErrorLoadRentalDetailDialog
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
 import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
@@ -146,5 +147,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
 
     if (uiState.showUnknownStatusDialog) {
         UnknownStatusDialog(viewModel::navigateBack)
+    }
+
+    if (uiState.showLoadFailedDialog) {
+        ErrorLoadRentalDetailDialog(viewModel::navigateBack)
     }
 }

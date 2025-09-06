@@ -4,16 +4,16 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.enums.RentalRole
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.data.rental.mapper.toModel
-import com.example.rentit.domain.rental.repository.RentalRepository
+import com.example.rentit.domain.rental.exception.RentalStatusUnknownException
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
+import com.example.rentit.domain.rental.repository.RentalRepository
+import com.example.rentit.domain.rental.usecase.GetRentalDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -25,6 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
     private val rentalRepository: RentalRepository,
+    private val getRentalDetailUseCase: GetRentalDetailUseCase,
     private val registerTrackingUseCase: RegisterTrackingUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(RentalDetailState())
@@ -39,20 +40,28 @@ class RentalDetailViewModel @Inject constructor(
         }
     }
 
+    fun setLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getRentalDetail(productId: Int, reservationId: Int) {
         viewModelScope.launch {
-            rentalRepository.getRentalDetail(productId, reservationId)
+            getRentalDetailUseCase(productId, reservationId)
                 .onSuccess {
-                    val uiModel = it.toModel()
-                    if (uiModel != RentalDetailStatusModel.Unknown) {
-                        _uiState.value = _uiState.value.copy(rentalDetailStatusModel = uiModel)
-                        // TODO: User의 Role 확인
-                    } else {
-                        showUnknownStatusDialog()
+                    _uiState.value = _uiState.value.copy(
+                        rentalDetailStatusModel = it.rentalDetailStatusModel,
+                        role = it.role
+                    )
+                }.onFailure { e ->
+                    when(e) {
+                        is RentalStatusUnknownException -> {
+                            showUnknownStatusDialog()
+                        }
+                        else -> {
+                            showLoadFailedDialog()
+                        }
                     }
-                }.onFailure {
-                    showUnknownStatusDialog()
                 }
         }
     }
@@ -61,8 +70,8 @@ class RentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showUnknownStatusDialog = true)
     }
 
-    fun setLoading(isLoading: Boolean) {
-        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    private fun showLoadFailedDialog() {
+        _uiState.value = _uiState.value.copy(showLoadFailedDialog = true)
     }
 
     /** 요청 수락 */
