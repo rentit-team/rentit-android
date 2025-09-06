@@ -23,6 +23,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalTra
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.util.formatPrice
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 import kotlin.math.abs
 
@@ -34,7 +35,7 @@ import kotlin.math.abs
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OwnerRentingContent(
-    rentingData: OwnerRentalStatusUiModel.Renting,
+    rentingData: RentalDetailStatusModel.Renting,
 ) {
     val priceItem = listOf(
         PriceSummaryUiModel(
@@ -83,7 +84,7 @@ fun OwnerRentingContent(
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val examplePendingUiModel = OwnerRentalStatusUiModel.Renting(
+    val examplePendingUiModel = RentalDetailStatusModel.Renting(
         status = RentingStatus.RENTING_OVERDUE,
         isOverdue = true,
         daysFromReturnDate = 3,
@@ -97,6 +98,9 @@ private fun Preview() {
         basicRentalFee = 90_000,
         deposit = 10_000 * 3,
         rentalTrackingNumber = null,
+        isReturnAvailable = false,
+        isReturnPhotoRegistered = false,
+        isReturnTrackingNumRegistered = false,
     )
     RentItTheme {
         Column {

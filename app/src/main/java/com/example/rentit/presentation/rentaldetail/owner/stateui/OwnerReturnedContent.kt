@@ -19,6 +19,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalPay
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
 /**
  * 대여 상세(대여자)에서
@@ -28,7 +29,7 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OwnerReturnedContent(
-    returnedData: OwnerRentalStatusUiModel.Returned,
+    returnedData: RentalDetailStatusModel.Returned,
     onCheckPhotoClick: () -> Unit = {},
 ) {
     val priceItems = listOf(
@@ -72,7 +73,7 @@ fun OwnerReturnedContent(
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val examplePendingUiModel = OwnerRentalStatusUiModel.Returned(
+    val examplePendingUiModel = RentalDetailStatusModel.Returned(
         status = RentalStatus.RETURNED,
         rentalSummary = RentalSummaryUiModel(
             productTitle = "프리미엄 캠핑 텐트",

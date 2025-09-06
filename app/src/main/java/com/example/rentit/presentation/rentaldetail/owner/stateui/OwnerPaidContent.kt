@@ -25,6 +25,7 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.components.ArrowedTextButton
 import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
 /**
  * 대여 상세(대여자)에서
@@ -34,7 +35,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalTas
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OwnerPaidContent(
-    paidData: OwnerRentalStatusUiModel.Paid,
+    paidData: RentalDetailStatusModel.Paid,
     onPhotoTaskClick: () -> Unit = {},
     onTrackingNumTaskClick: () -> Unit = {},
     onCancelRentClick: () -> Unit = {},
@@ -94,7 +95,7 @@ fun OwnerPaidContent(
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val examplePendingUiModel = OwnerRentalStatusUiModel.Paid(
+    val examplePendingUiModel = RentalDetailStatusModel.Paid(
         status = RentalStatus.PAID,
         daysUntilRental = 3,
         rentalSummary = RentalSummaryUiModel(
@@ -108,6 +109,7 @@ private fun Preview() {
         rentalTrackingNumber = null,
         isSendingPhotoRegistered = false,
         isSendingTrackingNumRegistered = false,
+        deposit = 10_000,
     )
     RentItTheme {
         Column {

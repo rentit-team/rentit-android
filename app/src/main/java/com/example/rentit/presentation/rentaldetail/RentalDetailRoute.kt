@@ -92,8 +92,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
     when(uiState.role) {
         RentalRole.OWNER -> {
             OwnerRentalDetailScreen(
-                uiModel = uiState.rentalStatusUiModel,
+                uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
+                isLoading = uiState.isLoading,
                 onBackClick = viewModel::navigateBack,
                 onRequestResponseClick = viewModel::showRequestAcceptDialog,
                 onCancelRentClick = viewModel::showCancelDialog,
@@ -104,20 +105,19 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
         }
         RentalRole.RENTER -> {
             RentalDetailRenterScreen(
-                uiModel = uiState.rentalStatusUiModel,
+                uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
+                isLoading = uiState.isLoading,
                 onBackPressed = viewModel::navigateBack,
                 onPayClick = viewModel::navigateToPay,
                 onCancelRentClick = viewModel::showCancelDialog,
                 onPhotoTaskClick = viewModel::navigateToPhotoBeforeReturn,
                 onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
-                onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck
+                onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck,
             )
         }
         RentalRole.DEFAULT -> { }
     }
-
-    LoadingScreen(uiState.isLoading)
 
     uiState.requestAcceptDialog?.let {
         RequestAcceptDialog(

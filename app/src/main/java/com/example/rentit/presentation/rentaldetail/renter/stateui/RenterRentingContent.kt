@@ -34,6 +34,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalInf
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.presentation.rentaldetail.model.RentingStatus
 import kotlin.math.abs
 
@@ -45,7 +46,7 @@ import kotlin.math.abs
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RenterRentingContent(
-    rentingData: RenterRentalStatusUiModel.Renting,
+    rentingData: RentalDetailStatusModel.Renting,
     onPhotoTaskClick: () -> Unit = {},
     onTrackingNumTaskClick: () -> Unit = {},
 ) {
@@ -137,7 +138,7 @@ fun ReturnOverdueWarning(daysFromReturnDate: Int, deposit: Int) {
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val examplePendingUiModel = RenterRentalStatusUiModel.Renting(
+    val examplePendingUiModel = RentalDetailStatusModel.Renting(
         status = RentingStatus.RENTING_RETURN_DAY,
         isOverdue = false,
         daysFromReturnDate = 3,

@@ -23,17 +23,17 @@ import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.RentalDto
 import com.example.rentit.data.rental.dto.RenterDto
 import com.example.rentit.data.rental.dto.ReturnStatusDto
-import com.example.rentit.data.rental.mapper.toRenterUiModel
+import com.example.rentit.data.rental.mapper.toModel
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterPaidContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRequestContent
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentalStatusUiModel
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentingContent
 import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterReturnedContent
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalDetailRenterScreen(
-    uiModel: RenterRentalStatusUiModel,
+    uiModel: RentalDetailStatusModel,
     scrollState: ScrollState,
     isLoading: Boolean,
     onBackPressed: () -> Unit,
@@ -48,15 +48,15 @@ fun RentalDetailRenterScreen(
     ) {
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
-                is RenterRentalStatusUiModel.Request ->
+                is RentalDetailStatusModel.Request ->
                     RenterRequestContent(uiModel, onPayClick, onCancelRentClick)
-                is RenterRentalStatusUiModel.Paid ->
+                is RentalDetailStatusModel.Paid ->
                     RenterPaidContent(uiModel)
-                is RenterRentalStatusUiModel.Renting ->
+                is RentalDetailStatusModel.Renting ->
                     RenterRentingContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick)
-                is RenterRentalStatusUiModel.Returned ->
+                is RentalDetailStatusModel.Returned ->
                     RenterReturnedContent(uiModel, onCheckPhotoClick)
-                is RenterRentalStatusUiModel.Unknown -> Unit
+                is RentalDetailStatusModel.Unknown -> Unit
             }
         }
         LoadingScreen(isLoading)
@@ -98,7 +98,7 @@ private fun Preview() {
 
     RentItTheme {
         RentalDetailRenterScreen(
-            uiModel = sample2.toRenterUiModel(),
+            uiModel = sample2.toModel(),
             scrollState = rememberScrollState(),
             isLoading = true,
             onBackPressed =  { },

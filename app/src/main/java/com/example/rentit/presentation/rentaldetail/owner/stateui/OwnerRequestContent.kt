@@ -25,6 +25,7 @@ import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
 /**
  * 대여 상세(대여자)에서
@@ -34,7 +35,7 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OwnerRequestContent(
-    requestData: OwnerRentalStatusUiModel.Request,
+    requestData: RentalDetailStatusModel.Request,
     onRequestResponseClick: () -> Unit = {},
     onCancelRentClick: () -> Unit = {},
 ) {
@@ -94,7 +95,7 @@ fun OwnerRequestContent(
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
-    val examplePendingUiModel = OwnerRentalStatusUiModel.Request(
+    val examplePendingUiModel = RentalDetailStatusModel.Request(
         status = RentalStatus.REJECTED,
         isPending = false,
         isAccepted = false,
@@ -106,6 +107,7 @@ private fun Preview() {
             totalPrice = 120_000
         ),
         basicRentalFee = 90_000,
+        deposit = 10_000,
     )
     RentItTheme {
         Column {
