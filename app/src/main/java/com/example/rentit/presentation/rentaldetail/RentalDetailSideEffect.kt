@@ -2,6 +2,7 @@ package com.example.rentit.presentation.rentaldetail
 
 sealed class RentalDetailSideEffect {
     data object NavigateBack: RentalDetailSideEffect()
+    data object NavigateToProductDetail: RentalDetailSideEffect()
     data object NavigateToPay: RentalDetailSideEffect()
     data object NavigateToPhotoBeforeRent: RentalDetailSideEffect()
     data object NavigateToPhotoBeforeReturn: RentalDetailSideEffect()

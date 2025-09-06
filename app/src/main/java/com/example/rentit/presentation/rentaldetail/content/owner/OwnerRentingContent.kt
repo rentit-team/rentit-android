@@ -36,6 +36,7 @@ import kotlin.math.abs
 @Composable
 fun OwnerRentingContent(
     rentingData: RentalDetailStatusModel.Renting,
+    onRentalSummaryClick: () -> Unit = {}
 ) {
     val priceItem = listOf(
         PriceSummaryUiModel(
@@ -53,6 +54,7 @@ fun OwnerRentingContent(
             stringResource(it, abs(rentingData.daysFromReturnDate))
         },
         rentalInfo = rentingData.rentalSummary,
+        onRentalSummaryClick = onRentalSummaryClick
     ) {
         if (rentingData.isOverdue) {
             Text(

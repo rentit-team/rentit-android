@@ -39,6 +39,7 @@ fun OwnerPaidContent(
     onPhotoTaskClick: () -> Unit = {},
     onTrackingNumTaskClick: () -> Unit = {},
     onCancelRentClick: () -> Unit = {},
+    onRentalSummaryClick: () -> Unit = {}
 ) {
     val priceItem = listOf(
         PriceSummaryUiModel(
@@ -58,6 +59,7 @@ fun OwnerPaidContent(
         ),
         subTitleColor = Gray400,
         rentalInfo = paidData.rentalSummary,
+        onRentalSummaryClick = onRentalSummaryClick
     )
 
     RentalTaskSection(

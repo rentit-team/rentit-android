@@ -19,6 +19,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.dialog.RequestAcceptDialog
 import com.example.rentit.common.enums.RentalRole
 import com.example.rentit.navigation.pay.navigateToPay
+import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeRent
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeReturn
 import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
@@ -49,6 +50,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                 when(it) {
                     RentalDetailSideEffect.NavigateBack -> {
                         navHostController.popBackStack()
+                    }
+                    RentalDetailSideEffect.NavigateToProductDetail -> {
+                        navHostController.navigateToProductDetail(productId)
                     }
                     RentalDetailSideEffect.NavigateToPay -> {
                         navHostController.navigateToPay(productId, reservationId)
@@ -105,7 +109,8 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                 onCancelRentClick = viewModel::showCancelDialog,
                 onPhotoTaskClick = viewModel::navigateToPhotoBeforeRent,
                 onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
-                onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck
+                onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck,
+                onRentalSummaryClick = viewModel::navigateToProductDetail,
             )
         }
         RentalRole.RENTER -> {
@@ -119,6 +124,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                 onPhotoTaskClick = viewModel::navigateToPhotoBeforeReturn,
                 onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
                 onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck,
+                onRentalSummaryClick = viewModel::navigateToProductDetail,
             )
         }
         RentalRole.DEFAULT -> { }

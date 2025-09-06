@@ -42,6 +42,7 @@ fun RentalDetailRenterScreen(
     onTrackingNumTaskClick: () -> Unit,
     onPhotoTaskClick: () -> Unit,
     onCheckPhotoClick: () -> Unit,
+    onRentalSummaryClick: () -> Unit
 ) {
     Scaffold(
         topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), onBackClick = onBackPressed) }
@@ -49,13 +50,13 @@ fun RentalDetailRenterScreen(
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
                 is RentalDetailStatusModel.Request ->
-                    RenterRequestContent(uiModel, onPayClick, onCancelRentClick)
+                    RenterRequestContent(uiModel, onPayClick, onCancelRentClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Paid ->
-                    RenterPaidContent(uiModel)
+                    RenterPaidContent(uiModel, onRentalSummaryClick)
                 is RentalDetailStatusModel.Renting ->
-                    RenterRentingContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick)
+                    RenterRentingContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Returned ->
-                    RenterReturnedContent(uiModel, onCheckPhotoClick)
+                    RenterReturnedContent(uiModel, onCheckPhotoClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Unknown -> Unit
             }
         }
@@ -114,7 +115,8 @@ private fun Preview() {
             onCancelRentClick = { },
             onTrackingNumTaskClick = { },
             onPhotoTaskClick = { },
-            onCheckPhotoClick = { }
+            onCheckPhotoClick = { },
+            onRentalSummaryClick = { }
         )
     }
 }

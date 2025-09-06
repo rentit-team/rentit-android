@@ -31,6 +31,7 @@ import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 fun RenterReturnedContent(
     returnedData: RentalDetailStatusModel.Returned,
     onCheckPhotoClick: () -> Unit = {},
+    onRentalSummaryClick: () -> Unit = {}
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -47,6 +48,7 @@ fun RenterReturnedContent(
         title = stringResource(returnedData.status.strRes),
         titleColor = returnedData.status.textColor,
         rentalInfo = returnedData.rentalSummary,
+        onRentalSummaryClick = onRentalSummaryClick
     ) {
         ArrowedTextButton(
             modifier = Modifier

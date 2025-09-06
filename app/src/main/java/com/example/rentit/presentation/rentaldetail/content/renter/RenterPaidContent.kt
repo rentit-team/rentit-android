@@ -26,6 +26,7 @@ import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 @Composable
 fun RenterPaidContent(
     paidData: RentalDetailStatusModel.Paid,
+    onRentalSummaryClick: () -> Unit = {}
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -47,6 +48,7 @@ fun RenterPaidContent(
         ),
         subTitleColor = Gray400,
         rentalInfo = paidData.rentalSummary,
+        onRentalSummaryClick = onRentalSummaryClick
     )
 
     RentalPaymentSection(

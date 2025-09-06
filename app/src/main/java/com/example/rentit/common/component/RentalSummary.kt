@@ -2,6 +2,7 @@ package com.example.rentit.common.component
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,8 +41,10 @@ fun RentalSummary(
     startDate: String,
     endDate: String,
     totalPrice: Int,
+    isClickable: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
-    Row(modifier.fillMaxWidth(), verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+    Row(modifier.fillMaxWidth().clickable(isClickable) { onClick() }, verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
         LoadableUrlImage(
             modifier = Modifier.size(imageSize).clip(RoundedCornerShape(20.dp)),
             imgUrl = thumbnailImgUrl,

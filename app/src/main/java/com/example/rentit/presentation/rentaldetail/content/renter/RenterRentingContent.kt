@@ -49,6 +49,7 @@ fun RenterRentingContent(
     rentingData: RentalDetailStatusModel.Renting,
     onPhotoTaskClick: () -> Unit = {},
     onTrackingNumTaskClick: () -> Unit = {},
+    onRentalSummaryClick: () -> Unit = {}
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -72,6 +73,7 @@ fun RenterRentingContent(
             stringResource( it, abs(rentingData.daysFromReturnDate))
         },
         rentalInfo = rentingData.rentalSummary,
+        onRentalSummaryClick = onRentalSummaryClick
     )
 
     RentalTaskSection(

@@ -259,6 +259,10 @@ class RentalDetailViewModel @Inject constructor(
         emitSideEffect(RentalDetailSideEffect.NavigateToPay)
     }
 
+    fun navigateToProductDetail() {
+        emitSideEffect(RentalDetailSideEffect.NavigateToProductDetail)
+    }
+
     fun navigateToPhotoBeforeRent() {
         emitSideEffect(RentalDetailSideEffect.NavigateToPhotoBeforeRent)
     }

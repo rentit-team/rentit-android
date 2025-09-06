@@ -38,6 +38,7 @@ fun RenterRequestContent(
     requestData: RentalDetailStatusModel.Request,
     onPayClick: () -> Unit = {},
     onCancelRentClick: () -> Unit = {},
+    onRentalSummaryClick: () -> Unit = {}
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
@@ -63,6 +64,7 @@ fun RenterRequestContent(
         title = stringResource(requestData.status.strRes),
         titleColor = requestData.status.textColor,
         rentalInfo = requestData.rentalSummary,
+        onRentalSummaryClick = onRentalSummaryClick
     ) {
         if(requestData.isAccepted) {
             ArrowedTextButton(

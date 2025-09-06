@@ -42,6 +42,7 @@ fun OwnerRentalDetailScreen(
     onPhotoTaskClick: () -> Unit,
     onTrackingNumTaskClick: () -> Unit,
     onCheckPhotoClick: () -> Unit,
+    onRentalSummaryClick: () -> Unit,
 ) {
     Scaffold(
         topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title)) { onBackClick() } }
@@ -51,25 +52,13 @@ fun OwnerRentalDetailScreen(
             .verticalScroll(scrollState)) {
             when(uiModel) {
                 is RentalDetailStatusModel.Request ->
-                    OwnerRequestContent(
-                        requestData = uiModel,
-                        onRequestResponseClick = onRequestResponseClick,
-                        onCancelRentClick = onCancelRentClick
-                    )
+                    OwnerRequestContent(uiModel, onRequestResponseClick, onCancelRentClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Paid ->
-                    OwnerPaidContent(
-                        paidData = uiModel,
-                        onPhotoTaskClick = onPhotoTaskClick,
-                        onTrackingNumTaskClick = onTrackingNumTaskClick,
-                        onCancelRentClick = onCancelRentClick
-                    )
+                    OwnerPaidContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick, onCancelRentClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Renting ->
-                    OwnerRentingContent(uiModel)
+                    OwnerRentingContent(uiModel, onRentalSummaryClick)
                 is RentalDetailStatusModel.Returned ->
-                    OwnerReturnedContent(
-                        returnedData = uiModel,
-                        onCheckPhotoClick = onCheckPhotoClick
-                    )
+                    OwnerReturnedContent(uiModel, onCheckPhotoClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Unknown -> Unit
             }
         }
@@ -128,6 +117,8 @@ private fun OwnerRentalDetailScreenPreview() {
             onCancelRentClick = {},
             onPhotoTaskClick = {},
             onTrackingNumTaskClick = {},
-        ) {}
+            onCheckPhotoClick = {},
+            onRentalSummaryClick = {}
+        )
     }
 }

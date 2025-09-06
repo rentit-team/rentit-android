@@ -38,6 +38,7 @@ fun OwnerRequestContent(
     requestData: RentalDetailStatusModel.Request,
     onRequestResponseClick: () -> Unit = {},
     onCancelRentClick: () -> Unit = {},
+    onRentalSummaryClick: () -> Unit = {}
 ) {
     val priceItem = listOf(
         PriceSummaryUiModel(
@@ -62,6 +63,7 @@ fun OwnerRequestContent(
         title = stringResource(requestData.status.strRes),
         titleColor = requestData.status.textColor,
         rentalInfo = requestData.rentalSummary,
+        onRentalSummaryClick = onRentalSummaryClick
     ) {
         if(requestData.isPending) {
             ArrowedTextButton(
