@@ -1,6 +1,7 @@
 package com.example.rentit.presentation.productdetail.reservation.request
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -77,14 +78,22 @@ class ResvRequestViewModel @Inject constructor(
                     minPeriod = it.product.period?.min,
                     maxPeriod = it.product.period?.max
                 )
-            }.onFailure { e -> handleFailure(e) }
+                Log.i(TAG, "상품 조회 성공: Product Id: $productId")
+            }.onFailure { e ->
+                Log.e(TAG, "상품 조회 실패", e)
+                handleFailure(e)
+            }
     }
 
     private suspend fun getReservedDates(productId: Int) {
         productRepository.getReservedDates(productId)
             .onSuccess {
                 _uiState.value = _uiState.value.copy(reservedDateList = it.disabledDates)
-            }.onFailure { e -> handleFailure(e) }
+                Log.i(TAG, "예약 불가일 조회 성공: 불가일 ${it.disabledDates.size}개")
+            }.onFailure { e ->
+                Log.e(TAG, "예약 불가일 조회 실패", e)
+                handleFailure(e)
+            }
     }
 
     suspend fun loadInitialData(productId: Int) {
@@ -128,7 +137,11 @@ class ResvRequestViewModel @Inject constructor(
                         totalPrice = totalPrice
                     )
                 )
-            }.onFailure { e -> handleFailure(e) }
+                Log.i(TAG, "대여 예약 성공: ${it.data.reservationId}")
+            }.onFailure { e ->
+                Log.e(TAG, "대여 예약 실패", e)
+                handleFailure(e)
+            }
         }
     }
 

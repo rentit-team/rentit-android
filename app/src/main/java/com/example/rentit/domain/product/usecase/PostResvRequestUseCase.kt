@@ -1,6 +1,7 @@
 package com.example.rentit.domain.product.usecase
 
 import com.example.rentit.data.product.dto.ResvRequestDto
+import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.domain.product.repository.ProductRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,7 +22,7 @@ class PostResvRequestUseCase @Inject constructor(
         selectedPeriod: Int,
         startDate: String,
         endDate: String,
-    ): Result<Unit> {
+    ): Result<ResvResponseDto> {
         return runCatching {
             val periodRange = (minPeriod ?: 0)..(maxPeriod ?: Int.MAX_VALUE)
             if(selectedPeriod !in periodRange) throw IllegalArgumentException("Invalid period")
