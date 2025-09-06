@@ -1,6 +1,7 @@
 package com.example.rentit.presentation.rentaldetail
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,6 +22,8 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "RentalDetailViewModel"
 
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
@@ -65,7 +68,9 @@ class RentalDetailViewModel @Inject constructor(
                         rentalDetailStatusModel = it.rentalDetailStatusModel,
                         role = it.role
                     )
+                    Log.i(TAG, "대여 상세 조회 성공: Product Id: $productId, Reservation Id: $reservationId")
                 }.onFailure { e ->
+                    Log.e(TAG, "대여 상세 조회 실패", e)
                     handleFetchError(e)
                 }
         }
@@ -82,7 +87,7 @@ class RentalDetailViewModel @Inject constructor(
     private fun handleFetchError(e: Throwable) {
         when(e) {
             is MissingTokenException -> {
-                println("Logout") // TODO: 로그아웃 및 로그인 이동
+                // TODO: 로그아웃 및 로그인 이동
             }
             is RentalStatusUnknownException -> {
                 showUnknownStatusDialog()
@@ -105,7 +110,9 @@ class RentalDetailViewModel @Inject constructor(
                 toastAcceptSuccess()
                 dismissRequestAcceptDialog()
                 getRentalDetail(productId, reservationId)
+                Log.i(TAG, "요청 수락 성공")
             }.onFailure { e ->
+                Log.e(TAG, "요청 수락 실패", e)
                 handleAcceptError(e)
             }
         }
@@ -155,7 +162,9 @@ class RentalDetailViewModel @Inject constructor(
                 toastCancelSuccess()
                 dismissCancelDialog()
                 getRentalDetail(productId, reservationId)
+                Log.i(TAG, "대여 취소 성공")
             }.onFailure { e ->
+                Log.e(TAG, "대여 취소 실패", e)
                 handleCancelError(e)
             }
         }
@@ -193,7 +202,9 @@ class RentalDetailViewModel @Inject constructor(
                         trackingCourierNames = it.courierNames,
                         selectedCourierName = it.courierNames.firstOrNull() ?: ""
                     )
-                }.onFailure {
+                    Log.i(TAG, "택배사 조회 성공: ${it.courierNames.size}개")
+                }.onFailure { e ->
+                    Log.e(TAG, "택배사 조회 실패", e)
                     emitSideEffect(RentalDetailSideEffect.ToastErrorGetCourierNames)
                 }
         }
@@ -213,7 +224,9 @@ class RentalDetailViewModel @Inject constructor(
                 dismissTrackingRegDialog()
                 emitSideEffect(RentalDetailSideEffect.ToastSuccessTrackingRegistration)
                 getRentalDetail(productId, reservationId)
+                Log.i(TAG, "운송장 등록 성공: ${it?.tracking}")
             }.onFailure { e ->
+                Log.e(TAG, "운송장 등록 실패", e)
                 handleTrackingError(e)
             }
         }

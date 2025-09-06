@@ -38,8 +38,8 @@ enum class RentingStatus(
 
     companion object {
         fun fromDaysFromReturnDate(daysFromReturnDate: Int): RentingStatus = when {
-            daysFromReturnDate >= 0 -> RENTING_IN_USE
-            daysFromReturnDate == -1 -> RENTING_RETURN_DAY
+            daysFromReturnDate >= 1 -> RENTING_IN_USE
+            daysFromReturnDate == 0 -> RENTING_RETURN_DAY
             else -> RENTING_OVERDUE
         }
     }
