@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.owner.stateui
+package com.example.rentit.presentation.rentaldetail.content.owner
 
 import android.os.Build
 import androidx.annotation.RequiresApi

@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.owner.photobeforerent
+package com.example.rentit.presentation.rentaldetail.photobeforerent
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel

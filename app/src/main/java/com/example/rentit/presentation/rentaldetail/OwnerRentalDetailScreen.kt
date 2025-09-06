@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.renter
+package com.example.rentit.presentation.rentaldetail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -25,37 +25,51 @@ import com.example.rentit.data.rental.dto.RenterDto
 import com.example.rentit.data.rental.dto.ReturnStatusDto
 import com.example.rentit.data.rental.mapper.toModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterPaidContent
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRequestContent
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterRentingContent
-import com.example.rentit.presentation.rentaldetail.renter.stateui.RenterReturnedContent
+import com.example.rentit.presentation.rentaldetail.content.owner.OwnerPaidContent
+import com.example.rentit.presentation.rentaldetail.content.owner.OwnerRentingContent
+import com.example.rentit.presentation.rentaldetail.content.owner.OwnerRequestContent
+import com.example.rentit.presentation.rentaldetail.content.owner.OwnerReturnedContent
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalDetailRenterScreen(
+fun OwnerRentalDetailScreen(
     uiModel: RentalDetailStatusModel,
     scrollState: ScrollState,
     isLoading: Boolean,
-    onBackPressed: () -> Unit,
-    onPayClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onRequestResponseClick: () -> Unit,
     onCancelRentClick: () -> Unit,
-    onTrackingNumTaskClick: () -> Unit,
     onPhotoTaskClick: () -> Unit,
+    onTrackingNumTaskClick: () -> Unit,
     onCheckPhotoClick: () -> Unit,
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), onBackClick = onBackPressed) }
+        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title)) { onBackClick() } }
     ) {
-        Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
+        Column(modifier = Modifier
+            .padding(it)
+            .verticalScroll(scrollState)) {
             when(uiModel) {
                 is RentalDetailStatusModel.Request ->
-                    RenterRequestContent(uiModel, onPayClick, onCancelRentClick)
+                    OwnerRequestContent(
+                        requestData = uiModel,
+                        onRequestResponseClick = onRequestResponseClick,
+                        onCancelRentClick = onCancelRentClick
+                    )
                 is RentalDetailStatusModel.Paid ->
-                    RenterPaidContent(uiModel)
+                    OwnerPaidContent(
+                        paidData = uiModel,
+                        onPhotoTaskClick = onPhotoTaskClick,
+                        onTrackingNumTaskClick = onTrackingNumTaskClick,
+                        onCancelRentClick = onCancelRentClick
+                    )
                 is RentalDetailStatusModel.Renting ->
-                    RenterRentingContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick)
+                    OwnerRentingContent(uiModel)
                 is RentalDetailStatusModel.Returned ->
-                    RenterReturnedContent(uiModel, onCheckPhotoClick)
+                    OwnerReturnedContent(
+                        returnedData = uiModel,
+                        onCheckPhotoClick = onCheckPhotoClick
+                    )
                 is RentalDetailStatusModel.Unknown -> Unit
             }
         }
@@ -66,12 +80,12 @@ fun RentalDetailRenterScreen(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
-private fun Preview() {
+private fun OwnerRentalDetailScreenPreview() {
     val sample1 = RentalDetailResponseDto(
         rental = RentalDto(
             reservationId = 1001,
             renter = RenterDto(userId = 101, nickname = "김철수"),
-            status = RentalStatus.RENTING,
+            status = RentalStatus.PENDING,
             product = ProductDto(
                 title = "캐논 EOS R6 카메라",
                 thumbnailImgUrl = "https://example.com/image/123.jpg"
@@ -97,16 +111,15 @@ private fun Preview() {
     )
 
     RentItTheme {
-        RentalDetailRenterScreen(
-            uiModel = sample2.toModel(),
-            scrollState = rememberScrollState(),
+        OwnerRentalDetailScreen(
+            sample2.toModel(),
+            rememberScrollState(),
             isLoading = true,
-            onBackPressed =  { },
-            onPayClick = { },
-            onCancelRentClick = { },
-            onTrackingNumTaskClick = { },
-            onPhotoTaskClick = { },
-            onCheckPhotoClick = { }
-        )
+            onBackClick = {},
+            onRequestResponseClick = {},
+            onCancelRentClick = {},
+            onPhotoTaskClick = {},
+            onTrackingNumTaskClick = {},
+        ) {}
     }
 }

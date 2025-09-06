@@ -7,9 +7,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.presentation.rentaldetail.RentalDetailRoute
-import com.example.rentit.presentation.rentaldetail.owner.photobeforerent.PhotoBeforeRentRoute
+import com.example.rentit.presentation.rentaldetail.photobeforerent.PhotoBeforeRentRoute
 import com.example.rentit.presentation.rentaldetail.rentalphotocheck.RentalPhotoCheckRoute
-import com.example.rentit.presentation.rentaldetail.renter.photobeforereturn.PhotoBeforeReturnRoute
+import com.example.rentit.presentation.rentaldetail.photobeforereturn.PhotoBeforeReturnRoute
 
 fun NavHostController.navigateToRentalDetail(productId: Int, reservationId: Int) {
     navigate(

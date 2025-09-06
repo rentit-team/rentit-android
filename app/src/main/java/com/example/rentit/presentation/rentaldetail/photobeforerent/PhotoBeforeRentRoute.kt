@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.owner.photobeforerent
+package com.example.rentit.presentation.rentaldetail.photobeforerent
 
 import android.widget.Toast
 import androidx.compose.runtime.Composable

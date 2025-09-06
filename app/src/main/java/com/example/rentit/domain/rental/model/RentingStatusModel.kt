@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.model
+package com.example.rentit.domain.rental.model
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color

@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.owner.stateui
+package com.example.rentit.presentation.rentaldetail.content.renter
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -22,23 +22,23 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
 /**
- * 대여 상세(대여자)에서
+ * 대여 상세(사용자)에서
  * 반납 완료 완료 상태를 나타내는 UI 컨텐츠
  */
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun OwnerReturnedContent(
+fun RenterReturnedContent(
     returnedData: RentalDetailStatusModel.Returned,
     onCheckPhotoClick: () -> Unit = {},
 ) {
     val priceItems = listOf(
         PriceSummaryUiModel(
-            label = stringResource(R.string.screen_rental_detail_owner_total_profit_price_label_basic_rent),
+            label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_basic_rent),
             price = returnedData.basicRentalFee
         ),
         PriceSummaryUiModel(
-            label = stringResource(R.string.screen_rental_detail_owner_total_profit_price_label_deposit),
+            label = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_deposit),
             price = returnedData.deposit
         )
     )
@@ -58,9 +58,9 @@ fun OwnerReturnedContent(
     }
 
     RentalPaymentSection(
-        title = stringResource(R.string.screen_rental_detail_owner_total_profit_price_title),
+        title = stringResource(R.string.screen_rental_detail_renter_total_paid_price_title),
         priceItems = priceItems,
-        totalLabel = stringResource(R.string.screen_rental_detail_owner_total_profit_price_label_total)
+        totalLabel = stringResource(R.string.screen_rental_detail_renter_total_paid_price_label_total)
     )
 
     RentalTrackingSection(
@@ -85,11 +85,11 @@ private fun Preview() {
         basicRentalFee = 90_000,
         deposit = 10_000 * 3,
         rentalTrackingNumber = null,
-        returnTrackingNumber = null,
+        returnTrackingNumber = null
     )
     RentItTheme {
         Column {
-            OwnerReturnedContent(returnedData = examplePendingUiModel)
+            RenterReturnedContent(returnedData = examplePendingUiModel)
         }
     }
 }

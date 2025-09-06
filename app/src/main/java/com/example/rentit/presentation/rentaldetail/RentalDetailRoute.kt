@@ -16,7 +16,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.dialog.RequestAcceptDialog
-import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.enums.RentalRole
 import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeRent
@@ -25,8 +24,6 @@ import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
 import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
-import com.example.rentit.presentation.rentaldetail.owner.OwnerRentalDetailScreen
-import com.example.rentit.presentation.rentaldetail.renter.RentalDetailRenterScreen
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

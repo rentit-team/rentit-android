@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.rentaldetail.owner.stateui
+package com.example.rentit.presentation.rentaldetail.content.owner
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -24,7 +24,7 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
-import com.example.rentit.presentation.rentaldetail.model.RentingStatus
+import com.example.rentit.domain.rental.model.RentingStatus
 import kotlin.math.abs
 
 /**
