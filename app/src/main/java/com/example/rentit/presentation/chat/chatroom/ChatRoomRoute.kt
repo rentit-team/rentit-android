@@ -24,6 +24,7 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
+import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -67,7 +68,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
                         navHostController.navigateToProductDetail(sideEffect.productId)
                     }
                     is ChatRoomSideEffect.NavigateToRentalDetail -> {
-                        // TODO: 대여 상세로 이동
+                        navHostController.navigateToRentalDetail(sideEffect.productId, sideEffect.reservationId)
                     }
                     ChatRoomSideEffect.ToastPaymentInvalidStatus -> {
                         Toast.makeText(context, context.getString(R.string.toast_payment_invalid_status), Toast.LENGTH_SHORT).show()
