@@ -33,6 +33,12 @@ class RentalDetailViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<RentalDetailSideEffect>()
     val sideEffect: SharedFlow<RentalDetailSideEffect> = _sideEffect
 
+    private fun emitSideEffect(sideEffect: RentalDetailSideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(sideEffect)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getRentalDetail(productId: Int, reservationId: Int) {
         viewModelScope.launch {
@@ -95,16 +101,16 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     private fun toastAcceptSuccess() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.ToastAcceptRentalSuccess)
-        }
+        emitSideEffect(RentalDetailSideEffect.ToastAcceptRentalSuccess)
     }
 
     private fun handleAcceptError(e: Throwable) {
-        viewModelScope.launch {
-            when (e) {
-                is MissingTokenException -> println("Logout") // TODO: 로그아웃 및 로그인 이동
-                else -> _sideEffect.emit(RentalDetailSideEffect.ToastAcceptRentalFailed)
+        when (e) {
+            is MissingTokenException -> {
+                println("Logout") // TODO: 로그아웃 및 로그인 이동
+            }
+            else -> {
+                emitSideEffect(RentalDetailSideEffect.ToastAcceptRentalFailed)
             }
         }
     }
@@ -136,16 +142,16 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     private fun toastCancelSuccess() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.ToastCancelRentalSuccess)
-        }
+        emitSideEffect(RentalDetailSideEffect.ToastCancelRentalSuccess)
     }
 
     private fun handleCancelError(e: Throwable) {
-        viewModelScope.launch {
-            when (e) {
-                is MissingTokenException -> println("Logout") // TODO: 로그아웃 및 로그인 이동
-                else -> _sideEffect.emit(RentalDetailSideEffect.ToastCancelRentalFailed)
+        when (e) {
+            is MissingTokenException -> {
+                println("Logout") // TODO: 로그아웃 및 로그인 이동
+            }
+            else -> {
+                emitSideEffect(RentalDetailSideEffect.ToastCancelRentalFailed)
             }
         }
     }
@@ -160,7 +166,7 @@ class RentalDetailViewModel @Inject constructor(
                         selectedCourierName = it.courierNames.firstOrNull() ?: ""
                     )
                 }.onFailure {
-                    _sideEffect.emit(RentalDetailSideEffect.ToastErrorGetCourierNames)
+                    emitSideEffect(RentalDetailSideEffect.ToastErrorGetCourierNames)
                 }
         }
     }
@@ -185,25 +191,19 @@ class RentalDetailViewModel @Inject constructor(
                 trackingNumber = _uiState.value.trackingNumber
             ).onSuccess {
                 dismissTrackingRegDialog()
-                toastTrackingRegistered()
+                emitSideEffect(RentalDetailSideEffect.ToastSuccessTrackingRegistration)
                 getRentalDetail(productId, reservationId)
             }.onFailure { e -> handleTrackingError(e) }
         }
     }
 
-    private fun toastTrackingRegistered() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.ToastSuccessTrackingRegistration)
-        }
-    }
-
     private fun handleTrackingError(e: Throwable) {
-        viewModelScope.launch {
-            when (e) {
-                is IllegalArgumentException -> _uiState.value =
-                    _uiState.value.copy(showTrackingNumberEmptyError = true)
-
-                else -> _sideEffect.emit(RentalDetailSideEffect.ToastErrorTrackingRegistration)
+        when (e) {
+            is IllegalArgumentException -> {
+                _uiState.value = _uiState.value.copy(showTrackingNumberEmptyError = true)
+            }
+            else -> {
+                emitSideEffect(RentalDetailSideEffect.ToastErrorTrackingRegistration)
             }
         }
     }
@@ -221,32 +221,22 @@ class RentalDetailViewModel @Inject constructor(
 
     /** 네비게이션 */
     fun navigateBack() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.NavigateBack)
-        }
+        emitSideEffect(RentalDetailSideEffect.NavigateBack)
     }
 
     fun navigateToPay() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.NavigateToPay)
-        }
+        emitSideEffect(RentalDetailSideEffect.NavigateToPay)
     }
 
     fun navigateToPhotoBeforeRent() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.NavigateToPhotoBeforeRent)
-        }
+        emitSideEffect(RentalDetailSideEffect.NavigateToPhotoBeforeRent)
     }
 
     fun navigateToPhotoBeforeReturn() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.NavigateToPhotoBeforeReturn)
-        }
+        emitSideEffect(RentalDetailSideEffect.NavigateToPhotoBeforeReturn)
     }
 
     fun navigateToRentalPhotoCheck() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalDetailSideEffect.NavigateToRentalPhotoCheck)
-        }
+        emitSideEffect(RentalDetailSideEffect.NavigateToRentalPhotoCheck)
     }
 }
