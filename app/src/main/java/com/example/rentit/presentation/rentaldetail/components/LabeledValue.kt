@@ -9,7 +9,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.RentItTheme
 
 /**
@@ -21,6 +23,7 @@ fun LabeledValue(
     modifier: Modifier = Modifier,
     labelText: String,
     value: String,
+    valueTextColor: Color = AppBlack
 ) {
     Row(
         modifier = modifier
@@ -33,7 +36,8 @@ fun LabeledValue(
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
+            color = valueTextColor
         )
     }
 }

@@ -4,10 +4,7 @@ import kotlinx.serialization.Serializable
 
 sealed class RentalDetailRoute {
     @Serializable
-    data class OwnerRentalDetail(val productId: Int, val reservationId: Int) : RentalDetailRoute()
-
-    @Serializable
-    data class RenterRentalDetail(val productId: Int, val reservationId: Int) : RentalDetailRoute()
+    data class RentalDetail(val productId: Int, val reservationId: Int) : RentalDetailRoute()
 
     @Serializable
     data class RentalPhotoCheck(val productId: Int, val reservationId: Int) : RentalDetailRoute()

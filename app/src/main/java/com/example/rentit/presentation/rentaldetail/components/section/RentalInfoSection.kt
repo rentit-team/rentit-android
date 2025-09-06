@@ -25,6 +25,7 @@ fun RentalInfoSection(
     subTitle: String? = null,
     subTitleColor: Color = Gray400,
     rentalInfo: RentalSummaryUiModel,
+    onRentalSummaryClick: () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit = {},
 ) {
     val titleWithSubTitle = buildAnnotatedString {
@@ -48,6 +49,8 @@ fun RentalInfoSection(
             startDate = rentalInfo.startDate,
             endDate = rentalInfo.endDate,
             totalPrice = rentalInfo.totalPrice,
+            isClickable = true,
+            onClick = onRentalSummaryClick
         )
         content()
     }

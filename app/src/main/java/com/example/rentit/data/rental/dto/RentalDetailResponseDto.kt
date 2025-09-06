@@ -39,8 +39,14 @@ data class RentalDto(
     @SerializedName("rentalTrackingNumber")
     val rentalTrackingNumber: String?,
 
+    @SerializedName("rentalCourierName")
+    val rentalCourierName: String?,
+
     @SerializedName("returnTrackingNumber")
     val returnTrackingNumber: String?,
+
+    @SerializedName("returnCourierName")
+    val returnCourierName: String?,
 
     @SerializedName("deliveryStatus")
     val deliveryStatus: DeliveryStatusDto,
