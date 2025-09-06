@@ -15,6 +15,11 @@ data class ResvRequestState(
     val deposit: Int = 0,
     val totalRentalPrice: Int = 0,
     val reservedDateList: List<String> = emptyList(),
+    val isLoading: Boolean = false,
+    val showNetworkErrorDialog: Boolean = false,
+    val showServerErrorDialog: Boolean = false,
+    val showAccessNotAllowedDialog: Boolean = false,
+    val showResvAlreadyExistDialog: Boolean = false
 ) {
     val rentalPeriod: Int
         get() = inclusiveDaysBetween(rentalStartDate, rentalEndDate)

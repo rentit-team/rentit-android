@@ -149,6 +149,12 @@
     <string name="screen_resv_request_label_total_fee">합계</string>
     <string name="screen_resv_request_btn_resv_request">예약 요청</string>
 
+    <string name="dialog_owner_access_not_allowed_title">예약할 수 없어요</string>
+    <string name="dialog_owner_access_not_allowed_content">이 상품은 등록하신 상품이라 예약할 수 없어요.</string>
+
+    <string name="dialog_resv_already_exist_title">이미 예약한 상품이에요</string>
+    <string name="dialog_resv_already_exist_content">이 상품에 대한 예약 내역이 있어요. 예약 내역을 확인해주세요.</string>
+
     <!-- 예약 요청 확인 -->
     <string name="screen_request_confirm_title">요청이 전달되었어요!</string>
     <string name="screen_request_confirm_resv_period">예약 기간</string>
