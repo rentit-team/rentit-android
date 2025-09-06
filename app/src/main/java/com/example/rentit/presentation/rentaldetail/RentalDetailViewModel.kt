@@ -44,6 +44,18 @@ class RentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
+    fun resetDialogState() {
+        _uiState.value = _uiState.value.copy(
+            showLoadFailedDialog = false,
+            showUnknownStatusDialog = false,
+            showCancelDialog = false,
+            requestAcceptDialog = null,
+            showTrackingRegDialog = false,
+            showTrackingNumberEmptyError = false
+        )
+    }
+
+    /** 대여 상세 정보 조회 */
     @RequiresApi(Build.VERSION_CODES.O)
     fun getRentalDetail(productId: Int, reservationId: Int) {
         viewModelScope.launch {
@@ -54,14 +66,7 @@ class RentalDetailViewModel @Inject constructor(
                         role = it.role
                     )
                 }.onFailure { e ->
-                    when(e) {
-                        is RentalStatusUnknownException -> {
-                            showUnknownStatusDialog()
-                        }
-                        else -> {
-                            showLoadFailedDialog()
-                        }
-                    }
+                    handleFetchError(e)
                 }
         }
     }
@@ -74,24 +79,21 @@ class RentalDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showLoadFailedDialog = true)
     }
 
+    private fun handleFetchError(e: Throwable) {
+        when(e) {
+            is MissingTokenException -> {
+                println("Logout") // TODO: 로그아웃 및 로그인 이동
+            }
+            is RentalStatusUnknownException -> {
+                showUnknownStatusDialog()
+            }
+            else -> {
+                showLoadFailedDialog()
+            }
+        }
+    }
+
     /** 요청 수락 */
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun showRequestAcceptDialog() {
-        val requestData =
-            _uiState.value.rentalDetailStatusModel as? RentalDetailStatusModel.Request ?: return
-        _uiState.value = _uiState.value.copy(
-            requestAcceptDialog = RequestAcceptDialogUiModel(
-                startDate = requestData.rentalSummary.startDate,
-                endDate = requestData.rentalSummary.endDate,
-                expectedRevenue = requestData.basicRentalFee
-            )
-        )
-    }
-
-    fun dismissRequestAcceptDialog() {
-        _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun acceptRequest(productId: Int, reservationId: Int) {
         viewModelScope.launch {
@@ -107,6 +109,23 @@ class RentalDetailViewModel @Inject constructor(
                 handleAcceptError(e)
             }
         }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun showRequestAcceptDialog() {
+        val requestData =
+            _uiState.value.rentalDetailStatusModel as? RentalDetailStatusModel.Request ?: return
+        _uiState.value = _uiState.value.copy(
+            requestAcceptDialog = RequestAcceptDialogUiModel(
+                startDate = requestData.rentalSummary.startDate,
+                endDate = requestData.rentalSummary.endDate,
+                expectedRevenue = requestData.basicRentalFee
+            )
+        )
+    }
+
+    fun dismissRequestAcceptDialog() {
+        _uiState.value = _uiState.value.copy(requestAcceptDialog = null)
     }
 
     private fun toastAcceptSuccess() {
@@ -125,14 +144,6 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     /** 대여 취소 */
-    fun showCancelDialog() {
-        _uiState.value = _uiState.value.copy(showCancelDialog = true)
-    }
-
-    fun dismissCancelDialog() {
-        _uiState.value = _uiState.value.copy(showCancelDialog = false)
-    }
-
     @RequiresApi(Build.VERSION_CODES.O)
     fun confirmCancel(productId: Int, reservationId: Int) {
         viewModelScope.launch {
@@ -150,6 +161,14 @@ class RentalDetailViewModel @Inject constructor(
         }
     }
 
+    fun showCancelDialog() {
+        _uiState.value = _uiState.value.copy(showCancelDialog = true)
+    }
+
+    fun dismissCancelDialog() {
+        _uiState.value = _uiState.value.copy(showCancelDialog = false)
+    }
+
     private fun toastCancelSuccess() {
         emitSideEffect(RentalDetailSideEffect.ToastCancelRentalSuccess)
     }
@@ -165,7 +184,7 @@ class RentalDetailViewModel @Inject constructor(
         }
     }
 
-    /** 운송장 등록 */
+    /** 운송장 등록 - 택배사 조회 */
     private fun getCourierNames() {
         viewModelScope.launch {
             rentalRepository.getCourierNames()
@@ -180,15 +199,7 @@ class RentalDetailViewModel @Inject constructor(
         }
     }
 
-    fun showTrackingRegDialog() {
-        if (_uiState.value.trackingCourierNames.isEmpty()) getCourierNames()
-        _uiState.value = _uiState.value.copy(showTrackingRegDialog = true)
-    }
-
-    fun dismissTrackingRegDialog() {
-        _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
-    }
-
+    /** 운송장 등록 */
     @RequiresApi(Build.VERSION_CODES.O)
     fun confirmTrackingReg(productId: Int, reservationId: Int) {
         viewModelScope.launch {
@@ -202,7 +213,9 @@ class RentalDetailViewModel @Inject constructor(
                 dismissTrackingRegDialog()
                 emitSideEffect(RentalDetailSideEffect.ToastSuccessTrackingRegistration)
                 getRentalDetail(productId, reservationId)
-            }.onFailure { e -> handleTrackingError(e) }
+            }.onFailure { e ->
+                handleTrackingError(e)
+            }
         }
     }
 
@@ -215,6 +228,15 @@ class RentalDetailViewModel @Inject constructor(
                 emitSideEffect(RentalDetailSideEffect.ToastErrorTrackingRegistration)
             }
         }
+    }
+
+    fun showTrackingRegDialog() {
+        if (_uiState.value.trackingCourierNames.isEmpty()) getCourierNames()
+        _uiState.value = _uiState.value.copy(showTrackingRegDialog = true)
+    }
+
+    fun dismissTrackingRegDialog() {
+        _uiState.value = _uiState.value.copy(showTrackingRegDialog = false)
     }
 
     fun changeSelectedCourierName(name: String) {
