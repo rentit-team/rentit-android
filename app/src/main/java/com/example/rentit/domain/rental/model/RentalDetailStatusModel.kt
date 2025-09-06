@@ -22,6 +22,7 @@ sealed class RentalDetailStatusModel {
         val basicRentalFee: Int,
         val deposit: Int,
         val rentalTrackingNumber: String?,
+        val rentalCourierName: String?,
         val isSendingPhotoRegistered: Boolean,
         val isSendingTrackingNumRegistered: Boolean
     ): RentalDetailStatusModel()
@@ -33,6 +34,9 @@ sealed class RentalDetailStatusModel {
         val basicRentalFee: Int,
         val deposit: Int,
         val rentalTrackingNumber: String?,
+        val rentalCourierName: String?,
+        val returnTrackingNumber: String?,
+        val returnCourierName: String?,
         val isOverdue: Boolean,
         val isReturnAvailable: Boolean,
         val isReturnPhotoRegistered: Boolean,
@@ -45,7 +49,9 @@ sealed class RentalDetailStatusModel {
         val basicRentalFee: Int,
         val deposit: Int,
         val rentalTrackingNumber: String?,
-        val returnTrackingNumber: String?
+        val rentalCourierName: String?,
+        val returnTrackingNumber: String?,
+        val returnCourierName: String?
     ): RentalDetailStatusModel()
 
     data object Unknown: RentalDetailStatusModel()

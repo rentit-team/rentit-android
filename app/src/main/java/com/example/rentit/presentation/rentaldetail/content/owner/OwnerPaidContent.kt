@@ -80,6 +80,7 @@ fun OwnerPaidContent(
 
     RentalTrackingSection(
         rentalTrackingNumber = paidData.rentalTrackingNumber,
+        rentalCourierName = paidData.rentalCourierName
     )
 
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
@@ -110,6 +111,7 @@ private fun Preview() {
         isSendingPhotoRegistered = false,
         isSendingTrackingNumRegistered = false,
         deposit = 10_000,
+        rentalCourierName = "롯데택배",
     )
     RentItTheme {
         Column {

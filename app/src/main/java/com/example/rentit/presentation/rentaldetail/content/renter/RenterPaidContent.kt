@@ -57,6 +57,7 @@ fun RenterPaidContent(
 
     RentalTrackingSection(
         rentalTrackingNumber = paidData.rentalTrackingNumber,
+        rentalCourierName = paidData.rentalCourierName,
     )
 }
 
@@ -79,6 +80,7 @@ private fun Preview() {
         rentalTrackingNumber = null,
         isSendingPhotoRegistered = false,
         isSendingTrackingNumRegistered = false,
+        rentalCourierName = null,
     )
     RentItTheme {
         Column {

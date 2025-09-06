@@ -48,6 +48,7 @@ fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
                 basicRentalFee = basicRentalFee,
                 deposit = rental.depositAmount,
                 rentalTrackingNumber = rental.rentalTrackingNumber,
+                rentalCourierName = rental.rentalCourierName,
                 isSendingPhotoRegistered = rental.deliveryStatus.isPhotoRegistered,
                 isSendingTrackingNumRegistered = rental.deliveryStatus.isTrackingNumberRegistered
             )
@@ -65,6 +66,9 @@ fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
                 basicRentalFee = basicRentalFee,
                 deposit = rental.depositAmount,
                 rentalTrackingNumber = rental.rentalTrackingNumber,
+                rentalCourierName = rental.rentalCourierName,
+                returnTrackingNumber = rental.returnTrackingNumber,
+                returnCourierName = rental.returnCourierName,
                 isOverdue = rentingStatus == RentingStatus.RENTING_OVERDUE,
                 isReturnAvailable = isReturnAvailable,
                 isReturnPhotoRegistered = rental.returnStatus.isPhotoRegistered,
@@ -78,7 +82,9 @@ fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
             basicRentalFee = basicRentalFee,
             deposit = rental.depositAmount,
             rentalTrackingNumber = rental.rentalTrackingNumber,
-            returnTrackingNumber = rental.returnTrackingNumber
+            rentalCourierName = rental.rentalCourierName,
+            returnTrackingNumber = rental.returnTrackingNumber,
+            returnCourierName = rental.returnCourierName
         )
     }
 }

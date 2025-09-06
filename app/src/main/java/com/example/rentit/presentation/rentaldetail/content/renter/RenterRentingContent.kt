@@ -101,6 +101,9 @@ fun RenterRentingContent(
 
     RentalTrackingSection(
         rentalTrackingNumber = rentingData.rentalTrackingNumber,
+        rentalCourierName = rentingData.rentalCourierName,
+        returnTrackingNumber = rentingData.returnTrackingNumber,
+        returnCourierName = rentingData.returnCourierName
     )
 }
 
@@ -155,6 +158,9 @@ private fun Preview() {
         isReturnAvailable = false,
         isReturnPhotoRegistered = true,
         isReturnTrackingNumRegistered = false,
+        rentalCourierName = null,
+        returnTrackingNumber = null,
+        returnCourierName = null
     )
     RentItTheme {
         Column {

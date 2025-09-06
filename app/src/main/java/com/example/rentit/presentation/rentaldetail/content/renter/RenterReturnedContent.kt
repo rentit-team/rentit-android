@@ -65,7 +65,9 @@ fun RenterReturnedContent(
 
     RentalTrackingSection(
         rentalTrackingNumber = returnedData.rentalTrackingNumber,
+        rentalCourierName = returnedData.rentalCourierName,
         returnTrackingNumber = returnedData.returnTrackingNumber,
+        returnCourierName = returnedData.returnCourierName,
     )
 }
 
@@ -85,7 +87,9 @@ private fun Preview() {
         basicRentalFee = 90_000,
         deposit = 10_000 * 3,
         rentalTrackingNumber = null,
-        returnTrackingNumber = null
+        returnTrackingNumber = null,
+        rentalCourierName = null,
+        returnCourierName = null
     )
     RentItTheme {
         Column {

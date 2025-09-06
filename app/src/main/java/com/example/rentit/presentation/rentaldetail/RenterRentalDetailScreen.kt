@@ -82,8 +82,16 @@ private fun Preview() {
             depositAmount = 45000,
             rentalTrackingNumber = "1234567890",
             returnTrackingNumber = null,
-            deliveryStatus = DeliveryStatusDto(isPhotoRegistered = true, isTrackingNumberRegistered = true),
-            returnStatus = ReturnStatusDto(isPhotoRegistered = false, isTrackingNumberRegistered = false)
+            deliveryStatus = DeliveryStatusDto(
+                isPhotoRegistered = true,
+                isTrackingNumberRegistered = true
+            ),
+            returnStatus = ReturnStatusDto(
+                isPhotoRegistered = false,
+                isTrackingNumberRegistered = false
+            ),
+            rentalCourierName = null,
+            returnCourierName = null
         ),
         statusHistory = listOf(/* 생략 */)
     )

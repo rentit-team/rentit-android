@@ -245,8 +245,8 @@
     <string name="screen_rental_detail_subtitle_day_before_rent">· 대여 %d일전</string>
 
     <string name="screen_rental_detail_tracking_info_title">운송장 정보</string>
-    <string name="screen_rental_detail_rental_tracking_num">대여 송장 번호</string>
-    <string name="screen_rental_detail_returned_tracking_num">반납 송장 번호</string>
+    <string name="screen_rental_detail_rental_tracking_num">대여 송장</string>
+    <string name="screen_rental_detail_returned_tracking_num">반납 송장</string>
     <string name="screen_rental_detail_tracking_num_unregistered">미등록</string>
 
     <string name="screen_rental_detail_renter_charge_price_title">대여 요금 상세</string>
