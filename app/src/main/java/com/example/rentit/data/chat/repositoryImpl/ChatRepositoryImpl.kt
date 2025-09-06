@@ -5,12 +5,12 @@ import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
 import com.example.rentit.common.exception.ServerException
 import com.example.rentit.domain.chat.exception.ChatRoomAlreadyExistsException
-import com.example.rentit.domain.product.exception.ResvByOwnerException
 import com.example.rentit.data.chat.dto.ChatDetailResponseDto
 import com.example.rentit.data.chat.dto.ChatListResponseDto
 import com.example.rentit.data.chat.dto.NewChatResponseDto
 import com.example.rentit.data.chat.remote.ChatRemoteDataSource
 import com.example.rentit.domain.chat.repository.ChatRepository
+import com.example.rentit.domain.product.exception.AccessNotAllowedException
 import com.example.rentit.domain.rental.exception.EmptyBodyException
 import javax.inject.Inject
 
@@ -52,7 +52,7 @@ class ChatRepositoryImpl @Inject constructor(
                 200 -> response.body() ?: throw Exception("Empty response body")
                 403 -> {
                     Log.e(TAG, "Server error 403: ${response.errorBody()?.string()}")
-                    throw ResvByOwnerException()
+                    throw AccessNotAllowedException()
                 }
                 409 -> {
                     Log.e(TAG, "Server error 409: ${response.errorBody()?.string()}")

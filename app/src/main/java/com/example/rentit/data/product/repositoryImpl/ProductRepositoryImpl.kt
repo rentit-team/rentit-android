@@ -15,7 +15,6 @@ import com.example.rentit.data.product.dto.RequestHistoryResponseDto
 import com.example.rentit.data.product.remote.ProductRemoteDataSource
 import com.example.rentit.domain.product.exception.AccessNotAllowedException
 import com.example.rentit.domain.product.exception.ResvAlreadyExistException
-import com.example.rentit.domain.product.exception.ResvByOwnerException
 import com.example.rentit.domain.product.repository.ProductRepository
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -76,7 +75,8 @@ class ProductRepositoryImpl @Inject constructor(
             } else {
                 val errorMsg = response.errorBody()?.string() ?: "Client Error"
                 throw when(response.code()) {
-                    403 -> ResvByOwnerException(errorMsg)   // 판매자가 요청한 경우
+                    401 -> MissingTokenException(errorMsg)
+                    403 -> AccessNotAllowedException(errorMsg)   // 판매자가 요청한 경우
                     409 -> ResvAlreadyExistException(errorMsg)  // 이미 동일 기간의 예약이 1건 이상 존재하는 경우
                     500 -> ServerException(errorMsg)
                     else -> Exception(errorMsg)
