@@ -23,9 +23,11 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.formatPeriodTextWithLabel
 import com.example.rentit.common.component.paddingForBottomBarButton
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray300
+import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -40,6 +42,8 @@ fun ResvRequestScreen(
     rentalEndDate: LocalDate? = null,
     rentalPeriod: Int = 0,
     reservedDateList: List<String> = emptyList(),
+    minPeriod: Int? = null,
+    maxPeriod: Int? = null,
     rentalPrice: Int = 0,
     totalPrice: Int = 0,
     deposit: Int = 0,
@@ -72,7 +76,7 @@ fun ResvRequestScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             DateRangePicker(
-                modifier = Modifier.padding(top = 10.dp, bottom = 26.dp),
+                modifier = Modifier.padding(top = 10.dp, bottom = 8.dp),
                 rentalStartDate = rentalStartDate,
                 rentalEndDate = rentalEndDate,
                 rentalPeriod = rentalPeriod,
@@ -80,6 +84,7 @@ fun ResvRequestScreen(
                 setRentalStartDate = onSetRentalStartDate,
                 setRentalEndDate = onSetRentalEndDate
             )
+            PeriodGuideText(minPeriod, maxPeriod)
             PriceSection(
                 rentalPrice = rentalPrice,
                 deposit = deposit,
@@ -90,9 +95,19 @@ fun ResvRequestScreen(
 }
 
 @Composable
+fun PeriodGuideText(minPeriod: Int?, maxPeriod: Int?) {
+    val periodText = formatPeriodTextWithLabel(minPeriod, maxPeriod)
+    Text(
+        text = stringResource(id = R.string.screen_resv_request_period_guide, periodText),
+        style = MaterialTheme.typography.labelMedium,
+        color = Gray400
+    )
+}
+
+@Composable
 fun PriceSection(rentalPrice: Int, deposit: Int, totalPrice: Int){
     Column(Modifier.screenHorizontalPadding()) {
-        LabelValueRow(Modifier.padding(bottom = 10.dp)) {
+        LabelValueRow(Modifier.padding(top = 30.dp, bottom = 10.dp)) {
             Text(
                 text = stringResource(
                     id = R.string.screen_resv_request_label_total_rental_fee
@@ -162,6 +177,8 @@ fun ResvRequestScreenPreview() {
             reservedDateList = listOf("2025-09-12", "2025-09-13"), // 이미 예약된 날짜
             rentalPrice = 90_000,
             totalPrice = 120_000,
+            minPeriod = 1,
+            maxPeriod = 5,
             deposit = 30_000,
             onBackClick = { /* 뒤로가기 처리 */ },
             onResvRequestClick = { /* 예약 요청 처리 */ },

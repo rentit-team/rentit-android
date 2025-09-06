@@ -50,6 +50,8 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
         rentalEndDate = uiState.rentalEndDate,
         rentalPeriod = uiState.rentalPeriod,
         reservedDateList = uiState.reservedDateList,
+        minPeriod = uiState.minPeriod,
+        maxPeriod = uiState.maxPeriod,
         rentalPrice = uiState.rentalPrice,
         totalPrice = uiState.totalPrice,
         deposit = uiState.deposit,

@@ -143,6 +143,7 @@
 
     <!-- 대여 예약 요청 -->
     <string name="screen_resv_request_app_bar_title">예약 기간을 설정해주세요.</string>
+    <string name="screen_resv_request_period_guide">이 상품은 %s까지 대여가 가능해요</string>
     <string name="screen_resv_request_label_total_rental_fee">총 대여 비용</string>
     <string name="screen_resv_request_label_deposit">보증금</string>
     <string name="screen_resv_request_label_total_fee">합계</string>
