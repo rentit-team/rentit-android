@@ -201,12 +201,12 @@ class RentalDetailViewModel @Inject constructor(
 
     /** 운송장 등록 */
     @RequiresApi(Build.VERSION_CODES.O)
-    fun confirmTrackingReg(productId: Int, reservationId: Int) {
+    fun confirmTrackingReg(requestType: TrackingRegistrationRequestType, productId: Int, reservationId: Int) {
         viewModelScope.launch {
             registerTrackingUseCase(
                 productId = productId,
                 reservationId = reservationId,
-                type = TrackingRegistrationRequestType.RENTAL,
+                type = requestType,
                 courierName = _uiState.value.selectedCourierName,
                 trackingNumber = _uiState.value.trackingNumber
             ).onSuccess {

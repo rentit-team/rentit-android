@@ -18,6 +18,8 @@ class RegisterTrackingUseCase @Inject constructor(
     ): Result<TrackingRegistrationResponseDto?> {
         if(trackingNumber.isBlank())
             return Result.failure(IllegalArgumentException())
+        if(type == TrackingRegistrationRequestType.NONE)
+            return Result.failure(Exception())
 
         return rentalRepository.postTrackingRegistration(
             productId = productId,

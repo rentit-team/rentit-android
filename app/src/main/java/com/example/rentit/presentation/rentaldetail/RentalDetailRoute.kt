@@ -148,7 +148,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
             onSelectCourier = viewModel::changeSelectedCourierName,
             onTrackingNumberChange = viewModel::changeTrackingNumber,
             onDismiss = viewModel::dismissTrackingRegDialog,
-            onConfirm = { viewModel.confirmTrackingReg(productId, reservationId) }
+            onConfirm = { viewModel.confirmTrackingReg(uiState.trackingRegisterRequestType, productId, reservationId) }
         )
     }
 
