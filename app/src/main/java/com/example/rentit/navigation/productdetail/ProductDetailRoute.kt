@@ -7,7 +7,7 @@ sealed class ProductDetailRoute {
     data class ProductDetail(val productId: Int) : ProductDetailRoute()
 
     @Serializable
-    data class ResvRequest(val productId: Int?) : ProductDetailRoute()
+    data class ResvRequest(val productId: Int) : ProductDetailRoute()
 
     @Serializable
     data class ResvRequestComplete(

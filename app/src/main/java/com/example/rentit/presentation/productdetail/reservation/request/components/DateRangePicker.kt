@@ -44,7 +44,7 @@ fun DateRangePicker(
     modifier: Modifier = Modifier,
     rentalStartDate: LocalDate?,
     rentalEndDate: LocalDate?,
-    rentalPeriod: Int,
+    selectedPeriod: Int,
     disabledDates: List<String> = emptyList(),
     setRentalStartDate: (LocalDate?) -> Unit,
     setRentalEndDate: (LocalDate?) -> Unit,
@@ -61,7 +61,7 @@ fun DateRangePicker(
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         CalendarHeader(yearMonth.value, { changeMonth(-1) }, { changeMonth(1) })
         DayOfWeek(cellWidth)
-        CalendarDate(yearMonth = yearMonth.value, disabledDates = disabledDates, cellWidth = cellWidth, isPastDateDisabled = true, rentalStartDate, rentalEndDate, rentalPeriod) { date ->
+        CalendarDate(yearMonth = yearMonth.value, disabledDates = disabledDates, cellWidth = cellWidth, isPastDateDisabled = true, rentalStartDate, rentalEndDate, selectedPeriod) { date ->
             if (!isSelectingStartDate && rentalStartDate != null) {
                 if (date.isBefore(rentalStartDate)) {
                     if (isSelectingEndDate) {
@@ -82,6 +82,7 @@ fun DateRangePicker(
             }
         }
         Column(modifier = Modifier
+            .padding(top = 20.dp)
             .fillMaxWidth()
             .screenHorizontalPadding(), horizontalAlignment = Alignment.CenterHorizontally) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -94,7 +95,7 @@ fun DateRangePicker(
                 }
                 Text(modifier = Modifier.padding(horizontal = 5.dp), text = "까지", style = MaterialTheme.typography.bodyMedium)
             }
-            TotalPeriodText(rentalPeriod)
+            TotalPeriodText(selectedPeriod)
         }
     }
 }
@@ -135,7 +136,7 @@ private fun Preview() {
             hiltViewModel(),
             rentalStartDate = null,
             rentalEndDate = null,
-            rentalPeriod = 0,
+            selectedPeriod = 0,
             setRentalStartDate = { },
             setRentalEndDate = { },
         )
