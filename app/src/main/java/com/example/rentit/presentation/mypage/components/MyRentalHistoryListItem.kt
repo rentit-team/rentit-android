@@ -3,6 +3,7 @@ package com.example.rentit.presentation.mypage.components
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -37,14 +38,15 @@ import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MyRentalHistoryListItem(rentalInfo: ReservationDto) {
+fun MyRentalHistoryListItem(rentalInfo: ReservationDto, onItemClick: (Int, Int) -> Unit = {_, _ -> }) {
     val requestedAt = LocalDateTime.parse(rentalInfo.requestedAt).toLocalDate()
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(25.dp),
+            .padding(25.dp)
+            .clickable { onItemClick(rentalInfo.product.productId, rentalInfo.reservationId) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         LoadableUrlImage(

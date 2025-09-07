@@ -22,11 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,11 +32,9 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.LoadableUrlImage
@@ -55,32 +48,27 @@ import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
 import com.example.rentit.common.component.item.ProductListItem
-import com.example.rentit.navigation.productdetail.navigateToProductDetail
-import com.example.rentit.navigation.setting.navigateToSetting
+import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.mypage.components.MyRentalHistoryListItem
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MyPageScreen(navHostController: NavHostController) {
-    val myPageViewModel: MyPageViewModel = hiltViewModel()
-
-    var isFirstTabSelected by remember { mutableStateOf(true) }
-
-    LaunchedEffect(Unit) {
-        myPageViewModel.getMyProductList()
-        myPageViewModel.getMyRentalList()
-    }
-
-    val myProductList by myPageViewModel.myProductList.collectAsStateWithLifecycle()
-    val myRentalList by myPageViewModel.myRentalList.collectAsStateWithLifecycle()
-
+fun MyPageScreen(
+    isFirstTabSelected: Boolean,
+    myProductList: List<ProductDto>,
+    myRentalList: List<ReservationDto>,
+    onTabActive: () -> Unit,
+    onProductItemClick: (Int) -> Unit,
+    onRentalItemClick: (Int, Int) -> Unit,
+    onSettingClick: () -> Unit
+) {
     Column {
         Column(
             modifier = Modifier
                 .padding(top = 40.dp)
                 .screenHorizontalPadding()
         ) {
-            TopSection(onSettingClick = navHostController::navigateToSetting)
+            TopSection(onSettingClick)
             ProfileSection()
             InfoBox()
         }
@@ -88,8 +76,9 @@ fun MyPageScreen(navHostController: NavHostController) {
             isFirstTabSelected = isFirstTabSelected,
             myProductList = myProductList,
             myRentList = myRentalList,
-            onTabActive = { isFirstTabSelected = !isFirstTabSelected },
-            onItemClick = { navHostController.navigateToProductDetail(it) }
+            onTabActive = onTabActive,
+            onProductItemClick = onProductItemClick,
+            onRentalItemClick = onRentalItemClick
         )
     }
 }
@@ -139,7 +128,9 @@ fun ProfileSection() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         LoadableUrlImage(
-            modifier = Modifier.size(54.dp).clip(CircleShape),
+            modifier = Modifier
+                .size(54.dp)
+                .clip(CircleShape),
             imgUrl = "url",
             defaultImageResId = R.drawable.img_profile_placeholder,
             defaultDescResId = R.string.content_description_for_img_profile_placeholder
@@ -222,7 +213,8 @@ fun TabbedListSection(
     myProductList: List<ProductDto>,
     myRentList: List<ReservationDto>,
     onTabActive: () -> Unit,
-    onItemClick: (Int) -> Unit,
+    onProductItemClick: (Int) -> Unit,
+    onRentalItemClick: (Int, Int) -> Unit,
 ) {
     Row {
         TabTitle(
@@ -259,11 +251,11 @@ fun TabbedListSection(
                         status = it.status,
                         createdAt = it.createdAt,
                         showCheckRequest = true
-                    ) { onItemClick(it.productId) }
+                    ) { onProductItemClick(it.productId) }
                 }
             } else {
                 items(myRentList) {
-                    MyRentalHistoryListItem(it)
+                    MyRentalHistoryListItem(it, onRentalItemClick)
                 }
             }
         } else {
@@ -309,5 +301,14 @@ fun TabTitle(title: String, isTabSelected: Boolean, modifier: Modifier, onClick:
                     .background(PrimaryBlue500)
             )
         }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+@Preview(showBackground = true)
+fun MyPageScreenPreview() {
+    RentItTheme {
+        MyPageScreen(true, emptyList(), emptyList(), {}, {}, {_, _ -> }, {})
     }
 }

@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.example.rentit.presentation.chat.ChatListRoute
 import com.example.rentit.presentation.home.HomeRoute
-import com.example.rentit.presentation.mypage.MyPageScreen
+import com.example.rentit.presentation.mypage.MyPageRoute
 
 fun NavHostController.navigateBottomTab(route: String) {
     navigate(route = route) {
@@ -36,6 +36,6 @@ fun NavGraphBuilder.bottomTabGraph(navHostController: NavHostController) {
         ChatListRoute(navHostController)
     }
     composable(BottomTabRoute.MyPage.route) {
-        MyPageScreen(navHostController)
+        MyPageRoute(navHostController)
     }
 }
