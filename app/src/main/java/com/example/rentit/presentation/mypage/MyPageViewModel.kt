@@ -60,7 +60,16 @@ class MyPageViewModel @Inject constructor(
         emitSideEffect(MyPageSideEffect.NavigateToSetting)
     }
 
+    fun onInfoRentalDetailClicked() {
+        // TODO: API 수정 후 productId, reservationId 값 변경
+        emitSideEffect(MyPageSideEffect.NavigateToRentalDetail(0, 0))
+    }
+
     fun setTabSelected() {
         _uiState.value = _uiState.value.copy(isFirstTabSelected = !uiState.value.isFirstTabSelected)
+    }
+
+    fun showComingSoonMessage() {
+        emitSideEffect(MyPageSideEffect.ToastComingSoon)
     }
 }

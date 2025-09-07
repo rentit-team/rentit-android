@@ -5,18 +5,20 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -25,12 +27,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,36 +46,53 @@ import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
-import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.data.product.dto.ProductDto
 import com.example.rentit.data.user.dto.ReservationDto
 import com.example.rentit.common.component.item.ProductListItem
+import com.example.rentit.common.enums.RentalStatus
+import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.mypage.components.MyRentalHistoryListItem
+import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.toShortFormat
+import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(
+    profileImgUrl: String? = null,
+    nickName: String = "",
+    infoProductTitle: String = "",
+    infoRemainingRentalDays: Int = 0,
     isFirstTabSelected: Boolean,
     myProductList: List<ProductDto>,
     myRentalList: List<ReservationDto>,
+    onSettingClick: () -> Unit,
+    onAlertClick: () -> Unit,
+    onMyHistoryClick: () -> Unit,
+    onInfoRentalDetailClick: () -> Unit,
     onTabActive: () -> Unit,
     onProductItemClick: (Int) -> Unit,
-    onRentalItemClick: (Int, Int) -> Unit,
-    onSettingClick: () -> Unit
+    onRentalItemClick: (Int, Int) -> Unit
 ) {
     Column {
-        Column(
-            modifier = Modifier
-                .padding(top = 40.dp)
-                .screenHorizontalPadding()
-        ) {
-            TopSection(onSettingClick)
-            ProfileSection()
-            InfoBox()
+        Column(modifier = Modifier.screenHorizontalPadding()) {
+
+            TopSection(onAlertClick, onSettingClick)
+
+            ProfileSection(
+                profileImgUrl = profileImgUrl,
+                nickName = nickName,
+                onMyHistoryClick = onMyHistoryClick
+            )
+
+            InfoBox(
+                productTitle = infoProductTitle,
+                remainingRentalDays = infoRemainingRentalDays,
+                onRentalDetailClick = onInfoRentalDetailClick
+            )
         }
         TabbedListSection(
             isFirstTabSelected = isFirstTabSelected,
@@ -84,22 +106,21 @@ fun MyPageScreen(
 }
 
 @Composable
-fun TopSection(onSettingClick: () -> Unit = {}) {
+fun TopSection(onAlertClick: () -> Unit = {}, onSettingClick: () -> Unit = {}) {
     Row(
-        modifier = Modifier.padding(bottom = 35.dp), verticalAlignment = Alignment.CenterVertically
+        modifier = Modifier.padding(top = 40.dp, bottom = 35.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             modifier = Modifier.weight(1F),
             text = stringResource(id = R.string.title_activity_my_page_tab),
             style = MaterialTheme.typography.bodyLarge
         )
-        IconButton(modifier = Modifier.size(30.dp), onClick = { /*TODO*/ }) {
+        IconButton(modifier = Modifier.size(30.dp), onClick = onAlertClick) {
             Box {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_bell),
-                    contentDescription = stringResource(
-                        id = R.string.content_description_for_ic_bell
-                    )
+                    contentDescription = stringResource(id = R.string.content_description_for_ic_bell)
                 )
                 Box(
                     modifier = Modifier
@@ -114,36 +135,39 @@ fun TopSection(onSettingClick: () -> Unit = {}) {
         IconButton(modifier = Modifier.size(30.dp), onClick = onSettingClick) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_setting),
-                contentDescription = stringResource(
-                    id = R.string.content_description_for_ic_setting
-                )
+                contentDescription = stringResource(id = R.string.content_description_for_ic_setting)
             )
         }
     }
 }
 
 @Composable
-fun ProfileSection() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+fun ProfileSection(
+    profileImgUrl: String? = null,
+    nickName: String = "",
+    onMyHistoryClick: () -> Unit = {}
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         LoadableUrlImage(
             modifier = Modifier
                 .size(54.dp)
                 .clip(CircleShape),
-            imgUrl = "url",
+            imgUrl = profileImgUrl,
             defaultImageResId = R.drawable.img_profile_placeholder,
             defaultDescResId = R.string.content_description_for_img_profile_placeholder
         )
 
         Text(
             modifier = Modifier
-                .weight(1F)
+                .weight(1f)
                 .padding(start = 15.dp),
-            text = "닉네임",
+            text = nickName,
             style = MaterialTheme.typography.bodyMedium
         )
-        Box(modifier = Modifier.basicRoundedGrayBorder()) {
+
+        Box(modifier = Modifier
+            .basicRoundedGrayBorder()
+            .clickable { onMyHistoryClick() }) {
             Row(
                 modifier = Modifier.padding(10.5.dp, 6.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -167,7 +191,11 @@ fun ProfileSection() {
 }
 
 @Composable
-fun InfoBox() {
+fun InfoBox(
+    productTitle: String = "",
+    remainingRentalDays: Int = 0,
+    onRentalDetailClick: () -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -175,20 +203,20 @@ fun InfoBox() {
             .basicRoundedGrayBorder()
             .padding(16.dp, 12.dp)
     ) {
-
         Text(
             text = buildAnnotatedString {
-                append(stringResource(R.string.screen_mypage_info_text_start, "[상품명]"))
+                append(stringResource(R.string.screen_mypage_info_text_start, "[$productTitle]"))
                 withStyle(style = SpanStyle(color = PrimaryBlue500)) {
-                    append(" 1일 ")
+                    append(" $remainingRentalDays 일 ")
                 }
                 append(stringResource(R.string.screen_mypage_info_text_end))
-            }, style = MaterialTheme.typography.bodySmall
+            },
+            style = MaterialTheme.typography.bodySmall
         )
         Row(
             modifier = Modifier
                 .padding(top = 4.dp)
-                .clickable { },
+                .clickable { onRentalDetailClick() },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -216,79 +244,96 @@ fun TabbedListSection(
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit,
 ) {
-    Row {
+    Row(Modifier.padding(top = 14.dp)) {
         TabTitle(
-            stringResource(id = R.string.screen_mypage_tab_title_my_product),
-            isFirstTabSelected,
-            Modifier.weight(1F),
+            modifier = Modifier.weight(1F),
+            title = stringResource(id = R.string.screen_mypage_tab_title_my_product),
+            isTabSelected = isFirstTabSelected,
             onClick = onTabActive
         )
         TabTitle(
-            stringResource(id = R.string.screen_mypage_tab_title_on_rent),
-            !isFirstTabSelected,
-            Modifier.weight(1F),
+            modifier = Modifier.weight(1F),
+            title = stringResource(id = R.string.screen_mypage_tab_title_on_rent),
+            isTabSelected = !isFirstTabSelected,
             onClick = onTabActive
         )
     }
+
     CommonDivider()
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray200),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        val list = if (isFirstTabSelected) myProductList else myRentList
-        if (list.isNotEmpty()) {
-            if (isFirstTabSelected) {
-                items(myProductList) {
-                    ProductListItem(
-                        title = it.title,
-                        price = it.price,
-                        thumbnailImgUrl = it.thumbnailImgUrl,
-                        minPeriod = it.period?.min,
-                        maxPeriod = it.period?.max,
-                        categories = emptyList(),
-                        status = it.status,
-                        createdAt = it.createdAt,
-                        showCheckRequest = true
-                    ) { onProductItemClick(it.productId) }
-                }
-            } else {
-                items(myRentList) {
-                    MyRentalHistoryListItem(it, onRentalItemClick)
-                }
-            }
-        } else {
-            item {
-                Column(
-                    modifier = Modifier.padding(top = 50.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        modifier = Modifier.size(112.dp),
-                        painter = painterResource(id = R.drawable.img_empty_box),
-                        contentDescription = stringResource(id = R.string.content_description_for_img_empty_box)
-                    )
-                    Text(
-                        modifier = Modifier.padding(top = 14.dp),
-                        text = stringResource(id = R.string.screen_mypage_text_tab_list_empty),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Gray400
-                    )
-                }
+
+    if (isFirstTabSelected && myProductList.isNotEmpty()) {
+        LazyColumn(modifier = Modifier.background(Gray100)) {
+            items(myProductList, key = { it.productId }) {
+                ProductListItem(
+                    title = it.title,
+                    price = it.price,
+                    thumbnailImgUrl = it.thumbnailImgUrl,
+                    minPeriod = it.period?.min,
+                    maxPeriod = it.period?.max,
+                    categories = emptyList(),
+                    status = it.status,
+                    createdAt = it.createdAt,
+                    showCheckRequest = true
+                ) { onProductItemClick(it.productId) }
             }
         }
+    } else if(!isFirstTabSelected && myRentList.isNotEmpty()) {
+        LazyColumn(modifier = Modifier.background(Gray100)) {
+            items(myRentList, key = { it.reservationId }) {
+                MyRentalHistoryListItem(
+                    title = it.product.title,
+                    thumbnailImgUrl = it.product.thumbnailImgUrl,
+                    startDate = it.startDate,
+                    endDate = it.endDate,
+                    status = it.status,
+                    requestedAt = it.requestedAt
+                ) { onRentalItemClick(it.product.productId, it.reservationId) }
+            }
+        }
+    } else {
+        EmptyListPlaceHolder(isFirstTabSelected)
     }
 }
 
 @Composable
-fun TabTitle(title: String, isTabSelected: Boolean, modifier: Modifier, onClick: () -> Unit) {
+fun EmptyListPlaceHolder(isFirstTabSelected: Boolean = false) {
+    val text =
+        if(isFirstTabSelected) {
+            stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
+        } else {
+            stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
+        }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Gray100),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(modifier = Modifier.weight(0.8f))
+        Image(
+            modifier = Modifier.fillMaxWidth(0.4f),
+            painter = painterResource(id = R.drawable.img_empty_box),
+            contentDescription = stringResource(id = R.string.content_description_for_img_empty_box)
+        )
+        Text(
+            modifier = Modifier.padding(top = 14.dp),
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = Gray400
+        )
+        Spacer(modifier = Modifier.weight(2f))
+    }
+}
+
+@Composable
+fun TabTitle(modifier: Modifier, title: String, isTabSelected: Boolean, onClick: () -> Unit) {
     Column(
         modifier = modifier.clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.padding(bottom = 10.dp, top = 13.dp),
+            modifier = Modifier.padding(bottom = 10.dp),
             text = title,
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.bodyMedium
@@ -296,9 +341,68 @@ fun TabTitle(title: String, isTabSelected: Boolean, modifier: Modifier, onClick:
         if (isTabSelected) {
             Box(
                 modifier = Modifier
-                    .width(75.dp)
+                    .fillMaxWidth(0.4f)
                     .height(2.dp)
                     .background(PrimaryBlue500)
+            )
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun MyRentalHistoryListItem(
+    title: String,
+    thumbnailImgUrl: String?,
+    startDate: String,
+    endDate: String,
+    status: RentalStatus,
+    requestedAt: String,
+    onItemClick: () -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .screenHorizontalPadding()
+            .padding(vertical = 25.dp)
+            .clickable { onItemClick() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        LoadableUrlImage(
+            modifier = Modifier
+                .size(70.dp)
+                .clip(RoundedCornerShape(20.dp)),
+            imgUrl = thumbnailImgUrl,
+            defaultImageResId = R.drawable.img_thumbnail_placeholder,
+        )
+        Column(Modifier.padding(start = 18.dp)) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = title,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 1,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    text = stringResource(status.strRes),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = status.textColor
+                )
+            }
+            Text(
+                modifier = Modifier.padding(vertical = 8.dp),
+                text = formatRentalPeriod(LocalContext.current, startDate, endDate),
+                style = MaterialTheme.typography.labelMedium,
+            )
+            Text(
+                text = "${stringResource(R.string.screen_mypage_my_rental_list_item_label_request_at)} ${LocalDateTime.parse(requestedAt).toShortFormat()}",
+                style = MaterialTheme.typography.labelMedium,
+                color = Gray400
             )
         }
     }
@@ -309,6 +413,6 @@ fun TabTitle(title: String, isTabSelected: Boolean, modifier: Modifier, onClick:
 @Preview(showBackground = true)
 fun MyPageScreenPreview() {
     RentItTheme {
-        MyPageScreen(true, emptyList(), emptyList(), {}, {}, {_, _ -> }, {})
+        MyPageScreen("", "", "", 0, true, emptyList(), emptyList(), {}, {}, {}, {}, {}, {}, {_, _ -> })
     }
 }

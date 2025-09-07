@@ -1,16 +1,19 @@
 package com.example.rentit.presentation.mypage
 
 import android.os.Build
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
+import com.example.rentit.R
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.navigation.setting.navigateToSetting
@@ -19,6 +22,7 @@ import com.example.rentit.navigation.setting.navigateToSetting
 @Composable
 fun MyPageRoute(navHostController: NavHostController) {
     val viewModel: MyPageViewModel = hiltViewModel()
+    val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -38,8 +42,11 @@ fun MyPageRoute(navHostController: NavHostController) {
                     is MyPageSideEffect.NavigateToRentalDetail -> {
                         navHostController.navigateToRentalDetail(it.productId, it.reservationId)
                     }
-                    is MyPageSideEffect.NavigateToSetting -> {
+                    MyPageSideEffect.NavigateToSetting -> {
                         navHostController.navigateToSetting()
+                    }
+                    MyPageSideEffect.ToastComingSoon -> {
+                        Toast.makeText(context, context.getString(R.string.common_toast_feat_coming_soon), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -47,9 +54,16 @@ fun MyPageRoute(navHostController: NavHostController) {
     }
 
     MyPageScreen(
+        profileImgUrl = uiState.profileImgUrl,
+        nickName = uiState.nickName,
+        infoProductTitle = uiState.infoProductTitle,
+        infoRemainingRentalDays = uiState.infoRemainingRentalDays,
         isFirstTabSelected = uiState.isFirstTabSelected,
         myProductList = uiState.myProductList,
         myRentalList = uiState.myRentalList,
+        onAlertClick = viewModel::showComingSoonMessage,
+        onMyHistoryClick = viewModel::showComingSoonMessage,
+        onInfoRentalDetailClick = viewModel::onInfoRentalDetailClicked,
         onTabActive = viewModel::setTabSelected,
         onProductItemClick = viewModel::onProductItemClicked,
         onRentalItemClick = viewModel::onRentalItemClicked,
