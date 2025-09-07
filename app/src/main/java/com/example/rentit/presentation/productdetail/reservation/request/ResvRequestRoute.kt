@@ -66,7 +66,7 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
         reservedDateList = uiState.reservedDateList,
         minPeriod = uiState.minPeriod,
         maxPeriod = uiState.maxPeriod,
-        rentalPrice = uiState.rentalPrice,
+        rentalPrice = uiState.totalRentalPrice,
         totalPrice = uiState.totalPrice,
         deposit = uiState.deposit,
         onBackClick = navHostController::popBackStack,
