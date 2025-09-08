@@ -77,7 +77,8 @@ fun MyPageRoute(navHostController: NavHostController) {
         onTabActive = viewModel::setTabSelected,
         onProductItemClick = viewModel::onProductItemClicked,
         onRentalItemClick = viewModel::onRentalItemClicked,
-        onSettingClick = viewModel::onSettingClicked
+        onSettingClick = viewModel::onSettingClicked,
+        onMyPendingRentalClick = viewModel::showComingSoonMessage // TODO: 승인/발송 대기 리스트 화면 구현 후 Navigation 연결
     )
 
     LoadingScreen(uiState.isLoading)

@@ -91,6 +91,8 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
+    // TODO: 서버 구현 후 승인/발송 대기 리스트 조회 및 연동
+
     suspend fun loadInitialData() {
         setLoading(true)
         getMyInfo()

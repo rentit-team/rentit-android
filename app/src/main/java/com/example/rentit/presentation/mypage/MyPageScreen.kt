@@ -46,6 +46,7 @@ import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.component.item.ProductListItem
+import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
@@ -70,6 +71,7 @@ fun MyPageScreen(
     isFirstTabSelected: Boolean,
     onSettingClick: () -> Unit,
     onAlertClick: () -> Unit,
+    onMyPendingRentalClick: () -> Unit,
     onInfoRentalDetailClick: () -> Unit,
     onTabActive: () -> Unit,
     onProductItemClick: (Int) -> Unit,
@@ -85,7 +87,8 @@ fun MyPageScreen(
                 nickName = nickName,
                 myProductCount = myProductCount,
                 myValidRentalCount = myValidRentalCount,
-                myPendingRentalCount = myPendingRentalCount
+                myPendingRentalCount = myPendingRentalCount,
+                onMyPendingRentalClick = onMyPendingRentalClick
             )
 
             if(nearestDueItem != null) {
@@ -149,7 +152,8 @@ fun ProfileSection(
     nickName: String = "",
     myProductCount: Int = 0,
     myValidRentalCount: Int = 0,
-    myPendingRentalCount: Int = 0
+    myPendingRentalCount: Int = 0,
+    onMyPendingRentalClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier.padding(bottom = 26.dp),
@@ -178,15 +182,18 @@ fun ProfileSection(
             ) {
                 CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myProductCount)
                 CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myValidRentalCount)
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount, true, onMyPendingRentalClick)
             }
         }
     }
 }
 
 @Composable
-fun RowScope.CountBox(label: String, count: Int) {
-    Column(modifier = Modifier.weight(1f)) {
+fun RowScope.CountBox(label: String, count: Int, clickable: Boolean = false, onClick: () -> Unit = {}) {
+    Column(modifier = Modifier
+        .weight(1f)
+        .clip(RoundedCornerShape(10.dp))
+        .clickable(clickable) { onClick() }) {
         Text(
             modifier = Modifier.padding(bottom = 2.dp),
             text = count.toString(),
@@ -435,7 +442,59 @@ fun MyRentalHistoryListItem(
 @Composable
 @Preview(showBackground = true)
 fun MyPageScreenPreview() {
+
+    val sampleNearestDueItem = NearestDueItemModel(
+        reservationId = 1,
+        productId = 101,
+        productTitle = "아이패드 프로 12.9인치",
+        remainingRentalDays = 1
+    )
+
+    val sampleMyProductList = listOf(
+        MyProductItemModel(
+            productId = 101,
+            title = "아이패드 프로 12.9인치",
+            price = 120000,
+            thumbnailImgUrl = "https://example.com/ipad.jpg",
+            minPeriod = 1,
+            maxPeriod = 7,
+            categories = listOf("전자기기", "태블릿"),
+            status = ProductStatus.AVAILABLE,
+            createdAt = "2025-09-08T12:00:00"
+        )
+    )
+
+    val sampleMyRentalList = listOf(
+        MyRentalItemModel(
+            productId = 102,
+            reservationId = 201,
+            productTitle = "맥북 에어 M2",
+            thumbnailImgUrl = "https://example.com/macbook.jpg",
+            startDate = "2025-09-05",
+            endDate = "2025-09-12",
+            status = RentalStatus.RENTING,
+            requestedAt = "2025-09-04T12:30:00"
+        )
+    )
+
     RentItTheme {
-        MyPageScreen("", "닉네임", 0, 0, 0, NearestDueItemModel(0, 0, "게시글 제목", 0), emptyList(), emptyList(), true, {}, {}, {}, {}, {}, {_, _ -> })
+        MyPageScreen(
+            profileImgUrl = "https://example.com/profile.jpg",
+            nickName = "홍길동",
+            myProductCount = sampleMyProductList.size,
+            myValidRentalCount = sampleMyRentalList.size,
+            myPendingRentalCount = 0,
+            nearestDueItem = sampleNearestDueItem,
+            myProductList = sampleMyProductList,
+            myRentalList = sampleMyRentalList,
+            isFirstTabSelected = true,
+            onSettingClick = {},
+            onAlertClick = {},
+            onMyPendingRentalClick = {},
+            onInfoRentalDetailClick = {},
+            onTabActive = {},
+            onProductItemClick = {},
+            onRentalItemClick = { _, _ -> }
+        )
     }
 }
