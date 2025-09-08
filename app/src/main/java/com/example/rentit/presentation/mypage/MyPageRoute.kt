@@ -65,8 +65,8 @@ fun MyPageRoute(navHostController: NavHostController) {
     MyPageScreen(
         profileImgUrl = uiState.profileImgUrl,
         nickName = uiState.nickName,
-        myPostCount = uiState.myPostCount,
-        myRentalCount = uiState.myRentalCount,
+        myProductCount = uiState.myProductCount,
+        myValidRentalCount = uiState.myValidRentalCount,
         myPendingRentalCount = uiState.myPendingRentalCount,
         nearestDueItem = uiState.nearestDueItem,
         myProductList = uiState.myProductList,

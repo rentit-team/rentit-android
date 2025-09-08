@@ -61,8 +61,8 @@ import java.time.LocalDateTime
 fun MyPageScreen(
     profileImgUrl: String?,
     nickName: String = "",
-    myPostCount: Int = 0,
-    myRentalCount: Int = 0,
+    myProductCount: Int = 0,
+    myValidRentalCount: Int = 0,
     myPendingRentalCount: Int = 0,
     nearestDueItem: NearestDueItemModel?,
     myProductList: List<MyProductItemModel>,
@@ -83,8 +83,8 @@ fun MyPageScreen(
             ProfileSection(
                 profileImgUrl = profileImgUrl,
                 nickName = nickName,
-                myPostCount = myPostCount,
-                myRentalCount = myRentalCount,
+                myProductCount = myProductCount,
+                myValidRentalCount = myValidRentalCount,
                 myPendingRentalCount = myPendingRentalCount
             )
 
@@ -147,8 +147,8 @@ fun TopSection(onAlertClick: () -> Unit = {}, onSettingClick: () -> Unit = {}) {
 fun ProfileSection(
     profileImgUrl: String? = null,
     nickName: String = "",
-    myPostCount: Int = 0,
-    myRentalCount: Int = 0,
+    myProductCount: Int = 0,
+    myValidRentalCount: Int = 0,
     myPendingRentalCount: Int = 0
 ) {
     Row(
@@ -176,8 +176,8 @@ fun ProfileSection(
                     .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myPostCount)
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myRentalCount)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myProductCount)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myValidRentalCount)
                 CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount)
             }
         }
@@ -413,7 +413,7 @@ fun MyRentalHistoryListItem(
                 )
                 Text(
                     text = stringResource(status.strRes),
-                    style = MaterialTheme.typography.labelLarge,
+                    style = MaterialTheme.typography.labelMedium,
                     color = status.textColor
                 )
             }

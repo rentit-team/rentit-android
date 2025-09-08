@@ -7,8 +7,8 @@ import com.example.rentit.domain.user.model.NearestDueItemModel
 data class MyPageState(
     val profileImgUrl: String? = "",
     val nickName: String = "",
-    val myPostCount: Int = 0,
-    val myRentalCount: Int = 0,
+    val myProductCount: Int = 0,
+    val myValidRentalCount: Int = 0,
     val myPendingRentalCount: Int = 0,
     val nearestDueItem: NearestDueItemModel? = null,
     val myProductList: List<MyProductItemModel> = emptyList(),

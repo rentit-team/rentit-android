@@ -58,7 +58,10 @@ class MyPageViewModel @Inject constructor(
     private suspend fun getMyProductList() {
         getMyProductsWithCategoryUseCase()
             .onSuccess {
-                _uiState.value = _uiState.value.copy(myProductList = it)
+                _uiState.value = _uiState.value.copy(
+                    myProductList = it,
+                    myProductCount = it.size
+                )
             }.onFailure { e ->
                 errorHandling(e)
             }
@@ -69,6 +72,7 @@ class MyPageViewModel @Inject constructor(
             .onSuccess {
                 _uiState.value = _uiState.value.copy(
                     myRentalList = it.myRentalList,
+                    myValidRentalCount = it.myValidRentalCount,
                     nearestDueItem = it.nearestDueItem
                 )
             }.onFailure { e ->

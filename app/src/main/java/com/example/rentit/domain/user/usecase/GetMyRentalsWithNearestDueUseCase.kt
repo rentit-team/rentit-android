@@ -2,6 +2,7 @@ package com.example.rentit.domain.user.usecase
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.data.user.mapper.toModel
 import com.example.rentit.data.user.mapper.toMyRentalItemModel
 import com.example.rentit.domain.user.model.MyRentalsWithNearestDueModel
@@ -18,8 +19,15 @@ class GetMyRentalsWithNearestDueUseCase @Inject constructor(
 
             val myRentalList = response.myReservations.map { it.toMyRentalItemModel() }
             val nearestDueItem = response.nearestDueItem?.toModel()
+            val myValidRentalCount = myRentalList.count {
+                it.status !in listOf(
+                    RentalStatus.CANCELED,
+                    RentalStatus.REJECTED,
+                    RentalStatus.PENDING
+                )
+            }
 
-            MyRentalsWithNearestDueModel(myRentalList, nearestDueItem)
+            MyRentalsWithNearestDueModel(myRentalList, myValidRentalCount, nearestDueItem)
         }
     }
 }
