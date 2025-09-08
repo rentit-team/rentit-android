@@ -179,8 +179,10 @@
     <string name="screen_product_create_complete_btn_text">등록하기</string>
 
     <!-- 채팅 리스트 -->
-    <string name="screen_chat_list_time_days_ago">· %d일 전</string>
-    <string name="screen_chat_list_time_months_ago">· %d달 전</string>
+    <string name="screen_chat_list_time_minutes_ago">%d분 전</string>
+    <string name="screen_chat_list_time_hours_ago">%d시간 전</string>
+    <string name="screen_chat_list_time_days_ago">%d일 전</string>
+    <string name="screen_chat_list_time_months_ago">%d달 전</string>
     <string name="screen_chat_list_empty_chat_message">아직 채팅이 시작되지 않았어요.</string>
 
     <!-- 채팅방 -->
@@ -220,16 +222,19 @@
     <!-- 마이페이지 -->
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
-    <string name="screen_mypage_info_text_start">내가 대여한 %s의 반납일이</string>
-    <string name="screen_mypage_info_text_end">남았어요!</string>
+    <string name="screen_mypage_info_text_1">내가 대여한</string>
+    <string name="screen_mypage_info_text_2">의 반납일이</string>
+    <string name="screen_mypage_info_text_3">일&#160;</string>
+    <string name="screen_mypage_info_text_4">남았어요!</string>
     <string name="screen_mypage_check_usage_history">대여 정보 확인하기</string>
     <string name="screen_mypage_tab_title_my_product">내 물건</string>
-    <string name="screen_mypage_tab_title_on_rent">대여 기록</string>
+    <string name="screen_mypage_tab_title_on_rent">내 대여</string>
     <string name="screen_mypage_text_tab_list_product_empty">게시글이 없어요</string>
     <string name="screen_mypage_text_tab_list_rental_empty">대여 내역이 없어요</string>
 
-    <string name="screen_mypage_my_rental_list_item_label_renting">대여중</string>
-    <string name="screen_mypage_my_rental_list_item_label_request_at">요청일: </string>
+    <string name="screen_mypage_my_activity_count_label_post">게시글</string>
+    <string name="screen_mypage_my_activity_count_label_rental">대여 현황</string>
+    <string name="screen_mypage_my_activity_count_label_pending">승인/발송 대기</string>
 
     <!-- 설정 -->
     <string name="screen_setting_title">설정</string>
