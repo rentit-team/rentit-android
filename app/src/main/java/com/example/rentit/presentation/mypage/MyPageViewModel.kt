@@ -2,6 +2,7 @@ package com.example.rentit.presentation.mypage
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.domain.user.repository.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -9,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,13 +30,29 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun getMyProductList() {
-        viewModelScope.launch {
-            userRepository.getMyProductList().onSuccess {
-                _uiState.value = _uiState.value.copy(myProductList = it.myProducts)
-            }.onFailure {
-                /* 로딩 실패 시 */
+    private fun errorHandling(e: Throwable) {
+        when(e) {
+            is MissingTokenException -> {
+                // TODO: 로그아웃 및 로그인 화면으로 이동
             }
+            is IOException -> {
+                showNetworkErrorDialog()
+            }
+            else -> {
+                showServerErrorDialog()
+            }
+        }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    private suspend fun getMyProductList() {
+        userRepository.getMyProductList().onSuccess {
+            _uiState.value = _uiState.value.copy(myProductList = it.myProducts)
+        }.onFailure { e ->
+            errorHandling(e)
         }
     }
 
@@ -46,6 +64,24 @@ class MyPageViewModel @Inject constructor(
                 /* 로딩 실패 시 */
             }
         }
+
+    private suspend fun getMyInfo() {
+        userRepository.getMyInfo().onSuccess {
+            _uiState.value = _uiState.value.copy(
+                profileImgUrl = it.data.profileImgUrl,
+                nickName = it.data.nickname,
+            )
+        }.onFailure { e ->
+            errorHandling(e)
+        }
+    }
+
+    suspend fun loadInitialData() {
+        setLoading(true)
+        getMyInfo()
+        getMyProductList()
+        getMyRentalList()
+        setLoading(false)
     }
 
     fun onProductItemClicked(productId: Int) {
@@ -71,5 +107,27 @@ class MyPageViewModel @Inject constructor(
 
     fun showComingSoonMessage() {
         emitSideEffect(MyPageSideEffect.ToastComingSoon)
+    }
+
+    fun showNetworkErrorDialog() {
+        _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
+    }
+
+    fun showServerErrorDialog() {
+        _uiState.value = _uiState.value.copy(showServerErrorDialog = true)
+    }
+
+    fun reloadData() {
+        dismissAllDialog()
+        viewModelScope.launch {
+            loadInitialData()
+        }
+    }
+
+    fun dismissAllDialog() {
+        _uiState.value = _uiState.value.copy(
+            showNetworkErrorDialog = false,
+            showServerErrorDialog = false
+        )
     }
 }

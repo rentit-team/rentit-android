@@ -4,6 +4,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -14,6 +15,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.common.component.dialog.NetworkErrorDialog
+import com.example.rentit.common.component.dialog.ServerErrorDialog
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.navigation.setting.navigateToSetting
@@ -28,8 +32,7 @@ fun MyPageRoute(navHostController: NavHostController) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.getMyProductList()
-        viewModel.getMyRentalList()
+        viewModel.loadInitialData()
     }
 
     LaunchedEffect(Unit) {
@@ -53,6 +56,12 @@ fun MyPageRoute(navHostController: NavHostController) {
         }
     }
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.dismissAllDialog()
+        }
+    }
+
     MyPageScreen(
         profileImgUrl = uiState.profileImgUrl,
         nickName = uiState.nickName,
@@ -69,4 +78,20 @@ fun MyPageRoute(navHostController: NavHostController) {
         onRentalItemClick = viewModel::onRentalItemClicked,
         onSettingClick = viewModel::onSettingClicked
     )
+
+    LoadingScreen(uiState.isLoading)
+
+    if(uiState.showNetworkErrorDialog) {
+        NetworkErrorDialog(
+            navigateBack = navHostController::popBackStack,
+            onRetry = viewModel::reloadData,
+        )
+    }
+
+    if(uiState.showServerErrorDialog) {
+        ServerErrorDialog(
+            navigateBack = navHostController::popBackStack,
+            onRetry = viewModel::reloadData
+        )
+    }
 }
