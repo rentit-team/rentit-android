@@ -1,9 +1,13 @@
 package com.example.rentit.presentation.mypage
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.domain.user.repository.UserRepository
+import com.example.rentit.domain.user.usecase.GetMyProductsWithCategoryUseCase
+import com.example.rentit.domain.user.usecase.GetMyRentalsWithNearestDueUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,9 +17,12 @@ import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
+    private val getMyRentalsWithNearestDueUseCase: GetMyRentalsWithNearestDueUseCase,
+    private val getMyProductsWithCategoryUseCase: GetMyProductsWithCategoryUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageState())
@@ -49,21 +56,25 @@ class MyPageViewModel @Inject constructor(
     }
 
     private suspend fun getMyProductList() {
-        userRepository.getMyProductList().onSuccess {
-            _uiState.value = _uiState.value.copy(myProductList = it.myProducts)
-        }.onFailure { e ->
-            errorHandling(e)
-        }
+        getMyProductsWithCategoryUseCase()
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(myProductList = it)
+            }.onFailure { e ->
+                errorHandling(e)
+            }
     }
 
-    fun getMyRentalList() {
-        viewModelScope.launch {
-            userRepository.getMyRentalList().onSuccess {
-                _uiState.value = _uiState.value.copy(myRentalList = it.myReservations)
-            }.onFailure {
-                /* 로딩 실패 시 */
+    private suspend fun getMyRentalList() {
+        getMyRentalsWithNearestDueUseCase()
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(
+                    myRentalList = it.myRentalList,
+                    nearestDueItem = it.nearestDueItem
+                )
+            }.onFailure { e ->
+                errorHandling(e)
             }
-        }
+    }
 
     private suspend fun getMyInfo() {
         userRepository.getMyInfo().onSuccess {
@@ -97,8 +108,10 @@ class MyPageViewModel @Inject constructor(
     }
 
     fun onInfoRentalDetailClicked() {
-        // TODO: API 수정 후 productId, reservationId 값 변경
-        emitSideEffect(MyPageSideEffect.NavigateToRentalDetail(0, 0))
+        val myInfoModel = _uiState.value.nearestDueItem
+        myInfoModel?.let {
+            emitSideEffect(MyPageSideEffect.NavigateToRentalDetail(myInfoModel.productId, myInfoModel.reservationId))
+        }
     }
 
     fun setTabSelected() {

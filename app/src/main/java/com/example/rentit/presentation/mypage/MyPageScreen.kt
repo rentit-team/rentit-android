@@ -49,14 +49,15 @@ import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.pretendardFamily
-import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.data.user.dto.ReservationDto
 import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.common.util.toShortFormat
+import com.example.rentit.domain.user.model.MyProductItemModel
+import com.example.rentit.domain.user.model.MyRentalItemModel
+import com.example.rentit.domain.user.model.NearestDueItemModel
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -64,11 +65,10 @@ import java.time.LocalDateTime
 fun MyPageScreen(
     profileImgUrl: String? = null,
     nickName: String = "",
-    infoProductTitle: String = "",
-    infoRemainingRentalDays: Int = 0,
+    nearestDueItem: NearestDueItemModel? = null,
     isFirstTabSelected: Boolean,
-    myProductList: List<ProductDto>,
-    myRentalList: List<ReservationDto>,
+    myProductList: List<MyProductItemModel>,
+    myRentalList: List<MyRentalItemModel>,
     onSettingClick: () -> Unit,
     onAlertClick: () -> Unit,
     onMyHistoryClick: () -> Unit,
@@ -88,11 +88,13 @@ fun MyPageScreen(
                 onMyHistoryClick = onMyHistoryClick
             )
 
-            InfoBox(
-                productTitle = infoProductTitle,
-                remainingRentalDays = infoRemainingRentalDays,
-                onRentalDetailClick = onInfoRentalDetailClick
-            )
+            if(nearestDueItem != null) {
+                InfoBox(
+                    productTitle = nearestDueItem.productTitle,
+                    remainingRentalDays = nearestDueItem.remainingRentalDays,
+                    onRentalDetailClick = onInfoRentalDetailClick
+                )
+            }
         }
         TabbedListSection(
             isFirstTabSelected = isFirstTabSelected,
@@ -238,8 +240,8 @@ fun InfoBox(
 @Composable
 fun TabbedListSection(
     isFirstTabSelected: Boolean,
-    myProductList: List<ProductDto>,
-    myRentList: List<ReservationDto>,
+    myProductList: List<MyProductItemModel>,
+    myRentList: List<MyRentalItemModel>,
     onTabActive: () -> Unit,
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit,
@@ -268,9 +270,9 @@ fun TabbedListSection(
                     title = it.title,
                     price = it.price,
                     thumbnailImgUrl = it.thumbnailImgUrl,
-                    minPeriod = it.period?.min,
-                    maxPeriod = it.period?.max,
-                    categories = emptyList(),
+                    minPeriod = it.minPeriod,
+                    maxPeriod = it.maxPeriod,
+                    categories = it.categories,
                     status = it.status,
                     createdAt = it.createdAt,
                     showCheckRequest = true
@@ -281,13 +283,13 @@ fun TabbedListSection(
         LazyColumn(modifier = Modifier.background(Gray100)) {
             items(myRentList, key = { it.reservationId }) {
                 MyRentalHistoryListItem(
-                    title = it.product.title,
-                    thumbnailImgUrl = it.product.thumbnailImgUrl,
+                    title = it.productTitle,
+                    thumbnailImgUrl = it.thumbnailImgUrl,
                     startDate = it.startDate,
                     endDate = it.endDate,
                     status = it.status,
                     requestedAt = it.requestedAt
-                ) { onRentalItemClick(it.product.productId, it.reservationId) }
+                ) { onRentalItemClick(it.productId, it.reservationId) }
             }
         }
     } else {
@@ -413,6 +415,6 @@ fun MyRentalHistoryListItem(
 @Preview(showBackground = true)
 fun MyPageScreenPreview() {
     RentItTheme {
-        MyPageScreen("", "", "", 0, true, emptyList(), emptyList(), {}, {}, {}, {}, {}, {}, {_, _ -> })
+        MyPageScreen("", "", null, true, emptyList(), emptyList(), {}, {}, {}, {}, {}, {}, {_, _ -> })
     }
 }

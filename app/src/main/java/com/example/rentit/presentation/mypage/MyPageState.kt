@@ -1,15 +1,15 @@
 package com.example.rentit.presentation.mypage
 
-import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.data.user.dto.ReservationDto
+import com.example.rentit.domain.user.model.MyProductItemModel
+import com.example.rentit.domain.user.model.MyRentalItemModel
+import com.example.rentit.domain.user.model.NearestDueItemModel
 
 data class MyPageState(
     val profileImgUrl: String? = "",
     val nickName: String = "",
-    val infoProductTitle: String = "",
-    val infoRemainingRentalDays: Int = 0,
-    val myProductList: List<ProductDto> = emptyList(),
-    val myRentalList: List<ReservationDto> = emptyList(),
+    val nearestDueItem: NearestDueItemModel? = null,
+    val myProductList: List<MyProductItemModel> = emptyList(),
+    val myRentalList: List<MyRentalItemModel> = emptyList(),
     val isFirstTabSelected: Boolean = true,
     val isLoading: Boolean = false,
     val showNetworkErrorDialog: Boolean = false,
