@@ -2,6 +2,7 @@ package com.example.rentit.domain.rental.repository
 
 import com.example.rentit.common.enums.PhotoRegistrationType
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
+import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.RentalPhotoResponseDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
@@ -18,7 +19,7 @@ interface RentalRepository {
 
     suspend fun updateRentalStatus(productId: Int, reservationId: Int, request: UpdateRentalStatusRequestDto): Result<Unit>
 
-    suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<Unit>
+    suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<PhotoRegistrationResponseDto>
 
     suspend fun getRentalPhotos(productId: Int, reservationId: Int): Result<RentalPhotoResponseDto>
 }

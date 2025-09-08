@@ -11,6 +11,14 @@ import com.example.rentit.domain.rental.repository.RentalRepository
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
 
+/**
+ * 특정 예약의 상세 정보를 조회하는 UseCase
+ *
+ * - 서버에서 예약 상세 정보를 가져옴
+ * - 대여 상태를 도메인 모델(RentalDetailStatusModel)로 변환
+ * - 현재 로그인한 사용자가 예약자인지 상품 소유자인지 판단하여 역할 설정
+ */
+
 class GetRentalDetailUseCase @Inject constructor(
     private val rentalRepository: RentalRepository,
     private val userRepository: UserRepository
