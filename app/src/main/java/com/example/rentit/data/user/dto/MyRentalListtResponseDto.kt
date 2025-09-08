@@ -1,5 +1,6 @@
 package com.example.rentit.data.user.dto
 
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.data.product.dto.ProductDto
 import com.google.gson.annotations.SerializedName
 
@@ -25,7 +26,7 @@ data class ReservationDto(
     val endDate: String, // "YYYY-MM-DD"
 
     @SerializedName("status")
-    val status: String, // PENDING, REJECTED, ACCEPTED
+    val status: RentalStatus, // PENDING, REJECTED, ACCEPTED
 
     @SerializedName("requestedAt")
     val requestedAt: String // ISO 8601

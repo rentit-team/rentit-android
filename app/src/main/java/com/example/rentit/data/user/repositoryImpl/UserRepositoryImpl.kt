@@ -98,50 +98,34 @@ class UserRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getMyProductList(): Result<MyProductListResponseDto> {
-        return try {
+        return runCatching {
             val response = remoteDataSource.getMyProductList()
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
+            if(response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client error"
+                throw when(response.code()) {
+                    401 -> MissingTokenException(errorMsg)
+                    500 -> ServerException(errorMsg)
+                    else -> Exception(errorMsg)
                 }
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
     override suspend fun getMyRentalList(): Result<MyRentalListResponseDto> {
-        return try {
+        return runCatching {
             val response = remoteDataSource.getMyRentalList()
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                500 -> {
-                    Result.failure(ServerException())
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
+            if (response.isSuccessful) {
+                response.body() ?: throw EmptyBodyException()
+            } else {
+                val errorMsg = response.errorBody()?.string() ?: "Client error"
+                throw when (response.code()) {
+                    401 -> MissingTokenException(errorMsg)
+                    500 -> ServerException(errorMsg)
+                    else -> Exception(errorMsg)
                 }
             }
-        } catch (e: Exception) {
-            Result.failure(e)
         }
     }
 
