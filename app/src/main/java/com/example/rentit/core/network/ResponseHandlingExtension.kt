@@ -1,6 +1,5 @@
 package com.example.rentit.core.network
 
-import com.example.rentit.common.exception.ServerException
 import com.example.rentit.core.error.BadRequestException
 import com.example.rentit.core.error.ConflictException
 import com.example.rentit.core.error.ForbiddenException
@@ -14,7 +13,7 @@ import retrofit2.Response
 fun <T> Response<T>.getOrThrow(): Result<T> {
     return runCatching {
         if(isSuccessful) {
-            body() ?: throw ServerException("Response body is null")
+            body() ?: throw ServerErrorException("Response body is null")
         } else {
             val errorMessage = errorBody()?.string() ?: "Client Error"
             throw when(code()) {

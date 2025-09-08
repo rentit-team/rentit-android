@@ -5,9 +5,9 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.core.error.ConflictException
 import com.example.rentit.core.error.ForbiddenException
+import com.example.rentit.core.error.UnauthorizedException
 import com.example.rentit.domain.product.repository.ProductRepository
 import com.example.rentit.domain.product.usecase.PostResvRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -48,7 +48,7 @@ class ResvRequestViewModel @Inject constructor(
 
     private fun handleFailure(e: Throwable) {
         when(e) {
-            is MissingTokenException -> {
+            is UnauthorizedException -> {
                 // TODO: 로그아웃 처리 및 로그인 화면으로 이동
             }
             is ForbiddenException -> {

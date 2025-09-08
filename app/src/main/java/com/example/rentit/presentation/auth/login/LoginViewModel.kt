@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.BuildConfig
-import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.core.error.ConflictException
+import com.example.rentit.core.error.UnauthorizedException
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.domain.user.usecase.InitializeAuthUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -63,7 +63,7 @@ class LoginViewModel @Inject constructor(
                 _sideEffect.emit(LoginSideEffect.ToastGreetingMessage(name))
                 _sideEffect.emit(LoginSideEffect.NavigateToHome)
             }.onFailure { e ->
-                if (e is MissingTokenException) {
+                if (e is UnauthorizedException) {
                     emitLoginFailure()
                     Log.w(TAG, "유효하지 않은 토큰으로 사용자 정보 조회 실패: $e")
                 } else {
