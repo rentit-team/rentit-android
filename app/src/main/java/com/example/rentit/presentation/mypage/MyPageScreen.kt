@@ -149,7 +149,10 @@ fun ProfileSection(
     nickName: String = "",
     onMyHistoryClick: () -> Unit = {}
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        modifier = Modifier.padding(bottom = 26.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         LoadableUrlImage(
             modifier = Modifier
                 .size(54.dp)
@@ -201,7 +204,7 @@ fun InfoBox(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 26.dp, bottom = 13.dp)
+            .padding(bottom = 13.dp)
             .basicRoundedGrayBorder()
             .padding(16.dp, 12.dp)
     ) {
@@ -275,7 +278,6 @@ fun TabbedListSection(
                     categories = it.categories,
                     status = it.status,
                     createdAt = it.createdAt,
-                    showCheckRequest = true
                 ) { onProductItemClick(it.productId) }
             }
         }
@@ -415,6 +417,6 @@ fun MyRentalHistoryListItem(
 @Preview(showBackground = true)
 fun MyPageScreenPreview() {
     RentItTheme {
-        MyPageScreen("", "", null, true, emptyList(), emptyList(), {}, {}, {}, {}, {}, {}, {_, _ -> })
+        MyPageScreen("", "", NearestDueItemModel(0, 0, "", 0), true, emptyList(), emptyList(), {}, {}, {}, {}, {}, {}, {_, _ -> })
     }
 }

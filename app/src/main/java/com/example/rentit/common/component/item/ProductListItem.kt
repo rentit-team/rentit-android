@@ -9,20 +9,17 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,7 +48,6 @@ fun ProductListItem(
     categories: List<String> = emptyList(),
     status: ProductStatus,
     createdAt: String,
-    showCheckRequest: Boolean = false,
     onClick: () -> Unit = {}
 ) {
     val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
@@ -142,22 +138,6 @@ fun ProductListItem(
                         text = formatPrice(price) + stringResource(R.string.common_price_unit_per_day),
                         style = MaterialTheme.typography.bodyLarge
                     )
-                    if (showCheckRequest) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                modifier = Modifier.padding(end = 6.dp),
-                                text = stringResource(R.string.product_list_item_period_btn_check_request),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = PrimaryBlue500
-                            )
-                            Icon(
-                                modifier = Modifier.height(10.dp),
-                                painter = painterResource(id = R.drawable.ic_chevron_right),
-                                contentDescription = "",
-                                tint = PrimaryBlue500
-                            )
-                        }
-                    }
                 }
             }
         }
