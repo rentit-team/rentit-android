@@ -1,17 +1,12 @@
 package com.example.rentit.data.user.repositoryImpl
 
-import com.example.rentit.common.exception.MissingTokenException
-import com.example.rentit.common.exception.ServerException
-import com.example.rentit.domain.rental.exception.EmptyBodyException
-import com.example.rentit.domain.rental.exception.TooManyRequestException
-import com.example.rentit.domain.rental.exception.VerificationFailedException
-import com.example.rentit.domain.rental.exception.VerificationRequestNotFoundException
-import com.example.rentit.domain.user.exception.GoogleSsoFailedException
+import com.example.rentit.core.network.getOrThrow
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
 import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
+import com.example.rentit.data.user.dto.VerifyPhoneCodeResponseDto
 import com.example.rentit.data.user.local.UserPrefsDataSource
 import com.example.rentit.data.user.remote.UserRemoteDataSource
 import com.example.rentit.domain.user.repository.UserRepository
@@ -22,111 +17,38 @@ class UserRepositoryImpl @Inject constructor(
     private val remoteDataSource: UserRemoteDataSource
 ): UserRepository {
     override suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
-        return runCatching {
-            val response = remoteDataSource.googleLogin(code, redirectUri)
-            if (response.isSuccessful) {
-                response.body() ?: throw EmptyBodyException("Empty response body")
-            } else {
-                val errorMsg = response.errorBody()?.string() ?: "Client error"
-                throw if (response.code() == 409) GoogleSsoFailedException(errorMsg) else ServerException(errorMsg)
-            }
-        }
+        val response = remoteDataSource.googleLogin(code, redirectUri)
+        return response.getOrThrow()
     }
 
     override suspend fun sendPhoneCode(phoneNumber: String): Result<SendPhoneCodeResponseDto> {
-        return runCatching {
-            val response = remoteDataSource.sendPhoneCode(phoneNumber)
-            if(response.isSuccessful) {
-                response.body() ?: throw EmptyBodyException()
-            } else {
-                throw if (response.code() == 403) TooManyRequestException() else ServerException()
-            }
-        }
+        val response = remoteDataSource.sendPhoneCode(phoneNumber)
+        return response.getOrThrow()
     }
 
-    override suspend fun verifyPhoneCode(phoneNumber: String, code: String): Result<Unit> {
-        return runCatching {
-            val response = remoteDataSource.verifyPhoneCode(phoneNumber, code)
-            if (response.isSuccessful) {
-                response.body()?.let {
-                    if (!it.verified) throw VerificationFailedException(it.message)
-                } ?: throw EmptyBodyException()
-            } else {
-                throw if (response.code() == 403) VerificationRequestNotFoundException() else ServerException()
-            }
-        }
+    override suspend fun verifyPhoneCode(phoneNumber: String, code: String): Result<VerifyPhoneCodeResponseDto> {
+        val response = remoteDataSource.verifyPhoneCode(phoneNumber, code)
+        return response.getOrThrow()
     }
 
     override suspend fun signUp(name: String, email: String, nickname: String, profileImageUrl: String): Result<Unit> {
-        return try {
-            val response = remoteDataSource.signUp(name, email, nickname, profileImageUrl)
-            when(response.code()) {
-                200 -> {
-                    val body = response.body()
-                    if(body != null) {
-                        Result.success(body)
-                    } else {
-                        Result.failure(Exception("Empty response body"))
-                    }
-                }
-                409 -> {
-                    val errorMsg = response.errorBody()?.string() ?: "Client error"
-                    Result.failure(Exception("Client error: $errorMsg"))
-                }
-                500 -> {
-                    Result.failure(Exception("Server error"))
-                }
-                else -> {
-                    Result.failure(Exception("Unexpected error"))
-                }
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+        val response = remoteDataSource.signUp(name, email, nickname, profileImageUrl)
+        return response.getOrThrow()
     }
 
     override suspend fun getMyInfo(): Result<MyInfoResponseDto> {
-        return runCatching {
-            val response = remoteDataSource.getMyInfo()
-            if(response.isSuccessful) {
-                response.body() ?: throw EmptyBodyException("Empty response body")
-            } else {
-                val errorMsg = response.errorBody()?.string() ?: "Client error"
-                throw if(response.code() == 401) MissingTokenException(errorMsg) else ServerException(errorMsg)
-            }
-        }
+        val response = remoteDataSource.getMyInfo()
+        return response.getOrThrow()
     }
 
     override suspend fun getMyProductList(): Result<MyProductListResponseDto> {
-        return runCatching {
-            val response = remoteDataSource.getMyProductList()
-            if(response.isSuccessful) {
-                response.body() ?: throw EmptyBodyException()
-            } else {
-                val errorMsg = response.errorBody()?.string() ?: "Client error"
-                throw when(response.code()) {
-                    401 -> MissingTokenException(errorMsg)
-                    500 -> ServerException(errorMsg)
-                    else -> Exception(errorMsg)
-                }
-            }
-        }
+        val response = remoteDataSource.getMyProductList()
+        return response.getOrThrow()
     }
 
     override suspend fun getMyRentalList(): Result<MyRentalListResponseDto> {
-        return runCatching {
-            val response = remoteDataSource.getMyRentalList()
-            if (response.isSuccessful) {
-                response.body() ?: throw EmptyBodyException()
-            } else {
-                val errorMsg = response.errorBody()?.string() ?: "Client error"
-                throw when (response.code()) {
-                    401 -> MissingTokenException(errorMsg)
-                    500 -> ServerException(errorMsg)
-                    else -> Exception(errorMsg)
-                }
-            }
-        }
+        val response = remoteDataSource.getMyRentalList()
+        return response.getOrThrow()
     }
 
     override fun getAuthUserIdFromPrefs(): Long = prefsDataSource.getAuthUserIdFromPrefs()

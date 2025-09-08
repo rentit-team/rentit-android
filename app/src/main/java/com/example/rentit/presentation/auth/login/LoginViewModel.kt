@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.BuildConfig
 import com.example.rentit.common.exception.MissingTokenException
-import com.example.rentit.domain.user.exception.GoogleSsoFailedException
+import com.example.rentit.core.error.ConflictException
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.domain.user.usecase.InitializeAuthUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import javax.inject.Inject
 
-private const val TAG = "GoogleLogin"
+private const val TAG = "LoginViewModel"
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -42,7 +42,7 @@ class LoginViewModel @Inject constructor(
                     Log.i(TAG, "로그인 성공: $userName")
                 }
                 .onFailure { e ->
-                    if (e is GoogleSsoFailedException) {
+                    if (e is ConflictException) {
                         emitLoginFailure()
                         Log.w(TAG, "구글 SSO 충돌: $e")
                     } else {

@@ -4,6 +4,15 @@ import com.example.rentit.common.exception.MissingTokenException
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
 
+/**
+ * 사용자 세션을 확인하는 UseCase
+ *
+ * - 로컬에 저장된 토큰과 사용자 ID를 확인
+ * - 토큰이 없으면 MissingTokenException 발생 및 로컬 prefs 초기화
+ * - 사용자 ID가 없으면 서버에서 가져와 로컬에 저장
+ * - 앱 시작 시 사용자 인증/세션 상태 확인에 사용
+ */
+
 class CheckUserSessionUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
