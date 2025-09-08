@@ -34,8 +34,8 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.toRelativeTimeFormat
 import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -50,9 +50,6 @@ fun ProductListItem(
     createdAt: String,
     onClick: () -> Unit = {}
 ) {
-    val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
-    val localDateTime = LocalDateTime.parse(createdAt, formatter)
-
     val categoryText =
         if (categories.isNotEmpty()) {
             categories.joinToString(" · ")
@@ -124,7 +121,7 @@ fun ProductListItem(
                     )
                     Text(
                         modifier = Modifier.padding(bottom = 5.dp),
-                        text = "${localDateTime?.monthValue}.${localDateTime?.dayOfMonth}",
+                        text = LocalDateTime.parse(createdAt).toRelativeTimeFormat(),
                         style = MaterialTheme.typography.labelMedium,
                         color = Gray400
                     )

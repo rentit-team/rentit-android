@@ -50,7 +50,7 @@ import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatRentalPeriod
-import com.example.rentit.common.util.toShortFormat
+import com.example.rentit.common.util.toRelativeTimeFormat
 import com.example.rentit.domain.user.model.MyProductItemModel
 import com.example.rentit.domain.user.model.MyRentalItemModel
 import com.example.rentit.domain.user.model.NearestDueItemModel
@@ -163,13 +163,17 @@ fun ProfileSection(
             defaultImageResId = R.drawable.img_profile_placeholder,
             defaultDescResId = R.string.content_description_for_img_profile_placeholder
         )
-        Column(modifier = Modifier.weight(1f).padding(start = 20.dp)) {
+        Column(modifier = Modifier
+            .weight(1f)
+            .padding(start = 20.dp)) {
             Text(
                 text = nickName,
                 style = MaterialTheme.typography.bodyMedium
             )
             Row(
-                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myPostCount)
@@ -383,9 +387,9 @@ fun MyRentalHistoryListItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
+            .clickable { onItemClick() }
             .screenHorizontalPadding()
-            .padding(vertical = 25.dp)
-            .clickable { onItemClick() },
+            .padding(vertical = 25.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         LoadableUrlImage(
@@ -414,14 +418,14 @@ fun MyRentalHistoryListItem(
                 )
             }
             Text(
-                modifier = Modifier.padding(vertical = 8.dp),
-                text = formatRentalPeriod(LocalContext.current, startDate, endDate),
-                style = MaterialTheme.typography.labelMedium,
-            )
-            Text(
-                text = "${stringResource(R.string.screen_mypage_my_rental_list_item_label_request_at)} ${LocalDateTime.parse(requestedAt).toShortFormat()}",
+                modifier = Modifier.padding(top = 4.dp, bottom = 10.dp),
+                text = LocalDateTime.parse(requestedAt).toRelativeTimeFormat(),
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray400
+            )
+            Text(
+                text = formatRentalPeriod(LocalContext.current, startDate, endDate),
+                style = MaterialTheme.typography.labelMedium,
             )
         }
     }

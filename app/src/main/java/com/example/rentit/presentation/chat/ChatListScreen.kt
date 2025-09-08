@@ -39,11 +39,9 @@ import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.toRelativeDayFormat
 import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
-import java.time.Duration
-import java.time.LocalDate
 import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -104,7 +102,7 @@ fun ChatListItem(
     thumbnailImgUrl: String?,
     onClick: () -> Unit
 ) {
-    val formatLastMsgTime = lastMessageTime?.toChatTimeString() ?: ""
+    val formatLastMsgTime = lastMessageTime?.let { "· " + it.toRelativeDayFormat() } ?: ""
 
     val lastMsg = when (lastMessage) {
         AutoMessageType.REQUEST_ACCEPT.code -> stringResource(R.string.auto_msg_type_request_accept_title)
@@ -166,23 +164,6 @@ fun ChatListItem(
                 )
             }
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun OffsetDateTime.toChatTimeString(): String {
-    val now = LocalDate.now()
-    val diffDays = Duration.between(this.toLocalDate().atStartOfDay(), now.atStartOfDay()).toDays()
-
-    return when {
-        diffDays == 0L -> {
-            val formatter = DateTimeFormatter.ofPattern("· a h:mm")
-            this.format(formatter)
-        }
-        diffDays in 1..29 -> stringResource(R.string.screen_chat_list_time_days_ago, diffDays)
-        diffDays > 29 -> stringResource(R.string.screen_chat_list_time_months_ago, diffDays / 30)
-        else -> ""
     }
 }
 
