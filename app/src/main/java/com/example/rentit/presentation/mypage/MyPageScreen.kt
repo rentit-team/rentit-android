@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,24 +32,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.common.theme.pretendardFamily
 import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
@@ -63,15 +59,17 @@ import java.time.LocalDateTime
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(
-    profileImgUrl: String? = null,
+    profileImgUrl: String?,
     nickName: String = "",
-    nearestDueItem: NearestDueItemModel? = null,
-    isFirstTabSelected: Boolean,
+    myPostCount: Int = 0,
+    myRentalCount: Int = 0,
+    myPendingRentalCount: Int = 0,
+    nearestDueItem: NearestDueItemModel?,
     myProductList: List<MyProductItemModel>,
     myRentalList: List<MyRentalItemModel>,
+    isFirstTabSelected: Boolean,
     onSettingClick: () -> Unit,
     onAlertClick: () -> Unit,
-    onMyHistoryClick: () -> Unit,
     onInfoRentalDetailClick: () -> Unit,
     onTabActive: () -> Unit,
     onProductItemClick: (Int) -> Unit,
@@ -85,7 +83,9 @@ fun MyPageScreen(
             ProfileSection(
                 profileImgUrl = profileImgUrl,
                 nickName = nickName,
-                onMyHistoryClick = onMyHistoryClick
+                myPostCount = myPostCount,
+                myRentalCount = myRentalCount,
+                myPendingRentalCount = myPendingRentalCount
             )
 
             if(nearestDueItem != null) {
@@ -147,51 +147,52 @@ fun TopSection(onAlertClick: () -> Unit = {}, onSettingClick: () -> Unit = {}) {
 fun ProfileSection(
     profileImgUrl: String? = null,
     nickName: String = "",
-    onMyHistoryClick: () -> Unit = {}
+    myPostCount: Int = 0,
+    myRentalCount: Int = 0,
+    myPendingRentalCount: Int = 0
 ) {
     Row(
         modifier = Modifier.padding(bottom = 26.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.Bottom
     ) {
         LoadableUrlImage(
             modifier = Modifier
-                .size(54.dp)
+                .size(70.dp)
                 .clip(CircleShape),
             imgUrl = profileImgUrl,
             defaultImageResId = R.drawable.img_profile_placeholder,
             defaultDescResId = R.string.content_description_for_img_profile_placeholder
         )
-
-        Text(
-            modifier = Modifier
-                .weight(1f)
-                .padding(start = 15.dp),
-            text = nickName,
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        Box(modifier = Modifier
-            .basicRoundedGrayBorder()
-            .clickable { onMyHistoryClick() }) {
+        Column(modifier = Modifier.weight(1f).padding(start = 20.dp)) {
+            Text(
+                text = nickName,
+                style = MaterialTheme.typography.bodyMedium
+            )
             Row(
-                modifier = Modifier.padding(10.5.dp, 6.dp),
-                verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth().padding(top = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = stringResource(id = R.string.screen_mypage_btn_my_activity),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = PrimaryBlue500
-                )
-                Text(
-                    text = stringResource(id = R.string.screen_mypage_btn_new),
-                    modifier = Modifier.padding(start = 6.dp),
-                    fontFamily = pretendardFamily,
-                    fontSize = 8.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = AppRed
-                )
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myPostCount)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myRentalCount)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount)
             }
         }
+    }
+}
+
+@Composable
+fun RowScope.CountBox(label: String, count: Int) {
+    Column(modifier = Modifier.weight(1f)) {
+        Text(
+            modifier = Modifier.padding(bottom = 2.dp),
+            text = count.toString(),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            color = Gray400
+        )
     }
 }
 
@@ -204,20 +205,34 @@ fun InfoBox(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = 13.dp)
-            .basicRoundedGrayBorder()
-            .padding(16.dp, 12.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Gray100)
+            .padding(20.dp, 18.dp)
     ) {
-        Text(
-            text = buildAnnotatedString {
-                append(stringResource(R.string.screen_mypage_info_text_start, "[$productTitle]"))
-                withStyle(style = SpanStyle(color = PrimaryBlue500)) {
-                    append(" $remainingRentalDays 일 ")
-                }
-                append(stringResource(R.string.screen_mypage_info_text_end))
-            },
-            style = MaterialTheme.typography.bodySmall
-        )
+        Row {
+            Text(
+                text = stringResource(R.string.screen_mypage_info_text_1),
+                style = MaterialTheme.typography.labelMedium
+            )
+            Text(
+                modifier = Modifier.weight(1f, fill = false),
+                text = " $productTitle ",
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
+                style = MaterialTheme.typography.labelLarge
+            )
+            Text(
+                text = buildAnnotatedString {
+                    append(stringResource(R.string.screen_mypage_info_text_2))
+                    withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(color = PrimaryBlue500)) {
+                        append(" $remainingRentalDays")
+                        append(stringResource(R.string.screen_mypage_info_text_3))
+                    }
+                    append(stringResource(R.string.screen_mypage_info_text_4))
+                },
+                style = MaterialTheme.typography.labelMedium
+            )
+        }
         Row(
             modifier = Modifier
                 .padding(top = 4.dp)
@@ -249,7 +264,7 @@ fun TabbedListSection(
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit,
 ) {
-    Row(Modifier.padding(top = 14.dp)) {
+    Row(modifier = Modifier.padding(top = 12.dp)) {
         TabTitle(
             modifier = Modifier.weight(1F),
             title = stringResource(id = R.string.screen_mypage_tab_title_my_product),
@@ -300,6 +315,29 @@ fun TabbedListSection(
 }
 
 @Composable
+fun TabTitle(modifier: Modifier, title: String, isTabSelected: Boolean, onClick: () -> Unit) {
+    Column(
+        modifier = modifier.clickable { onClick() },
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            modifier = Modifier.padding(top = 12.dp, bottom = 10.dp),
+            text = title,
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.bodyMedium
+        )
+        if (isTabSelected) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.4f)
+                    .height(2.dp)
+                    .background(PrimaryBlue500)
+            )
+        }
+    }
+}
+
+@Composable
 fun EmptyListPlaceHolder(isFirstTabSelected: Boolean = false) {
     val text =
         if(isFirstTabSelected) {
@@ -327,29 +365,6 @@ fun EmptyListPlaceHolder(isFirstTabSelected: Boolean = false) {
             color = Gray400
         )
         Spacer(modifier = Modifier.weight(2f))
-    }
-}
-
-@Composable
-fun TabTitle(modifier: Modifier, title: String, isTabSelected: Boolean, onClick: () -> Unit) {
-    Column(
-        modifier = modifier.clickable { onClick() },
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            modifier = Modifier.padding(bottom = 10.dp),
-            text = title,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodyMedium
-        )
-        if (isTabSelected) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.4f)
-                    .height(2.dp)
-                    .background(PrimaryBlue500)
-            )
-        }
     }
 }
 
@@ -417,6 +432,6 @@ fun MyRentalHistoryListItem(
 @Preview(showBackground = true)
 fun MyPageScreenPreview() {
     RentItTheme {
-        MyPageScreen("", "", NearestDueItemModel(0, 0, "", 0), true, emptyList(), emptyList(), {}, {}, {}, {}, {}, {}, {_, _ -> })
+        MyPageScreen("", "닉네임", 0, 0, 0, NearestDueItemModel(0, 0, "게시글 제목", 0), emptyList(), emptyList(), true, {}, {}, {}, {}, {}, {_, _ -> })
     }
 }
