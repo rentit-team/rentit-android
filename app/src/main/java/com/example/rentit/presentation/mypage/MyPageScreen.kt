@@ -121,7 +121,7 @@ fun TopSection(onAlertClick: () -> Unit = {}, onSettingClick: () -> Unit = {}) {
             text = stringResource(id = R.string.title_activity_my_page_tab),
             style = MaterialTheme.typography.bodyLarge
         )
-        IconButton(modifier = Modifier.size(30.dp), onClick = onAlertClick) {
+        IconButton(modifier = Modifier.padding(end = 8.dp).size(30.dp), onClick = onAlertClick) {
             Box {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_bell),
