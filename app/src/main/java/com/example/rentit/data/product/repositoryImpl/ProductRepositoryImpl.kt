@@ -1,6 +1,6 @@
 package com.example.rentit.data.product.repositoryImpl
 
-import com.example.rentit.core.network.getOrThrow
+import com.example.rentit.core.network.safeApiCall
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
@@ -19,37 +19,30 @@ class ProductRepositoryImpl @Inject constructor(
     private val productRemoteDataSource: ProductRemoteDataSource
 ): ProductRepository {
     override suspend fun getProductList(): Result<ProductListResponseDto> {
-        val response = productRemoteDataSource.getProductList()
-        return response.getOrThrow()
+        return safeApiCall(productRemoteDataSource::getProductList)
     }
 
     override suspend fun getProductDetail(productId: Int): Result<ProductDetailResponseDto> {
-        val response = productRemoteDataSource.getProductDetail(productId)
-        return response.getOrThrow()
+        return safeApiCall { productRemoteDataSource.getProductDetail(productId) }
     }
 
     override suspend fun getReservedDates(productId: Int): Result<ProductReservedDatesResponseDto> {
-        val response = productRemoteDataSource.getReservedDates(productId)
-        return response.getOrThrow()
+        return safeApiCall { productRemoteDataSource.getReservedDates(productId) }
     }
 
     override suspend fun postResv(productId: Int, request: ResvRequestDto): Result<ResvResponseDto> {
-        val response = productRemoteDataSource.postResv(productId, request)
-        return response.getOrThrow()
+        return safeApiCall { productRemoteDataSource.postResv(productId, request) }
     }
 
     override suspend fun getCategories(): Result<CategoryListResponseDto> {
-        val response = productRemoteDataSource.getCategories()
-        return response.getOrThrow()
+        return safeApiCall(productRemoteDataSource::getCategories)
     }
 
     override suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto> {
-        val response = productRemoteDataSource.createPost(payLoad, thumbnailImg)
-        return response.getOrThrow()
+        return safeApiCall { productRemoteDataSource.createPost(payLoad, thumbnailImg) }
     }
 
     override suspend fun getProductRequestList(productId: Int): Result<RequestHistoryResponseDto> {
-        val response = productRemoteDataSource.getProductRequestList(productId)
-        return response.getOrThrow()
+        return safeApiCall { productRemoteDataSource.getProductRequestList(productId) }
     }
 }

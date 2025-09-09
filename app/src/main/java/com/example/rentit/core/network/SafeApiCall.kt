@@ -10,13 +10,15 @@ import com.example.rentit.core.error.UnknownException
 import com.example.rentit.core.error.UnprocessableEntityException
 import retrofit2.Response
 
-fun <T> Response<T>.getOrThrow(): Result<T> {
+suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> {
     return runCatching {
-        if(isSuccessful) {
-            body() ?: throw ServerErrorException("Response body is null")
+        val response = apiCall()
+
+        if(response.isSuccessful) {
+            response.body() ?: throw ServerErrorException("Response body is null")
         } else {
-            val errorMessage = errorBody()?.string() ?: "Client Error"
-            throw when(code()) {
+            val errorMessage = response.errorBody()?.string() ?: "Client Error"
+            throw when(response.code()) {
                 400 -> BadRequestException(errorMessage)
                 401 -> UnauthorizedException(errorMessage)
                 403 -> ForbiddenException(errorMessage)
