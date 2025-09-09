@@ -4,7 +4,6 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -17,15 +16,17 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.dialog.BaseDialog
-import com.example.rentit.common.component.dialog.NetworkErrorDialog
-import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.navigation.productdetail.navigateToResvRequestComplete
+import com.example.rentit.presentation.main.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+
     val viewModel: ResvRequestViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val context = LocalContext.current
@@ -34,29 +35,32 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
 
     LaunchedEffect(Unit) {
         viewModel.loadInitialData(productId)
+        mainViewModel?.setRetryAction { viewModel.retryDataLoad(productId) }
     }
 
     LaunchedEffect(Unit) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.sideEffect.collect { sideEffect ->
-                when (sideEffect) {
+            viewModel.sideEffect.collect {
+                when (it) {
                     is ResvRequestSideEffect.NavigateToResvRequestComplete -> {
                         navHostController.navigateToResvRequestComplete(
-                            rentalStartDate = sideEffect.rentalStartDate,
-                            rentalEndDate = sideEffect.rentalEndDate,
-                            formattedTotalPrice = formatPrice(sideEffect.totalPrice)
+                            rentalStartDate = it.rentalStartDate,
+                            rentalEndDate = it.rentalEndDate,
+                            formattedTotalPrice = formatPrice(it.totalPrice)
                         )
                     }
                     ResvRequestSideEffect.ToastInvalidPeriod -> {
                         Toast.makeText(context, R.string.toast_invalid_period, Toast.LENGTH_SHORT).show()
                     }
+                    ResvRequestSideEffect.ToastPostResvFailed -> {
+                        Toast.makeText(context, R.string.toast_post_resv_failed, Toast.LENGTH_SHORT).show()
+                    }
+                    is ResvRequestSideEffect.CommonError -> {
+                        mainViewModel?.handleError(it.throwable)
+                    }
                 }
             }
         }
-    }
-
-    DisposableEffect(Unit) {
-        onDispose { viewModel.dismissAllDialogs() }
     }
 
     ResvRequestScreen(
@@ -76,20 +80,6 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
     )
 
     LoadingScreen(uiState.isLoading)
-
-    if(uiState.showNetworkErrorDialog){
-        NetworkErrorDialog(
-            navigateBack = navHostController::popBackStack,
-            onRetry = { viewModel.onRetryLoadData(productId) }
-        )
-    }
-
-    if(uiState.showServerErrorDialog){
-        ServerErrorDialog(
-            navigateBack = navHostController::popBackStack,
-            onRetry = { viewModel.onRetryLoadData(productId) }
-        )
-    }
 
     if(uiState.showAccessNotAllowedDialog) {
         BaseDialog(

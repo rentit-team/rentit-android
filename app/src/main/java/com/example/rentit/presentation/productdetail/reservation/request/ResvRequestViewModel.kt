@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.core.error.ConflictException
 import com.example.rentit.core.error.ForbiddenException
-import com.example.rentit.core.error.UnauthorizedException
 import com.example.rentit.domain.product.repository.ProductRepository
 import com.example.rentit.domain.product.usecase.PostResvRequestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import okio.IOException
 import java.time.LocalDate
 import javax.inject.Inject
 
@@ -46,29 +44,6 @@ class ResvRequestViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
-    private fun handleFailure(e: Throwable) {
-        when(e) {
-            is UnauthorizedException -> {
-                // TODO: 로그아웃 처리 및 로그인 화면으로 이동
-            }
-            is ForbiddenException -> {
-                _uiState.value = _uiState.value.copy(showAccessNotAllowedDialog = true)
-            }
-            is ConflictException -> {
-                _uiState.value = _uiState.value.copy(showResvAlreadyExistDialog = true)
-            }
-            is IllegalArgumentException -> {
-                emitSideEffect(ResvRequestSideEffect.ToastInvalidPeriod)
-            }
-            is IOException -> {
-                _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
-            }
-            else -> {
-                _uiState.value = _uiState.value.copy(showServerErrorDialog = true)
-            }
-        }
-    }
-
     private suspend fun getProductDetail(productId: Int) {
         productRepository.getProductDetail(productId)
             .onSuccess {
@@ -81,7 +56,7 @@ class ResvRequestViewModel @Inject constructor(
                 Log.i(TAG, "상품 조회 성공: Product Id: $productId")
             }.onFailure { e ->
                 Log.e(TAG, "상품 조회 실패", e)
-                handleFailure(e)
+                emitSideEffect(ResvRequestSideEffect.CommonError(e))
             }
     }
 
@@ -92,7 +67,7 @@ class ResvRequestViewModel @Inject constructor(
                 Log.i(TAG, "예약 불가일 조회 성공: 불가일 ${it.disabledDates.size}개")
             }.onFailure { e ->
                 Log.e(TAG, "예약 불가일 조회 실패", e)
-                handleFailure(e)
+                emitSideEffect(ResvRequestSideEffect.CommonError(e))
             }
     }
 
@@ -103,11 +78,7 @@ class ResvRequestViewModel @Inject constructor(
         setLoading(false)
     }
 
-    fun onRetryLoadData(productId: Int) {
-        _uiState.value = _uiState.value.copy(
-            showNetworkErrorDialog = false,
-            showServerErrorDialog = false,
-        )
+    fun retryDataLoad(productId: Int) {
         viewModelScope.launch {
             loadInitialData(productId)
         }
@@ -140,7 +111,24 @@ class ResvRequestViewModel @Inject constructor(
                 Log.i(TAG, "대여 예약 성공: ${it.data.reservationId}")
             }.onFailure { e ->
                 Log.e(TAG, "대여 예약 실패", e)
-                handleFailure(e)
+                handlePostResvError(e)
+            }
+        }
+    }
+
+    private fun handlePostResvError(e: Throwable) {
+        when(e) {
+            is ForbiddenException -> {
+                _uiState.value = _uiState.value.copy(showAccessNotAllowedDialog = true)
+            }
+            is ConflictException -> {
+                _uiState.value = _uiState.value.copy(showResvAlreadyExistDialog = true)
+            }
+            is IllegalArgumentException -> {
+                emitSideEffect(ResvRequestSideEffect.ToastInvalidPeriod)
+            }
+            else -> {
+                emitSideEffect(ResvRequestSideEffect.ToastPostResvFailed)
             }
         }
     }
@@ -159,14 +147,5 @@ class ResvRequestViewModel @Inject constructor(
 
     fun dismissResvAlreadyExistDialog() {
         _uiState.value = _uiState.value.copy(showResvAlreadyExistDialog = false)
-    }
-
-    fun dismissAllDialogs() {
-        _uiState.value = _uiState.value.copy(
-            showNetworkErrorDialog = false,
-            showServerErrorDialog = false,
-            showAccessNotAllowedDialog = false,
-            showResvAlreadyExistDialog = false
-        )
     }
 }

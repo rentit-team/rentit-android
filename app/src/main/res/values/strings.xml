@@ -150,6 +150,7 @@
     <string name="screen_resv_request_btn_resv_request">예약 요청</string>
 
     <string name="toast_invalid_period">상품의 최소/최대 대여 기간을 확인해주세요.</string>
+    <string name="toast_post_resv_failed">상품 예약을 전달하는데 실패했어요.</string>
 
     <string name="dialog_owner_access_not_allowed_title">예약할 수 없어요</string>
     <string name="dialog_owner_access_not_allowed_content">이 상품은 등록하신 상품이라 예약할 수 없어요.</string>
