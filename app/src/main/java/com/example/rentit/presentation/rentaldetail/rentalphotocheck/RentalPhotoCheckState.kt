@@ -5,7 +5,7 @@ data class RentalPhotoCheckState(
     val photoBeforeRentUrls: List<String> = emptyList(),
     val photoAfterRentUrls: List<String> = emptyList(),
     val previewPhotoUrl: String? = null,
-    val showFailedPhotoLoadDialog: Boolean = false
+    val isLoading: Boolean = false,
 ) {
     val currentPageNumber
         get() = currentPageIndex + 1

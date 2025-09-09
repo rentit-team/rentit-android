@@ -9,24 +9,28 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.example.rentit.presentation.rentaldetail.dialog.PhotoLoadFailedDialog
+import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.presentation.main.MainViewModel
 
 @Composable
 fun RentalPhotoCheckRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val viewModel: RentalPhotoCheckViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.fetchBeforePhotoUrls(productId, reservationId)
+        viewModel.fetchPhotoUrls(productId, reservationId)
+        mainViewModel?.setRetryAction { viewModel.retryFetchPhotoUrls(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.sideEffect.collect { sideEffect ->
-                when (sideEffect) {
-                    RentalPhotoCheckSideEffect.PopBackToRentalDetail -> navHostController.popBackStack()
+            viewModel.sideEffect.collect {
+                if(it is RentalPhotoCheckSideEffect.CommonError) {
+                    mainViewModel?.handleError(it.throwable)
                 }
             }
         }
@@ -43,9 +47,8 @@ fun RentalPhotoCheckRoute(navHostController: NavHostController, productId: Int, 
         onPhotoClick = viewModel::changePreviewPhotoUrl,
         onPageNext = viewModel::goToNextPage,
         onPageBack = viewModel::goToPreviousPage,
-        onBackPressed = viewModel::navigateBack,
+        onBackPressed = navHostController::popBackStack,
     )
 
-    if(uiState.showFailedPhotoLoadDialog)
-        PhotoLoadFailedDialog(viewModel::closeAndNavigateBack)
+    LoadingScreen(uiState.isLoading)
 }

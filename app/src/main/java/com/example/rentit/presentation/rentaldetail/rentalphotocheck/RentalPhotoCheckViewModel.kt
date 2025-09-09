@@ -22,44 +22,29 @@ class RentalPhotoCheckViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<RentalPhotoCheckSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    fun fetchBeforePhotoUrls(productId: Int, reservationId: Int) {
-        viewModelScope.launch {
-            rentalRepository.getRentalPhotos(productId, reservationId)
-                .onSuccess {
-                    val beforeUrls = it.rentalBefore.map { photo -> photo.url }
-                    val afterUrls = it.returnBefore.map { photo -> photo.url }
-                    handleFetchPhotoSuccess(beforeUrls, afterUrls)
-                }.onFailure {
-                    handleFetchPhotoFailed()
-                }
-        }
+    private fun setLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    suspend fun fetchPhotoUrls(productId: Int, reservationId: Int) {
+        setLoading(true)
+        rentalRepository.getRentalPhotos(productId, reservationId)
+            .onSuccess {
+                val beforeUrls = it.rentalBefore.map { photo -> photo.url }
+                val afterUrls = it.returnBefore.map { photo -> photo.url }
+                handleFetchPhotoSuccess(beforeUrls, afterUrls)
+            }.onFailure { e ->
+                _sideEffect.emit(RentalPhotoCheckSideEffect.CommonError(e))
+            }
+        setLoading(false)
     }
 
     private fun handleFetchPhotoSuccess(beforeUrls: List<String>, afterUrls: List<String>) {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(
-                photoBeforeRentUrls = beforeUrls,
-                photoAfterRentUrls = afterUrls,
-                previewPhotoUrl = beforeUrls.getOrNull(_uiState.value.currentPageIndex)
-            )
-        }
-    }
-
-    private fun handleFetchPhotoFailed() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(showFailedPhotoLoadDialog = true)
-        }
-    }
-
-    fun closeAndNavigateBack() {
-        _uiState.value = _uiState.value.copy(showFailedPhotoLoadDialog = false)
-        navigateBack()
-    }
-
-    fun navigateBack() {
-        viewModelScope.launch {
-            _sideEffect.emit(RentalPhotoCheckSideEffect.PopBackToRentalDetail)
-        }
+        _uiState.value = _uiState.value.copy(
+            photoBeforeRentUrls = beforeUrls,
+            photoAfterRentUrls = afterUrls,
+            previewPhotoUrl = beforeUrls.getOrNull(_uiState.value.currentPageIndex)
+        )
     }
 
     fun changePreviewPhotoUrl(url: String?) {
@@ -76,5 +61,11 @@ class RentalPhotoCheckViewModel @Inject constructor(
         if (_uiState.value.currentPageIndex > 0 )
             _uiState.value =
                 _uiState.value.copy(currentPageIndex = _uiState.value.currentPageIndex - 1)
+    }
+
+    fun retryFetchPhotoUrls(productId: Int, reservationId: Int) {
+        viewModelScope.launch {
+            fetchPhotoUrls(productId, reservationId)
+        }
     }
 }
