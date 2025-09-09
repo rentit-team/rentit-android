@@ -7,13 +7,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.domain.chat.usecase.GetChatRoomSummariesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
-private const val TAG = "ChatList"
+private const val TAG = "ChatListViewModel"
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
@@ -24,49 +25,30 @@ class ChatListViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ChatListState())
     val uiState: StateFlow<ChatListState> = _uiState
 
-    init {
-        fetchChatRoomSummaries()
-    }
+    private val _sideEffect = MutableSharedFlow<ChatListSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
 
-    private fun fetchChatRoomSummaries() {
-        viewModelScope.launch {
-            setIsLoading(true)
-            getChatRoomSummariesUseCase.invoke()
-                .onSuccess {
-                    _uiState.value = _uiState.value.copy(chatRoomSummaries = it)
-                    Log.i(TAG, "채팅 리스트 가져오기 성공: 채팅방 ${it.size}개")
-                }
-                .onFailure { e ->
-                    when (e) {
-                        is IOException -> {
-                            showNetworkErrorDialog()
-                            Log.e(TAG, "네트워크 에러: 채팅 리스트 가져오기 실패", e)
-                        }
-                        else -> {
-                            showServerErrorDialog()
-                            Log.e(TAG, "채팅 리스트 가져오기 실패", e)
-                        }
-                        // TODO: 토큰 에러 처리 필요 (리프레시 토큰으로 재발급 또는 로그인 화면 이동)
-                    }
-                }
-            setIsLoading(false)
-        }
+    suspend fun fetchChatRoomSummaries() {
+        setIsLoading(true)
+        getChatRoomSummariesUseCase()
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(chatRoomSummaries = it)
+                Log.i(TAG, "채팅 리스트 가져오기 성공: 채팅방 ${it.size}개")
+            }
+            .onFailure { e ->
+                Log.e(TAG, "채팅 리스트 가져오기 실패", e)
+                _sideEffect.emit(ChatListSideEffect.CommonError(e))
+            }
+        setIsLoading(false)
     }
 
     private fun setIsLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
-    private fun showServerErrorDialog() {
-        _uiState.value = _uiState.value.copy(showServerErrorDialog = true)
-    }
-
-    private fun showNetworkErrorDialog() {
-        _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
-    }
-
     fun retryFetchChatRoomSummaries(){
-        _uiState.value = _uiState.value.copy(showServerErrorDialog = false, showNetworkErrorDialog = false)
-        fetchChatRoomSummaries()
+        viewModelScope.launch {
+            fetchChatRoomSummaries()
+        }
     }
 }

@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 private const val TAG = "ChatRoomViewModel"
@@ -44,14 +43,6 @@ class ChatRoomViewModel @Inject constructor(
 
     private fun resetMessages() {
         _uiState.value = _uiState.value.copy(messages = emptyList())
-    }
-
-    private fun showServerErrorDialog() {
-        _uiState.value = _uiState.value.copy(showServerErrorDialog = true)
-    }
-
-    private fun showNetworkErrorDialog() {
-        _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
     }
 
     private fun showForbiddenChatAccessDialog() {
@@ -89,20 +80,14 @@ class ChatRoomViewModel @Inject constructor(
                 rentalSummary = rentalSummary
             )
         }.onFailure { e ->
+                Log.e(TAG, "채팅방 로드 에러", e)
             when (e) {
-                is IOException -> {
-                    Log.e(TAG, "네트워크 오류 발생", e)
-                    showNetworkErrorDialog()
-                }
                 is ForbiddenException -> {
-                    Log.e(TAG, "채팅방 접근 권한 없음", e)
                     showForbiddenChatAccessDialog()
                 }
                 else -> {
-                    Log.e(TAG, "서버 오류 발생", e)
-                    showServerErrorDialog()
+                    emitSideEffect(ChatRoomSideEffect.CommonError(e))
                 }
-                // TODO: 토큰 에러 처리 필요 (리프레시 토큰으로 재발급 또는 로그인 화면 이동)
             }
         }
         setIsLoading(false)
@@ -147,13 +132,6 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    fun retryFetchChatRoomData(chatRoomId: String){
-        _uiState.value = _uiState.value.copy(showServerErrorDialog = false, showNetworkErrorDialog = false)
-        viewModelScope.launch {
-            fetchChatRoomData(chatRoomId)
-        }
-    }
-
     fun connectWebSocket(chatRoomId: String) {
         webSocketManager.connect(
             chatroomId = chatRoomId,
@@ -174,5 +152,12 @@ class ChatRoomViewModel @Inject constructor(
     fun disconnectWebSocket() {
         webSocketManager.disconnect()
         resetMessages()
+    }
+
+    fun retryFetchChatRoomData(chatRoomId: String){
+        viewModelScope.launch {
+            fetchChatRoomData(chatRoomId)
+            connectWebSocket(chatRoomId)
+        }
     }
 }

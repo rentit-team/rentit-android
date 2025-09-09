@@ -14,6 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -22,13 +23,19 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
+import com.example.rentit.presentation.main.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+
     val viewModel: ChatRoomViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val context: Context = LocalContext.current
@@ -41,6 +48,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
     LaunchedEffect(Unit) {
         viewModel.fetchChatRoomData(chatRoomId)
         viewModel.connectWebSocket(chatRoomId)
+        mainViewModel?.setRetryAction { viewModel.retryFetchChatRoomData(chatRoomId) }
     }
 
     LaunchedEffect(Unit) {
@@ -79,6 +87,9 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
                     ChatRoomSideEffect.ToastPaymentProductNotFound -> {
                         Toast.makeText(context, context.getString(R.string.toast_payment_product_not_found), Toast.LENGTH_SHORT).show()
                     }
+                    is ChatRoomSideEffect.CommonError -> {
+                        mainViewModel?.handleError(sideEffect.throwable)
+                    }
                 }
             }
         }
@@ -103,17 +114,23 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
         rentalSummary = uiState.rentalSummary,
         messageScrollState = messageScrollState,
         inputScrollState = inputScrollState,
-        isLoading = uiState.isLoading,
-        showNetworkErrorDialog = uiState.showNetworkErrorDialog,
-        showServerErrorDialog = uiState.showServerErrorDialog,
-        showForbiddenChatAccessDialog = uiState.showForbiddenChatAccessDialog,
-        onRetry = { viewModel.retryFetchChatRoomData(chatRoomId) },
         onPayClick = viewModel::onPayClicked,
         onProductSectionClick = viewModel::onProductSectionClicked,
         onRentalSectionClick = viewModel::onRentalSectionClicked,
-        onForbiddenDialogDismiss = navHostController::popBackStack,
         onMessageChange = { messageValue = it },
         onMessageSend = { viewModel.sendMessage(chatRoomId, messageValue.text) },
         navigateBack = navHostController::popBackStack
     )
+
+    LoadingScreen(uiState.isLoading)
+
+    if(uiState.showForbiddenChatAccessDialog){
+        BaseDialog(
+            title = stringResource(R.string.dialog_forbidden_chat_access_title),
+            confirmBtnText = stringResource(R.string.dialog_forbidden_chat_access_btn),
+            isBackgroundClickable = false,
+            onDismissRequest = navHostController::popBackStack,
+            onConfirmRequest = navHostController::popBackStack,
+        )
+    }
 }

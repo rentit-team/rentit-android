@@ -44,11 +44,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.dialog.BaseDialog
-import com.example.rentit.common.component.dialog.NetworkErrorDialog
-import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.formatPeriodText
-import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
@@ -76,12 +72,6 @@ fun ChatroomScreen(
     rentalSummary: RentalChatRoomSummaryModel?,
     messageScrollState: LazyListState,
     inputScrollState: ScrollState,
-    isLoading: Boolean,
-    showNetworkErrorDialog: Boolean = false,
-    showServerErrorDialog: Boolean = false,
-    showForbiddenChatAccessDialog: Boolean = false,
-    onForbiddenDialogDismiss: () -> Unit,
-    onRetry: () -> Unit,
     onPayClick: () -> Unit,
     onProductSectionClick: () -> Unit,
     onRentalSectionClick: () -> Unit,
@@ -128,22 +118,6 @@ fun ChatroomScreen(
                 )
             }
         }
-    }
-
-    LoadingScreen(isLoading)
-
-    if(showNetworkErrorDialog) NetworkErrorDialog(navigateBack, onRetry)
-
-    if(showServerErrorDialog) ServerErrorDialog(navigateBack, onRetry)
-
-    if(showForbiddenChatAccessDialog){
-        BaseDialog(
-            title = stringResource(R.string.dialog_forbidden_chat_access_title),
-            confirmBtnText = stringResource(R.string.dialog_forbidden_chat_access_btn),
-            isBackgroundClickable = false,
-            onDismissRequest = navigateBack,
-            onConfirmRequest = onForbiddenDialogDismiss,
-        )
     }
 }
 
@@ -389,15 +363,12 @@ fun ChatRoomScreenPreview() {
             rentalSummary = sampleRental,
             messageScrollState = rememberLazyListState(),
             inputScrollState = sampleScrollState,
-            isLoading = false,
             navigateBack = { },
-            onRetry = { },
             onPayClick = { },
             onProductSectionClick = { },
             onRentalSectionClick = { },
             onMessageChange = { },
             onMessageSend = { },
-            onForbiddenDialogDismiss = { },
         )
     }
 }

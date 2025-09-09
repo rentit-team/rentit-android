@@ -31,9 +31,6 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicListItemTopDivider
-import com.example.rentit.common.component.dialog.NetworkErrorDialog
-import com.example.rentit.common.component.dialog.ServerErrorDialog
-import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
@@ -47,12 +44,7 @@ import java.time.OffsetDateTime
 @Composable
 fun ChatListScreen(
     chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
-    isLoading: Boolean = false,
-    showNetworkErrorDialog: Boolean = false,
-    showServerErrorDialog: Boolean = false,
     onItemClick: (String) -> Unit = {},
-    navigateBack: () -> Unit = {},
-    onRetry: () -> Unit = {},
 ) {
     Column(Modifier
         .fillMaxSize()
@@ -68,12 +60,6 @@ fun ChatListScreen(
 
         ChatListSection(chatRoomSummaries, onItemClick)
     }
-
-    LoadingScreen(isLoading)
-
-    if(showNetworkErrorDialog) NetworkErrorDialog(navigateBack, onRetry)
-
-    if(showServerErrorDialog) ServerErrorDialog(navigateBack, onRetry)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
