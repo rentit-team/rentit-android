@@ -7,6 +7,13 @@ import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
 import com.example.rentit.domain.rental.repository.RentalRepository
 import javax.inject.Inject
 
+/**
+ * 특정 예약에 대한 채팅방 요약 정보를 가져오는 UseCase
+ *
+ * - 상품 ID와 예약 ID를 기반으로 예약 상세 정보를 조회
+ * - 예약 정보를 채팅방 요약 도메인 모델(RentalChatRoomSummaryModel)로 변환
+ */
+
 class GetChatRoomRentalSummaryUseCase @Inject constructor(
     private val rentalRepository: RentalRepository
 ) {

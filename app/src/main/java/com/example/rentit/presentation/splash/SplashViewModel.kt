@@ -3,7 +3,7 @@ package com.example.rentit.presentation.splash
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.exception.MissingTokenException
+import com.example.rentit.core.error.UnauthorizedException
 import com.example.rentit.domain.user.usecase.CheckUserSessionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -40,7 +40,7 @@ class SplashViewModel @Inject constructor(
                 }
                 .onFailure { e ->
                     when(e) {
-                        is MissingTokenException -> {
+                        is UnauthorizedException -> {
                             navigateToLogin()
                             Log.w(TAG, "토큰 누락으로 사용자 정보 조회 실패", e)
                         }

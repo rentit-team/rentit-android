@@ -4,13 +4,14 @@ import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.domain.product.repository.ProductRepository
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
- *  선택한 기간이 유효한지 확인하고 예약 요청을 보내는 UseCase
+ * 상품 예약 요청을 처리하는 UseCase
+ *
+ * - 선택한 대여 기간이 상품의 최소/최대 대여 기간 범위 내인지 검증
+ * - 유효한 경우 서버에 예약 요청 전송
  */
 
-@Singleton
 class PostResvRequestUseCase @Inject constructor(
     private val productRepository: ProductRepository,
 ) {

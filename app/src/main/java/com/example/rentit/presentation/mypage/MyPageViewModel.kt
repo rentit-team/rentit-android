@@ -4,7 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.exception.MissingTokenException
+import com.example.rentit.core.error.UnauthorizedException
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.domain.user.usecase.GetMyProductsWithCategoryUseCase
 import com.example.rentit.domain.user.usecase.GetMyRentalsWithNearestDueUseCase
@@ -39,7 +39,7 @@ class MyPageViewModel @Inject constructor(
 
     private fun errorHandling(e: Throwable) {
         when(e) {
-            is MissingTokenException -> {
+            is UnauthorizedException -> {
                 // TODO: 로그아웃 및 로그인 화면으로 이동
             }
             is IOException -> {

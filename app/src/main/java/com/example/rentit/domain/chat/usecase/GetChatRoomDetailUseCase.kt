@@ -2,12 +2,20 @@ package com.example.rentit.domain.chat.usecase
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.rentit.domain.chat.exception.NotChatRoomMemberException
+import com.example.rentit.core.error.ForbiddenException
 import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.chat.model.ChatRoomDetailModel
 import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
+
+/**
+ * 채팅방 상세 정보를 가져오는 UseCase
+ *
+ * - 현재 로그인한 사용자가 채팅방 참가자인지 확인
+ * - 채팅 참가자가 아닌 경우 ForbiddenException 발생
+ * - 채팅방의 상대방 정보와 메시지 리스트를 도메인 모델로 변환
+ */
 
 @RequiresApi(Build.VERSION_CODES.O)
 class GetChatRoomDetailUseCase @Inject constructor(
@@ -25,7 +33,7 @@ class GetChatRoomDetailUseCase @Inject constructor(
             val chatRoomDetail = chatRepository.getChatDetail(chatRoomId, DEFAULT_PAGE, DEFAULT_PAGE_SIZE).getOrThrow()
             val participants = chatRoomDetail.chatRoom.participants
 
-            if(participants.find { it.userId == authUserId } == null) throw NotChatRoomMemberException()
+            if(participants.find { it.userId == authUserId } == null) throw ForbiddenException()
 
             val partner = participants.find { it.userId != authUserId }
 

@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.core.error.ForbiddenException
 import com.example.rentit.data.chat.dto.MessageResponseDto
-import com.example.rentit.domain.chat.exception.ForbiddenChatAccessException
 import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
 import com.example.rentit.domain.chat.websocket.WebSocketManager
@@ -94,7 +94,7 @@ class ChatRoomViewModel @Inject constructor(
                     Log.e(TAG, "네트워크 오류 발생", e)
                     showNetworkErrorDialog()
                 }
-                is ForbiddenChatAccessException -> {
+                is ForbiddenException -> {
                     Log.e(TAG, "채팅방 접근 권한 없음", e)
                     showForbiddenChatAccessDialog()
                 }
