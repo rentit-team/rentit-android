@@ -3,8 +3,8 @@ package com.example.rentit.domain.rental.usecase
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalRole
+import com.example.rentit.core.error.ServerErrorException
 import com.example.rentit.data.rental.mapper.toModel
-import com.example.rentit.domain.rental.exception.RentalStatusUnknownException
 import com.example.rentit.domain.rental.model.RentalDetailModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.domain.rental.repository.RentalRepository
@@ -30,7 +30,7 @@ class GetRentalDetailUseCase @Inject constructor(
 
             val rentalDetailStatusModel = rentalDetail.toModel()
             if(rentalDetailStatusModel is RentalDetailStatusModel.Unknown) {
-                throw RentalStatusUnknownException()
+                throw ServerErrorException("Unknown rental status")
             }
 
             val authUserId = userRepository.getAuthUserIdFromPrefs()

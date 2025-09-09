@@ -2,6 +2,7 @@ package com.example.rentit.presentation.productdetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.domain.product.repository.ProductRepository
 import com.example.rentit.domain.product.usecase.GetProductDetailResultUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -13,6 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
+    private val productRepository: ProductRepository,
     private val getProductDetailResultUseCase: GetProductDetailResultUseCase
 ) : ViewModel() {
 
@@ -22,24 +24,42 @@ class ProductDetailViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<ProductDetailSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    private fun requestNavigation(sideEffect: ProductDetailSideEffect) {
+    private fun emitSideEffect (sideEffect: ProductDetailSideEffect) {
         viewModelScope.launch {
             _sideEffect.emit(sideEffect)
         }
     }
 
-    fun setLoading(isLoading: Boolean) {
+    private fun setLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
-    suspend fun getProductDetail(productId: Int) {
+    suspend fun loadProductDetail(productId: Int) {
+        setLoading(true)
+        getProductDetail(productId)
+        getReservedDates(productId)
+        setLoading(false)
+    }
+
+    private suspend fun getProductDetail(productId: Int) {
         getProductDetailResultUseCase.invoke(productId)
             .onSuccess {
                 _uiState.value = _uiState.value.copy(
                     productDetail = it.productDetail,
                     requestCount = it.requestCount
                 )
-            }.onFailure { }
+            }.onFailure { e ->
+                emitSideEffect(ProductDetailSideEffect.CommonError(e))
+            }
+    }
+
+    private suspend fun getReservedDates(productId: Int) {
+        productRepository.getReservedDates(productId)
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(reservedDateList = it.disabledDates)
+            }.onFailure {e ->
+                emitSideEffect(ProductDetailSideEffect.CommonError(e))
+            }
     }
 
     fun showBottomSheet() {
@@ -59,20 +79,26 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     fun onChattingClicked() {
-        requestNavigation(ProductDetailSideEffect.NavigateToChatting)
+        emitSideEffect(ProductDetailSideEffect.NavigateToChatting)
     }
 
     fun onResvRequestClicked() {
-        requestNavigation(ProductDetailSideEffect.NavigateToResvRequest)
+        emitSideEffect(ProductDetailSideEffect.NavigateToResvRequest)
     }
 
     fun onRentalHistoryClicked() {
-        requestNavigation(ProductDetailSideEffect.NavigateToRentalHistory)
+        emitSideEffect(ProductDetailSideEffect.NavigateToRentalHistory)
     }
 
     fun emitComingSoonToast() {
         viewModelScope.launch {
             _sideEffect.emit(ProductDetailSideEffect.ToastComingSoon)
+        }
+    }
+
+    fun retryLoadProductDetail(productId: Int) {
+        viewModelScope.launch {
+            loadProductDetail(productId)
         }
     }
 }

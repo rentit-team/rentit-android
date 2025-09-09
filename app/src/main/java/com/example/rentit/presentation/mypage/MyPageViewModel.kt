@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.core.error.UnauthorizedException
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.domain.user.usecase.GetMyProductsWithCategoryUseCase
 import com.example.rentit.domain.user.usecase.GetMyRentalsWithNearestDueUseCase
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -37,20 +35,6 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    private fun errorHandling(e: Throwable) {
-        when(e) {
-            is UnauthorizedException -> {
-                // TODO: 로그아웃 및 로그인 화면으로 이동
-            }
-            is IOException -> {
-                showNetworkErrorDialog()
-            }
-            else -> {
-                showServerErrorDialog()
-            }
-        }
-    }
-
     private fun setLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
@@ -63,7 +47,7 @@ class MyPageViewModel @Inject constructor(
                     myProductCount = it.size
                 )
             }.onFailure { e ->
-                errorHandling(e)
+                emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
 
@@ -76,7 +60,7 @@ class MyPageViewModel @Inject constructor(
                     nearestDueItem = it.nearestDueItem
                 )
             }.onFailure { e ->
-                errorHandling(e)
+                emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
 
@@ -87,7 +71,7 @@ class MyPageViewModel @Inject constructor(
                 nickName = it.data.nickname,
             )
         }.onFailure { e ->
-            errorHandling(e)
+            emitSideEffect(MyPageSideEffect.CommonError(e))
         }
     }
 
@@ -128,25 +112,9 @@ class MyPageViewModel @Inject constructor(
         emitSideEffect(MyPageSideEffect.ToastComingSoon)
     }
 
-    fun showNetworkErrorDialog() {
-        _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
-    }
-
-    fun showServerErrorDialog() {
-        _uiState.value = _uiState.value.copy(showServerErrorDialog = true)
-    }
-
     fun reloadData() {
-        dismissAllDialog()
         viewModelScope.launch {
             loadInitialData()
         }
-    }
-
-    fun dismissAllDialog() {
-        _uiState.value = _uiState.value.copy(
-            showNetworkErrorDialog = false,
-            showServerErrorDialog = false
-        )
     }
 }

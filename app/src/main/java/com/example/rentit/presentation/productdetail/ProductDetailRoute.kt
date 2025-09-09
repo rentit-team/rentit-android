@@ -18,11 +18,15 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.navigation.productdetail.navigateToResvRequest
 import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
+import com.example.rentit.presentation.main.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+
     val viewModel: ProductDetailViewModel = hiltViewModel()
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -30,9 +34,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     LaunchedEffect(Unit) {
-        viewModel.setLoading(true)
-        viewModel.getProductDetail(productId)
-        viewModel.setLoading(false)
+        viewModel.loadProductDetail(productId)
+        mainViewModel?.setRetryAction { viewModel.retryLoadProductDetail(productId) }
     }
 
     LaunchedEffect(Unit) {
@@ -42,16 +45,17 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
                     ProductDetailSideEffect.NavigateToRentalHistory -> {
                         navHostController.navigateToResvRequestHistory(productId)
                     }
-
                     ProductDetailSideEffect.NavigateToChatting -> {
                         /* TODO */
                     }
-
                     ProductDetailSideEffect.NavigateToResvRequest -> {
                         navHostController.navigateToResvRequest(productId)
                     }
                     ProductDetailSideEffect.ToastComingSoon -> {
-                        Toast.makeText(context, context.getString(R.string.common_toast_feat_coming_soon), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.common_toast_feat_coming_soon, Toast.LENGTH_SHORT).show()
+                    }
+                    is ProductDetailSideEffect.CommonError -> {
+                        mainViewModel?.handleError(it.throwable)
                     }
                 }
             }
@@ -60,6 +64,7 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
 
     ProductDetailScreen(
         productDetail = uiState.productDetail,
+        reservedDateList = uiState.reservedDateList,
         requestCount = uiState.requestCount,
         showFullImage = uiState.showFullImage,
         showBottomSheet = uiState.showBottomSheet,

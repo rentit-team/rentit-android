@@ -16,8 +16,6 @@ data class RentalDetailState(
     val showTrackingRegDialog: Boolean = false,
     val requestAcceptDialog: RequestAcceptDialogUiModel? = null,
     val showCancelDialog: Boolean = false,
-    val showUnknownStatusDialog: Boolean = false,
-    val showLoadFailedDialog: Boolean = false
 ) {
     val trackingRegisterRequestType: TrackingRegistrationRequestType
         get() = when(rentalDetailStatusModel) {

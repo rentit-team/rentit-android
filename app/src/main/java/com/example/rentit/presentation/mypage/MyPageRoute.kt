@@ -4,7 +4,6 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -15,16 +14,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.NetworkErrorDialog
-import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.navigation.setting.navigateToSetting
+import com.example.rentit.presentation.main.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageRoute(navHostController: NavHostController) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+
     val viewModel: MyPageViewModel = hiltViewModel()
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -33,6 +34,7 @@ fun MyPageRoute(navHostController: NavHostController) {
 
     LaunchedEffect(Unit) {
         viewModel.loadInitialData()
+        mainViewModel?.setRetryAction(viewModel::reloadData)
     }
 
     LaunchedEffect(Unit) {
@@ -51,14 +53,11 @@ fun MyPageRoute(navHostController: NavHostController) {
                     MyPageSideEffect.ToastComingSoon -> {
                         Toast.makeText(context, context.getString(R.string.common_toast_feat_coming_soon), Toast.LENGTH_SHORT).show()
                     }
+                    is MyPageSideEffect.CommonError -> {
+                        mainViewModel?.handleError(it.throwable)
+                    }
                 }
             }
-        }
-    }
-
-    DisposableEffect(Unit) {
-        onDispose {
-            viewModel.dismissAllDialog()
         }
     }
 
@@ -82,18 +81,4 @@ fun MyPageRoute(navHostController: NavHostController) {
     )
 
     LoadingScreen(uiState.isLoading)
-
-    if(uiState.showNetworkErrorDialog) {
-        NetworkErrorDialog(
-            navigateBack = navHostController::popBackStack,
-            onRetry = viewModel::reloadData,
-        )
-    }
-
-    if(uiState.showServerErrorDialog) {
-        ServerErrorDialog(
-            navigateBack = navHostController::popBackStack,
-            onRetry = viewModel::reloadData
-        )
-    }
 }

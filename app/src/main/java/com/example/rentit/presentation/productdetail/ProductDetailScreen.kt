@@ -66,6 +66,7 @@ import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistory
 @Composable
 fun ProductDetailScreen(
     productDetail: ProductDetailModel,
+    reservedDateList: List<String>,
     requestCount: Int?,
     sheetState: SheetState,
     showBottomSheet: Boolean,
@@ -128,7 +129,7 @@ fun ProductDetailScreen(
             onDismissRequest = onBottomSheetDismiss,
             sheetState = sheetState
         ) {
-            RentalHistoryBottomDrawer(productDetail.productId)
+            RentalHistoryBottomDrawer(reservedDateList)
         }
     }
 
@@ -354,6 +355,7 @@ private fun Preview() {
     RentItTheme {
         ProductDetailScreen(
             productDetail = sampleProductDetail,
+            reservedDateList = emptyList(),
             requestCount = 2,
             showBottomSheet = false,
             sheetState = rememberModalBottomSheetState(),

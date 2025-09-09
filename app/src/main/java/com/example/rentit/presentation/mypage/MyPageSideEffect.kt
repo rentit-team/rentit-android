@@ -5,4 +5,5 @@ sealed class MyPageSideEffect {
     data class NavigateToRentalDetail(val productId: Int, val reservationId: Int): MyPageSideEffect()
     data object NavigateToSetting: MyPageSideEffect()
     data object ToastComingSoon: MyPageSideEffect()
+    data class CommonError(val throwable: Throwable): MyPageSideEffect()
 }

@@ -5,4 +5,5 @@ sealed class ProductDetailSideEffect {
     data object NavigateToChatting: ProductDetailSideEffect()
     data object NavigateToResvRequest: ProductDetailSideEffect()
     data object ToastComingSoon: ProductDetailSideEffect()
+    data class CommonError(val throwable: Throwable): ProductDetailSideEffect()
 }

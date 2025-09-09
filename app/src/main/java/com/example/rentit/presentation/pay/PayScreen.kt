@@ -42,13 +42,11 @@ fun PayScreen(
     rentalSummary: RentalSummaryUiModel,
     basicRentalFee: Int,
     depositAmount: Int,
-    showLoadFailedDialog: Boolean,
     showPayResultDialog: Boolean,
     scrollState: ScrollState,
     isLoading: Boolean,
     onBackClick: () -> Unit,
     onPayClick: () -> Unit,
-    onLoadErrorDismiss: () -> Unit,
     onPayResultDismiss: () -> Unit,
     onPayResultConfirm: () -> Unit,
 ) {
@@ -99,7 +97,6 @@ fun PayScreen(
             PaymentGuide()
         }
     }
-    if(showLoadFailedDialog) LoadErrorDialog(onLoadErrorDismiss)
     if(showPayResultDialog) PayResultDialog(onPayResultDismiss, onPayResultConfirm)
 
     // 로딩 상태
@@ -145,20 +142,6 @@ fun PaymentGuide() {
 }
 
 @Composable
-fun LoadErrorDialog(
-    onDismiss: () -> Unit = {},
-) {
-    BaseDialog(
-        title = stringResource(R.string.dialog_data_load_error_title),
-        content = stringResource(R.string.dialog_data_load_error_content),
-        confirmBtnText = stringResource(R.string.common_dialog_btn_close),
-        isBackgroundClickable = false,
-        onDismissRequest = onDismiss,
-        onConfirmRequest = onDismiss,
-    )
-}
-
-@Composable
 fun PayResultDialog(
     onClose: () -> Unit = {},
     onConfirm: () -> Unit = {},
@@ -187,12 +170,10 @@ private fun Preview() {
     RentItTheme {
         PayScreen(
             showPayResultDialog = false,
-            showLoadFailedDialog = false,
             scrollState = rememberScrollState(),
             isLoading = false,
             onBackClick = { },
             onPayClick = { },
-            onLoadErrorDismiss = { },
             onPayResultDismiss = { },
             onPayResultConfirm = { },
             rentalSummary = sample,

@@ -6,13 +6,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.domain.product.usecase.GetCategoryMapUseCase
 import com.example.rentit.domain.product.usecase.GetProductListWithCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import java.io.IOException
 import javax.inject.Inject
 
-private const val TAG = "Home"
+private const val TAG = "HomeViewModel"
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -23,11 +24,16 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeState())
     val uiState: StateFlow<HomeState> = _uiState
 
-    init {
-        fetchHomeData()
+    private val _sideEffect = MutableSharedFlow<HomeSideEffect>()
+    val sideEffect = _sideEffect.asSharedFlow()
+
+    private fun emitSideEffect(sideEffect: HomeSideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(sideEffect)
+        }
     }
 
-    private fun fetchHomeData() {
+    fun fetchHomeData() {
         viewModelScope.launch {
             setIsLoading(true)
             fetchCategoryMap()
@@ -47,8 +53,8 @@ class HomeViewModel @Inject constructor(
                 Log.i(TAG, "카테고리 맵 가져오기 성공: ${it.size}개 카테고리")
             }
             .onFailure { e ->
-                handleException(e)
                 Log.e(TAG, "카테고리 맵 가져오기 실패", e)
+                emitSideEffect(HomeSideEffect.CommonError(e))
             }
     }
 
@@ -59,8 +65,8 @@ class HomeViewModel @Inject constructor(
                 Log.i(TAG, "상품 리스트 가져오기 성공: ${it.size}개 상품")
             }
             .onFailure { e ->
-                handleException(e)
                 Log.e(TAG, "상품 리스트 가져오기 실패", e)
+                emitSideEffect(HomeSideEffect.CommonError(e))
             }
     }
 
@@ -80,25 +86,5 @@ class HomeViewModel @Inject constructor(
 
     private fun setIsLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
-    }
-
-    private fun showServerErrorDialog() {
-        _uiState.value = _uiState.value.copy(showServerErrorDialog = true)
-    }
-
-    private fun showNetworkErrorDialog() {
-        _uiState.value = _uiState.value.copy(showNetworkErrorDialog = true)
-    }
-
-    private fun handleException(e: Throwable) {
-        when (e) {
-            is IOException -> {
-                showNetworkErrorDialog()
-            }
-            else -> {
-                showServerErrorDialog()
-            }
-            // TODO: 토큰 에러 처리 필요 (리프레시 토큰으로 재발급 또는 로그인 화면 이동)
-        }
     }
 }

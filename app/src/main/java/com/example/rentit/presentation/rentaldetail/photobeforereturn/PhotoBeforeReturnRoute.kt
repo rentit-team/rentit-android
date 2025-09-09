@@ -13,11 +13,13 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.presentation.main.MainViewModel
 import com.example.rentit.presentation.rentaldetail.components.rememberTakePhotoLauncher
-import com.example.rentit.presentation.rentaldetail.dialog.PhotoLoadFailedDialog
 
 @Composable
 fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
 
     val viewModel: PhotoBeforeReturnViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -27,20 +29,24 @@ fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int,
 
     LaunchedEffect(Unit) {
         viewModel.fetchBeforePhotoUrls(productId, reservationId)
+        mainViewModel?.setRetryAction { viewModel.retryFetchBeforePhotoUrls(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-            viewModel.sideEffect.collect { sideEffect ->
-                when (sideEffect) {
+            viewModel.sideEffect.collect {
+                when (it) {
                     PhotoBeforeReturnSideEffect.PopBackToRentalDetail -> {
                         navHostController.popBackStack()
                     }
                     PhotoBeforeReturnSideEffect.ToastUploadSuccess -> {
-                        Toast.makeText(context, context.getString(R.string.toast_photo_upload_success), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_photo_upload_success, Toast.LENGTH_SHORT).show()
                     }
                     PhotoBeforeReturnSideEffect.ToastUploadFailed -> {
-                        Toast.makeText(context, context.getString(R.string.toast_photo_upload_failed), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_photo_upload_failed, Toast.LENGTH_SHORT).show()
+                    }
+                    is PhotoBeforeReturnSideEffect.CommonError -> {
+                        mainViewModel?.handleError(it.throwable)
                     }
                 }
             }
@@ -63,8 +69,5 @@ fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int,
         onRegister = { viewModel.uploadPhotos(productId, reservationId) },
     )
 
-    LoadingScreen(uiState.isUploadInProgress)
-
-    if(uiState.showFailedPhotoLoadDialog)
-        PhotoLoadFailedDialog(viewModel::closeAndNavigateBack)
+    LoadingScreen(uiState.isLoading || uiState.isUploadInProgress)
 }

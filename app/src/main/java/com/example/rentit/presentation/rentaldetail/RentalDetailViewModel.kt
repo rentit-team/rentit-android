@@ -8,9 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
-import com.example.rentit.core.error.UnauthorizedException
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.domain.rental.exception.RentalStatusUnknownException
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.domain.rental.repository.RentalRepository
@@ -25,6 +23,7 @@ import javax.inject.Inject
 
 private const val TAG = "RentalDetailViewModel"
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
     private val rentalRepository: RentalRepository,
@@ -43,14 +42,12 @@ class RentalDetailViewModel @Inject constructor(
         }
     }
 
-    fun setLoading(isLoading: Boolean) {
+    private fun setLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
     }
 
     fun resetDialogState() {
         _uiState.value = _uiState.value.copy(
-            showLoadFailedDialog = false,
-            showUnknownStatusDialog = false,
             showCancelDialog = false,
             requestAcceptDialog = null,
             showTrackingRegDialog = false,
@@ -59,47 +56,29 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     /** 대여 상세 정보 조회 */
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getRentalDetail(productId: Int, reservationId: Int) {
+    suspend fun getRentalDetail(productId: Int, reservationId: Int) {
+        setLoading(true)
+        getRentalDetailUseCase(productId, reservationId)
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(
+                    rentalDetailStatusModel = it.rentalDetailStatusModel,
+                    role = it.role
+                )
+                Log.i(TAG, "대여 상세 조회 성공: Product Id: $productId, Reservation Id: $reservationId")
+            }.onFailure { e ->
+                Log.e(TAG, "대여 상세 조회 실패", e)
+                emitSideEffect(RentalDetailSideEffect.CommonError(e))
+            }
+        setLoading(false)
+    }
+
+    fun retryLoadRentalDetail(productId: Int, reservationId: Int) {
         viewModelScope.launch {
-            getRentalDetailUseCase(productId, reservationId)
-                .onSuccess {
-                    _uiState.value = _uiState.value.copy(
-                        rentalDetailStatusModel = it.rentalDetailStatusModel,
-                        role = it.role
-                    )
-                    Log.i(TAG, "대여 상세 조회 성공: Product Id: $productId, Reservation Id: $reservationId")
-                }.onFailure { e ->
-                    Log.e(TAG, "대여 상세 조회 실패", e)
-                    handleFetchError(e)
-                }
-        }
-    }
-
-    private fun showUnknownStatusDialog() {
-        _uiState.value = _uiState.value.copy(showUnknownStatusDialog = true)
-    }
-
-    private fun showLoadFailedDialog() {
-        _uiState.value = _uiState.value.copy(showLoadFailedDialog = true)
-    }
-
-    private fun handleFetchError(e: Throwable) {
-        when(e) {
-            is UnauthorizedException -> {
-                // TODO: 로그아웃 및 로그인 이동
-            }
-            is RentalStatusUnknownException -> {
-                showUnknownStatusDialog()
-            }
-            else -> {
-                showLoadFailedDialog()
-            }
+            getRentalDetail(productId, reservationId)
         }
     }
 
     /** 요청 수락 */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun acceptRequest(productId: Int, reservationId: Int) {
         viewModelScope.launch {
             rentalRepository.updateRentalStatus(
@@ -113,12 +92,11 @@ class RentalDetailViewModel @Inject constructor(
                 Log.i(TAG, "요청 수락 성공")
             }.onFailure { e ->
                 Log.e(TAG, "요청 수락 실패", e)
-                handleAcceptError(e)
+                emitSideEffect(RentalDetailSideEffect.ToastAcceptRentalFailed)
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun showRequestAcceptDialog() {
         val requestData =
             _uiState.value.rentalDetailStatusModel as? RentalDetailStatusModel.Request ?: return
@@ -139,19 +117,7 @@ class RentalDetailViewModel @Inject constructor(
         emitSideEffect(RentalDetailSideEffect.ToastAcceptRentalSuccess)
     }
 
-    private fun handleAcceptError(e: Throwable) {
-        when (e) {
-            is UnauthorizedException -> {
-                println("Logout") // TODO: 로그아웃 및 로그인 이동
-            }
-            else -> {
-                emitSideEffect(RentalDetailSideEffect.ToastAcceptRentalFailed)
-            }
-        }
-    }
-
     /** 대여 취소 */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun confirmCancel(productId: Int, reservationId: Int) {
         viewModelScope.launch {
             rentalRepository.updateRentalStatus(
@@ -165,7 +131,7 @@ class RentalDetailViewModel @Inject constructor(
                 Log.i(TAG, "대여 취소 성공")
             }.onFailure { e ->
                 Log.e(TAG, "대여 취소 실패", e)
-                handleCancelError(e)
+                emitSideEffect(RentalDetailSideEffect.ToastCancelRentalFailed)
             }
         }
     }
@@ -180,17 +146,6 @@ class RentalDetailViewModel @Inject constructor(
 
     private fun toastCancelSuccess() {
         emitSideEffect(RentalDetailSideEffect.ToastCancelRentalSuccess)
-    }
-
-    private fun handleCancelError(e: Throwable) {
-        when (e) {
-            is UnauthorizedException -> {
-                println("Logout") // TODO: 로그아웃 및 로그인 이동
-            }
-            else -> {
-                emitSideEffect(RentalDetailSideEffect.ToastCancelRentalFailed)
-            }
-        }
     }
 
     /** 운송장 등록 - 택배사 조회 */
@@ -211,7 +166,6 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     /** 운송장 등록 */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun confirmTrackingReg(requestType: TrackingRegistrationRequestType, productId: Int, reservationId: Int) {
         viewModelScope.launch {
             registerTrackingUseCase(

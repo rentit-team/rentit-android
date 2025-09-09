@@ -7,4 +7,6 @@ sealed class ResvRequestSideEffect {
         val totalPrice: Int
     ): ResvRequestSideEffect()
     data object ToastInvalidPeriod: ResvRequestSideEffect()
+    data object ToastPostResvFailed: ResvRequestSideEffect()
+    data class CommonError(val throwable: Throwable): ResvRequestSideEffect()
 }

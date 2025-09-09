@@ -29,16 +29,26 @@ class PhotoBeforeReturnViewModel @Inject constructor(
 
     private var takePhotoFiles = mutableListOf<File>()
 
-    fun fetchBeforePhotoUrls(productId: Int, reservationId: Int) {
+    private fun emitSideEffect(sideEffect: PhotoBeforeReturnSideEffect) {
         viewModelScope.launch {
-            rentalRepository.getRentalPhotos(productId, reservationId)
-                .onSuccess {
-                    val beforeUrls = it.rentalBefore.map { photo -> photo.url }
-                    handleFetchPhotoSuccess(beforeUrls)
-                }.onFailure {
-                    handleFetchPhotoFailed()
-                }
+            _sideEffect.emit(sideEffect)
         }
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    suspend fun fetchBeforePhotoUrls(productId: Int, reservationId: Int) {
+        setLoading(true)
+        rentalRepository.getRentalPhotos(productId, reservationId)
+            .onSuccess {
+                val beforeUrls = it.rentalBefore.map { photo -> photo.url }
+                handleFetchPhotoSuccess(beforeUrls)
+            }.onFailure { e ->
+                emitSideEffect(PhotoBeforeReturnSideEffect.CommonError(e))
+            }
+        setLoading(false)
     }
 
     private fun handleFetchPhotoSuccess(beforeUrls: List<String>) {
@@ -46,19 +56,6 @@ class PhotoBeforeReturnViewModel @Inject constructor(
             _uiState.value = _uiState.value.copy(beforePhotoUrls = beforeUrls, takenPhotoUris = List(beforeUrls.size) { Uri.EMPTY })
             _uiState.value = _uiState.value.copy(beforePhotoUrls = beforeUrls, takenPhotoUris = List(beforeUrls.size) { Uri.EMPTY })
             takePhotoFiles = MutableList(beforeUrls.size) { File("") }
-        }
-    }
-
-    private fun handleFetchPhotoFailed() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(showFailedPhotoLoadDialog = true)
-        }
-    }
-
-    fun closeAndNavigateBack() {
-        _uiState.value = _uiState.value.copy(showFailedPhotoLoadDialog = false)
-        viewModelScope.launch {
-            _sideEffect.emit(PhotoBeforeReturnSideEffect.PopBackToRentalDetail)
         }
     }
 
@@ -105,18 +102,24 @@ class PhotoBeforeReturnViewModel @Inject constructor(
 
     private fun handlePhotoUploadSuccess() {
         viewModelScope.launch {
-            _sideEffect.emit(PhotoBeforeReturnSideEffect.PopBackToRentalDetail)
-            _sideEffect.emit(PhotoBeforeReturnSideEffect.ToastUploadSuccess)
+            emitSideEffect(PhotoBeforeReturnSideEffect.PopBackToRentalDetail)
+            emitSideEffect(PhotoBeforeReturnSideEffect.ToastUploadSuccess)
         }
     }
 
     private fun toastPhotoUploadFailed() {
         viewModelScope.launch {
-            _sideEffect.emit(PhotoBeforeReturnSideEffect.ToastUploadFailed)
+            emitSideEffect(PhotoBeforeReturnSideEffect.ToastUploadFailed)
         }
     }
 
     private fun setUploading(isUploading: Boolean) {
         _uiState.value = _uiState.value.copy(isUploadInProgress = isUploading)
+    }
+
+    fun retryFetchBeforePhotoUrls(productId: Int, reservationId: Int) {
+        viewModelScope.launch {
+            fetchBeforePhotoUrls(productId, reservationId)
+        }
     }
 }
