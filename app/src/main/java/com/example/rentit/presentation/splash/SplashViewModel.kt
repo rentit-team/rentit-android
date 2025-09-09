@@ -13,15 +13,15 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private const val TAG = "Splash"
+private const val TAG = "SplashViewModel"
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val checkUserSessionUseCase: CheckUserSessionUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SplashState())
-    val uiState: StateFlow<SplashState> = _uiState
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
 
     private val _splashSideEffect = Channel<SplashSideEffect>()
     val splashSideEffect = _splashSideEffect.receiveAsFlow()
@@ -45,8 +45,8 @@ class SplashViewModel @Inject constructor(
                             Log.w(TAG, "토큰 누락으로 사용자 정보 조회 실패", e)
                         }
                         else -> {
-                            showErrorDialog()
                             Log.e(TAG, "사용자 정보 조회 실패 (서버/네트워크)", e)
+                            _splashSideEffect.send(SplashSideEffect.CommonError(e))
                         }
                     }
                 }
@@ -55,19 +55,14 @@ class SplashViewModel @Inject constructor(
     }
 
     private fun startLoading() {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+        _isLoading.value = true
     }
 
     private fun stopLoading() {
-        _uiState.value = _uiState.value.copy(isLoading = false)
-    }
-
-    private fun showErrorDialog() {
-        _uiState.value = _uiState.value.copy(showErrorDialog = true)
+        _isLoading.value = false
     }
 
     fun retryCheckUserSession() {
-        _uiState.value = _uiState.value.copy(showErrorDialog = false)
         checkUserSession()
     }
 
