@@ -17,20 +17,23 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.dialog.RequestAcceptDialog
+import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.enums.RentalRole
 import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeRent
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeReturn
 import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
-import com.example.rentit.presentation.rentaldetail.dialog.ErrorLoadRentalDetailDialog
+import com.example.rentit.presentation.main.MainViewModel
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
-import com.example.rentit.presentation.rentaldetail.dialog.UnknownStatusDialog
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalDetailRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
     val viewModel: RentalDetailViewModel = hiltViewModel()
@@ -39,9 +42,8 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
     val scrollState = rememberScrollState()
 
     LaunchedEffect(Unit) {
-        viewModel.setLoading(true)
         viewModel.getRentalDetail(productId, reservationId)
-        viewModel.setLoading(false)
+        mainViewModel?.setRetryAction { viewModel.retryLoadRentalDetail(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
@@ -87,6 +89,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                     RentalDetailSideEffect.ToastAcceptRentalFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_accept_rental_failed), Toast.LENGTH_SHORT).show()
                     }
+                    is RentalDetailSideEffect.CommonError -> {
+                        mainViewModel?.handleError(it.throwable)
+                    }
                 }
             }
         }
@@ -103,7 +108,6 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
             OwnerRentalDetailScreen(
                 uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
-                isLoading = uiState.isLoading,
                 onBackClick = viewModel::navigateBack,
                 onRequestResponseClick = viewModel::showRequestAcceptDialog,
                 onCancelRentClick = viewModel::showCancelDialog,
@@ -117,7 +121,6 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
             RentalDetailRenterScreen(
                 uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
-                isLoading = uiState.isLoading,
                 onBackPressed = viewModel::navigateBack,
                 onPayClick = viewModel::navigateToPay,
                 onCancelRentClick = viewModel::showCancelDialog,
@@ -129,6 +132,8 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
         }
         RentalRole.DEFAULT -> { }
     }
+
+    LoadingScreen(uiState.isLoading)
 
     uiState.requestAcceptDialog?.let {
         RequestAcceptDialog(
@@ -156,13 +161,5 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
             onDismiss = viewModel::dismissTrackingRegDialog,
             onConfirm = { viewModel.confirmTrackingReg(uiState.trackingRegisterRequestType, productId, reservationId) }
         )
-    }
-
-    if (uiState.showUnknownStatusDialog) {
-        UnknownStatusDialog(viewModel::navigateBack)
-    }
-
-    if (uiState.showLoadFailedDialog) {
-        ErrorLoadRentalDetailDialog(viewModel::navigateBack)
     }
 }

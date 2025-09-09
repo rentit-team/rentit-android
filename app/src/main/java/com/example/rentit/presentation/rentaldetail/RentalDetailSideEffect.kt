@@ -14,4 +14,5 @@ sealed class RentalDetailSideEffect {
     data object ToastCancelRentalFailed: RentalDetailSideEffect()
     data object ToastAcceptRentalSuccess: RentalDetailSideEffect()
     data object ToastAcceptRentalFailed: RentalDetailSideEffect()
+    data class CommonError(val throwable: Throwable): RentalDetailSideEffect()
 }

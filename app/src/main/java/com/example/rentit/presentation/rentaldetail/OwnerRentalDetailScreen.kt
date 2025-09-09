@@ -14,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto
@@ -35,7 +34,6 @@ import com.example.rentit.presentation.rentaldetail.content.owner.OwnerReturnedC
 fun OwnerRentalDetailScreen(
     uiModel: RentalDetailStatusModel,
     scrollState: ScrollState,
-    isLoading: Boolean,
     onBackClick: () -> Unit,
     onRequestResponseClick: () -> Unit,
     onCancelRentClick: () -> Unit,
@@ -62,7 +60,6 @@ fun OwnerRentalDetailScreen(
                 is RentalDetailStatusModel.Unknown -> Unit
             }
         }
-        LoadingScreen(isLoading)
     }
 }
 
@@ -111,7 +108,6 @@ private fun OwnerRentalDetailScreenPreview() {
         OwnerRentalDetailScreen(
             sample2.toModel(),
             rememberScrollState(),
-            isLoading = true,
             onBackClick = {},
             onRequestResponseClick = {},
             onCancelRentClick = {},
