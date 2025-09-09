@@ -5,7 +5,6 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 data class PayState (
     val rentalSummary: RentalSummaryUiModel = RentalSummaryUiModel.EMPTY,
     val depositAmount: Int = 0,
-    val showLoadErrorDialog: Boolean = false,
     val showPayResultDialog: Boolean = false,
     val isLoading: Boolean = false
 ) {

@@ -15,10 +15,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.presentation.main.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PayRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
+    val backStackEntry = navHostController.currentBackStackEntry
+    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -30,6 +33,7 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
 
     LaunchedEffect(Unit) {
         viewModel.getPayInfo(productId, reservationId)
+        mainViewModel?.setRetryAction { viewModel.reloadData(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
@@ -39,8 +43,11 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
                     PaySideEffect.ToastPayFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_pay_result_failed), Toast.LENGTH_SHORT).show()
                     }
-                    PaySideEffect.NavigateBackToRentalDetail -> {
+                    PaySideEffect.NavigateBack -> {
                         navHostController.popBackStack()
+                    }
+                    is PaySideEffect.CommonError -> {
+                        mainViewModel?.handleError(it.throwable)
                     }
                 }
             }
@@ -52,12 +59,10 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
         basicRentalFee = uiState.basicRentalFee,
         depositAmount = uiState.depositAmount,
         showPayResultDialog = uiState.showPayResultDialog,
-        showLoadFailedDialog = uiState.showLoadErrorDialog,
         scrollState = scrollState,
         isLoading = uiState.isLoading,
-        onBackClick = viewModel::navigateBackToRentalDetail,
+        onBackClick = navHostController::popBackStack,
         onPayClick = { viewModel.updateStatusToPaid(productId, reservationId) },
-        onLoadErrorDismiss = viewModel::dismissLoadErrorDialogAndNavigateBack,
         onPayResultDismiss = viewModel::showPayResultDialog,
         onPayResultConfirm = viewModel::onConfirmAndNavigateBack
     )

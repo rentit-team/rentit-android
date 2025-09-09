@@ -30,6 +30,12 @@ class PayViewModel @Inject constructor(
     private val _sideEffect = MutableSharedFlow<PaySideEffect>()
     val sideEffect: SharedFlow<PaySideEffect> = _sideEffect
 
+    private fun emitSideEffect(sideEffect: PaySideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(sideEffect)
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getPayInfo(productId: Int, reservationId: Int) {
         setLoading(true)
@@ -48,7 +54,7 @@ class PayViewModel @Inject constructor(
                     depositAmount = rental.depositAmount
                 )
             }.onFailure {
-                showLoadErrorDialog()
+                emitSideEffect(PaySideEffect.CommonError(it))
             }
         setLoading(false)
     }
@@ -66,7 +72,7 @@ class PayViewModel @Inject constructor(
                 ).onSuccess {
                     showPayResultDialog()
                 }.onFailure {
-                    toastPayFailed()
+                    emitSideEffect(PaySideEffect.ToastPayFailed)
                 }
             } finally {
                 setLoading(false)
@@ -74,21 +80,8 @@ class PayViewModel @Inject constructor(
         }
     }
 
-    private suspend fun toastPayFailed() {
-        _sideEffect.emit(PaySideEffect.ToastPayFailed)
-    }
-
     private fun setLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
-    }
-
-    private fun showLoadErrorDialog() {
-        _uiState.value = _uiState.value.copy(showLoadErrorDialog = true)
-    }
-
-    fun dismissLoadErrorDialogAndNavigateBack() {
-        _uiState.value = _uiState.value.copy(showLoadErrorDialog = false)
-        navigateBackToRentalDetail()
     }
 
     fun showPayResultDialog() {
@@ -101,12 +94,13 @@ class PayViewModel @Inject constructor(
 
     fun onConfirmAndNavigateBack() {
         hidePayResultDialog()
-        navigateBackToRentalDetail()
+        emitSideEffect(PaySideEffect.NavigateBack)
     }
 
-    fun navigateBackToRentalDetail() {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun reloadData(productId: Int, reservationId: Int) {
         viewModelScope.launch {
-            _sideEffect.emit(PaySideEffect.NavigateBackToRentalDetail)
+            getPayInfo(productId, reservationId)
         }
     }
 }
