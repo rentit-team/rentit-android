@@ -9,5 +9,6 @@ data class ProductDetailState(
     val isMyProduct: Boolean = false,
     val isLoading: Boolean = false,
     val showFullImage: Boolean = false,
-    val showBottomSheet: Boolean = false
+    val showBottomSheet: Boolean = false,
+    val showChatUnavailableDialog: Boolean = false
 )

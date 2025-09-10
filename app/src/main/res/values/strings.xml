@@ -138,6 +138,9 @@
     <string name="screen_product_btn_chatting">채팅하기</string>
     <string name="screen_product_btn_reserve">예약하기</string>
 
+    <string name="dialog_chat_unavailable_title">예약이 필요해요</string>
+    <string name="dialog_chat_unavailable_content">채팅 기능은 예약 후에만 제공돼요. 예약은 언제든 취소할 수 있으니 지금 예약을 진행해보세요!</string>
+
     <!-- 예약 가능일 확인 서랍 -->
     <string name="drawer_rental_history_calendar_legend_text">예약할 수 없는 날은 노란 원으로 표시돼요.</string>
 

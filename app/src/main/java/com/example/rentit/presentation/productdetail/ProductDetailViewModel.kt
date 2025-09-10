@@ -62,6 +62,21 @@ class ProductDetailViewModel @Inject constructor(
             }
     }
 
+    fun onChattingClicked(productId: Int) {
+        viewModelScope.launch {
+            productRepository.getChatAccessibility(productId)
+                .onSuccess {
+                    if(it.canAccessChat) {
+                        emitSideEffect(ProductDetailSideEffect.NavigateToChatting(it.chatroomId))
+                    } else {
+                        showChatUnavailableDialog()
+                    }
+                }.onFailure {e ->
+                    emitSideEffect(ProductDetailSideEffect.CommonError(e))
+                }
+        }
+    }
+
     fun showBottomSheet() {
         _uiState.value = _uiState.value.copy(showBottomSheet = true)
     }
@@ -78,8 +93,12 @@ class ProductDetailViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(showFullImage = false)
     }
 
-    fun onChattingClicked() {
-        emitSideEffect(ProductDetailSideEffect.NavigateToChatting)
+    private fun showChatUnavailableDialog() {
+        _uiState.value = _uiState.value.copy(showChatUnavailableDialog = true)
+    }
+
+    fun hideChatUnavailableDialog() {
+        _uiState.value = _uiState.value.copy(showChatUnavailableDialog = false)
     }
 
     fun onResvRequestClicked() {

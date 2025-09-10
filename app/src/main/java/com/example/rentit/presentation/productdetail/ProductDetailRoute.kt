@@ -17,9 +17,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.navigation.productdetail.navigateToResvRequest
 import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
 import com.example.rentit.presentation.main.MainViewModel
+import com.example.rentit.presentation.productdetail.dialog.ChatUnavailableDialog
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,8 +51,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
                     ProductDetailSideEffect.NavigateToRentalHistory -> {
                         navHostController.navigateToResvRequestHistory(productId)
                     }
-                    ProductDetailSideEffect.NavigateToChatting -> {
-                        /* TODO */
+                    is ProductDetailSideEffect.NavigateToChatting -> {
+                        navHostController.navigateToChatRoom(it.chatRoomId)
                     }
                     ProductDetailSideEffect.NavigateToResvRequest -> {
                         navHostController.navigateToResvRequest(productId)
@@ -82,7 +84,7 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         imagePagerState = imagePagerState,
         fullImagePagerState = fullImagePagerState,
         onRentalHistoryClick = viewModel::onRentalHistoryClicked,
-        onChattingClick = viewModel::onChattingClicked,
+        onChattingClick = { viewModel.onChattingClicked(productId) },
         onResvRequestClick = viewModel::onResvRequestClicked,
         onBackClick = navHostController::popBackStack,
         onFullImageDismiss = viewModel::hideFullImage,
@@ -92,4 +94,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         onLikeClick = viewModel::emitComingSoonToast,
         onShareClick = viewModel::emitComingSoonToast
     )
+
+    if(uiState.showChatUnavailableDialog) {
+        ChatUnavailableDialog(viewModel::hideChatUnavailableDialog)
+    }
 }

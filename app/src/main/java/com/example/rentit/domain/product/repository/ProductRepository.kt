@@ -3,6 +3,7 @@ package com.example.rentit.domain.product.repository
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
+import com.example.rentit.data.product.dto.ChatAccessibilityResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
@@ -25,4 +26,6 @@ interface ProductRepository {
     suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto>
 
     suspend fun getProductRequestList(productId: Int): Result<RequestHistoryResponseDto>
+
+    suspend fun getChatAccessibility(productId: Int): Result<ChatAccessibilityResponseDto>
 }

@@ -3,6 +3,7 @@ package com.example.rentit.data.product.remote
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
+import com.example.rentit.data.product.dto.ChatAccessibilityResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
@@ -36,5 +37,8 @@ class ProductRemoteDataSource @Inject constructor(
     }
     suspend fun getProductRequestList(productId: Int): Response<RequestHistoryResponseDto> {
         return productApiService.getProductRequestList(productId)
+    }
+    suspend fun getChatAccessibility(productId: Int): Response<ChatAccessibilityResponseDto> {
+        return productApiService.getChatAccessibility(productId)
     }
 }
