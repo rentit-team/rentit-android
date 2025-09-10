@@ -3,6 +3,7 @@ package com.example.rentit.presentation.productdetail
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -16,9 +17,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
+import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.navigation.productdetail.navigateToResvRequest
 import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
 import com.example.rentit.presentation.main.MainViewModel
+import com.example.rentit.presentation.productdetail.dialog.ChatUnavailableDialog
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,7 +34,11 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val menuDrawerState = rememberModalBottomSheetState()
+    val imagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
+    val fullImagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
 
     LaunchedEffect(Unit) {
         viewModel.loadProductDetail(productId)
@@ -45,8 +52,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
                     ProductDetailSideEffect.NavigateToRentalHistory -> {
                         navHostController.navigateToResvRequestHistory(productId)
                     }
-                    ProductDetailSideEffect.NavigateToChatting -> {
-                        /* TODO */
+                    is ProductDetailSideEffect.NavigateToChatting -> {
+                        navHostController.navigateToChatRoom(it.chatRoomId)
                     }
                     ProductDetailSideEffect.NavigateToResvRequest -> {
                         navHostController.navigateToResvRequest(productId)
@@ -62,22 +69,41 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         }
     }
 
+    LaunchedEffect(uiState.showFullImage) {
+        if(uiState.showFullImage) {
+            fullImagePagerState.scrollToPage(imagePagerState.currentPage)
+        }
+    }
+
     ProductDetailScreen(
         productDetail = uiState.productDetail,
         reservedDateList = uiState.reservedDateList,
         requestCount = uiState.requestCount,
+        menuDrawerState = menuDrawerState,
+        bottomSheetState = bottomSheetState,
+        imagePagerState = imagePagerState,
+        fullImagePagerState = fullImagePagerState,
+        isUserOwner = uiState.isUserOwner,
         showFullImage = uiState.showFullImage,
+        showMenuDrawer = uiState.showMenuDrawer,
         showBottomSheet = uiState.showBottomSheet,
-        sheetState = sheetState,
         onRentalHistoryClick = viewModel::onRentalHistoryClicked,
-        onChattingClick = viewModel::onChattingClicked,
+        onChattingClick = { viewModel.onChattingClicked(productId) },
         onResvRequestClick = viewModel::onResvRequestClicked,
         onBackClick = navHostController::popBackStack,
+        onEditClick = viewModel::emitComingSoonToast,
+        onDeleteClick = viewModel::emitComingSoonToast,
+        onMenuDrawerShow = viewModel::showMenuDrawer,
+        onMenuDrawerDismiss = viewModel::hideMenuDrawer,
         onFullImageDismiss = viewModel::hideFullImage,
         onFullImageShow = viewModel::showFullImage,
         onBottomSheetShow = viewModel::showBottomSheet,
         onBottomSheetDismiss = viewModel::hideBottomSheet,
         onLikeClick = viewModel::emitComingSoonToast,
-        onShareClick = viewModel::emitComingSoonToast
+        onShareClick = viewModel::emitComingSoonToast,
     )
+
+    if(uiState.showChatUnavailableDialog) {
+        ChatUnavailableDialog(viewModel::hideChatUnavailableDialog)
+    }
 }

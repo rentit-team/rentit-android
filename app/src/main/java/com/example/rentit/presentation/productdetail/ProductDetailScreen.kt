@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,6 +48,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.dialog.FullImageDialog
 import com.example.rentit.common.component.formatPeriodTextWithLabel
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
@@ -59,6 +59,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.domain.product.model.ProductDetailModel
+import com.example.rentit.presentation.productdetail.drawer.MenuDrawer
 import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryBottomDrawer
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -68,10 +69,17 @@ fun ProductDetailScreen(
     productDetail: ProductDetailModel,
     reservedDateList: List<String>,
     requestCount: Int?,
-    sheetState: SheetState,
+    bottomSheetState: SheetState,
+    menuDrawerState: SheetState,
+    imagePagerState: PagerState,
+    fullImagePagerState: PagerState,
+    isUserOwner: Boolean,
     showBottomSheet: Boolean,
+    showMenuDrawer: Boolean,
     showFullImage: Boolean,
     onBackClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     onLikeClick: () -> Unit,
     onShareClick: () -> Unit,
     onRentalHistoryClick: () -> Unit,
@@ -80,13 +88,22 @@ fun ProductDetailScreen(
     onFullImageDismiss: () -> Unit,
     onFullImageShow: () -> Unit,
     onBottomSheetShow: () -> Unit,
-    onBottomSheetDismiss: () -> Unit
+    onBottomSheetDismiss: () -> Unit,
+    onMenuDrawerShow: () -> Unit,
+    onMenuDrawerDismiss: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { CommonTopAppBar(onBackClick = onBackClick) },
+        topBar = {
+            CommonTopAppBar(
+                showMenu = isUserOwner,
+                onBackClick = onBackClick,
+                onMenuClick = onMenuDrawerShow
+            )
+        },
         bottomBar = {
             PostBottomBar(
+                isUserOwner = isUserOwner,
                 price = productDetail.price,
                 minPeriod = productDetail.minPeriod,
                 maxPeriod = productDetail.maxPeriod,
@@ -104,7 +121,7 @@ fun ProductDetailScreen(
                     .padding(innerPadding)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                ImagePager(productDetail.imgUrlList, onFullImageShow)
+                ImagePager(imagePagerState, productDetail.imgUrlList, onFullImageShow)
                 PostHeader(
                     productDetail.title,
                     productDetail.category,
@@ -127,17 +144,26 @@ fun ProductDetailScreen(
     if(showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = onBottomSheetDismiss,
-            sheetState = sheetState
+            sheetState = bottomSheetState
         ) {
             RentalHistoryBottomDrawer(reservedDateList)
         }
     }
 
-    if(showFullImage) FullImagePager(productDetail.imgUrlList, onFullImageDismiss)
+    if(showMenuDrawer) {
+        ModalBottomSheet(
+            onDismissRequest = onMenuDrawerDismiss,
+            sheetState = menuDrawerState
+        ) {
+            MenuDrawer(onEditClick, onDeleteClick)
+        }
+    }
+
+    if(showFullImage) FullImageDialog(fullImagePagerState, productDetail.imgUrlList, onFullImageDismiss)
 }
 
 @Composable
-fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
+fun ImagePager(pagerState: PagerState, imgUrlList: List<String?>, onClick: () -> Unit) {
     if(imgUrlList.isEmpty()){
         Image(
             modifier = Modifier.height(290.dp),
@@ -146,7 +172,6 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
             contentScale = ContentScale.FillWidth
         )
     } else {
-        val pagerState = rememberPagerState { imgUrlList.size }
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
@@ -179,36 +204,6 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
     }
 }
 
-@Composable
-fun FullImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
-    val pagerState = rememberPagerState { imgUrlList.size }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.Black.copy(alpha = 0.5f))) {
-        Image(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(20.dp)
-                .clickable { onClick() },
-            painter = painterResource(id = R.drawable.ic_x),
-            contentDescription = "닫기",
-            colorFilter = ColorFilter.tint(Color.White)
-        )
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) { page ->
-            LoadableUrlImage(
-                modifier = Modifier.fillMaxHeight(0.7f),
-                imgUrl = imgUrlList[page],
-                defaultImageResId = R.drawable.img_placeholder,
-                defaultDescResId = R.string.screen_product_detail_img_description,
-                contentScale = ContentScale.FillWidth
-            )
-        }
-    }
-}
 
 
 @Composable
@@ -253,6 +248,7 @@ fun PostHeader(title: String, category: List<String>, creationDate: String, onLi
 
 @Composable
 fun PostBottomBar(
+    isUserOwner: Boolean,
     price: Int,
     minPeriod: Int?,
     maxPeriod: Int?,
@@ -290,8 +286,9 @@ fun PostBottomBar(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
-        if(requestCount != null) {
-            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount), onRentalHistoryClick)
+        if(isUserOwner) {
+            val count = requestCount ?: 0
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, count), onRentalHistoryClick)
         } else {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting), onChattingClick)
             MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve), onResvRequestClick)
@@ -358,7 +355,10 @@ private fun Preview() {
             reservedDateList = emptyList(),
             requestCount = 2,
             showBottomSheet = false,
-            sheetState = rememberModalBottomSheetState(),
+            menuDrawerState = rememberModalBottomSheetState(),
+            imagePagerState = rememberPagerState { 0 },
+            fullImagePagerState = rememberPagerState { 0 },
+            isUserOwner = false,
             showFullImage = false,
             onRentalHistoryClick = { },
             onChattingClick = { },
@@ -369,7 +369,13 @@ private fun Preview() {
             onBottomSheetDismiss = { },
             onBottomSheetShow = { },
             onLikeClick = { },
-            onShareClick = { }
+            onShareClick = { },
+            bottomSheetState = rememberModalBottomSheetState(),
+            showMenuDrawer = true,
+            onEditClick = {},
+            onDeleteClick = {},
+            onMenuDrawerShow = {},
+            onMenuDrawerDismiss = {}
         )
     }
 }

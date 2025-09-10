@@ -3,6 +3,7 @@ package com.example.rentit.data.product.remote
 import com.example.rentit.data.product.dto.ResvRequestDto
 import com.example.rentit.data.product.dto.ResvResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
+import com.example.rentit.data.product.dto.ChatAccessibilityResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
@@ -50,4 +51,8 @@ interface ProductApiService {
     @GET("api/v1/products/{productId}/reservations")
     @Headers("Content-Type: application/json")
     suspend fun getProductRequestList(@Path("productId") productId: Int): Response<RequestHistoryResponseDto>
+
+    @GET("api/v1/products/{productId}/reservations/chat-access")
+    @Headers("Content-Type: application/json")
+    suspend fun getChatAccessibility(@Path("productId") productId: Int): Response<ChatAccessibilityResponseDto>
 }

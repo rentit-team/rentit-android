@@ -37,7 +37,7 @@ class GetProductDetailResultUseCase @Inject constructor(
                     .getOrThrow().reservations.filter { it.status == RentalStatus.PENDING }.size
             } else null
 
-            ProductDetailResultModel(productDetailModel, requestCount)
+            ProductDetailResultModel(productDetailModel, isUserOwner, requestCount)
         }
     }
 }
