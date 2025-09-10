@@ -1,11 +1,6 @@
 package com.example.rentit.presentation.main.createpost
 
 import android.net.Uri
-import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
-import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
@@ -35,12 +30,6 @@ import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -53,12 +42,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
-import com.example.rentit.common.PRICE_LIMIT
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
@@ -72,29 +56,35 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.data.product.dto.CategoryDto
-import com.example.rentit.data.product.dto.CreatePostRequestDto
-import com.example.rentit.data.product.dto.PeriodDto
-import com.example.rentit.navigation.bottomtab.navigateToHome
-import com.example.rentit.presentation.main.createpost.categorytag.CategoryTagDrawer
+import com.example.rentit.presentation.main.createpost.drawer.CategoryTagDrawer
 import com.example.rentit.presentation.main.createpost.components.RemovableTagButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreatePostScreen(navHostController: NavHostController) {
-    var titleText by remember { mutableStateOf("") }
-    var contentText by remember { mutableStateOf("") }
-    var showTagDrawer by remember { mutableStateOf(false) }
-    var periodSliderPosition by remember { mutableStateOf(3F..15F) }
-    var price by remember { mutableIntStateOf(0) }
-    var priceInput by remember { mutableStateOf(TextFieldValue("")) }
-
-    val createPostViewModel: CreatePostViewModel = hiltViewModel()
-    val categoryList by createPostViewModel.categoryList.collectAsStateWithLifecycle()
-    val selectedCategoryList by createPostViewModel.selectedCategoryList.collectAsStateWithLifecycle()
-    val selectedImgUriList by createPostViewModel.selectedImgUriList.collectAsStateWithLifecycle()
-
+fun CreatePostScreen(
+    title: String,
+    content: String,
+    selectedImgUriList: List<Uri>,
+    categoryList: List<CategoryDto>,
+    selectedCategoryList: List<CategoryDto>,
+    periodSliderPosition: ClosedFloatingPointRange<Float>,
+    price: Int,
+    showCategoryTagDrawer: Boolean,
+    onBackClick: () -> Unit,
+    onTitleChange: (String) -> Unit,
+    onContentChange: (String) -> Unit,
+    onCategoryClick: (CategoryDto) -> Unit,
+    onAddImageBoxClick: () -> Unit,
+    onImageRemoveClick: (Uri) -> Unit,
+    onAddCategoryClick: () -> Unit,
+    onRemoveCategory: (CategoryDto) -> Unit,
+    onCategoryDialogDismiss: () -> Unit,
+    onPeriodChange: (ClosedFloatingPointRange<Float>) -> Unit,
+    onPriceChange: (TextFieldValue) -> Unit,
+    onPostClick: () -> Unit
+) {
     Scaffold(
-        topBar = { CommonTopAppBar { navHostController.popBackStack() } }
+        topBar = { CommonTopAppBar(onBackClick = onBackClick) }
     ) {
         Column(
             Modifier
@@ -106,20 +96,20 @@ fun CreatePostScreen(navHostController: NavHostController) {
             LabeledContent(stringResource(id = R.string.screen_product_create_image_label)) {
                 ImageSelectSection(
                     selectedImgUriList = selectedImgUriList,
-                    onUpdateImageList = createPostViewModel::updateImageUriList,
-                    onImageRemoveClick = createPostViewModel::removeImageUri
+                    onAddImageBoxClick = onAddImageBoxClick,
+                    onImageRemoveClick = onImageRemoveClick
                 )
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
                 CommonTextField(
-                    value = titleText,
-                    onValueChange = { value -> titleText = value },
+                    value = title,
+                    onValueChange = onTitleChange,
                     placeholder = stringResource(id = R.string.screen_product_create_title_placeholder))
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_content_label)){
                 CommonTextField(
-                    value = contentText,
-                    onValueChange = { value -> contentText = value },
+                    value = content,
+                    onValueChange = onContentChange,
                     placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
                     minLines = 4,
                     maxLines = Int.MAX_VALUE,
@@ -130,51 +120,34 @@ fun CreatePostScreen(navHostController: NavHostController) {
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_category_label)) {
                 CategoryTagSection(
-                    selectedCategoryList,
-                    onRemoveCategory = createPostViewModel::removeSelectedCategory,
-                    onAddCategory = { showTagDrawer = true }
+                    selectedCategoryList = selectedCategoryList,
+                    onRemoveCategory = onRemoveCategory,
+                    onAddCategoryClick = onAddCategoryClick
                 )
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_rental_period_label)){
-                RentalPeriodSlider(periodSliderPosition) { pos -> periodSliderPosition = pos }
+                RentalPeriodSlider(periodSliderPosition, onPeriodChange)
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_price_label)){
-                PriceInputSection(priceInput) { value ->
-                    val digitsOnly = value.text.filter { v -> v.isDigit() }
-                    price = digitsOnly.toIntOrNull()?.coerceAtMost(PRICE_LIMIT) ?: 0
-
-                    val formattedPrice = formatPrice(price)
-                    priceInput = priceInput.copy(
-                        text = formattedPrice,
-                        selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
-                    )
-                }
+                PriceInputSection(price, onPriceChange)
             }
             CommonButton(
                 text = stringResource(id = R.string.screen_product_create_complete_btn_text),
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White,
-                modifier = Modifier.padding(top = 30.dp, bottom = 50.dp)
-            ) {
-                val period = PeriodDto("daily", periodSliderPosition.start.toInt(), periodSliderPosition.endInclusive.toInt())
-                val selectedCategoryIdList = selectedCategoryList.map { cat -> cat.id }
-                val requestBody = CreatePostRequestDto(titleText, contentText, selectedCategoryIdList, period, price.toDouble(), null)
-                val thumbnailImg = if(selectedImgUriList.isNotEmpty()) selectedImgUriList[0] else null
-                createPostViewModel.createPost(requestBody, thumbnailImg)
-            }
+                modifier = Modifier.padding(top = 30.dp, bottom = 50.dp),
+                onClick = onPostClick
+            )
         }
-        if(showTagDrawer) {
-            ModalBottomSheet(onDismissRequest = { showTagDrawer = false }) {
+        if(showCategoryTagDrawer) {
+            ModalBottomSheet(onDismissRequest = onCategoryDialogDismiss) {
                 CategoryTagDrawer(
                     categoryList = categoryList,
                     selectedCategoryList = selectedCategoryList,
-                    onTagButtonClick = createPostViewModel::handleCategoryClick
+                    onTagButtonClick = onCategoryClick
                 )
             }
         }
-    }
-    CreatePostResultHandler(createPostViewModel) {
-        navHostController.navigateToHome()
     }
 }
 
@@ -190,10 +163,9 @@ fun LabeledContent(title: String, content: @Composable () -> Unit) {
 @Composable
 fun ImageSelectSection(
     selectedImgUriList: List<Uri>,
-    onUpdateImageList: (List<Uri>) -> Unit,
+    onAddImageBoxClick: () -> Unit = {},
     onImageRemoveClick: (Uri) -> Unit
 ) {
-    val pickMultipleImage = pickMultipleImage(onUpdateImageList)
     val imageBoxWidth = 160.dp
     val imageBoxAspectRatio = 4f/3f
 
@@ -206,13 +178,7 @@ fun ImageSelectSection(
             .width(imageBoxWidth)
             .aspectRatio(imageBoxAspectRatio)
             .basicRoundedGrayBorder()
-            .clickable {
-                pickMultipleImage.launch(
-                    PickVisualMediaRequest(
-                        PickVisualMedia.ImageOnly
-                    )
-                )
-            }) {
+            .clickable { onAddImageBoxClick() }) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -236,23 +202,14 @@ fun ImageSelectSection(
     }
 }
 
-@Composable
-fun pickMultipleImage(onUpdateImageList: (List<Uri>) -> Unit): ManagedActivityResultLauncher<PickVisualMediaRequest, List<Uri>> {
-    return rememberLauncherForActivityResult(
-        PickMultipleVisualMedia()
-    ) { uris ->
-        if (uris.isNotEmpty()) {
-            onUpdateImageList(uris)
-        }
-    }
-}
+
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoryTagSection(
     selectedCategoryList: List<CategoryDto>,
     onRemoveCategory: (CategoryDto) -> Unit,
-    onAddCategory: () -> Unit) {
+    onAddCategoryClick: () -> Unit) {
     FlowRow(
         modifier = Modifier.padding(bottom = 10.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -262,7 +219,7 @@ fun CategoryTagSection(
                 onRemoveCategory(cat)
             }
         }
-        AddCategoryButton(onAddCategory)
+        AddCategoryButton(onAddCategoryClick)
     }
 }
 @Composable
@@ -314,10 +271,14 @@ fun RentalPeriodSlider(sliderPosition: ClosedFloatingPointRange<Float>, onValueC
     }
 }
 @Composable
-fun PriceInputSection(priceInput: TextFieldValue, onValueChange: (TextFieldValue) -> Unit) {
+fun PriceInputSection(price: Int, onValueChange: (TextFieldValue) -> Unit) {
+    val formattedPrice = formatPrice(price)
     Row(verticalAlignment = Alignment.CenterVertically) {
         CommonTextField(
-            value = priceInput,
+            value = TextFieldValue(
+                text = formattedPrice,
+                selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
+            ),
             onValueChange = onValueChange,
             placeholder = "0",
             keyboardType = KeyboardType.Number,
@@ -334,22 +295,31 @@ fun PriceInputSection(priceInput: TextFieldValue, onValueChange: (TextFieldValue
     }
 }
 
-@Composable
-fun CreatePostResultHandler(createPostViewModel: CreatePostViewModel, onCreatePostSuccess: () -> Unit){
-    val createPostResult by createPostViewModel.createPostResult.collectAsStateWithLifecycle()
-    LaunchedEffect(createPostResult) {
-        createPostResult?.onSuccess {
-            onCreatePostSuccess()
-        }?.onFailure {
-            /* 게시글 생성 실패 시 */
-        }
-    }
-}
-
 @Preview
 @Composable
 fun PreviewProductCreateScreen() {
     RentItTheme {
-        CreatePostScreen(rememberNavController())
+        CreatePostScreen(
+            title = "",
+            content = "",
+            selectedImgUriList = emptyList(),
+            categoryList = emptyList(),
+            selectedCategoryList = emptyList(),
+            periodSliderPosition = 3F..15F,
+            price = 0,
+            showCategoryTagDrawer = false,
+            onBackClick = {},
+            onTitleChange = {},
+            onContentChange = {},
+            onCategoryClick = {},
+            onImageRemoveClick = {},
+            onAddCategoryClick = {},
+            onAddImageBoxClick = {},
+            onRemoveCategory = {},
+            onCategoryDialogDismiss = {},
+            onPeriodChange = {},
+            onPriceChange = {},
+            onPostClick = {}
+        )
     }
 }

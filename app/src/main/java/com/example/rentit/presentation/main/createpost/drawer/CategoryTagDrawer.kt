@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.main.createpost.categorytag
+package com.example.rentit.presentation.main.createpost.drawer
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
