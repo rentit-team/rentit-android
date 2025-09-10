@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.productdetail
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.domain.product.repository.ProductRepository
@@ -11,6 +12,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "ProductDetailViewModel"
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
@@ -49,7 +52,9 @@ class ProductDetailViewModel @Inject constructor(
                     isUserOwner = it.isUserOwner,
                     requestCount = it.requestCount
                 )
+                Log.i(TAG, "상품 상세 정보 조회 성공: Product Id: $productId")
             }.onFailure { e ->
+                Log.e(TAG, "상품 상세 정보 조회 실패", e)
                 emitSideEffect(ProductDetailSideEffect.CommonError(e))
             }
     }
@@ -58,7 +63,9 @@ class ProductDetailViewModel @Inject constructor(
         productRepository.getReservedDates(productId)
             .onSuccess {
                 _uiState.value = _uiState.value.copy(reservedDateList = it.disabledDates)
+                Log.i(TAG, "상품 예약일 조회 성공: 예약된 날짜 ${it.disabledDates.size}개")
             }.onFailure {e ->
+                Log.e(TAG, "상품 예약일 조회 실패", e)
                 emitSideEffect(ProductDetailSideEffect.CommonError(e))
             }
     }
@@ -72,7 +79,9 @@ class ProductDetailViewModel @Inject constructor(
                     } else {
                         showChatUnavailableDialog()
                     }
+                    Log.i(TAG, "채팅 접근 가능 여부 조회 성공: 채팅 접근 가능 여부 ${it.canAccessChat}")
                 }.onFailure {e ->
+                    Log.e(TAG, "채팅 접근 가능 여부 조회 실패", e)
                     emitSideEffect(ProductDetailSideEffect.CommonError(e))
                 }
         }
