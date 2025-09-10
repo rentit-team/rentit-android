@@ -3,6 +3,7 @@ package com.example.rentit.presentation.productdetail
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -31,7 +32,10 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
     val context = LocalContext.current
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val imagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
+    val fullImagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
 
     LaunchedEffect(Unit) {
         viewModel.loadProductDetail(productId)
@@ -62,6 +66,12 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         }
     }
 
+    LaunchedEffect(uiState.showFullImage) {
+        if(uiState.showFullImage) {
+            fullImagePagerState.scrollToPage(imagePagerState.currentPage)
+        }
+    }
+
     ProductDetailScreen(
         productDetail = uiState.productDetail,
         reservedDateList = uiState.reservedDateList,
@@ -69,6 +79,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         showFullImage = uiState.showFullImage,
         showBottomSheet = uiState.showBottomSheet,
         sheetState = sheetState,
+        imagePagerState = imagePagerState,
+        fullImagePagerState = fullImagePagerState,
         onRentalHistoryClick = viewModel::onRentalHistoryClicked,
         onChattingClick = viewModel::onChattingClicked,
         onResvRequestClick = viewModel::onResvRequestClicked,

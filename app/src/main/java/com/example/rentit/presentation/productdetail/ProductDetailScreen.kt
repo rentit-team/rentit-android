@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +17,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -49,6 +48,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.dialog.FullImageDialog
 import com.example.rentit.common.component.formatPeriodTextWithLabel
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
@@ -69,6 +69,8 @@ fun ProductDetailScreen(
     reservedDateList: List<String>,
     requestCount: Int?,
     sheetState: SheetState,
+    imagePagerState: PagerState,
+    fullImagePagerState: PagerState,
     showBottomSheet: Boolean,
     showFullImage: Boolean,
     onBackClick: () -> Unit,
@@ -104,7 +106,7 @@ fun ProductDetailScreen(
                     .padding(innerPadding)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                ImagePager(productDetail.imgUrlList, onFullImageShow)
+                ImagePager(imagePagerState, productDetail.imgUrlList, onFullImageShow)
                 PostHeader(
                     productDetail.title,
                     productDetail.category,
@@ -133,11 +135,11 @@ fun ProductDetailScreen(
         }
     }
 
-    if(showFullImage) FullImagePager(productDetail.imgUrlList, onFullImageDismiss)
+    if(showFullImage) FullImageDialog(fullImagePagerState, productDetail.imgUrlList, onFullImageDismiss)
 }
 
 @Composable
-fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
+fun ImagePager(pagerState: PagerState, imgUrlList: List<String?>, onClick: () -> Unit) {
     if(imgUrlList.isEmpty()){
         Image(
             modifier = Modifier.height(290.dp),
@@ -146,7 +148,6 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
             contentScale = ContentScale.FillWidth
         )
     } else {
-        val pagerState = rememberPagerState { imgUrlList.size }
         HorizontalPager(
             state = pagerState,
             modifier = Modifier
@@ -179,36 +180,6 @@ fun ImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
     }
 }
 
-@Composable
-fun FullImagePager(imgUrlList: List<String?>, onClick: () -> Unit) {
-    val pagerState = rememberPagerState { imgUrlList.size }
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(color = Color.Black.copy(alpha = 0.5f))) {
-        Image(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(20.dp)
-                .clickable { onClick() },
-            painter = painterResource(id = R.drawable.ic_x),
-            contentDescription = "닫기",
-            colorFilter = ColorFilter.tint(Color.White)
-        )
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.fillMaxSize(),
-            verticalAlignment = Alignment.CenterVertically
-        ) { page ->
-            LoadableUrlImage(
-                modifier = Modifier.fillMaxHeight(0.7f),
-                imgUrl = imgUrlList[page],
-                defaultImageResId = R.drawable.img_placeholder,
-                defaultDescResId = R.string.screen_product_detail_img_description,
-                contentScale = ContentScale.FillWidth
-            )
-        }
-    }
-}
 
 
 @Composable
@@ -359,6 +330,8 @@ private fun Preview() {
             requestCount = 2,
             showBottomSheet = false,
             sheetState = rememberModalBottomSheetState(),
+            imagePagerState = rememberPagerState { 0 },
+            fullImagePagerState = rememberPagerState { 0 },
             showFullImage = false,
             onRentalHistoryClick = { },
             onChattingClick = { },
