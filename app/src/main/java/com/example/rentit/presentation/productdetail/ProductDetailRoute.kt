@@ -35,7 +35,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val menuSheetState = rememberModalBottomSheetState()
     val imagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
     val fullImagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
 
@@ -79,20 +80,26 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
         reservedDateList = uiState.reservedDateList,
         requestCount = uiState.requestCount,
         showFullImage = uiState.showFullImage,
+        showMenuDrawer = uiState.showMenuDrawer,
         showBottomSheet = uiState.showBottomSheet,
-        sheetState = sheetState,
+        menuDrawerState = bottomSheetState,
         imagePagerState = imagePagerState,
         fullImagePagerState = fullImagePagerState,
         onRentalHistoryClick = viewModel::onRentalHistoryClicked,
         onChattingClick = { viewModel.onChattingClicked(productId) },
         onResvRequestClick = viewModel::onResvRequestClicked,
         onBackClick = navHostController::popBackStack,
+        onEditClick = {},
+        onDeleteClick = viewModel::emitComingSoonToast,
+        onMenuDrawerShow = viewModel::showMenuDrawer,
+        onMenuDrawerDismiss = viewModel::hideMenuDrawer,
         onFullImageDismiss = viewModel::hideFullImage,
         onFullImageShow = viewModel::showFullImage,
         onBottomSheetShow = viewModel::showBottomSheet,
         onBottomSheetDismiss = viewModel::hideBottomSheet,
         onLikeClick = viewModel::emitComingSoonToast,
-        onShareClick = viewModel::emitComingSoonToast
+        onShareClick = viewModel::emitComingSoonToast,
+        bottomSheetState = menuSheetState,
     )
 
     if(uiState.showChatUnavailableDialog) {

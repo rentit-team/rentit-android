@@ -59,6 +59,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.domain.product.model.ProductDetailModel
+import com.example.rentit.presentation.productdetail.drawer.MenuDrawer
 import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryBottomDrawer
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -68,12 +69,16 @@ fun ProductDetailScreen(
     productDetail: ProductDetailModel,
     reservedDateList: List<String>,
     requestCount: Int?,
-    sheetState: SheetState,
+    bottomSheetState: SheetState,
+    menuDrawerState: SheetState,
     imagePagerState: PagerState,
     fullImagePagerState: PagerState,
     showBottomSheet: Boolean,
+    showMenuDrawer: Boolean,
     showFullImage: Boolean,
     onBackClick: () -> Unit,
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit,
     onLikeClick: () -> Unit,
     onShareClick: () -> Unit,
     onRentalHistoryClick: () -> Unit,
@@ -82,11 +87,19 @@ fun ProductDetailScreen(
     onFullImageDismiss: () -> Unit,
     onFullImageShow: () -> Unit,
     onBottomSheetShow: () -> Unit,
-    onBottomSheetDismiss: () -> Unit
+    onBottomSheetDismiss: () -> Unit,
+    onMenuDrawerShow: () -> Unit,
+    onMenuDrawerDismiss: () -> Unit
 ) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        topBar = { CommonTopAppBar(onBackClick = onBackClick) },
+        topBar = {
+            CommonTopAppBar(
+                showMenu = true,
+                onBackClick = onBackClick,
+                onMenuClick = onMenuDrawerShow
+            )
+        },
         bottomBar = {
             PostBottomBar(
                 price = productDetail.price,
@@ -129,9 +142,18 @@ fun ProductDetailScreen(
     if(showBottomSheet) {
         ModalBottomSheet(
             onDismissRequest = onBottomSheetDismiss,
-            sheetState = sheetState
+            sheetState = bottomSheetState
         ) {
             RentalHistoryBottomDrawer(reservedDateList)
+        }
+    }
+
+    if(showMenuDrawer) {
+        ModalBottomSheet(
+            onDismissRequest = onMenuDrawerDismiss,
+            sheetState = menuDrawerState
+        ) {
+            MenuDrawer(onEditClick, onDeleteClick)
         }
     }
 
@@ -329,7 +351,7 @@ private fun Preview() {
             reservedDateList = emptyList(),
             requestCount = 2,
             showBottomSheet = false,
-            sheetState = rememberModalBottomSheetState(),
+            menuDrawerState = rememberModalBottomSheetState(),
             imagePagerState = rememberPagerState { 0 },
             fullImagePagerState = rememberPagerState { 0 },
             showFullImage = false,
@@ -342,7 +364,13 @@ private fun Preview() {
             onBottomSheetDismiss = { },
             onBottomSheetShow = { },
             onLikeClick = { },
-            onShareClick = { }
+            onShareClick = { },
+            bottomSheetState = rememberModalBottomSheetState(),
+            showMenuDrawer = true,
+            onEditClick = {},
+            onDeleteClick = {},
+            onMenuDrawerShow = {},
+            onMenuDrawerDismiss = {}
         )
     }
 }

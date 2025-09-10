@@ -17,6 +17,7 @@
     <string name="rental_status_returned">반납 완료</string>
 
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
+    <string name="common_top_app_bar_menu_icon_description">메뉴</string>
     <string name="common_price_unit_per_day">원/일</string>
     <string name="common_price_unit">원</string>
     <string name="common_total">총</string>

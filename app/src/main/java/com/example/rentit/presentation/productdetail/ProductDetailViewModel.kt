@@ -77,6 +77,14 @@ class ProductDetailViewModel @Inject constructor(
         }
     }
 
+    fun showMenuDrawer() {
+        _uiState.value = _uiState.value.copy(showMenuDrawer = true)
+    }
+
+    fun hideMenuDrawer() {
+        _uiState.value = _uiState.value.copy(showMenuDrawer = false)
+    }
+
     fun showBottomSheet() {
         _uiState.value = _uiState.value.copy(showBottomSheet = true)
     }
