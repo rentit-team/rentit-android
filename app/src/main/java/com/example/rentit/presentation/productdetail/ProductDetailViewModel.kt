@@ -46,6 +46,7 @@ class ProductDetailViewModel @Inject constructor(
             .onSuccess {
                 _uiState.value = _uiState.value.copy(
                     productDetail = it.productDetail,
+                    isUserOwner = it.isUserOwner,
                     requestCount = it.requestCount
                 )
             }.onFailure { e ->

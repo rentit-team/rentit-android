@@ -73,6 +73,7 @@ fun ProductDetailScreen(
     menuDrawerState: SheetState,
     imagePagerState: PagerState,
     fullImagePagerState: PagerState,
+    isUserOwner: Boolean,
     showBottomSheet: Boolean,
     showMenuDrawer: Boolean,
     showFullImage: Boolean,
@@ -95,13 +96,14 @@ fun ProductDetailScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CommonTopAppBar(
-                showMenu = true,
+                showMenu = isUserOwner,
                 onBackClick = onBackClick,
                 onMenuClick = onMenuDrawerShow
             )
         },
         bottomBar = {
             PostBottomBar(
+                isUserOwner = isUserOwner,
                 price = productDetail.price,
                 minPeriod = productDetail.minPeriod,
                 maxPeriod = productDetail.maxPeriod,
@@ -246,6 +248,7 @@ fun PostHeader(title: String, category: List<String>, creationDate: String, onLi
 
 @Composable
 fun PostBottomBar(
+    isUserOwner: Boolean,
     price: Int,
     minPeriod: Int?,
     maxPeriod: Int?,
@@ -283,8 +286,9 @@ fun PostBottomBar(
                 style = MaterialTheme.typography.bodyLarge
             )
         }
-        if(requestCount != null) {
-            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, requestCount), onRentalHistoryClick)
+        if(isUserOwner) {
+            val count = requestCount ?: 0
+            MiniButton(false, stringResource(id = R.string.screen_product_btn_request, count), onRentalHistoryClick)
         } else {
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting), onChattingClick)
             MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve), onResvRequestClick)
@@ -354,6 +358,7 @@ private fun Preview() {
             menuDrawerState = rememberModalBottomSheetState(),
             imagePagerState = rememberPagerState { 0 },
             fullImagePagerState = rememberPagerState { 0 },
+            isUserOwner = false,
             showFullImage = false,
             onRentalHistoryClick = { },
             onChattingClick = { },
