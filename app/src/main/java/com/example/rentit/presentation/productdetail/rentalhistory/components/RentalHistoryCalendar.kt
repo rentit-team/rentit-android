@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.requesthistory.components
+package com.example.rentit.presentation.productdetail.rentalhistory.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -20,7 +20,7 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestCalendar(requestPeriodList: List<RequestPeriodDto>, onChangeMonth: (month: YearMonth) -> Unit = {}) {
+fun RentalHistoryCalendar(requestPeriodList: List<RequestPeriodDto>, onChangeMonth: (month: YearMonth) -> Unit = {}) {
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
     val cellWidth = 48.dp
 
@@ -47,6 +47,6 @@ fun RequestCalendar(requestPeriodList: List<RequestPeriodDto>, onChangeMonth: (m
 @Composable
 private fun Preview() {
     RentItTheme {
-        RequestCalendar(emptyList())
+        RentalHistoryCalendar(emptyList())
     }
 }

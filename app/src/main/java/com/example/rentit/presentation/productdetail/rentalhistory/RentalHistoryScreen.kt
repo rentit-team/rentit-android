@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.requesthistory
+package com.example.rentit.presentation.productdetail.rentalhistory
 
 import android.os.Build
 import android.widget.Toast
@@ -31,16 +31,16 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.product.dto.RequestInfoDto
 import com.example.rentit.data.product.dto.RequestPeriodDto
 import com.example.rentit.navigation.chatroom.navigateToChatRoom
-import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestCalendar
-import com.example.rentit.presentation.productdetail.reservation.requesthistory.components.RequestHistoryListItem
+import com.example.rentit.presentation.productdetail.rentalhistory.components.RentalHistoryCalendar
+import com.example.rentit.presentation.productdetail.rentalhistory.components.RentalHistoryListItem
 import java.time.LocalDate
 import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) {
-    val requestHistoryViewModel: RequestHistoryViewModel = hiltViewModel()
-    val requestHistory by requestHistoryViewModel.requestList.collectAsStateWithLifecycle()
+fun RentalHistoryScreen(navHostController: NavHostController, productId: Int?) {
+    val rentalHistoryViewModel: RentalHistoryViewModel = hiltViewModel()
+    val requestHistory by rentalHistoryViewModel.requestList.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
@@ -61,7 +61,7 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
             Toast.makeText(context, context.getString(R.string.error_common_cant_find_product), Toast.LENGTH_SHORT).show()
             navHostController.popBackStack()
         } else {
-            requestHistoryViewModel.getProductRequestList(productId)
+            rentalHistoryViewModel.getProductRequestList(productId)
         }
     }
 
@@ -71,18 +71,18 @@ fun RequestHistoryScreen(navHostController: NavHostController, productId: Int?) 
         Column(
             modifier = Modifier.padding(it)
         ) {
-            RequestCalendar(requestPeriodList) { month -> yearMonth = month }
+            RentalHistoryCalendar(requestPeriodList) { month -> yearMonth = month }
             LazyColumn(
                 modifier = Modifier.screenHorizontalPadding(),
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 item { Spacer(Modifier.size(2.dp)) }
                 items(groupedByMonth[yearMonth] ?: emptyList()) { info ->
-                    RequestHistoryListItem(requestInfo = info) {
+                    RentalHistoryListItem(requestInfo = info) {
                         if (info.chatRoomId != null) {
                             navHostController.navigateToChatRoom(info.chatRoomId)
                         } else {
-                            requestHistoryViewModel.postNewChat(
+                            rentalHistoryViewModel.postNewChat(
                                 productId = productId ?: -1,
                                 onSuccess = { chatRoomId -> navHostController.navigateToChatRoom(chatRoomId) },
                                 onError = {

@@ -1,7 +1,7 @@
 package com.example.rentit.data.product.remote
 
-import com.example.rentit.data.product.dto.ResvRequestDto
-import com.example.rentit.data.product.dto.ResvResponseDto
+import com.example.rentit.data.product.dto.ReservationRequestDto
+import com.example.rentit.data.product.dto.ReservationResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
 import com.example.rentit.data.product.dto.ChatAccessibilityResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
@@ -35,7 +35,7 @@ interface ProductApiService {
 
     @POST("api/v1/products/{productId}/reservations")
     @Headers("Content-Type: application/json")
-    suspend fun postResv(@Path("productId") productId: Int, @Body request: ResvRequestDto): Response<ResvResponseDto>
+    suspend fun postReservation(@Path("productId") productId: Int, @Body request: ReservationRequestDto): Response<ReservationResponseDto>
 
     @GET("api/v1/products/categories")
     @Headers("Content-Type: application/json")

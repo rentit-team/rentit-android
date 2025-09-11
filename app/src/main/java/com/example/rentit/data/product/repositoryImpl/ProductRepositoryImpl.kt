@@ -1,8 +1,8 @@
 package com.example.rentit.data.product.repositoryImpl
 
 import com.example.rentit.core.network.safeApiCall
-import com.example.rentit.data.product.dto.ResvRequestDto
-import com.example.rentit.data.product.dto.ResvResponseDto
+import com.example.rentit.data.product.dto.ReservationRequestDto
+import com.example.rentit.data.product.dto.ReservationResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
 import com.example.rentit.data.product.dto.ChatAccessibilityResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
@@ -31,8 +31,8 @@ class ProductRepositoryImpl @Inject constructor(
         return safeApiCall { productRemoteDataSource.getReservedDates(productId) }
     }
 
-    override suspend fun postResv(productId: Int, request: ResvRequestDto): Result<ResvResponseDto> {
-        return safeApiCall { productRemoteDataSource.postResv(productId, request) }
+    override suspend fun postReservation(productId: Int, request: ReservationRequestDto): Result<ReservationResponseDto> {
+        return safeApiCall { productRemoteDataSource.postReservation(productId, request) }
     }
 
     override suspend fun getCategories(): Result<CategoryListResponseDto> {

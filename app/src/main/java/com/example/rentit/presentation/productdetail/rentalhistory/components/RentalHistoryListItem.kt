@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.requesthistory.components
+package com.example.rentit.presentation.productdetail.rentalhistory.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -40,7 +40,7 @@ import java.time.format.DateTimeFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RequestHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> Unit) {
+fun RentalHistoryListItem(requestInfo: RequestInfoDto, onStartChatClick: () -> Unit) {
 
     val formatter = DateTimeFormatter.ofPattern("yy.MM.dd")
 

@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.navigation.bottomtab.BottomTabRoute
 import com.example.rentit.presentation.productdetail.ProductDetailRoute
-import com.example.rentit.presentation.productdetail.reservation.request.ResvRequestRoute
-import com.example.rentit.presentation.productdetail.reservation.request.complete.ResvRequestCompleteScreen
-import com.example.rentit.presentation.productdetail.reservation.requesthistory.RequestHistoryScreen
+import com.example.rentit.presentation.productdetail.reservation.ReservationRoute
+import com.example.rentit.presentation.productdetail.reservation.complete.ReservationCompleteScreen
+import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryScreen
 
 fun NavHostController.navigateToProductDetail(productId: Int) {
     navigate(
@@ -28,19 +28,19 @@ fun NavHostController.navigateToProductDetailFromCreate(productId: Int) {
     }
 }
 
-fun NavHostController.navigateToResvRequest(productId: Int) {
+fun NavHostController.navigateToReservation(productId: Int) {
     navigate(
-        route = ProductDetailRoute.ResvRequest(productId)
+        route = ProductDetailRoute.Reservation(productId)
     )
 }
 
-fun NavHostController.navigateToResvRequestComplete(
+fun NavHostController.navigateToReservationComplete(
     rentalStartDate: String = "",
     rentalEndDate: String = "",
     formattedTotalPrice: String = "0",
 ) {
     navigate(
-        route = ProductDetailRoute.ResvRequestComplete(
+        route = ProductDetailRoute.ReservationComplete(
             rentalStartDate,
             rentalEndDate,
             formattedTotalPrice
@@ -48,9 +48,9 @@ fun NavHostController.navigateToResvRequestComplete(
     )
 }
 
-fun NavHostController.navigateToResvRequestHistory(productId: Int?) {
+fun NavHostController.navigateToRentalHistory(productId: Int?) {
     navigate(
-        route = ProductDetailRoute.ResvRequestHistory(productId)
+        route = ProductDetailRoute.RentalHistory(productId)
     )
 }
 
@@ -60,21 +60,21 @@ fun NavGraphBuilder.productDetailGraph(navHostController: NavHostController) {
         val items: ProductDetailRoute.ProductDetail = backStackEntry.toRoute()
         ProductDetailRoute(navHostController, items.productId)
     }
-    composable<ProductDetailRoute.ResvRequest> { backStackEntry ->
-        val items: ProductDetailRoute.ResvRequest = backStackEntry.toRoute()
-        ResvRequestRoute(navHostController, items.productId)
+    composable<ProductDetailRoute.Reservation> { backStackEntry ->
+        val items: ProductDetailRoute.Reservation = backStackEntry.toRoute()
+        ReservationRoute(navHostController, items.productId)
     }
-    composable<ProductDetailRoute.ResvRequestComplete> { backStackEntry ->
-        val items: ProductDetailRoute.ResvRequestComplete = backStackEntry.toRoute()
-        ResvRequestCompleteScreen(
+    composable<ProductDetailRoute.ReservationComplete> { backStackEntry ->
+        val items: ProductDetailRoute.ReservationComplete = backStackEntry.toRoute()
+        ReservationCompleteScreen(
             navHostController,
             items.rentalStartDate,
             items.rentalEndDate,
             items.formattedTotalPrice
         )
     }
-    composable<ProductDetailRoute.ResvRequestHistory> { backStackEntry ->
-        val items: ProductDetailRoute.ResvRequestHistory = backStackEntry.toRoute()
-        RequestHistoryScreen(navHostController, items.productId)
+    composable<ProductDetailRoute.RentalHistory> { backStackEntry ->
+        val items: ProductDetailRoute.RentalHistory = backStackEntry.toRoute()
+        RentalHistoryScreen(navHostController, items.productId)
     }
 }

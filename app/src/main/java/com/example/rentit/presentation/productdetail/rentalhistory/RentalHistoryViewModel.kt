@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.requesthistory
+package com.example.rentit.presentation.productdetail.rentalhistory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RequestHistoryViewModel @Inject constructor(
+class RentalHistoryViewModel @Inject constructor(
     private val productRepository: ProductRepository,
     private val chatRepository: ChatRepository
 ): ViewModel() {

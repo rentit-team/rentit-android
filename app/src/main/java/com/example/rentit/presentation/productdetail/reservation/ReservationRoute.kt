@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.request
+package com.example.rentit.presentation.productdetail.reservation
 
 import android.os.Build
 import android.widget.Toast
@@ -18,16 +18,16 @@ import com.example.rentit.R
 import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.navigation.productdetail.navigateToResvRequestComplete
+import com.example.rentit.navigation.productdetail.navigateToReservationComplete
 import com.example.rentit.presentation.main.MainViewModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
+fun ReservationRoute(navHostController: NavHostController, productId: Int) {
     val backStackEntry = navHostController.currentBackStackEntry
     val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
 
-    val viewModel: ResvRequestViewModel = hiltViewModel()
+    val viewModel: ReservationViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val context = LocalContext.current
 
@@ -42,20 +42,20 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect {
                 when (it) {
-                    is ResvRequestSideEffect.NavigateToResvRequestComplete -> {
-                        navHostController.navigateToResvRequestComplete(
+                    is ReservationSideEffect.NavigateToReservationComplete -> {
+                        navHostController.navigateToReservationComplete(
                             rentalStartDate = it.rentalStartDate,
                             rentalEndDate = it.rentalEndDate,
                             formattedTotalPrice = formatPrice(it.totalPrice)
                         )
                     }
-                    ResvRequestSideEffect.ToastInvalidPeriod -> {
+                    ReservationSideEffect.ToastInvalidPeriod -> {
                         Toast.makeText(context, R.string.toast_invalid_period, Toast.LENGTH_SHORT).show()
                     }
-                    ResvRequestSideEffect.ToastPostResvFailed -> {
+                    ReservationSideEffect.ToastPostReservationFailed -> {
                         Toast.makeText(context, R.string.toast_post_resv_failed, Toast.LENGTH_SHORT).show()
                     }
-                    is ResvRequestSideEffect.CommonError -> {
+                    is ReservationSideEffect.CommonError -> {
                         mainViewModel?.handleError(it.throwable)
                     }
                 }
@@ -63,7 +63,7 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
         }
     }
 
-    ResvRequestScreen(
+    ReservationScreen(
         rentalStartDate = uiState.rentalStartDate,
         rentalEndDate = uiState.rentalEndDate,
         selectedPeriod = uiState.selectedPeriod,
@@ -74,7 +74,7 @@ fun ResvRequestRoute(navHostController: NavHostController, productId: Int) {
         totalPrice = uiState.totalPrice,
         deposit = uiState.deposit,
         onBackClick = navHostController::popBackStack,
-        onResvRequestClick = { viewModel.postResv(productId) },
+        onReservationClick = { viewModel.postResv(productId) },
         onSetRentalStartDate = viewModel::setRentalStartDate,
         onSetRentalEndDate = viewModel::setRentalEndDate
     )

@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.request
+package com.example.rentit.presentation.productdetail.reservation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -6,7 +6,7 @@ import com.example.rentit.common.util.inclusiveDaysBetween
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
-data class ResvRequestState(
+data class ReservationState(
     val rentalStartDate: LocalDate? = null,
     val rentalEndDate: LocalDate? = null,
     val minPeriod: Int? = 0,

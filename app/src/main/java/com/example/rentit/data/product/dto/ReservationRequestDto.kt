@@ -2,7 +2,7 @@ package com.example.rentit.data.product.dto
 
 import com.google.gson.annotations.SerializedName
 
-data class ResvRequestDto(
+data class ReservationRequestDto(
 
     @SerializedName("startDate")
     val startDate: String,
