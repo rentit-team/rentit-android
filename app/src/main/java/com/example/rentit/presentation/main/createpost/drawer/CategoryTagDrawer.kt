@@ -94,21 +94,19 @@ fun TagButton(
     isSelectedTag: Boolean = false,
     onClick: () -> Unit
 ) {
-    var isSelected by remember { mutableStateOf(isSelectedTag) }
     OutlinedButton(
         onClick = {
-            isSelected = !isSelected
             onClick()
         },
         shape = RoundedCornerShape(25.dp),
-        border = CommonBorders.basicBorder(color = if(isSelected) PrimaryBlue500 else Gray200),
+        border = CommonBorders.basicBorder(color = if(isSelectedTag) PrimaryBlue500 else Gray200),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (isSelected) {
+            if (isSelectedTag) {
                 Icon(
                     modifier = Modifier
                         .height(12.dp)
@@ -121,7 +119,7 @@ fun TagButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
-                color = if (isSelected) PrimaryBlue500 else AppBlack
+                color = if (isSelectedTag) PrimaryBlue500 else AppBlack
             )
         }
     }

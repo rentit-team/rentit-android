@@ -19,6 +19,7 @@ import okio.IOException
 import javax.inject.Inject
 
 private const val TAG = "CreatePostViewModel"
+private const val MAX_CATEGORY_COUNT = 3
 
 @HiltViewModel
 class CreatePostViewModel @Inject constructor(
@@ -78,22 +79,26 @@ class CreatePostViewModel @Inject constructor(
         updateState { copy(selectedImgUriList = _uiState.value.selectedImgUriList - uri) }
     }
 
-    fun handleCategoryClick(categoryId: Int) {
-        val currentSelected = _uiState.value.selectedCategoryIdList
-        val newSelected = if(currentSelected.contains(categoryId)){
-            currentSelected - categoryId
-        } else {
-            currentSelected + categoryId
-        }
-        updateState { copy(selectedCategoryIdList = newSelected) }
-    }
-
     fun showCategoryTagDrawer() {
         updateState { copy(showCategoryTagDrawer = true) }
     }
 
     fun hideCategoryTagDrawer() {
         updateState { copy(showCategoryTagDrawer = false) }
+    }
+
+    fun handleCategoryClick(categoryId: Int) {
+        val currentSelected = _uiState.value.selectedCategoryIdList
+
+        val newSelected = if(currentSelected.contains(categoryId)){
+            currentSelected - categoryId
+        } else {
+            currentSelected + categoryId
+        }
+
+        if(newSelected.size <= MAX_CATEGORY_COUNT) {
+            updateState { copy(selectedCategoryIdList = newSelected) }
+        }
     }
 
     fun removeSelectedCategory(categoryId: Int) {
