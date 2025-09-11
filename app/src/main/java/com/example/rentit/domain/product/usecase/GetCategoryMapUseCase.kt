@@ -1,6 +1,6 @@
 package com.example.rentit.domain.product.usecase
 
-import com.example.rentit.domain.product.model.Category
+import com.example.rentit.domain.product.model.CategoryModel
 import com.example.rentit.domain.product.repository.ProductRepository
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,14 +15,14 @@ class GetCategoryMapUseCase @Inject constructor(
     private val productRepository: ProductRepository,
 ) {
 
-    private var cachedCategoryMap: Map<Int, Category>? = null
+    private var cachedCategoryMap: Map<Int, CategoryModel>? = null
 
-    suspend operator fun invoke(): Result<Map<Int, Category>> {
+    suspend operator fun invoke(): Result<Map<Int, CategoryModel>> {
         cachedCategoryMap?.let { return Result.success(it) }
 
         return runCatching {
             val categoryMap = productRepository.getCategories().getOrThrow().categories
-                .associate { it.id to Category(it.name, it.isParent, it.parentId) }
+                .associate { it.id to CategoryModel(it.name, it.isParent, it.parentId) }
             cachedCategoryMap = categoryMap
             categoryMap
         }

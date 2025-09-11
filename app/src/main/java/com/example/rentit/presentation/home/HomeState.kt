@@ -1,12 +1,12 @@
 package com.example.rentit.presentation.home
 
 import com.example.rentit.common.enums.ProductStatus
-import com.example.rentit.domain.product.model.Category
-import com.example.rentit.domain.product.model.ProductWithCategory
+import com.example.rentit.domain.product.model.CategoryModel
+import com.example.rentit.domain.product.model.ProductWithCategoryModel
 
 data class HomeState(
-    val productList: List<ProductWithCategory> = emptyList(),
-    val categoryMap: Map<Int, Category> = emptyMap(),
+    val productList: List<ProductWithCategoryModel> = emptyList(),
+    val categoryMap: Map<Int, CategoryModel> = emptyMap(),
     val parentIdToNameCategoryMap: Map<Int, String> = emptyMap(),
     val filterParentCategoryId: Int = -1,
     val isLoading: Boolean = false,
@@ -14,7 +14,7 @@ data class HomeState(
     val showServerErrorDialog: Boolean = false,
     val showNetworkErrorDialog: Boolean = false,
 ) {
-    val filteredProductList: List<ProductWithCategory>
+    val filteredProductList: List<ProductWithCategoryModel>
         get() = productList
             .filter {
                 val matchesCategory =

@@ -1,10 +1,10 @@
 package com.example.rentit.data.product.mapper
 
 import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.domain.product.model.Category
+import com.example.rentit.domain.product.model.CategoryModel
 import com.example.rentit.domain.product.model.ProductDetailModel
 
-fun ProductDto.toProductDetailModel(categoryMap: Map<Int, Category>) =
+fun ProductDto.toProductDetailModel(categoryMap: Map<Int, CategoryModel>) =
     ProductDetailModel(
         productId = productId,
         price = price,

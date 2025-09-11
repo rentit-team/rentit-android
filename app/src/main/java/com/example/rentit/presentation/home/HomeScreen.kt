@@ -47,13 +47,13 @@ import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.domain.product.model.ProductWithCategory
+import com.example.rentit.domain.product.model.ProductWithCategoryModel
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     scrollState: LazyListState = rememberLazyListState(),
-    sortedProducts: List<ProductWithCategory> = emptyList(),
+    sortedProducts: List<ProductWithCategoryModel> = emptyList(),
     parentIdToNameCategoryMap: Map<Int, String> = emptyMap(),
     filterParentCategoryId: Int = -1,
     onlyRentalAvailable: Boolean = false,
@@ -149,7 +149,7 @@ fun HomeFilterSection(
 @Composable
 fun HomeProductListSection(
     scrollState: LazyListState,
-    sortedProducts: List<ProductWithCategory>,
+    sortedProducts: List<ProductWithCategoryModel>,
     onProductClick: (Int) -> Unit,
 ) {
     LazyColumn(

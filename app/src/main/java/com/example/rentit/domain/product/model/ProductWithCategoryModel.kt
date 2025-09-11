@@ -2,7 +2,7 @@ package com.example.rentit.domain.product.model
 
 import com.example.rentit.common.enums.ProductStatus
 
-data class ProductWithCategory(
+data class ProductWithCategoryModel(
     val productId: Int,
     val title: String,
     val thumbnailImgUrl: String?,
