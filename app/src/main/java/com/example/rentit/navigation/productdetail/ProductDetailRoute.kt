@@ -17,5 +17,5 @@ sealed class ProductDetailRoute {
     ) : ProductDetailRoute()
 
     @Serializable
-    data class RentalHistory(val productId: Int?) : ProductDetailRoute()
+    data class RentalHistory(val productId: Int) : ProductDetailRoute()
 }

@@ -33,7 +33,7 @@ import com.example.rentit.common.theme.PrimaryBlue300
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
-import com.example.rentit.data.product.dto.RequestPeriodDto
+import com.example.rentit.common.uimodel.RentalPeriodModel
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -47,7 +47,7 @@ fun CalendarDate(
     rentalStartDate: LocalDate? = null,
     rentalEndDate: LocalDate? = null,
     rentalPeriod: Int = 0,
-    requestPeriodList: List<RequestPeriodDto> = emptyList(),
+    requestPeriodList: List<RentalPeriodModel> = emptyList(),
     onDateClick: (LocalDate) -> Unit = {}
 ) {
     val daysInMonth = yearMonth.lengthOfMonth()

@@ -48,7 +48,7 @@ fun NavHostController.navigateToReservationComplete(
     )
 }
 
-fun NavHostController.navigateToRentalHistory(productId: Int?) {
+fun NavHostController.navigateToRentalHistory(productId: Int) {
     navigate(
         route = ProductDetailRoute.RentalHistory(productId)
     )

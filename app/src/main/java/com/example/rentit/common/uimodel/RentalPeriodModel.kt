@@ -1,8 +1,8 @@
-package com.example.rentit.data.product.dto
+package com.example.rentit.common.uimodel
 
 import java.time.LocalDate
 
-data class RequestPeriodDto(
+data class RentalPeriodModel(
     val startDate: LocalDate,
     val endDate: LocalDate,
 )

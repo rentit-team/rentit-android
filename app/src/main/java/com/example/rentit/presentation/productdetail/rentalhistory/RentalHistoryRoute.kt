@@ -20,7 +20,7 @@ import java.time.YearMonth
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalHistoryRoute(navHostController: NavHostController, productId: Int?) {
+fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
     val viewModel: RentalHistoryViewModel = hiltViewModel()
     val context = LocalContext.current
     val requestHistory by viewModel.requestList.collectAsStateWithLifecycle()
@@ -34,12 +34,7 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int?) {
     }
 
     LaunchedEffect(productId) {
-        if(productId == null){
-            Toast.makeText(context, context.getString(R.string.error_common_cant_find_product), Toast.LENGTH_SHORT).show()
-            navHostController.popBackStack()
-        } else {
-            viewModel.getProductRequestList(productId)
-        }
+        viewModel.getProductRequestList(productId)
     }
 
     RentalHistoryScreen(
