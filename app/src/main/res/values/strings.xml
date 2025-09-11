@@ -171,8 +171,8 @@
     <!-- 상품 대여 내역 -->
     <string name="screen_product_rental_history_filter_in_progress">진행 중</string>
     <string name="screen_product_rental_history_filter_in_progress_content_description">거래 진행 중인 내역만 보기</string>
-    <string name="screen_product_rental_history_filter_ready_to_ship">발송 대기</string>
-    <string name="screen_product_rental_history_filter_ready_to_ship_content_description">발송 대기 중인 내역만 보기</string>
+    <string name="screen_product_rental_history_filter_accepted">요청 수락</string>
+    <string name="screen_product_rental_history_filter_accepted_content_description">요청을 수락한 내역만 보기</string>
     <string name="screen_product_rental_history_filter_request">대여 요청</string>
     <string name="screen_product_rental_history_filter_request_content_description">대여 요청만 확인하기</string>
     <string name="screen_product_rental_history_filter_finished">종료됨</string>

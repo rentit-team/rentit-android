@@ -11,11 +11,11 @@ data class RentalHistoryState(
 ) {
     val filteredRentalHistoryList: List<RentalHistoryListItemModel>
         get() {
-            val readyToShipList = rentalHistoryList.filter { it.status == RentalStatus.PAID }.sortedBy { it.rentalPeriod.startDate }
 
             when (filterMode) {
                 RentalHistoryFilter.IN_PROGRESS -> {
                     val rentingList = rentalHistoryList.filter { it.status == RentalStatus.RENTING }
+                    val readyToShipList = rentalHistoryList.filter { it.status == RentalStatus.PAID }.sortedBy { it.rentalPeriod.startDate }
                     val otherList = rentalHistoryList.filter {
                         it.status in listOf(
                             RentalStatus.ACCEPTED,
@@ -25,7 +25,7 @@ data class RentalHistoryState(
                     return rentingList + readyToShipList + otherList
                 }
 
-                RentalHistoryFilter.READY_TO_SHIP -> return readyToShipList
+                RentalHistoryFilter.ACCEPTED -> return rentalHistoryList.filter { it.status == RentalStatus.ACCEPTED }.sortedByDescending { it.createdAt }
 
                 RentalHistoryFilter.REQUEST -> return rentalHistoryList.filter { it.status == RentalStatus.PENDING }.sortedByDescending { it.createdAt }
 

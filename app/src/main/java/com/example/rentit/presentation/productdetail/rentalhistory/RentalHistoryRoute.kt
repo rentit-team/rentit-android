@@ -2,6 +2,7 @@ package com.example.rentit.presentation.productdetail.rentalhistory
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,17 +20,24 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
     val viewModel: RentalHistoryViewModel = hiltViewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val historyListScrollState = remember { LazyListState() }
+
     var yearMonth by remember { mutableStateOf(YearMonth.now()) }
 
     LaunchedEffect(productId) {
         viewModel.getProductRequestList(productId)
     }
 
+    LaunchedEffect(uiState.filterMode) {
+        historyListScrollState.animateScrollToItem(0)
+    }
+
     RentalHistoryScreen(
         rentalHistoryList = uiState.filteredRentalHistoryList,
+        filterMode = uiState.filterMode,
+        historyListScrollState = historyListScrollState,
         onChangeMonth = { yearMonth = it },
         onBackClick = navHostController::popBackStack,
-        filterMode = uiState.filterMode,
         onToggleFilter = { viewModel.updateFilterMode(it) }
     )
 }

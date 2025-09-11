@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -45,9 +46,7 @@ import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
-import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.theme.SecondaryYellow
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.common.util.toRelativeTimeFormat
 import com.example.rentit.common.uimodel.RentalPeriodModel
@@ -65,6 +64,7 @@ private const val D_DAY_ALERT_THRESHOLD_DAYS = 3
 fun RentalHistoryScreen(
     rentalHistoryList: List<RentalHistoryListItemModel>,
     filterMode: RentalHistoryFilter,
+    historyListScrollState: LazyListState,
     onToggleFilter: (RentalHistoryFilter) -> Unit,
     onChangeMonth: (YearMonth) -> Unit = {},
     onBackClick: () -> Unit,
@@ -82,7 +82,7 @@ fun RentalHistoryScreen(
                 onToggleFilter = onToggleFilter
             )
 
-            RentalHistoryListSection(rentalHistoryList)
+            RentalHistoryListSection(rentalHistoryList, historyListScrollState)
         }
     }
 }
@@ -131,10 +131,10 @@ fun RentalHistoryFilterSection(
             onClick = { onToggleFilter(RentalHistoryFilter.IN_PROGRESS) }
         )
         FilterButton(
-            title = stringResource(R.string.screen_product_rental_history_filter_ready_to_ship),
-            contentDesc = stringResource(R.string.screen_product_rental_history_filter_ready_to_ship_content_description),
-            isSelected = filterMode == RentalHistoryFilter.READY_TO_SHIP,
-            onClick = { onToggleFilter(RentalHistoryFilter.READY_TO_SHIP) }
+            title = stringResource(R.string.screen_product_rental_history_filter_accepted),
+            contentDesc = stringResource(R.string.screen_product_rental_history_filter_accepted_content_description),
+            isSelected = filterMode == RentalHistoryFilter.ACCEPTED,
+            onClick = { onToggleFilter(RentalHistoryFilter.ACCEPTED) }
         )
         FilterButton(
             title = stringResource(R.string.screen_product_rental_history_filter_request),
@@ -170,9 +170,9 @@ fun RentingListItem(nickName: String = "닉네임", rentalReturnDate: LocalDate 
     val daysBeforeReturn = daysFromToday(rentalReturnDate)
     RoundedItemRow {
         Text(
-            text = "대여 중",
+            text = stringResource(RentalStatus.RENTING.strRes),
             style = MaterialTheme.typography.labelLarge,
-            color = SecondaryYellow
+            color = RentalStatus.RENTING.color
         )
         Text(
             text = nickName,
@@ -200,9 +200,9 @@ fun ReadyToShipListItem(nickName: String = "닉네임", rentalStartDate: LocalDa
     val dDayTextColor = if (daysBeforeRent > D_DAY_ALERT_THRESHOLD_DAYS) AppBlack else AppRed
     RoundedItemRow {
         Text(
-            text = "상품 발송 준비",
+            text = stringResource(RentalStatus.PAID.strRes),
             style = MaterialTheme.typography.labelLarge,
-            color = PrimaryBlue500
+            color = RentalStatus.PAID.color
         )
         Text(
             text = nickName,
@@ -244,7 +244,7 @@ fun OtherStatusListItem(
                 Text(
                     text = stringResource(status.strRes),
                     style = MaterialTheme.typography.labelLarge,
-                    color = Gray400
+                    color = status.color
                 )
                 Text(
                     text = nickName,
@@ -268,11 +268,15 @@ fun OtherStatusListItem(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalHistoryListSection(rentalHistoryList: List<RentalHistoryListItemModel> = emptyList()) {
+fun RentalHistoryListSection(
+    rentalHistoryList: List<RentalHistoryListItemModel> = emptyList(),
+    lazyListState: LazyListState
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .screenHorizontalPadding(),
+        state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         items(rentalHistoryList.size, key = { rentalHistoryList[it].reservationId }) {
@@ -317,8 +321,9 @@ private fun RentalHistoryScreenPreview() {
     RentItTheme {
         RentalHistoryScreen(
             rentalHistoryList = emptyList(),
+            filterMode = RentalHistoryFilter.ACCEPTED,
+            historyListScrollState = remember { LazyListState() },
             onBackClick = {},
-            filterMode = RentalHistoryFilter.READY_TO_SHIP,
             onToggleFilter = {},
             onChangeMonth = {}
         )
