@@ -3,7 +3,7 @@ package com.example.rentit.navigation.createpost
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.example.rentit.presentation.main.createpost.CreatePostScreen
+import com.example.rentit.presentation.main.createpost.CreatePostRoute
 
 fun NavHostController.navigateToCreatePost() {
     navigate(
@@ -12,5 +12,5 @@ fun NavHostController.navigateToCreatePost() {
 }
 
 fun NavGraphBuilder.createPostGraph(navHostController: NavHostController) {
-    composable<CreatePostRoute.CreatePost> { CreatePostScreen(navHostController) }
+    composable<CreatePostRoute.CreatePost> { CreatePostRoute(navHostController) }
 }

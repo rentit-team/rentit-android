@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.rentit.navigation.bottomtab.BottomTabRoute
 import com.example.rentit.presentation.productdetail.ProductDetailRoute
 import com.example.rentit.presentation.productdetail.reservation.request.ResvRequestRoute
 import com.example.rentit.presentation.productdetail.reservation.request.complete.ResvRequestCompleteScreen
@@ -15,6 +16,16 @@ fun NavHostController.navigateToProductDetail(productId: Int) {
     navigate(
         route = ProductDetailRoute.ProductDetail(productId)
     )
+}
+
+fun NavHostController.navigateToProductDetailFromCreate(productId: Int) {
+    navigate(
+        route = ProductDetailRoute.ProductDetail(productId)
+    ) {
+        popUpTo(BottomTabRoute.Home.route){
+            inclusive = false
+        }
+    }
 }
 
 fun NavHostController.navigateToResvRequest(productId: Int) {
