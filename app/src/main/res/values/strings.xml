@@ -171,6 +171,7 @@
     <!-- 게시글 생성 -->
     <string name="screen_product_create_image_label">이미지</string>
     <string name="screen_product_create_add_image_text">+ 이미지 추가</string>
+    <string name="screen_product_create_add_image_guide">현재는 한 장의 사진만 업로드가 가능해요.</string>
     <string name="screen_product_create_selected_image_description">선택된 이미지</string>
     <string name="screen_product_create_title_label">제목</string>
     <string name="screen_product_create_title_placeholder">게시글 제목</string>
@@ -183,8 +184,13 @@
     <string name="screen_product_create_price_label">가격</string>
     <string name="screen_product_create_complete_btn_text">등록하기</string>
 
+    <string name="screen_product_create_empty_error_title">제목을 적어주세요.</string>
+    <string name="screen_product_create_empty_error_content">자세한 설명을 적어주세요.</string>
+    <string name="screen_product_create_empty_error_price">가격을 입력해주세요.</string>
+
     <string name="drawer_category_tag_empty">카테고리를 불러오지 못했어요</string>
 
+    <string name="toast_post_invalid_input">필수 입력 항목을 확인해주세요.</string>
     <string name="toast_post_network_error">네트워크 연결을 확인해주세요.</string>
     <string name="toast_post_server_error">게시물 생성 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.</string>
 

@@ -31,7 +31,7 @@ import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.White
-import com.example.rentit.presentation.auth.join.components.InputErrorMessage
+import com.example.rentit.common.component.InputErrorMessage
 
 const val PHONE_NUMBER_DIGITS_LENGTH = 11
 const val PHONE_NUMBER_SECOND_SPLIT_MIN = 8

@@ -19,6 +19,7 @@ import okio.IOException
 import javax.inject.Inject
 
 private const val TAG = "CreatePostViewModel"
+private const val MAX_CATEGORY_COUNT = 3
 
 @HiltViewModel
 class CreatePostViewModel @Inject constructor(
@@ -40,6 +41,12 @@ class CreatePostViewModel @Inject constructor(
         _uiState.value = _uiState.value.transform()
     }
 
+    private fun emitSideEffect(effect: CreatePostSideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(effect)
+        }
+    }
+
     private fun getCategoryList() {
         viewModelScope.launch {
             getCategoryMapUseCase()
@@ -53,11 +60,15 @@ class CreatePostViewModel @Inject constructor(
     }
 
     fun updateTitle(title: String) {
-        updateState { copy(title = title) }
+        updateState {
+            copy(title = title, showEmptyTitleError = false)
+        }
     }
 
     fun updateContent(content: String) {
-        updateState { copy(content = content) }
+        updateState {
+            copy(content = content, showEmptyContentError = false)
+        }
     }
 
     fun updateImageUriList(uriList: List<Uri>) {
@@ -68,22 +79,26 @@ class CreatePostViewModel @Inject constructor(
         updateState { copy(selectedImgUriList = _uiState.value.selectedImgUriList - uri) }
     }
 
-    fun handleCategoryClick(categoryId: Int) {
-        val currentSelected = _uiState.value.selectedCategoryIdList
-        val newSelected = if(currentSelected.contains(categoryId)){
-            currentSelected - categoryId
-        } else {
-            currentSelected + categoryId
-        }
-        updateState { copy(selectedCategoryIdList = newSelected) }
-    }
-
     fun showCategoryTagDrawer() {
         updateState { copy(showCategoryTagDrawer = true) }
     }
 
     fun hideCategoryTagDrawer() {
         updateState { copy(showCategoryTagDrawer = false) }
+    }
+
+    fun handleCategoryClick(categoryId: Int) {
+        val currentSelected = _uiState.value.selectedCategoryIdList
+
+        val newSelected = if(currentSelected.contains(categoryId)){
+            currentSelected - categoryId
+        } else {
+            currentSelected + categoryId
+        }
+
+        if(newSelected.size <= MAX_CATEGORY_COUNT) {
+            updateState { copy(selectedCategoryIdList = newSelected) }
+        }
     }
 
     fun removeSelectedCategory(categoryId: Int) {
@@ -95,10 +110,47 @@ class CreatePostViewModel @Inject constructor(
     }
 
     fun updatePrice(price: TextFieldValue) {
-        updateState { copy(priceTextFieldValue = price) }
+        updateState {
+            copy(priceTextFieldValue = price, showEmptyPriceError = false)
+        }
+    }
+
+    private fun checkValid(): Boolean {
+        val title = _uiState.value.title
+        val content = _uiState.value.content
+        val price = _uiState.value.price
+
+        if(title.isNotBlank() && content.isNotBlank() && price > 0) {
+            return true
+        }
+
+        updateState {
+            copy(
+                showEmptyTitleError = title.isBlank(),
+                showEmptyContentError = content.isBlank(),
+                showEmptyPriceError = price <= 0
+            )
+        }
+        return false
+    }
+
+    private fun createPostErrorHandling(e: Throwable) {
+        emitSideEffect(
+            when(e) {
+                is IOException -> CreatePostSideEffect.ShowNetworkErrorToast
+                else -> CreatePostSideEffect.ShowPostErrorToast
+            }
+        )
     }
 
     fun createPost(context: Context) {
+        val isValid = checkValid()
+
+        if(!isValid) {
+            emitSideEffect(CreatePostSideEffect.ShowInvalidInputToast)
+            return
+        }
+
         viewModelScope.launch {
             updateState { copy(isLoading = true) }
             // 서버는 단일 이미지만 지원(임시)하므로 첫 번째 선택 이미지를 업로드 대상으로 사용
@@ -121,13 +173,10 @@ class CreatePostViewModel @Inject constructor(
             ).onSuccess {
                 val productId = it.productId
                 Log.i(TAG, "게시글 생성 성공: Product Id: $productId")
-                _sideEffect.emit(CreatePostSideEffect.NavigateToProductDetail(productId))
+                emitSideEffect(CreatePostSideEffect.NavigateToProductDetail(productId))
             }.onFailure { e ->
                 Log.e(TAG, "게시글 생성 실패", e)
-                when(e) {
-                    is IOException -> _sideEffect.emit(CreatePostSideEffect.ShowNetworkErrorToast)
-                    else -> _sideEffect.emit(CreatePostSideEffect.ShowPostErrorToast)
-                }
+                createPostErrorHandling(e)
             }
             updateState { copy(isLoading = false) }
         }

@@ -44,6 +44,9 @@ fun CreatePostRoute(navHostController: NavHostController) {
                     is CreatePostSideEffect.NavigateToProductDetail -> {
                         navHostController.navigateToProductDetailFromCreate(it.productId)
                     }
+                    CreatePostSideEffect.ShowInvalidInputToast -> {
+                        Toast.makeText(context, R.string.toast_post_invalid_input, Toast.LENGTH_SHORT).show()
+                    }
                     CreatePostSideEffect.ShowNetworkErrorToast -> {
                         Toast.makeText(context, R.string.toast_post_network_error, Toast.LENGTH_SHORT).show()
                     }
@@ -63,6 +66,9 @@ fun CreatePostRoute(navHostController: NavHostController) {
         selectedCategoryList = uiState.selectedCategoryIdList,
         periodSliderPosition = uiState.periodSliderPosition,
         price = uiState.price,
+        showEmptyTitleError = uiState.showEmptyTitleError,
+        showEmptyContentError = uiState.showEmptyContentError,
+        showEmptyPriceError = uiState.showEmptyPriceError,
         showCategoryTagDrawer = uiState.showCategoryTagDrawer,
         isPostButtonAvailable = uiState.isPostButtonAvailable,
         onBackClick = navHostController::popBackStack,

@@ -15,10 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -94,21 +90,19 @@ fun TagButton(
     isSelectedTag: Boolean = false,
     onClick: () -> Unit
 ) {
-    var isSelected by remember { mutableStateOf(isSelectedTag) }
     OutlinedButton(
         onClick = {
-            isSelected = !isSelected
             onClick()
         },
         shape = RoundedCornerShape(25.dp),
-        border = CommonBorders.basicBorder(color = if(isSelected) PrimaryBlue500 else Gray200),
+        border = CommonBorders.basicBorder(color = if(isSelectedTag) PrimaryBlue500 else Gray200),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            if (isSelected) {
+            if (isSelectedTag) {
                 Icon(
                     modifier = Modifier
                         .height(12.dp)
@@ -121,7 +115,7 @@ fun TagButton(
             Text(
                 text = text,
                 style = MaterialTheme.typography.bodyMedium,
-                color = if (isSelected) PrimaryBlue500 else AppBlack
+                color = if (isSelectedTag) PrimaryBlue500 else AppBlack
             )
         }
     }

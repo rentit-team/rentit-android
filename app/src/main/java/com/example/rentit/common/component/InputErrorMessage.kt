@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.auth.join.components
+package com.example.rentit.common.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

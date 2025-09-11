@@ -27,7 +27,7 @@ import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.presentation.auth.join.components.InputErrorMessage
+import com.example.rentit.common.component.InputErrorMessage
 
 @Composable
 fun JoinNicknameScreen(
