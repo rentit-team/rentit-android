@@ -206,6 +206,14 @@ fun ImageSelectSection(
                 }
             }
         }
+
+        Text(
+            modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
+            text = stringResource(id = R.string.screen_product_create_add_image_guide),
+            style = MaterialTheme.typography.labelMedium,
+            color = Gray400,
+            textAlign = TextAlign.Start
+        )
     }
 }
 
