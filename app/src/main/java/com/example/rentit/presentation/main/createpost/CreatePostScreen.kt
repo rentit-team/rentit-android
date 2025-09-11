@@ -71,6 +71,7 @@ fun CreatePostScreen(
     periodSliderPosition: ClosedFloatingPointRange<Float>,
     price: Int,
     showCategoryTagDrawer: Boolean,
+    isPostButtonAvailable: Boolean,
     onBackClick: () -> Unit,
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit,
@@ -127,6 +128,7 @@ fun CreatePostScreen(
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White,
                 modifier = Modifier.padding(top = 30.dp, bottom = 50.dp),
+                enabled = isPostButtonAvailable,
                 onClick = onPostClick
             )
         }
@@ -369,6 +371,7 @@ fun PreviewProductCreateScreen() {
             periodSliderPosition = 3F..15F,
             price = 0,
             showCategoryTagDrawer = false,
+            isPostButtonAvailable = false,
             onBackClick = {},
             onTitleChange = {},
             onContentChange = {},

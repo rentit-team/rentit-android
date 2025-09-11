@@ -13,6 +13,7 @@ data class CreatePostState(
     val selectedImgUriList: List<Uri> = emptyList(),
     val periodSliderPosition: ClosedFloatingPointRange<Float> = 3F..15F,
     val priceTextFieldValue: TextFieldValue = TextFieldValue(""),
+    val isLoading: Boolean = false,
     val showCategoryTagDrawer: Boolean = false,
 ) {
     val price: Int
@@ -20,4 +21,7 @@ data class CreatePostState(
             val digitsOnly = priceTextFieldValue.text.filter { v -> v.isDigit() }
             return digitsOnly.toIntOrNull()?.coerceAtMost(PRICE_LIMIT) ?: 0
         }
+
+    val isPostButtonAvailable: Boolean
+        get() = !isLoading
 }

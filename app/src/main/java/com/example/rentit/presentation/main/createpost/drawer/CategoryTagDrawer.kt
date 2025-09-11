@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
@@ -30,6 +31,7 @@ import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
+import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.domain.product.model.CategoryModel
@@ -63,6 +65,25 @@ fun CategoryTagDrawer(
                             onClick = { onTagButtonClick(cat.key) })
                     }
                 }
+            }
+        }
+        if(categoryMap.isEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.padding(end = 6.dp),
+                    painter = painterResource(R.drawable.ic_info),
+                    contentDescription = null,
+                    tint = Gray400
+                )
+                Text(
+                    text = stringResource(id = R.string.drawer_category_tag_empty),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Gray400,
+                )
             }
         }
     }
