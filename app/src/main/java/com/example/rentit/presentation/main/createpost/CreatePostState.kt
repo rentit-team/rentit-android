@@ -14,6 +14,9 @@ data class CreatePostState(
     val periodSliderPosition: ClosedFloatingPointRange<Float> = 3F..15F,
     val priceTextFieldValue: TextFieldValue = TextFieldValue(""),
     val isLoading: Boolean = false,
+    val showEmptyTitleError: Boolean = false,
+    val showEmptyContentError: Boolean = false,
+    val showEmptyPriceError: Boolean = false,
     val showCategoryTagDrawer: Boolean = false,
 ) {
     val price: Int

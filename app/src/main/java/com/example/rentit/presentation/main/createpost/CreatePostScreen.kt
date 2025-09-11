@@ -48,6 +48,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonTextField
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.InputErrorMessage
 import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.item.RemovableImageBox
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -70,6 +71,9 @@ fun CreatePostScreen(
     selectedCategoryList: List<Int>,
     periodSliderPosition: ClosedFloatingPointRange<Float>,
     price: Int,
+    showEmptyTitleError: Boolean,
+    showEmptyContentError: Boolean,
+    showEmptyPriceError: Boolean,
     showCategoryTagDrawer: Boolean,
     isPostButtonAvailable: Boolean,
     onBackClick: () -> Unit,
@@ -103,11 +107,13 @@ fun CreatePostScreen(
 
             TitleSection(
                 title = title,
+                showEmptyTitleError = showEmptyTitleError,
                 onTitleChange = onTitleChange
             )
 
             ContentSection(
                 content = content,
+                showEmptyContentError = showEmptyContentError,
                 onContentChange = onContentChange
             )
 
@@ -121,7 +127,11 @@ fun CreatePostScreen(
 
             RentalPeriodSection(periodSliderPosition, onPeriodChange)
 
-            PriceInputSection(price, onPriceChange)
+            PriceInputSection(
+                price = price,
+                showEmptyPriceError = showEmptyPriceError,
+                onPriceChange = onPriceChange
+            )
 
             CommonButton(
                 text = stringResource(id = R.string.screen_product_create_complete_btn_text),
@@ -200,28 +210,43 @@ fun ImageSelectSection(
 }
 
 @Composable
-fun TitleSection(title: String, onTitleChange: (String) -> Unit) {
+fun TitleSection(title: String, showEmptyTitleError: Boolean, onTitleChange: (String) -> Unit) {
     LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
-        CommonTextField(
-            value = title,
-            onValueChange = onTitleChange,
-            placeholder = stringResource(id = R.string.screen_product_create_title_placeholder))
+        Column {
+            CommonTextField(
+                value = title,
+                onValueChange = onTitleChange,
+                placeholder = stringResource(id = R.string.screen_product_create_title_placeholder)
+            )
+            if(showEmptyTitleError){
+                InputErrorMessage(
+                    text = stringResource(R.string.screen_product_create_empty_error_title)
+                )
+            }
+        }
     }
 }
 
 @Composable
-fun ContentSection(content: String, onContentChange: (String) -> Unit) {
+fun ContentSection(content: String, showEmptyContentError: Boolean, onContentChange: (String) -> Unit) {
     LabeledContent(stringResource(id = R.string.screen_product_create_content_label)){
-        CommonTextField(
-            value = content,
-            onValueChange = onContentChange,
-            placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
-            minLines = 4,
-            maxLines = Int.MAX_VALUE,
-            isSingleLine = false,
-            imeAction = ImeAction.Default,
-            placeholderAlignment = Alignment.TopStart
-        )
+        Column {
+            CommonTextField(
+                value = content,
+                onValueChange = onContentChange,
+                placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
+                minLines = 4,
+                maxLines = Int.MAX_VALUE,
+                isSingleLine = false,
+                imeAction = ImeAction.Default,
+                placeholderAlignment = Alignment.TopStart
+            )
+            if(showEmptyContentError){
+                InputErrorMessage(
+                    text = stringResource(R.string.screen_product_create_empty_error_content)
+                )
+            }
+        }
     }
 }
 
@@ -331,29 +356,36 @@ fun RentalPeriodSection(sliderPosition: ClosedFloatingPointRange<Float>, onValue
 }
 
 @Composable
-fun PriceInputSection(price: Int, onValueChange: (TextFieldValue) -> Unit) {
+fun PriceInputSection(price: Int, showEmptyPriceError: Boolean, onPriceChange: (TextFieldValue) -> Unit) {
     val formattedPrice = formatPrice(price)
 
     LabeledContent(stringResource(id = R.string.screen_product_create_price_label)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            CommonTextField(
-                value = TextFieldValue(
-                    text = formattedPrice,
-                    selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
-                ),
-                onValueChange = onValueChange,
-                placeholder = "0",
-                keyboardType = KeyboardType.Number,
-                textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.End),
-                placeholderAlignment = Alignment.CenterEnd,
-                modifier = Modifier.width(140.dp)
-            )
-            Text(
-                text = stringResource(id = R.string.common_price_unit_per_day),
-                modifier = Modifier.padding(start = 10.dp),
-                style = MaterialTheme.typography.bodyMedium,
-                color = Gray800
-            )
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                CommonTextField(
+                    value = TextFieldValue(
+                        text = formattedPrice,
+                        selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
+                    ),
+                    onValueChange = onPriceChange,
+                    placeholder = "0",
+                    keyboardType = KeyboardType.Number,
+                    textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.End),
+                    placeholderAlignment = Alignment.CenterEnd,
+                    modifier = Modifier.width(140.dp)
+                )
+                Text(
+                    text = stringResource(id = R.string.common_price_unit_per_day),
+                    modifier = Modifier.padding(start = 10.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Gray800
+                )
+            }
+            if(showEmptyPriceError){
+                InputErrorMessage(
+                    text = stringResource(R.string.screen_product_create_empty_error_price)
+                )
+            }
         }
     }
 }
@@ -370,6 +402,9 @@ fun PreviewProductCreateScreen() {
             selectedCategoryList = emptyList(),
             periodSliderPosition = 3F..15F,
             price = 0,
+            showEmptyTitleError = false,
+            showEmptyContentError = false,
+            showEmptyPriceError = false,
             showCategoryTagDrawer = false,
             isPostButtonAvailable = false,
             onBackClick = {},
