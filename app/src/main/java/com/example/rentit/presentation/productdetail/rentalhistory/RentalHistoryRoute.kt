@@ -22,7 +22,7 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
 
     val historyListScrollState = remember { LazyListState() }
 
-    var yearMonth by remember { mutableStateOf(YearMonth.now()) }
+    var calendarMonth by remember { mutableStateOf(YearMonth.now()) }
 
     LaunchedEffect(productId) {
         viewModel.getProductRequestList(productId)
@@ -35,8 +35,9 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
     RentalHistoryScreen(
         rentalHistoryList = uiState.filteredRentalHistoryList,
         filterMode = uiState.filterMode,
+        calendarMonth = calendarMonth,
         historyListScrollState = historyListScrollState,
-        onChangeMonth = { yearMonth = it },
+        onChangeMonth = { calendarMonth = calendarMonth.plusMonths(it) },
         onBackClick = navHostController::popBackStack,
         onToggleFilter = { viewModel.updateFilterMode(it) }
     )

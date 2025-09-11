@@ -64,9 +64,10 @@ private const val D_DAY_ALERT_THRESHOLD_DAYS = 3
 fun RentalHistoryScreen(
     rentalHistoryList: List<RentalHistoryListItemModel>,
     filterMode: RentalHistoryFilter,
+    calendarMonth: YearMonth,
     historyListScrollState: LazyListState,
     onToggleFilter: (RentalHistoryFilter) -> Unit,
-    onChangeMonth: (YearMonth) -> Unit = {},
+    onChangeMonth: (Long) -> Unit = {},
     onBackClick: () -> Unit,
 ) {
     Scaffold(
@@ -75,7 +76,7 @@ fun RentalHistoryScreen(
         Column(
             modifier = Modifier.padding(it)
         ) {
-            RentalHistoryCalendar(rentalHistoryList.map { history -> history.rentalPeriod }, onChangeMonth)
+            RentalHistoryCalendar(rentalHistoryList.map { history -> history.rentalPeriod }, calendarMonth, onChangeMonth)
 
             RentalHistoryFilterSection(
                 filterMode = filterMode,
@@ -89,20 +90,18 @@ fun RentalHistoryScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalHistoryCalendar(rentalPeriodList: List<RentalPeriodModel>, onChangeMonth: (YearMonth) -> Unit = {}) {
-    var yearMonth by remember { mutableStateOf(YearMonth.now()) }
+fun RentalHistoryCalendar(
+    rentalPeriodList: List<RentalPeriodModel>,
+    calendarMonth: YearMonth,
+    onChangeMonth: (Long) -> Unit = {},
+) {
     val cellWidth = 48.dp
 
-    fun changeMonth(monthsToAdd: Long) {
-        yearMonth = yearMonth.plusMonths(monthsToAdd)
-        onChangeMonth(yearMonth)
-    }
-
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        CalendarHeader(yearMonth, { changeMonth(-1) }, { changeMonth(1) })
+        CalendarHeader(calendarMonth, { onChangeMonth(-1) }, { onChangeMonth(1) })
         DayOfWeek(cellWidth)
         CalendarDate(
-            yearMonth = yearMonth,
+            yearMonth = calendarMonth,
             disabledDates = emptyList(),
             cellWidth = cellWidth,
             isPastDateDisabled = true,
@@ -322,6 +321,7 @@ private fun RentalHistoryScreenPreview() {
         RentalHistoryScreen(
             rentalHistoryList = emptyList(),
             filterMode = RentalHistoryFilter.ACCEPTED,
+            calendarMonth = YearMonth.now(),
             historyListScrollState = remember { LazyListState() },
             onBackClick = {},
             onToggleFilter = {},
