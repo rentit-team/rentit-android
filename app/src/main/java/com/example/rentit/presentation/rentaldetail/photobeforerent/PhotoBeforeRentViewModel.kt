@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.PhotoRegistrationType
+import com.example.rentit.common.util.MultipartUtil
 import com.example.rentit.domain.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -11,9 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject
 
@@ -40,7 +38,7 @@ class PhotoBeforeRentViewModel @Inject constructor(
     }
 
     fun uploadPhotos(productId: Int, reservationId: Int, ) {
-        val files = takePhotoFiles.map { fileToMultipart(it) }
+        val files = takePhotoFiles.map { MultipartUtil.fileToMultipart(it) }
         viewModelScope.launch {
             setUploading(true)
             rentalRepository.postPhotoRegistration(productId, reservationId, PhotoRegistrationType.RENTAL_BEFORE, files)
@@ -51,11 +49,6 @@ class PhotoBeforeRentViewModel @Inject constructor(
                 }
             setUploading(false)
         }
-    }
-
-    private fun fileToMultipart(file: File): MultipartBody.Part {
-        val requestBody = file.asRequestBody("image/jpg".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("images", file.name, requestBody)
     }
 
     private fun handlePhotoUploadSuccess() {

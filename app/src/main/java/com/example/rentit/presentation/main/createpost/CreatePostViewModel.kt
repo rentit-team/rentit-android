@@ -5,9 +5,9 @@ import android.net.Uri
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.util.MultipartUtil
 import com.example.rentit.domain.product.usecase.CreatePostUseCase
 import com.example.rentit.domain.product.usecase.GetCategoryMapUseCase
-import com.example.rentit.presentation.main.createpost.components.createMultipartFromUri
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -58,14 +58,6 @@ class CreatePostViewModel @Inject constructor(
         updateState { copy(selectedImgUriList = _uiState.value.selectedImgUriList - uri) }
     }
 
-    fun showCategoryTagDrawer() {
-        updateState { copy(showCategoryTagDrawer = true) }
-    }
-
-    fun hideCategoryTagDrawer() {
-        updateState { copy(showCategoryTagDrawer = false) }
-    }
-
     fun handleCategoryClick(categoryId: Int) {
         val currentSelected = _uiState.value.selectedCategoryIdList
         val newSelected = if(currentSelected.contains(categoryId)){
@@ -74,6 +66,14 @@ class CreatePostViewModel @Inject constructor(
             currentSelected + categoryId
         }
         updateState { copy(selectedCategoryIdList = newSelected) }
+    }
+
+    fun showCategoryTagDrawer() {
+        updateState { copy(showCategoryTagDrawer = true) }
+    }
+
+    fun hideCategoryTagDrawer() {
+        updateState { copy(showCategoryTagDrawer = false) }
     }
 
     fun removeSelectedCategory(categoryId: Int) {
@@ -92,10 +92,13 @@ class CreatePostViewModel @Inject constructor(
         viewModelScope.launch {
             // 서버는 단일 이미지만 지원하므로 첫 번째 선택 이미지를 업로드 대상으로 사용
             val selectedImageUriList = _uiState.value.selectedImgUriList
-            val thumbnailPart = if (selectedImageUriList.isNotEmpty()) createMultipartFromUri(
-                context = context,
-                uri = selectedImageUriList[0]
-            ) else null
+            val thumbnailPart =
+                if (selectedImageUriList.isNotEmpty()) {
+                    MultipartUtil.uriToMultipart(
+                        context = context,
+                        uri = selectedImageUriList[0]
+                    )
+                } else null
 
             createPostUseCase(
                 thumbnailPart = thumbnailPart,

@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -32,6 +33,7 @@ import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,7 +59,6 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.domain.product.model.CategoryModel
 import com.example.rentit.presentation.main.createpost.drawer.CategoryTagDrawer
-import com.example.rentit.presentation.main.createpost.components.RemovableTagButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,45 +94,34 @@ fun CreatePostScreen(
                 .screenHorizontalPadding()
                 .verticalScroll(state = rememberScrollState())
         ) {
-            LabeledContent(stringResource(id = R.string.screen_product_create_image_label)) {
-                ImageSelectSection(
-                    selectedImgUriList = selectedImgUriList,
-                    onAddImageBoxClick = onAddImageBoxClick,
-                    onImageRemoveClick = onImageRemoveClick
-                )
-            }
-            LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
-                CommonTextField(
-                    value = title,
-                    onValueChange = onTitleChange,
-                    placeholder = stringResource(id = R.string.screen_product_create_title_placeholder))
-            }
-            LabeledContent(stringResource(id = R.string.screen_product_create_content_label)){
-                CommonTextField(
-                    value = content,
-                    onValueChange = onContentChange,
-                    placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
-                    minLines = 4,
-                    maxLines = Int.MAX_VALUE,
-                    isSingleLine = false,
-                    imeAction = ImeAction.Default,
-                    placeholderAlignment = Alignment.TopStart
-                )
-            }
-            LabeledContent(stringResource(id = R.string.screen_product_create_category_label)) {
-                CategoryTagSection(
-                    categoryMap = categoryMap,
-                    selectedCategoryList = selectedCategoryList,
-                    onRemoveCategory = onRemoveCategory,
-                    onAddCategoryClick = onAddCategoryClick
-                )
-            }
-            LabeledContent(stringResource(id = R.string.screen_product_create_rental_period_label)){
-                RentalPeriodSlider(periodSliderPosition, onPeriodChange)
-            }
-            LabeledContent(stringResource(id = R.string.screen_product_create_price_label)){
-                PriceInputSection(price, onPriceChange)
-            }
+            ImageSelectSection(
+                selectedImgUriList = selectedImgUriList,
+                onAddImageBoxClick = onAddImageBoxClick,
+                onImageRemoveClick = onImageRemoveClick
+            )
+
+            TitleSection(
+                title = title,
+                onTitleChange = onTitleChange
+            )
+
+            ContentSection(
+                content = content,
+                onContentChange = onContentChange
+            )
+
+
+            CategoryTagSection(
+                categoryMap = categoryMap,
+                selectedCategoryList = selectedCategoryList,
+                onRemoveCategory = onRemoveCategory,
+                onAddCategoryClick = onAddCategoryClick
+            )
+
+            RentalPeriodSection(periodSliderPosition, onPeriodChange)
+
+            PriceInputSection(price, onPriceChange)
+
             CommonButton(
                 text = stringResource(id = R.string.screen_product_create_complete_btn_text),
                 containerColor = PrimaryBlue500,
@@ -140,6 +130,7 @@ fun CreatePostScreen(
                 onClick = onPostClick
             )
         }
+
         if(showCategoryTagDrawer) {
             ModalBottomSheet(onDismissRequest = onCategoryDialogDismiss) {
                 CategoryTagDrawer(
@@ -154,11 +145,11 @@ fun CreatePostScreen(
 
 @Composable
 fun LabeledContent(title: String, content: @Composable () -> Unit) {
-        Text(
-            modifier = Modifier.padding(bottom = 15.dp, top = 20.dp),
-            text = title,
-            style = MaterialTheme.typography.bodyLarge)
-        content()
+    Text(
+        modifier = Modifier.padding(bottom = 15.dp, top = 20.dp),
+        text = title,
+        style = MaterialTheme.typography.bodyLarge)
+    content()
 }
 
 @Composable
@@ -170,40 +161,67 @@ fun ImageSelectSection(
     val imageBoxWidth = 160.dp
     val imageBoxAspectRatio = 4f/3f
 
-    Row(Modifier.horizontalScroll(state = rememberScrollState())) {
-        selectedImgUriList.forEach { uri ->
-            RemovableImageBox(imageBoxWidth, imageBoxAspectRatio, uri, onImageRemoveClick)
-            Spacer(Modifier.width(10.dp))
-        }
-        Box(modifier = Modifier
-            .width(imageBoxWidth)
-            .aspectRatio(imageBoxAspectRatio)
-            .basicRoundedGrayBorder()
-            .clickable { onAddImageBoxClick() }) {
-            Column(
+    LabeledContent(stringResource(id = R.string.screen_product_create_image_label)) {
+        Row(Modifier.horizontalScroll(state = rememberScrollState())) {
+            selectedImgUriList.forEach { uri ->
+                RemovableImageBox(imageBoxWidth, imageBoxAspectRatio, uri, onImageRemoveClick)
+                Spacer(Modifier.width(10.dp))
+            }
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 18.dp),
-                verticalArrangement = Arrangement.SpaceBetween
-            ) {
-                Image(
-                    modifier = Modifier.size(32.dp),
-                    painter = painterResource(id = R.drawable.img_image),
-                    contentDescription = ""
-                )
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(id = R.string.screen_product_create_add_image_text),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Gray400,
-                    textAlign = TextAlign.Center
-                )
+                    .width(imageBoxWidth)
+                    .aspectRatio(imageBoxAspectRatio)
+                    .basicRoundedGrayBorder()
+                    .clickable { onAddImageBoxClick() }) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp, vertical = 18.dp),
+                    verticalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Image(
+                        modifier = Modifier.size(32.dp),
+                        painter = painterResource(id = R.drawable.img_image),
+                        contentDescription = ""
+                    )
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(id = R.string.screen_product_create_add_image_text),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Gray400,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
         }
     }
 }
 
+@Composable
+fun TitleSection(title: String, onTitleChange: (String) -> Unit) {
+    LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
+        CommonTextField(
+            value = title,
+            onValueChange = onTitleChange,
+            placeholder = stringResource(id = R.string.screen_product_create_title_placeholder))
+    }
+}
 
+@Composable
+fun ContentSection(content: String, onContentChange: (String) -> Unit) {
+    LabeledContent(stringResource(id = R.string.screen_product_create_content_label)){
+        CommonTextField(
+            value = content,
+            onValueChange = onContentChange,
+            placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
+            minLines = 4,
+            maxLines = Int.MAX_VALUE,
+            isSingleLine = false,
+            imeAction = ImeAction.Default,
+            placeholderAlignment = Alignment.TopStart
+        )
+    }
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -211,21 +229,26 @@ fun CategoryTagSection(
     categoryMap: Map<Int, CategoryModel>,
     selectedCategoryList: List<Int>,
     onRemoveCategory: (Int) -> Unit,
-    onAddCategoryClick: () -> Unit) {
-    FlowRow(
-        modifier = Modifier.padding(bottom = 10.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        selectedCategoryList.forEach { categoryId ->
-            categoryMap[categoryId]?.let {
-                RemovableTagButton(text = it.name) {
-                    onRemoveCategory(categoryId)
+    onAddCategoryClick: () -> Unit
+) {
+    LabeledContent(stringResource(id = R.string.screen_product_create_category_label)) {
+        FlowRow(
+            modifier = Modifier.padding(bottom = 10.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            selectedCategoryList.forEach { categoryId ->
+                categoryMap[categoryId]?.let {
+                    RemovableTagButton(text = it.name) {
+                        onRemoveCategory(categoryId)
+                    }
                 }
             }
+            AddCategoryButton(onAddCategoryClick)
         }
-        AddCategoryButton(onAddCategoryClick)
     }
 }
+
 @Composable
 fun AddCategoryButton(onClick: () -> Unit) {
     IconButton(
@@ -243,59 +266,93 @@ fun AddCategoryButton(onClick: () -> Unit) {
         }
     }
 }
+
 @Composable
-fun RentalPeriodSlider(sliderPosition: ClosedFloatingPointRange<Float>, onValueChange: (ClosedFloatingPointRange<Float>) -> Unit) {
-    Column {
+fun RemovableTagButton(text: String, onRemoveClick: () -> Unit) {
+    Row(
+        modifier = Modifier
+            .height(40.dp)
+            .clip(RoundedCornerShape(25.dp))
+            .basicRoundedGrayBorder(color = PrimaryBlue500)
+            .padding(horizontal = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         Text(
-            text = stringResource(
-                id = R.string.screen_product_create_rental_period_text,
-                sliderPosition.start.toInt(),
-                sliderPosition.endInclusive.toInt()
-            )
+            modifier = Modifier.padding(end = 6.dp),
+            text = text,
+            style = MaterialTheme.typography.bodyMedium,
+            color = PrimaryBlue500
         )
-        RangeSlider(
-            value = sliderPosition,
-            steps = 30,
-            onValueChange = { onValueChange(it) },
-            valueRange = 1F..30F,
-            onValueChangeFinished = {},
-            colors = SliderDefaults.colors(
-                // 핸들 색상
-                thumbColor = PrimaryBlue500,
-
-                // 트랙 색상
-                activeTrackColor = PrimaryBlue500,
-                inactiveTrackColor = Gray200,
-
-                // 눈금 색상
-                activeTickColor = PrimaryBlue500,
-                inactiveTickColor = Gray200
+        IconButton(modifier = Modifier.width(12.dp), onClick = onRemoveClick) {
+            Icon(
+                modifier = Modifier.width(10.dp),
+                painter = painterResource(id = R.drawable.ic_x),
+                contentDescription = stringResource(id = R.string.common_removable_tag_btn_icon_delete_description),
+                tint = PrimaryBlue500
             )
-        )
+        }
     }
 }
+
+@Composable
+fun RentalPeriodSection(sliderPosition: ClosedFloatingPointRange<Float>, onValueChange: (ClosedFloatingPointRange<Float>) -> Unit) {
+    LabeledContent(stringResource(id = R.string.screen_product_create_rental_period_label)) {
+        Column {
+            Text(
+                text = stringResource(
+                    id = R.string.screen_product_create_rental_period_text,
+                    sliderPosition.start.toInt(),
+                    sliderPosition.endInclusive.toInt()
+                )
+            )
+            RangeSlider(
+                value = sliderPosition,
+                steps = 30,
+                onValueChange = { onValueChange(it) },
+                valueRange = 1F..30F,
+                onValueChangeFinished = {},
+                colors = SliderDefaults.colors(
+                    // 핸들 색상
+                    thumbColor = PrimaryBlue500,
+
+                    // 트랙 색상
+                    activeTrackColor = PrimaryBlue500,
+                    inactiveTrackColor = Gray200,
+
+                    // 눈금 색상
+                    activeTickColor = PrimaryBlue500,
+                    inactiveTickColor = Gray200
+                )
+            )
+        }
+    }
+}
+
 @Composable
 fun PriceInputSection(price: Int, onValueChange: (TextFieldValue) -> Unit) {
     val formattedPrice = formatPrice(price)
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        CommonTextField(
-            value = TextFieldValue(
-                text = formattedPrice,
-                selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
-            ),
-            onValueChange = onValueChange,
-            placeholder = "0",
-            keyboardType = KeyboardType.Number,
-            textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.End),
-            placeholderAlignment = Alignment.CenterEnd,
-            modifier = Modifier.width(140.dp)
-        )
-        Text(
-            text = stringResource(id = R.string.common_price_unit_per_day),
-            modifier = Modifier.padding(start = 10.dp),
-            style = MaterialTheme.typography.bodyMedium,
-            color = Gray800
-        )
+
+    LabeledContent(stringResource(id = R.string.screen_product_create_price_label)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            CommonTextField(
+                value = TextFieldValue(
+                    text = formattedPrice,
+                    selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
+                ),
+                onValueChange = onValueChange,
+                placeholder = "0",
+                keyboardType = KeyboardType.Number,
+                textStyle = MaterialTheme.typography.bodyMedium.copy(textAlign = TextAlign.End),
+                placeholderAlignment = Alignment.CenterEnd,
+                modifier = Modifier.width(140.dp)
+            )
+            Text(
+                text = stringResource(id = R.string.common_price_unit_per_day),
+                modifier = Modifier.padding(start = 10.dp),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Gray800
+            )
+        }
     }
 }
 
