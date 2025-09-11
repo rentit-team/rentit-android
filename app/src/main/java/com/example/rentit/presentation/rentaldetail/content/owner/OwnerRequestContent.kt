@@ -61,7 +61,7 @@ fun OwnerRequestContent(
 
     RentalInfoSection(
         title = stringResource(requestData.status.strRes),
-        titleColor = requestData.status.textColor,
+        titleColor = requestData.status.color,
         rentalInfo = requestData.rentalSummary,
         onRentalSummaryClick = onRentalSummaryClick
     ) {

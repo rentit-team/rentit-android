@@ -7,7 +7,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.SecondaryYellow
 
-enum class RentalStatus(@StringRes val strRes: Int, val textColor: Color) {
+enum class RentalStatus(@StringRes val strRes: Int, val color: Color) {
     PENDING(R.string.rental_status_pending, Gray400),
     ACCEPTED(R.string.rental_status_accepted, PrimaryBlue500),
     REJECTED(R.string.rental_status_rejected, Gray400),

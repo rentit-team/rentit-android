@@ -46,7 +46,7 @@ fun RenterReturnedContent(
 
     RentalInfoSection(
         title = stringResource(returnedData.status.strRes),
-        titleColor = returnedData.status.textColor,
+        titleColor = returnedData.status.color,
         rentalInfo = returnedData.rentalSummary,
         onRentalSummaryClick = onRentalSummaryClick
     ) {

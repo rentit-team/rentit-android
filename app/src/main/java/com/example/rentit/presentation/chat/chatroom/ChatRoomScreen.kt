@@ -205,7 +205,7 @@ private fun RequestInfo(
         Text(
             text = stringResource(status.strRes),
             style = MaterialTheme.typography.labelLarge,
-            color = status.textColor
+            color = status.color
         )
         Text(
             text = periodText,
