@@ -8,9 +8,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.rentit.navigation.bottomtab.BottomTabRoute
 import com.example.rentit.presentation.productdetail.ProductDetailRoute
+import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryRoute
 import com.example.rentit.presentation.productdetail.reservation.ReservationRoute
 import com.example.rentit.presentation.productdetail.reservation.complete.ReservationCompleteScreen
-import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryScreen
 
 fun NavHostController.navigateToProductDetail(productId: Int) {
     navigate(
@@ -75,6 +75,6 @@ fun NavGraphBuilder.productDetailGraph(navHostController: NavHostController) {
     }
     composable<ProductDetailRoute.RentalHistory> { backStackEntry ->
         val items: ProductDetailRoute.RentalHistory = backStackEntry.toRoute()
-        RentalHistoryScreen(navHostController, items.productId)
+        RentalHistoryRoute(navHostController, items.productId)
     }
 }
