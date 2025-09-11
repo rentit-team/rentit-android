@@ -168,6 +168,16 @@
     <string name="screen_request_confirm_total_price">총 금액</string>
     <string name="screen_request_confirm_btn_complete">완료</string>
 
+    <!-- 상품 대여 내역 -->
+    <string name="screen_product_rental_history_filter_in_progress">진행 중</string>
+    <string name="screen_product_rental_history_filter_in_progress_content_description">거래 진행 중인 내역만 보기</string>
+    <string name="screen_product_rental_history_filter_ready_to_ship">발송 대기</string>
+    <string name="screen_product_rental_history_filter_ready_to_ship_content_description">발송 대기 중인 내역만 보기</string>
+    <string name="screen_product_rental_history_filter_request">대여 요청</string>
+    <string name="screen_product_rental_history_filter_request_content_description">대여 요청만 확인하기</string>
+    <string name="screen_product_rental_history_filter_finished">종료됨</string>
+    <string name="screen_product_rental_history_filter_finished_content_description">종료된 내역만 보기</string>
+
     <!-- 게시글 생성 -->
     <string name="screen_product_create_image_label">이미지</string>
     <string name="screen_product_create_add_image_text">+ 이미지 추가</string>
