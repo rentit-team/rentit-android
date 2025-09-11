@@ -1,12 +1,12 @@
 package com.example.rentit.presentation.main.createpost
 
-
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts.PickMultipleVisualMedia
 import androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
@@ -14,6 +14,7 @@ import androidx.navigation.NavHostController
 @Composable
 fun CreatePostRoute(navHostController: NavHostController) {
     val viewModel: CreatePostViewModel = hiltViewModel()
+    val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val pickMultipleImageLauncher =
@@ -31,8 +32,8 @@ fun CreatePostRoute(navHostController: NavHostController) {
         title = uiState.title,
         content = uiState.content,
         selectedImgUriList = uiState.selectedImgUriList,
-        categoryList = uiState.categoryList,
-        selectedCategoryList = uiState.selectedCategoryList,
+        categoryMap = uiState.categoryMap,
+        selectedCategoryList = uiState.selectedCategoryIdList,
         periodSliderPosition = uiState.periodSliderPosition,
         price = uiState.price,
         showCategoryTagDrawer = uiState.showCategoryTagDrawer,
@@ -47,6 +48,6 @@ fun CreatePostRoute(navHostController: NavHostController) {
         onCategoryDialogDismiss = viewModel::hideCategoryTagDrawer,
         onPeriodChange = viewModel::updatePeriod,
         onPriceChange = viewModel::updatePrice,
-        onPostClick = { },
+        onPostClick = { viewModel.createPost(context) },
     )
 }

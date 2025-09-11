@@ -2,29 +2,22 @@ package com.example.rentit.presentation.main.createpost
 
 import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.data.product.dto.CategoryDto
-import com.example.rentit.data.product.dto.CreatePostRequestDto
-import com.example.rentit.domain.product.repository.ProductRepository
+import com.example.rentit.domain.product.usecase.CreatePostUseCase
+import com.example.rentit.domain.product.usecase.GetCategoryMapUseCase
+import com.example.rentit.presentation.main.createpost.components.createMultipartFromUri
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.MultipartBody
-import okhttp3.RequestBody.Companion.asRequestBody
-import java.io.File
-import java.io.FileOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class CreatePostViewModel @Inject constructor(
-    @ApplicationContext private val applicationContext: Context,
-    private val repository: ProductRepository
+    private val getCategoryMapUseCase: GetCategoryMapUseCase,
+    private val createPostUseCase: CreatePostUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CreatePostState())
@@ -40,11 +33,12 @@ class CreatePostViewModel @Inject constructor(
 
     private fun getCategoryList() {
         viewModelScope.launch {
-            repository.getCategories().onSuccess {
-                _uiState.value = _uiState.value.copy(categoryList = it.categories)
-            }.onFailure {
-                /* 카테고리 로딩 실패 시 */
-            }
+            getCategoryMapUseCase()
+                .onSuccess {
+                    updateState { copy(categoryMap = it) }
+                }.onFailure {
+                    /* 카테고리 로딩 실패 시 */
+                }
         }
     }
 
@@ -72,18 +66,18 @@ class CreatePostViewModel @Inject constructor(
         updateState { copy(showCategoryTagDrawer = false) }
     }
 
-    fun handleCategoryClick(category: CategoryDto) {
-        val currentSelected = _uiState.value.selectedCategoryList
-        val newSelected = if(currentSelected.contains(category)){
-            currentSelected - category
+    fun handleCategoryClick(categoryId: Int) {
+        val currentSelected = _uiState.value.selectedCategoryIdList
+        val newSelected = if(currentSelected.contains(categoryId)){
+            currentSelected - categoryId
         } else {
-            currentSelected + category
+            currentSelected + categoryId
         }
-        updateState { copy(selectedCategoryList = newSelected) }
+        updateState { copy(selectedCategoryIdList = newSelected) }
     }
 
-    fun removeSelectedCategory(category: CategoryDto) {
-        updateState { copy(selectedCategoryList = _uiState.value.selectedCategoryList - category) }
+    fun removeSelectedCategory(categoryId: Int) {
+        updateState { copy(selectedCategoryIdList = _uiState.value.selectedCategoryIdList - categoryId) }
     }
 
     fun updatePeriod(position: ClosedFloatingPointRange<Float>) {
@@ -94,34 +88,23 @@ class CreatePostViewModel @Inject constructor(
         updateState { copy(priceTextFieldValue = price) }
     }
 
+    fun createPost(context: Context) {
+        viewModelScope.launch {
+            // 서버는 단일 이미지만 지원하므로 첫 번째 선택 이미지를 업로드 대상으로 사용
+            val selectedImageUriList = _uiState.value.selectedImgUriList
+            val thumbnailPart = if (selectedImageUriList.isNotEmpty()) createMultipartFromUri(
+                context = context,
+                uri = selectedImageUriList[0]
+            ) else null
 
-
-    private fun createMultipartFromUri(uri: Uri): MultipartBody.Part? {
-        val file = uriToFile(uri) ?: return null
-
-        val mimeType = applicationContext.contentResolver.getType(uri) ?: "image/*"
-        val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
-
-        return MultipartBody.Part.createFormData(
-            "thumbnailImg",
-            file.name,
-            requestBody
-        )
-    }
-
-    private fun uriToFile(uri: Uri): File? {
-        try {
-            val inputStream = applicationContext.contentResolver.openInputStream(uri)
-            val fileName = "IMG_${System.currentTimeMillis()}.jpg"
-            val tempFile = File(applicationContext.cacheDir, fileName)
-
-            inputStream?.use { input ->
-                FileOutputStream(tempFile).use { input.copyTo(it) }
-            }
-            return tempFile
-        } catch (e: Exception) {
-            e.printStackTrace()
-            return null
+            createPostUseCase(
+                thumbnailPart = thumbnailPart,
+                title = _uiState.value.title,
+                content = _uiState.value.content,
+                selectedCategoryIdList = _uiState.value.selectedCategoryIdList,
+                periodSliderPosition = _uiState.value.periodSliderPosition,
+                price = _uiState.value.price,
+            )
         }
     }
 }

@@ -55,7 +55,7 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.data.product.dto.CategoryDto
+import com.example.rentit.domain.product.model.CategoryModel
 import com.example.rentit.presentation.main.createpost.drawer.CategoryTagDrawer
 import com.example.rentit.presentation.main.createpost.components.RemovableTagButton
 
@@ -65,19 +65,19 @@ fun CreatePostScreen(
     title: String,
     content: String,
     selectedImgUriList: List<Uri>,
-    categoryList: List<CategoryDto>,
-    selectedCategoryList: List<CategoryDto>,
+    categoryMap: Map<Int, CategoryModel>,
+    selectedCategoryList: List<Int>,
     periodSliderPosition: ClosedFloatingPointRange<Float>,
     price: Int,
     showCategoryTagDrawer: Boolean,
     onBackClick: () -> Unit,
     onTitleChange: (String) -> Unit,
     onContentChange: (String) -> Unit,
-    onCategoryClick: (CategoryDto) -> Unit,
+    onCategoryClick: (Int) -> Unit,
     onAddImageBoxClick: () -> Unit,
     onImageRemoveClick: (Uri) -> Unit,
     onAddCategoryClick: () -> Unit,
-    onRemoveCategory: (CategoryDto) -> Unit,
+    onRemoveCategory: (Int) -> Unit,
     onCategoryDialogDismiss: () -> Unit,
     onPeriodChange: (ClosedFloatingPointRange<Float>) -> Unit,
     onPriceChange: (TextFieldValue) -> Unit,
@@ -120,6 +120,7 @@ fun CreatePostScreen(
             }
             LabeledContent(stringResource(id = R.string.screen_product_create_category_label)) {
                 CategoryTagSection(
+                    categoryMap = categoryMap,
                     selectedCategoryList = selectedCategoryList,
                     onRemoveCategory = onRemoveCategory,
                     onAddCategoryClick = onAddCategoryClick
@@ -142,7 +143,7 @@ fun CreatePostScreen(
         if(showCategoryTagDrawer) {
             ModalBottomSheet(onDismissRequest = onCategoryDialogDismiss) {
                 CategoryTagDrawer(
-                    categoryList = categoryList,
+                    categoryMap = categoryMap,
                     selectedCategoryList = selectedCategoryList,
                     onTagButtonClick = onCategoryClick
                 )
@@ -207,16 +208,19 @@ fun ImageSelectSection(
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun CategoryTagSection(
-    selectedCategoryList: List<CategoryDto>,
-    onRemoveCategory: (CategoryDto) -> Unit,
+    categoryMap: Map<Int, CategoryModel>,
+    selectedCategoryList: List<Int>,
+    onRemoveCategory: (Int) -> Unit,
     onAddCategoryClick: () -> Unit) {
     FlowRow(
         modifier = Modifier.padding(bottom = 10.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        selectedCategoryList.forEach { cat ->
-            RemovableTagButton(text = cat.name) {
-                onRemoveCategory(cat)
+        selectedCategoryList.forEach { categoryId ->
+            categoryMap[categoryId]?.let {
+                RemovableTagButton(text = it.name) {
+                    onRemoveCategory(categoryId)
+                }
             }
         }
         AddCategoryButton(onAddCategoryClick)
@@ -303,7 +307,7 @@ fun PreviewProductCreateScreen() {
             title = "",
             content = "",
             selectedImgUriList = emptyList(),
-            categoryList = emptyList(),
+            categoryMap = emptyMap(),
             selectedCategoryList = emptyList(),
             periodSliderPosition = 3F..15F,
             price = 0,
