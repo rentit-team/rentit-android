@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.request
+package com.example.rentit.presentation.productdetail.reservation
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -36,12 +36,12 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.presentation.productdetail.reservation.request.components.DateRangePicker
+import com.example.rentit.presentation.productdetail.reservation.components.DateRangePicker
 import java.time.LocalDate
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ResvRequestScreen(
+fun ReservationScreen(
     rentalStartDate: LocalDate? = null,
     rentalEndDate: LocalDate? = null,
     selectedPeriod: Int = 0,
@@ -52,7 +52,7 @@ fun ResvRequestScreen(
     totalPrice: Int = 0,
     deposit: Int = 0,
     onBackClick: () -> Unit,
-    onResvRequestClick: () -> Unit,
+    onReservationClick: () -> Unit,
     onSetRentalStartDate: (LocalDate?) -> Unit,
     onSetRentalEndDate: (LocalDate?) -> Unit,
 ) {
@@ -71,7 +71,7 @@ fun ResvRequestScreen(
                 text = stringResource(id = R.string.screen_resv_request_btn_resv_request),
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White,
-                onClick = onResvRequestClick
+                onClick = onReservationClick
             )
         }
     ) {
@@ -175,9 +175,9 @@ fun LabelValueRow(modifier: Modifier, content: @Composable () -> Unit) {
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
-fun ResvRequestScreenPreview() {
+fun ReservationScreenPreview() {
     RentItTheme {
-        ResvRequestScreen(
+        ReservationScreen(
             rentalStartDate = LocalDate.now(),
             rentalEndDate = LocalDate.now(),
             selectedPeriod = 5, // 대여일수
@@ -188,7 +188,7 @@ fun ResvRequestScreenPreview() {
             maxPeriod = 5,
             deposit = 30_000,
             onBackClick = { /* 뒤로가기 처리 */ },
-            onResvRequestClick = { /* 예약 요청 처리 */ },
+            onReservationClick = { /* 예약 요청 처리 */ },
             onSetRentalStartDate = { /* 시작일 선택 처리 */ },
             onSetRentalEndDate = { /* 종료일 선택 처리 */ }
         )

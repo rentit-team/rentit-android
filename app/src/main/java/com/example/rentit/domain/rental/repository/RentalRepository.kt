@@ -1,6 +1,7 @@
 package com.example.rentit.domain.rental.repository
 
 import com.example.rentit.common.enums.PhotoRegistrationType
+import com.example.rentit.data.rental.dto.RentalHistoriesResponseDto
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
@@ -11,6 +12,8 @@ import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import okhttp3.MultipartBody
 
 interface RentalRepository {
+    suspend fun getRentalHistoriesByProduct(productId: Int): Result<RentalHistoriesResponseDto>
+
     suspend fun getRentalDetail(productId: Int, reservationId: Int): Result<RentalDetailResponseDto>
 
     suspend fun postTrackingRegistration(productId: Int, reservationId: Int, body: TrackingRegistrationRequestDto): Result<TrackingRegistrationResponseDto?>

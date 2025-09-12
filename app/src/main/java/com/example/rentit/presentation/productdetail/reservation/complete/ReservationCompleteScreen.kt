@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.request.complete
+package com.example.rentit.presentation.productdetail.reservation.complete
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -34,7 +34,7 @@ import com.example.rentit.navigation.bottomtab.navigateToHome
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ResvRequestCompleteScreen(
+fun ReservationCompleteScreen(
     navHostController: NavHostController,
     rentalStartDate: String,
     rentalEndDate: String,
@@ -84,7 +84,7 @@ fun ResvRequestCompleteScreen(
 @Composable
 private fun Preview() {
     RentItTheme {
-        ResvRequestCompleteScreen(
+        ReservationCompleteScreen(
             rememberNavController(),
             rentalStartDate = "2025-07-12",
             rentalEndDate = "2025-07-16",

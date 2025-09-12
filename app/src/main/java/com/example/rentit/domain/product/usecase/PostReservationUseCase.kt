@@ -1,7 +1,7 @@
 package com.example.rentit.domain.product.usecase
 
-import com.example.rentit.data.product.dto.ResvRequestDto
-import com.example.rentit.data.product.dto.ResvResponseDto
+import com.example.rentit.data.product.dto.ReservationRequestDto
+import com.example.rentit.data.product.dto.ReservationResponseDto
 import com.example.rentit.domain.product.repository.ProductRepository
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ import javax.inject.Inject
  * - 유효한 경우 서버에 예약 요청 전송
  */
 
-class PostResvRequestUseCase @Inject constructor(
+class PostReservationUseCase @Inject constructor(
     private val productRepository: ProductRepository,
 ) {
 
@@ -23,13 +23,13 @@ class PostResvRequestUseCase @Inject constructor(
         selectedPeriod: Int,
         startDate: String,
         endDate: String,
-    ): Result<ResvResponseDto> {
+    ): Result<ReservationResponseDto> {
         return runCatching {
             val periodRange = (minPeriod ?: 0)..(maxPeriod ?: Int.MAX_VALUE)
             if(selectedPeriod !in periodRange) throw IllegalArgumentException("Invalid period")
 
-            val request = ResvRequestDto(startDate, endDate)
-            productRepository.postResv(productId, request).getOrThrow()
+            val request = ReservationRequestDto(startDate, endDate)
+            productRepository.postReservation(productId, request).getOrThrow()
         }
     }
 }

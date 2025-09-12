@@ -7,15 +7,15 @@ sealed class ProductDetailRoute {
     data class ProductDetail(val productId: Int) : ProductDetailRoute()
 
     @Serializable
-    data class ResvRequest(val productId: Int) : ProductDetailRoute()
+    data class Reservation(val productId: Int) : ProductDetailRoute()
 
     @Serializable
-    data class ResvRequestComplete(
+    data class ReservationComplete(
         val rentalStartDate: String,
         val rentalEndDate: String,
         val formattedTotalPrice: String,
     ) : ProductDetailRoute()
 
     @Serializable
-    data class ResvRequestHistory(val productId: Int?) : ProductDetailRoute()
+    data class RentalHistory(val productId: Int) : ProductDetailRoute()
 }

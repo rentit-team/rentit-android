@@ -4,6 +4,7 @@ import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.data.product.mapper.toProductDetailModel
 import com.example.rentit.domain.product.model.ProductDetailResultModel
 import com.example.rentit.domain.product.repository.ProductRepository
+import com.example.rentit.domain.rental.repository.RentalRepository
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 class GetProductDetailResultUseCase @Inject constructor(
     private val productRepository: ProductRepository,
+    private val rentalRepository: RentalRepository,
     private val userRepository: UserRepository,
     private val getCategoryMapUseCase: GetCategoryMapUseCase
 ) {
@@ -33,8 +35,14 @@ class GetProductDetailResultUseCase @Inject constructor(
             val isUserOwner = productDetail.owner.userId == authUserId
 
             val requestCount = if (isUserOwner) {
-                productRepository.getProductRequestList(productId)
-                    .getOrThrow().reservations.filter { it.status == RentalStatus.PENDING }.size
+                rentalRepository.getRentalHistoriesByProduct(productId)
+                    .getOrThrow().reservations.filter {
+                        it.status !in listOf(
+                            RentalStatus.CANCELED,
+                            RentalStatus.REJECTED,
+                            RentalStatus.RETURNED
+                        )
+                    }.size
             } else null
 
             ProductDetailResultModel(productDetailModel, isUserOwner, requestCount)

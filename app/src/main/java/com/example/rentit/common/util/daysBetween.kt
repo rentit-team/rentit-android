@@ -25,10 +25,21 @@ fun inclusiveDaysBetween(start: LocalDate?, end: LocalDate?): Int {
     return start.until(end, ChronoUnit.DAYS).toInt().plus(1)
 }
 
+/**
+ * 주어진 날짜와 오늘 날짜 사이의 일수를 계산
+ */
+
 @RequiresApi(Build.VERSION_CODES.O)
 fun daysFromToday(targetDateStr: String): Int {
     val today = LocalDate.now()
     val targetDate = parseLocalDateOrNull(targetDateStr) ?: return 0
     return ChronoUnit.DAYS.between(today, targetDate).toInt()
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
+fun daysFromToday(targetDate: LocalDate?): Int {
+    val today = LocalDate.now()
+    return targetDate?.let {ChronoUnit.DAYS.between(today, targetDate).toInt() } ?: 0
+}
+
 

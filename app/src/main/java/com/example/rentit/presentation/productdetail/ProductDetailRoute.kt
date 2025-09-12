@@ -18,8 +18,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.navigation.chatroom.navigateToChatRoom
-import com.example.rentit.navigation.productdetail.navigateToResvRequest
-import com.example.rentit.navigation.productdetail.navigateToResvRequestHistory
+import com.example.rentit.navigation.productdetail.navigateToReservation
+import com.example.rentit.navigation.productdetail.navigateToRentalHistory
 import com.example.rentit.presentation.main.MainViewModel
 import com.example.rentit.presentation.productdetail.dialog.ChatUnavailableDialog
 
@@ -50,13 +50,13 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
             viewModel.sideEffect.collect {
                 when (it) {
                     ProductDetailSideEffect.NavigateToRentalHistory -> {
-                        navHostController.navigateToResvRequestHistory(productId)
+                        navHostController.navigateToRentalHistory(productId)
                     }
                     is ProductDetailSideEffect.NavigateToChatting -> {
                         navHostController.navigateToChatRoom(it.chatRoomId)
                     }
                     ProductDetailSideEffect.NavigateToResvRequest -> {
-                        navHostController.navigateToResvRequest(productId)
+                        navHostController.navigateToReservation(productId)
                     }
                     ProductDetailSideEffect.ToastComingSoon -> {
                         Toast.makeText(context, R.string.common_toast_feat_coming_soon, Toast.LENGTH_SHORT).show()

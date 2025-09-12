@@ -1,14 +1,13 @@
 package com.example.rentit.data.product.remote
 
-import com.example.rentit.data.product.dto.ResvRequestDto
-import com.example.rentit.data.product.dto.ResvResponseDto
+import com.example.rentit.data.product.dto.ReservationRequestDto
+import com.example.rentit.data.product.dto.ReservationResponseDto
 import com.example.rentit.data.product.dto.CategoryListResponseDto
 import com.example.rentit.data.product.dto.ChatAccessibilityResponseDto
 import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
-import com.example.rentit.data.product.dto.RequestHistoryResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -35,7 +34,7 @@ interface ProductApiService {
 
     @POST("api/v1/products/{productId}/reservations")
     @Headers("Content-Type: application/json")
-    suspend fun postResv(@Path("productId") productId: Int, @Body request: ResvRequestDto): Response<ResvResponseDto>
+    suspend fun postReservation(@Path("productId") productId: Int, @Body request: ReservationRequestDto): Response<ReservationResponseDto>
 
     @GET("api/v1/products/categories")
     @Headers("Content-Type: application/json")
@@ -47,10 +46,6 @@ interface ProductApiService {
         @Part("payload") payload: RequestBody,
         @Part thumbnailImg: MultipartBody.Part?
     ): Response<CreatePostResponseDto>
-
-    @GET("api/v1/products/{productId}/reservations")
-    @Headers("Content-Type: application/json")
-    suspend fun getProductRequestList(@Path("productId") productId: Int): Response<RequestHistoryResponseDto>
 
     @GET("api/v1/products/{productId}/reservations/chat-access")
     @Headers("Content-Type: application/json")

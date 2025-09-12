@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.request.components
+package com.example.rentit.presentation.productdetail.reservation.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi

@@ -59,8 +59,8 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.domain.product.model.ProductDetailModel
+import com.example.rentit.presentation.productdetail.drawer.AvailableDateDrawer
 import com.example.rentit.presentation.productdetail.drawer.MenuDrawer
-import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryBottomDrawer
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
@@ -146,7 +146,7 @@ fun ProductDetailScreen(
             onDismissRequest = onBottomSheetDismiss,
             sheetState = bottomSheetState
         ) {
-            RentalHistoryBottomDrawer(reservedDateList)
+            AvailableDateDrawer(reservedDateList)
         }
     }
 

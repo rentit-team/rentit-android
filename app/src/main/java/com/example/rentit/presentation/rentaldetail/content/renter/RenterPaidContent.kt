@@ -41,7 +41,7 @@ fun RenterPaidContent(
 
     RentalInfoSection(
         title = stringResource(paidData.status.strRes),
-        titleColor = paidData.status.textColor,
+        titleColor = paidData.status.color,
         subTitle = stringResource(
             R.string.screen_rental_detail_subtitle_day_before_rent,
             paidData.daysUntilRental

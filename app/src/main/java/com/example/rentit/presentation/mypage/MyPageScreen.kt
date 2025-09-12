@@ -421,7 +421,7 @@ fun MyRentalHistoryListItem(
                 Text(
                     text = stringResource(status.strRes),
                     style = MaterialTheme.typography.labelMedium,
-                    color = status.textColor
+                    color = status.color
                 )
             }
             Text(

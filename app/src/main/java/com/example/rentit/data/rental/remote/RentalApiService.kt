@@ -1,5 +1,6 @@
 package com.example.rentit.data.rental.remote
 
+import com.example.rentit.data.rental.dto.RentalHistoriesResponseDto
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.data.rental.dto.RentalPhotoResponseDto
@@ -15,6 +16,11 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface RentalApiService {
+
+    @GET("api/v1/products/{productId}/reservations")
+    @Headers("Content-Type: application/json")
+    suspend fun getRentalHistoriesByProduct(@Path("productId") productId: Int): Response<RentalHistoriesResponseDto>
+
     @GET("api/v1/products/{productId}/reservations/{reservationId}")
     @Headers("Content-Type: application/json")
     suspend fun getRentalDetail(

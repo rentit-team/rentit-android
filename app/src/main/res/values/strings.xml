@@ -18,6 +18,7 @@
 
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_top_app_bar_menu_icon_description">메뉴</string>
+    <string name="common_day_unit">일</string>
     <string name="common_price_unit_per_day">원/일</string>
     <string name="common_price_unit">원</string>
     <string name="common_total">총</string>
@@ -135,7 +136,7 @@
     <string name="screen_product_like_icon_description">상품 좋아요</string>
     <string name="screen_product_share_icon_description">상품 공유하기</string>
     <string name="screen_product_btn_check_detail_of_use">예약 가능일 확인</string>
-    <string name="screen_product_btn_request">요청 %d건</string>
+    <string name="screen_product_btn_request">진행 중 %d건</string>
     <string name="screen_product_btn_chatting">채팅하기</string>
     <string name="screen_product_btn_reserve">예약하기</string>
 
@@ -167,6 +168,22 @@
     <string name="screen_request_confirm_resv_period">예약 기간</string>
     <string name="screen_request_confirm_total_price">총 금액</string>
     <string name="screen_request_confirm_btn_complete">완료</string>
+
+    <!-- 상품 대여 내역 -->
+    <string name="screen_product_rental_history_title">대여 내역</string>
+    <string name="screen_product_rental_history_item_renting_info_1">반납이</string>
+    <string name="screen_product_rental_history_item_renting_info_2">남았어요</string>
+    <string name="screen_product_rental_history_item_ready_to_ship_info">대여 시작일까지</string>
+    <string name="screen_product_rental_history_filter_in_progress">진행 중</string>
+    <string name="screen_product_rental_history_filter_in_progress_content_description">거래 진행 중인 내역만 보기</string>
+    <string name="screen_product_rental_history_filter_accepted">요청 수락</string>
+    <string name="screen_product_rental_history_filter_accepted_content_description">요청을 수락한 내역만 보기</string>
+    <string name="screen_product_rental_history_filter_request">대여 요청</string>
+    <string name="screen_product_rental_history_filter_request_content_description">대여 요청만 확인하기</string>
+    <string name="screen_product_rental_history_filter_finished">종료됨</string>
+    <string name="screen_product_rental_history_filter_finished_content_description">종료된 내역만 보기</string>
+
+    <string name="dialog_rental_history_access_forbidden">대여 내역을 조회할 권한이 없어요.</string>
 
     <!-- 게시글 생성 -->
     <string name="screen_product_create_image_label">이미지</string>

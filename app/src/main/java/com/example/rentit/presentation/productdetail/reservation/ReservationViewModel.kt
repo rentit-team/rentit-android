@@ -1,4 +1,4 @@
-package com.example.rentit.presentation.productdetail.reservation.request
+package com.example.rentit.presentation.productdetail.reservation
 
 import android.os.Build
 import android.util.Log
@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.core.error.ConflictException
 import com.example.rentit.core.error.ForbiddenException
 import com.example.rentit.domain.product.repository.ProductRepository
-import com.example.rentit.domain.product.usecase.PostResvRequestUseCase
+import com.example.rentit.domain.product.usecase.PostReservationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,23 +18,23 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import javax.inject.Inject
 
-private const val TAG = "ResvRequestViewModel"
+private const val TAG = "ReservationViewModel"
 private const val DEFAULT_DEPOSIT_DAYS = 3 // 기본 보증금 계산 기준 일수
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
-class ResvRequestViewModel @Inject constructor(
+class ReservationViewModel @Inject constructor(
     private val productRepository: ProductRepository,
-    private val postResvRequestUseCase: PostResvRequestUseCase
+    private val postReservationUseCase: PostReservationUseCase
 ): ViewModel() {
 
-    private val _uiState =  MutableStateFlow(ResvRequestState())
-    val uiState: StateFlow<ResvRequestState> = _uiState
+    private val _uiState =  MutableStateFlow(ReservationState())
+    val uiState: StateFlow<ReservationState> = _uiState
 
-    private val _sideEffect = MutableSharedFlow<ResvRequestSideEffect>()
+    private val _sideEffect = MutableSharedFlow<ReservationSideEffect>()
     val sideEffect = _sideEffect.asSharedFlow()
 
-    private fun emitSideEffect(sideEffect: ResvRequestSideEffect) {
+    private fun emitSideEffect(sideEffect: ReservationSideEffect) {
         viewModelScope.launch {
             _sideEffect.emit(sideEffect)
         }
@@ -56,7 +56,7 @@ class ResvRequestViewModel @Inject constructor(
                 Log.i(TAG, "상품 조회 성공: Product Id: $productId")
             }.onFailure { e ->
                 Log.e(TAG, "상품 조회 실패", e)
-                emitSideEffect(ResvRequestSideEffect.CommonError(e))
+                emitSideEffect(ReservationSideEffect.CommonError(e))
             }
     }
 
@@ -67,7 +67,7 @@ class ResvRequestViewModel @Inject constructor(
                 Log.i(TAG, "예약 불가일 조회 성공: 불가일 ${it.disabledDates.size}개")
             }.onFailure { e ->
                 Log.e(TAG, "예약 불가일 조회 실패", e)
-                emitSideEffect(ResvRequestSideEffect.CommonError(e))
+                emitSideEffect(ReservationSideEffect.CommonError(e))
             }
     }
 
@@ -93,7 +93,7 @@ class ResvRequestViewModel @Inject constructor(
         val totalPrice = _uiState.value.totalPrice
 
         viewModelScope.launch {
-            postResvRequestUseCase(
+            postReservationUseCase(
                 productId = productId,
                 minPeriod = minPeriod,
                 maxPeriod = maxPeriod,
@@ -102,7 +102,7 @@ class ResvRequestViewModel @Inject constructor(
                 endDate = endDate
             ).onSuccess {
                 emitSideEffect(
-                    ResvRequestSideEffect.NavigateToResvRequestComplete(
+                    ReservationSideEffect.NavigateToReservationComplete(
                         rentalStartDate = startDate,
                         rentalEndDate = endDate,
                         totalPrice = totalPrice
@@ -125,10 +125,10 @@ class ResvRequestViewModel @Inject constructor(
                 _uiState.value = _uiState.value.copy(showResvAlreadyExistDialog = true)
             }
             is IllegalArgumentException -> {
-                emitSideEffect(ResvRequestSideEffect.ToastInvalidPeriod)
+                emitSideEffect(ReservationSideEffect.ToastInvalidPeriod)
             }
             else -> {
-                emitSideEffect(ResvRequestSideEffect.ToastPostResvFailed)
+                emitSideEffect(ReservationSideEffect.ToastPostReservationFailed)
             }
         }
     }

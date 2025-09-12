@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import java.time.YearMonth
+import java.time.DayOfWeek
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -42,12 +43,14 @@ fun CalendarHeader(yearMonth: YearMonth, leftChevronOnClick: () -> Unit, rightCh
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DayOfWeek(cellWidth: Dp) {
+    val dayOfWeek = DayOfWeek.entries.let { it.takeLast(1) + it.dropLast(1) }   // 일요일부터 시작하도록 순서 변경
+
     Row(modifier = Modifier
         .height(cellWidth)
         .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center) {
-        java.time.DayOfWeek.entries.forEach {
+        dayOfWeek.forEach {
             Text(modifier = Modifier.width(cellWidth), text = it.name.take(1), style = MaterialTheme.typography.bodyMedium, textAlign = TextAlign.Center)
         }
     }
