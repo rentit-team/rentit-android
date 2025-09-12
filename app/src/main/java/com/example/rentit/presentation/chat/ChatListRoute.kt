@@ -2,6 +2,8 @@ package com.example.rentit.presentation.chat
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,6 +17,7 @@ import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.presentation.main.MainViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListRoute(navHostController: NavHostController) {
@@ -24,6 +27,8 @@ fun ChatListRoute(navHostController: NavHostController) {
     val viewModel: ChatListViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(Unit) {
         viewModel.fetchChatRoomSummaries()
@@ -42,8 +47,11 @@ fun ChatListRoute(navHostController: NavHostController) {
 
     ChatListScreen(
         chatRoomSummaries = uiState.activeChatRoomSummaries,
-        isActiveChatRooms = uiState.isActiveChatRooms,
         scrollState = uiState.scrollState,
+        pullToRefreshState = pullToRefreshState,
+        isActiveChatRooms = uiState.isActiveChatRooms,
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = viewModel::refreshChatRoomSummaries,
         onToggleFilter = viewModel::onToggledFilter,
         onItemClick = { navHostController.navigateToChatRoom(it) }
     )

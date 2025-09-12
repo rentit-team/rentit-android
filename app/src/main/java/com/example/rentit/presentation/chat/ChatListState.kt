@@ -6,6 +6,7 @@ import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
 data class ChatListState(
     val chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
     val scrollState: LazyListState = LazyListState(),
+    val isRefreshing: Boolean = false,
     val isActiveChatRooms: Boolean = true,
     val isLoading: Boolean = false,
 ) {
