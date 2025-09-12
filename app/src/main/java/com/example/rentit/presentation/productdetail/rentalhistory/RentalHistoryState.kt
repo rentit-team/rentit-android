@@ -51,7 +51,11 @@ data class RentalHistoryState(
         get() {
             val rentalHistoryByDate = mutableMapOf<LocalDate, RentalHistoryDateModel>()
             filteredRentalHistoryList
-                .filter { it.rentalPeriod.startDate.isBefore(it.rentalPeriod.endDate) }
+                .filter {
+                    val start = it.rentalPeriod.startDate
+                    val end = it.rentalPeriod.endDate
+                    start != null && end != null && start.isBefore(end)
+                }
                 .reversed()
                 .forEach {
                     val startDate = it.rentalPeriod.startDate
