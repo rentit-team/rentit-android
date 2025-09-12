@@ -65,6 +65,7 @@ fun RentalHistoryScreen(
     onToggleFilter: (RentalHistoryFilter) -> Unit,
     onChangeMonth: (Long) -> Unit = {},
     onRentalDateClick: (Int) -> Unit = {},
+    onHistoryClick: (Int) -> Unit = {},
     onBackClick: () -> Unit,
 ) {
     Scaffold(
@@ -85,7 +86,7 @@ fun RentalHistoryScreen(
                 onToggleFilter = onToggleFilter
             )
 
-            RentalHistoryListSection(rentalHistoryList, historyListScrollState)
+            RentalHistoryListSection(rentalHistoryList, historyListScrollState, onHistoryClick)
         }
     }
 }
@@ -130,13 +131,64 @@ fun RentalHistoryFilterSection(
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun RoundedItemRow(content: @Composable RowScope.() -> Unit) {
+fun RentalHistoryListSection(
+    rentalHistoryList: List<RentalHistoryModel> = emptyList(),
+    lazyListState: LazyListState,
+    onHistoryClick: (Int) -> Unit = {}
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .screenHorizontalPadding(),
+        state = lazyListState,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        items(rentalHistoryList.size, key = { rentalHistoryList[it].reservationId }) {
+            val history = rentalHistoryList[it]
+            when (history.status) {
+                RentalStatus.RENTING -> {
+                    RentingListItem(
+                        nickName = history.renterNickName,
+                        rentalReturnDate = history.rentalPeriod.endDate,
+                        onClick = { onHistoryClick(history.reservationId) }
+                    )
+                }
+
+                RentalStatus.PAID -> {
+                    ReadyToShipListItem(
+                        nickName = history.renterNickName,
+                        rentalStartDate = history.rentalPeriod.startDate,
+                        onClick = { onHistoryClick(history.reservationId) }
+                    )
+                }
+
+                else -> {
+                    OtherStatusListItem(
+                        status = history.status,
+                        nickName = history.renterNickName,
+                        rentalStartDate = history.rentalPeriod.startDate,
+                        rentalEndDate = history.rentalPeriod.endDate,
+                        requestedAt = history.requestedAt,
+                        onClick = { onHistoryClick(history.reservationId) }
+                    )
+                }
+            }
+        }
+        item {
+            Spacer(modifier = Modifier.height(40.dp))
+        }
+    }
+}
+
+@Composable
+private fun RoundedItemRow(onClick: () -> Unit, content: @Composable RowScope.() -> Unit) {
     Row(
         modifier = Modifier
             .clip(RoundedCornerShape(25.dp))
             .background(Gray100)
-            .clickable { }
+            .clickable { onClick() }
             .padding(horizontal = 30.dp, vertical = 18.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         content = content
@@ -145,9 +197,9 @@ private fun RoundedItemRow(content: @Composable RowScope.() -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentingListItem(nickName: String = "", rentalReturnDate: LocalDate? = LocalDate.now()) {
+fun RentingListItem(nickName: String = "", rentalReturnDate: LocalDate? = LocalDate.now(), onClick: () -> Unit = {}) {
     val daysBeforeReturn = daysFromToday(rentalReturnDate)
-    RoundedItemRow {
+    RoundedItemRow(onClick) {
         Text(
             text = stringResource(RentalStatus.RENTING.strRes),
             style = MaterialTheme.typography.labelLarge,
@@ -174,10 +226,10 @@ fun RentingListItem(nickName: String = "", rentalReturnDate: LocalDate? = LocalD
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ReadyToShipListItem(nickName: String = "", rentalStartDate: LocalDate? = LocalDate.now()) {
+fun ReadyToShipListItem(nickName: String = "", rentalStartDate: LocalDate? = LocalDate.now(), onClick: () -> Unit = {}) {
     val daysBeforeRent = daysFromToday(rentalStartDate)
     val dDayTextColor = if (daysBeforeRent > D_DAY_ALERT_THRESHOLD_DAYS) AppBlack else AppRed
-    RoundedItemRow {
+    RoundedItemRow(onClick) {
         Text(
             text = stringResource(R.string.rental_status_paid_owner),
             style = MaterialTheme.typography.labelLarge,
@@ -211,9 +263,10 @@ fun OtherStatusListItem(
     nickName: String = "",
     rentalStartDate: LocalDate? = LocalDate.now(),
     rentalEndDate: LocalDate? = LocalDate.now(),
-    requestedAt: LocalDateTime? = LocalDateTime.now()
+    requestedAt: LocalDateTime? = LocalDateTime.now(),
+    onClick: () -> Unit = {}
 ) {
-    RoundedItemRow {
+    RoundedItemRow(onClick) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -241,53 +294,6 @@ fun OtherStatusListItem(
                 text = formatRentalPeriod(LocalContext.current, rentalStartDate, rentalEndDate),
                 style = MaterialTheme.typography.labelMedium,
             )
-        }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun RentalHistoryListSection(
-    rentalHistoryList: List<RentalHistoryModel> = emptyList(),
-    lazyListState: LazyListState
-) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .screenHorizontalPadding(),
-        state = lazyListState,
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        items(rentalHistoryList.size, key = { rentalHistoryList[it].reservationId }) {
-            val history = rentalHistoryList[it]
-            when (history.status) {
-                RentalStatus.RENTING -> {
-                    RentingListItem(
-                        nickName = history.renterNickName,
-                        rentalReturnDate = history.rentalPeriod.endDate
-                    )
-                }
-
-                RentalStatus.PAID -> {
-                    ReadyToShipListItem(
-                        nickName = history.renterNickName,
-                        rentalStartDate = history.rentalPeriod.startDate
-                    )
-                }
-
-                else -> {
-                    OtherStatusListItem(
-                        status = history.status,
-                        nickName = history.renterNickName,
-                        rentalStartDate = history.rentalPeriod.startDate,
-                        rentalEndDate = history.rentalPeriod.endDate,
-                        requestedAt = history.requestedAt
-                    )
-                }
-            }
-        }
-        item {
-            Spacer(modifier = Modifier.height(40.dp))
         }
     }
 }

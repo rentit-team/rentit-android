@@ -3,11 +3,15 @@ package com.example.rentit.presentation.productdetail.rentalhistory
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.rentit.domain.rental.usecase.GetRentalHistoriesUseCase
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import java.time.YearMonth
 import javax.inject.Inject
 
@@ -20,8 +24,17 @@ class RentalHistoryViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(RentalHistoryState())
     val uiState: StateFlow<RentalHistoryState> = _uiState
 
+    private val _sideEffect = MutableSharedFlow<RentalHistorySideEffect>()
+    val sideEffect: SharedFlow<RentalHistorySideEffect> = _sideEffect
+
     private fun updateUiState(transform: RentalHistoryState.() -> RentalHistoryState) {
         _uiState.value = _uiState.value.transform()
+    }
+
+    private fun emitSideEffect(effect: RentalHistorySideEffect) {
+        viewModelScope.launch {
+            _sideEffect.emit(effect)
+        }
     }
 
     private fun initCalendarMonth() {
@@ -58,6 +71,10 @@ class RentalHistoryViewModel @Inject constructor(
                 selectedReservationId = null
             )
         }
+    }
+
+    fun onHistoryClicked(reservationId: Int) {
+        emitSideEffect(RentalHistorySideEffect.NavigateToRentalDetail(reservationId))
     }
 
     suspend fun scrollToTop() {
