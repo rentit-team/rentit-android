@@ -68,7 +68,12 @@ fun RentalHistoryScreen(
     onBackClick: () -> Unit,
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = "대여 내역", onBackClick = onBackClick) }
+        topBar = {
+            CommonTopAppBar(
+                title = stringResource(R.string.screen_product_rental_history_title),
+                onBackClick = onBackClick
+            )
+        }
     ) {
         Column(
             modifier = Modifier.padding(it)
@@ -140,7 +145,7 @@ private fun RoundedItemRow(content: @Composable RowScope.() -> Unit) {
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentingListItem(nickName: String = "닉네임", rentalReturnDate: LocalDate = LocalDate.now()) {
+fun RentingListItem(nickName: String = "", rentalReturnDate: LocalDate? = LocalDate.now()) {
     val daysBeforeReturn = daysFromToday(rentalReturnDate)
     RoundedItemRow {
         Text(
@@ -155,11 +160,11 @@ fun RentingListItem(nickName: String = "닉네임", rentalReturnDate: LocalDate 
         Text(
             modifier = Modifier.weight(1f),
             text = buildAnnotatedString {
-                append("반납이 ")
+                append(stringResource(R.string.screen_product_rental_history_item_renting_info_1))
                 withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
-                    append("$daysBeforeReturn 일")
+                    append(" $daysBeforeReturn ${stringResource(R.string.common_day_unit)} ")
                 }
-                append(" 남았어요!")
+                append(stringResource(R.string.screen_product_rental_history_item_renting_info_2))
             },
             style = MaterialTheme.typography.labelMedium,
             textAlign = TextAlign.End
@@ -169,12 +174,12 @@ fun RentingListItem(nickName: String = "닉네임", rentalReturnDate: LocalDate 
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ReadyToShipListItem(nickName: String = "닉네임", rentalStartDate: LocalDate? = LocalDate.now()) {
+fun ReadyToShipListItem(nickName: String = "", rentalStartDate: LocalDate? = LocalDate.now()) {
     val daysBeforeRent = daysFromToday(rentalStartDate)
     val dDayTextColor = if (daysBeforeRent > D_DAY_ALERT_THRESHOLD_DAYS) AppBlack else AppRed
     RoundedItemRow {
         Text(
-            text = stringResource(RentalStatus.PAID.strRes),
+            text = stringResource(R.string.rental_status_paid_owner),
             style = MaterialTheme.typography.labelLarge,
             color = RentalStatus.PAID.color
         )
@@ -185,12 +190,12 @@ fun ReadyToShipListItem(nickName: String = "닉네임", rentalStartDate: LocalDa
         Text(
             modifier = Modifier.weight(1f),
             text = buildAnnotatedString {
-                append("대여 시작일까지 ")
+                append(stringResource(R.string.screen_product_rental_history_item_ready_to_ship_info))
                 withStyle(
                     style = MaterialTheme.typography.labelLarge.toSpanStyle()
                         .copy(color = dDayTextColor)
                 ) {
-                    append("D - $daysBeforeRent")
+                    append(" D - $daysBeforeRent")
                 }
             },
             style = MaterialTheme.typography.labelMedium,
@@ -203,10 +208,10 @@ fun ReadyToShipListItem(nickName: String = "닉네임", rentalStartDate: LocalDa
 @Composable
 fun OtherStatusListItem(
     status: RentalStatus = RentalStatus.RETURNED,
-    nickName: String = "닉네임",
-    rentalStartDate: LocalDate = LocalDate.now(),
-    rentalEndDate: LocalDate = LocalDate.now(),
-    createdAt: String = "2025-08-30T14:22:28"
+    nickName: String = "",
+    rentalStartDate: LocalDate? = LocalDate.now(),
+    rentalEndDate: LocalDate? = LocalDate.now(),
+    requestedAt: LocalDateTime? = LocalDateTime.now()
 ) {
     RoundedItemRow {
         Column(
@@ -226,7 +231,7 @@ fun OtherStatusListItem(
                 )
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = LocalDateTime.parse(createdAt).toRelativeTimeFormat(),
+                    text = requestedAt?.toRelativeTimeFormat() ?: "",
                     style = MaterialTheme.typography.labelMedium,
                     color = Gray400,
                     textAlign = TextAlign.End
@@ -276,7 +281,7 @@ fun RentalHistoryListSection(
                         nickName = history.renterNickName,
                         rentalStartDate = history.rentalPeriod.startDate,
                         rentalEndDate = history.rentalPeriod.endDate,
-                        createdAt = history.requestedAt
+                        requestedAt = history.requestedAt
                     )
                 }
             }

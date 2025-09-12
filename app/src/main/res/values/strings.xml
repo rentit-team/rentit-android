@@ -18,6 +18,7 @@
 
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_top_app_bar_menu_icon_description">메뉴</string>
+    <string name="common_day_unit">일</string>
     <string name="common_price_unit_per_day">원/일</string>
     <string name="common_price_unit">원</string>
     <string name="common_total">총</string>
@@ -169,6 +170,11 @@
     <string name="screen_request_confirm_btn_complete">완료</string>
 
     <!-- 상품 대여 내역 -->
+    <string name="screen_product_rental_history_title">대여 내역</string>
+    <string name="screen_product_rental_history_item_renting_info_1">반납이</string>
+    <string name="screen_product_rental_history_item_renting_info_2">남았어요</string>
+    <string name="screen_product_rental_history_item_ready_to_ship_info">대여 시작일까지</string>
+
     <string name="screen_product_rental_history_filter_in_progress">진행 중</string>
     <string name="screen_product_rental_history_filter_in_progress_content_description">거래 진행 중인 내역만 보기</string>
     <string name="screen_product_rental_history_filter_accepted">요청 수락</string>

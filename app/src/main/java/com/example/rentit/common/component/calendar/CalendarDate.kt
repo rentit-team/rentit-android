@@ -33,7 +33,6 @@ import com.example.rentit.common.theme.PrimaryBlue300
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
-import com.example.rentit.common.uimodel.RentalPeriodModel
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -47,7 +46,6 @@ fun CalendarDate(
     rentalStartDate: LocalDate? = null,
     rentalEndDate: LocalDate? = null,
     rentalPeriod: Int = 0,
-    requestPeriodList: List<RentalPeriodModel> = emptyList(),
     onDateClick: (LocalDate) -> Unit = {}
 ) {
     val daysInMonth = yearMonth.lengthOfMonth()
@@ -62,27 +60,6 @@ fun CalendarDate(
     disabledLocalDates.forEach {
         disabledDatesInMonth[it.dayOfMonth] =
             yearMonth.year == it.year && yearMonth.month == it.month
-    }
-
-    val requestStartDates = mutableListOf<LocalDate>()
-    val requestEndDates = mutableListOf<LocalDate>()
-    val requestDatesInPeriod = mutableListOf<LocalDate>()
-
-    for (period in requestPeriodList) {
-        if (period.startDate.isAfter(period.endDate)) {
-            continue
-        }
-        var currentDate = period.startDate
-        while (!currentDate.isAfter(period.endDate)) {
-            if(currentDate.isEqual(period.startDate)){
-                requestStartDates.add(currentDate)
-            } else if(currentDate.isEqual(period.endDate)){
-                requestEndDates.add(currentDate)
-            } else {
-                requestDatesInPeriod.add(currentDate)
-            }
-            currentDate = currentDate.plusDays(1) // 다음 날짜로 이동
-        }
     }
 
     Column(
@@ -111,11 +88,6 @@ fun CalendarDate(
                     var isEndDay = false
                     var isInSelectedPeriod = false
 
-                    // 요청 기간 표시
-                    var isRequestStartDay = false
-                    var isRequestEndDay = false
-                    var isRequestDateInPeriod = false
-
                     date?.let {
                         isToday = isTodayInMonth && LocalDate.now().dayOfMonth == date.dayOfMonth
                         isDisabled = disabledDatesInMonth[dayNumber]
@@ -127,29 +99,25 @@ fun CalendarDate(
                         isInSelectedPeriod = rentalPeriod > 0 && date.isAfter(rentalStartDate) && date.isBefore(
                                 rentalEndDate
                             )
-
-                        isRequestStartDay = date in requestStartDates
-                        isRequestEndDay = date in requestEndDates
-                        isRequestDateInPeriod = date in requestDatesInPeriod
                     }
 
                     Box(modifier = Modifier.padding(vertical = 4.dp)) {
                         Box(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .width(if (isStartDay || isEndDay || isRequestStartDay || isRequestEndDay) cellWidth.div(2) else cellWidth)
-                                .background(if ((rentalPeriod > 1 && (isStartDay || isEndDay || isInSelectedPeriod)) || isRequestStartDay || isRequestEndDay || isRequestDateInPeriod) PrimaryBlue300 else Color.Transparent)
-                                .align(if (isStartDay || isRequestStartDay) Alignment.CenterEnd else if (isEndDay || isRequestEndDay) Alignment.CenterStart else Alignment.Center)
+                                .width(if (isStartDay || isEndDay) cellWidth.div(2) else cellWidth)
+                                .background(if ((rentalPeriod > 1 && (isStartDay || isEndDay || isInSelectedPeriod))) PrimaryBlue300 else Color.Transparent)
+                                .align(if (isStartDay) Alignment.CenterEnd else if (isEndDay) Alignment.CenterStart else Alignment.Center)
                         )
                         Box(
                             modifier = Modifier
                                 .size(cellWidth)
                                 .padding(horizontal = 4.dp)
-                                .clip(if (isInSelectedPeriod || isRequestDateInPeriod) RectangleShape else CircleShape)
+                                .clip(if (isInSelectedPeriod) RectangleShape else CircleShape)
                                 .background(
                                     if (isDisabled && !isPastDate) SecondaryYellow
                                     else if (isStartDay || isEndDay) PrimaryBlue500
-                                    else if (isInSelectedPeriod || isRequestStartDay || isRequestEndDay || isRequestDateInPeriod) PrimaryBlue300
+                                    else if (isInSelectedPeriod) PrimaryBlue300
                                     else Color.Transparent
                                 )
                                 .then(

@@ -2,14 +2,19 @@ package com.example.rentit.presentation.productdetail.rentalhistory
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.lazy.LazyListState
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryDateModel
 import com.example.rentit.domain.rental.model.RentalHistoryModel
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import java.time.LocalDate
+import java.time.YearMonth
 
+@RequiresApi(Build.VERSION_CODES.O)
 data class RentalHistoryState(
     val isLoading: Boolean = false,
+    val calendarMonth: YearMonth = YearMonth.now(),
+    val historyListScrollState: LazyListState = LazyListState(),
     val selectedReservationId: Int? = null,
     val filterMode: RentalHistoryFilter = RentalHistoryFilter.IN_PROGRESS,
     val rentalHistoryList: List<RentalHistoryModel> = emptyList(),
@@ -47,7 +52,6 @@ data class RentalHistoryState(
         }
 
     val rentalHistoryByDateMap: Map<LocalDate, RentalHistoryDateModel>
-        @RequiresApi(Build.VERSION_CODES.O)
         get() {
             val rentalHistoryByDate = mutableMapOf<LocalDate, RentalHistoryDateModel>()
             filteredRentalHistoryList

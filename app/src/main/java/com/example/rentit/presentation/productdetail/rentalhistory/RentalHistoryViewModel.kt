@@ -8,8 +8,10 @@ import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalH
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.YearMonth
 import javax.inject.Inject
 
+@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalHistoryViewModel @Inject constructor(
     private val getRentalHistoriesUseCase: GetRentalHistoriesUseCase,
@@ -22,15 +24,31 @@ class RentalHistoryViewModel @Inject constructor(
         _uiState.value = _uiState.value.transform()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+    private fun initCalendarMonth() {
+        val list = _uiState.value.rentalHistoryList.firstOrNull()
+        val initMonth = list?.rentalPeriod?.startDate
+        initMonth?.let { updateUiState { copy(calendarMonth = YearMonth.from(it)) } }
+    }
+
     suspend fun getProductRequestList(productId: Int){
         getRentalHistoriesUseCase(productId)
             .onSuccess {
                 updateUiState { copy(rentalHistoryList = it) }
+                initCalendarMonth()
             }.onFailure {
 
             }
-        }*/
+    }
+
+    fun updateCalendarMonth(month: Long) {
+        updateUiState { copy(calendarMonth = calendarMonth.plusMonths(month)) }
+    }
+
+    fun updateSelectedRentalDate(reservationId: Int) {
+        val currentId = uiState.value.selectedReservationId
+        currentId?.let {
+            updateUiState { copy(selectedReservationId = null) }
+        } ?: updateUiState { copy(selectedReservationId = reservationId) }
     }
 
     fun updateFilterMode(filterMode: RentalHistoryFilter){
@@ -40,5 +58,9 @@ class RentalHistoryViewModel @Inject constructor(
                 selectedReservationId = null
             )
         }
+    }
+
+    suspend fun scrollToTop() {
+        _uiState.value.historyListScrollState.animateScrollToItem(0)
     }
 }
