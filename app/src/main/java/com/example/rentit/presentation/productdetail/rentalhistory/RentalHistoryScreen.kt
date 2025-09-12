@@ -20,10 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,9 +34,6 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.FilterButton
-import com.example.rentit.common.component.calendar.CalendarDate
-import com.example.rentit.common.component.calendar.CalendarHeader
-import com.example.rentit.common.component.calendar.DayOfWeek
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.AppBlack
@@ -49,9 +43,10 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.common.util.toRelativeTimeFormat
-import com.example.rentit.common.uimodel.RentalPeriodModel
 import com.example.rentit.common.util.daysFromToday
-import com.example.rentit.domain.rental.model.RentalHistoryListItemModel
+import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryDateModel
+import com.example.rentit.domain.rental.model.RentalHistoryModel
+import com.example.rentit.presentation.productdetail.rentalhistory.calendar.RentalHistoryCalendar
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -62,12 +57,14 @@ private const val D_DAY_ALERT_THRESHOLD_DAYS = 3
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryScreen(
-    rentalHistoryList: List<RentalHistoryListItemModel>,
+    rentalHistoryList: List<RentalHistoryModel>,
+    rentalHistoryByDateMap: Map<LocalDate, RentalHistoryDateModel>,
     filterMode: RentalHistoryFilter,
     calendarMonth: YearMonth,
     historyListScrollState: LazyListState,
     onToggleFilter: (RentalHistoryFilter) -> Unit,
     onChangeMonth: (Long) -> Unit = {},
+    onRentalDateClick: (Int) -> Unit = {},
     onBackClick: () -> Unit,
 ) {
     Scaffold(
@@ -76,7 +73,7 @@ fun RentalHistoryScreen(
         Column(
             modifier = Modifier.padding(it)
         ) {
-            RentalHistoryCalendar(rentalHistoryList.map { history -> history.rentalPeriod }, calendarMonth, onChangeMonth)
+            RentalHistoryCalendar(rentalHistoryByDateMap, calendarMonth, onChangeMonth, onRentalDateClick)
 
             RentalHistoryFilterSection(
                 filterMode = filterMode,
@@ -85,28 +82,6 @@ fun RentalHistoryScreen(
 
             RentalHistoryListSection(rentalHistoryList, historyListScrollState)
         }
-    }
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-fun RentalHistoryCalendar(
-    rentalPeriodList: List<RentalPeriodModel>,
-    calendarMonth: YearMonth,
-    onChangeMonth: (Long) -> Unit = {},
-) {
-    val cellWidth = 48.dp
-
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        CalendarHeader(calendarMonth, { onChangeMonth(-1) }, { onChangeMonth(1) })
-        DayOfWeek(cellWidth)
-        CalendarDate(
-            yearMonth = calendarMonth,
-            disabledDates = emptyList(),
-            cellWidth = cellWidth,
-            isPastDateDisabled = true,
-            requestPeriodList = rentalPeriodList
-        )
     }
 }
 
@@ -268,7 +243,7 @@ fun OtherStatusListItem(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryListSection(
-    rentalHistoryList: List<RentalHistoryListItemModel> = emptyList(),
+    rentalHistoryList: List<RentalHistoryModel> = emptyList(),
     lazyListState: LazyListState
 ) {
     LazyColumn(
@@ -283,14 +258,14 @@ fun RentalHistoryListSection(
             when (history.status) {
                 RentalStatus.RENTING -> {
                     RentingListItem(
-                        nickName = history.nickname,
+                        nickName = history.renterNickName,
                         rentalReturnDate = history.rentalPeriod.endDate
                     )
                 }
 
                 RentalStatus.PAID -> {
                     ReadyToShipListItem(
-                        nickName = history.nickname,
+                        nickName = history.renterNickName,
                         rentalStartDate = history.rentalPeriod.startDate
                     )
                 }
@@ -298,10 +273,10 @@ fun RentalHistoryListSection(
                 else -> {
                     OtherStatusListItem(
                         status = history.status,
-                        nickName = history.nickname,
+                        nickName = history.renterNickName,
                         rentalStartDate = history.rentalPeriod.startDate,
                         rentalEndDate = history.rentalPeriod.endDate,
-                        createdAt = history.createdAt
+                        createdAt = history.requestedAt
                     )
                 }
             }
@@ -320,6 +295,7 @@ private fun RentalHistoryScreenPreview() {
     RentItTheme {
         RentalHistoryScreen(
             rentalHistoryList = emptyList(),
+            rentalHistoryByDateMap = emptyMap(),
             filterMode = RentalHistoryFilter.ACCEPTED,
             calendarMonth = YearMonth.now(),
             historyListScrollState = remember { LazyListState() },

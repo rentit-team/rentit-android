@@ -28,17 +28,19 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
         viewModel.getProductRequestList(productId)
     }
 
-    LaunchedEffect(uiState.filterMode) {
+    LaunchedEffect(uiState.filterMode, uiState.selectedReservationId) {
         historyListScrollState.animateScrollToItem(0)
     }
 
     RentalHistoryScreen(
         rentalHistoryList = uiState.filteredRentalHistoryList,
+        rentalHistoryByDateMap = uiState.rentalHistoryByDateMap,
         filterMode = uiState.filterMode,
         calendarMonth = calendarMonth,
         historyListScrollState = historyListScrollState,
         onChangeMonth = { calendarMonth = calendarMonth.plusMonths(it) },
+        onRentalDateClick = viewModel::updateSelectedRentalDate,
+        onToggleFilter = viewModel::updateFilterMode,
         onBackClick = navHostController::popBackStack,
-        onToggleFilter = { viewModel.updateFilterMode(it) }
     )
 }

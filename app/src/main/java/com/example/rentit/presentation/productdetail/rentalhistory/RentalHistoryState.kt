@@ -1,17 +1,24 @@
 package com.example.rentit.presentation.productdetail.rentalhistory
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.domain.rental.model.RentalHistoryListItemModel
+import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryDateModel
+import com.example.rentit.domain.rental.model.RentalHistoryModel
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
+import java.time.LocalDate
 
 data class RentalHistoryState(
     val isLoading: Boolean = false,
+    val selectedReservationId: Int? = null,
     val filterMode: RentalHistoryFilter = RentalHistoryFilter.IN_PROGRESS,
-    val rentalHistoryList: List<RentalHistoryListItemModel> = emptyList(),
+    val rentalHistoryList: List<RentalHistoryModel> = emptyList(),
 ) {
-    val filteredRentalHistoryList: List<RentalHistoryListItemModel>
+    val filteredRentalHistoryList: List<RentalHistoryModel>
         get() {
-
+            selectedReservationId?.let { id ->
+                return rentalHistoryList.filter { it.reservationId == id }
+            }
             when (filterMode) {
                 RentalHistoryFilter.IN_PROGRESS -> {
                     val rentingList = rentalHistoryList.filter { it.status == RentalStatus.RENTING }
@@ -21,13 +28,13 @@ data class RentalHistoryState(
                             RentalStatus.ACCEPTED,
                             RentalStatus.PENDING
                         )
-                    }.sortedByDescending { it.createdAt }
+                    }.sortedByDescending { it.requestedAt }
                     return rentingList + readyToShipList + otherList
                 }
 
-                RentalHistoryFilter.ACCEPTED -> return rentalHistoryList.filter { it.status == RentalStatus.ACCEPTED }.sortedByDescending { it.createdAt }
+                RentalHistoryFilter.ACCEPTED -> return rentalHistoryList.filter { it.status == RentalStatus.ACCEPTED }.sortedByDescending { it.requestedAt }
 
-                RentalHistoryFilter.REQUEST -> return rentalHistoryList.filter { it.status == RentalStatus.PENDING }.sortedByDescending { it.createdAt }
+                RentalHistoryFilter.REQUEST -> return rentalHistoryList.filter { it.status == RentalStatus.PENDING }.sortedByDescending { it.requestedAt }
 
                 RentalHistoryFilter.FINISHED -> return rentalHistoryList.filter {
                     it.status in listOf(
@@ -35,7 +42,31 @@ data class RentalHistoryState(
                         RentalStatus.REJECTED,
                         RentalStatus.RETURNED
                     )
-                }.sortedByDescending { it.createdAt }
+                }.sortedByDescending { it.requestedAt }
             }
+        }
+
+    val rentalHistoryByDateMap: Map<LocalDate, RentalHistoryDateModel>
+        @RequiresApi(Build.VERSION_CODES.O)
+        get() {
+            val rentalHistoryByDate = mutableMapOf<LocalDate, RentalHistoryDateModel>()
+            filteredRentalHistoryList
+                .filter { it.rentalPeriod.startDate.isBefore(it.rentalPeriod.endDate) }
+                .reversed()
+                .forEach {
+                    val startDate = it.rentalPeriod.startDate
+                    val endDate = it.rentalPeriod.endDate
+
+                    generateSequence(startDate) { date ->
+                        val next = date.plusDays(1)
+                        if (next <= endDate) next else null
+                    }.forEach { date ->
+                        rentalHistoryByDate[date] = RentalHistoryDateModel(
+                            reservationId = it.reservationId,
+                            rentalStatus = it.status
+                        )
+                    }
+                }
+            return rentalHistoryByDate.toMap()
         }
 }
