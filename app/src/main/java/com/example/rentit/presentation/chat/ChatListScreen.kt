@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -32,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.basicListItemTopDivider
 import com.example.rentit.common.component.layout.EmptyContentScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.AutoMessageType
@@ -49,6 +49,7 @@ import java.time.OffsetDateTime
 @Composable
 fun ChatListScreen(
     chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
+    scrollState: LazyListState = LazyListState(),
     isActiveChatRooms: Boolean = true,
     onToggleFilter: (ChatListFilter) -> Unit = {},
     onItemClick: (String) -> Unit = {},
@@ -67,7 +68,7 @@ fun ChatListScreen(
 
         RentalHistoryFilterSection(isActiveChatRooms, onToggleFilter)
 
-        ChatListSection(isActiveChatRooms, chatRoomSummaries, onItemClick)
+        ChatListSection(isActiveChatRooms, chatRoomSummaries, scrollState, onItemClick)
     }
 }
 
@@ -104,7 +105,7 @@ fun RentalHistoryFilterSection(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<ChatRoomSummaryModel>, onItemClick: (String) -> Unit) {
+fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<ChatRoomSummaryModel>, scrollState: LazyListState, onItemClick: (String) -> Unit) {
     val emptyContentText = if(isActiveChatRooms) {
         stringResource(R.string.screen_chat_list_empty_active_chat_rooms)
     } else {
@@ -113,7 +114,8 @@ fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<C
     if(chatRoomSummaries.isEmpty()) return EmptyContentScreen(text = emptyContentText)
 
     LazyColumn (
-        modifier = Modifier.fillMaxSize().background(Gray100)
+        modifier = Modifier.fillMaxSize().background(Gray100),
+        state = scrollState
     ) {
         items(chatRoomSummaries) {
             ChatListItem(
