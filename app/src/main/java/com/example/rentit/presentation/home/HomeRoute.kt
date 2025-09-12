@@ -2,6 +2,8 @@ package com.example.rentit.presentation.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,6 +16,7 @@ import androidx.navigation.NavHostController
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.presentation.main.MainViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeRoute(navHostController: NavHostController) {
@@ -24,9 +27,11 @@ fun HomeRoute(navHostController: NavHostController) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by viewModel.uiState.collectAsState()
 
+    val pullRefreshState = rememberPullToRefreshState()
+
     LaunchedEffect(Unit) {
         viewModel.fetchHomeData()
-        mainViewModel?.setRetryAction(viewModel::fetchHomeData)
+        mainViewModel?.setRetryAction(viewModel::retryFetchHomeData)
     }
 
     LaunchedEffect(Unit) {
@@ -50,12 +55,12 @@ fun HomeRoute(navHostController: NavHostController) {
         parentIdToNameCategoryMap = uiState.parentIdToNameCategoryMap,
         filterParentCategoryId = uiState.filterParentCategoryId,
         onlyRentalAvailable = uiState.onlyRentalAvailable,
+        pullToRefreshState = pullRefreshState,
         isLoading = uiState.isLoading,
-        showNetworkErrorDialog = uiState.showNetworkErrorDialog,
-        showServerErrorDialog = uiState.showServerErrorDialog,
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = viewModel::refreshHomeData,
         onToggleRentalAvailableFilter = viewModel::toggleOnlyRentalAvailable,
         onSelectCategory = viewModel::filterByParentCategory,
         onProductClick = navHostController::navigateToProductDetail,
-        onRetry = viewModel::retryFetchProductList
     )
 }

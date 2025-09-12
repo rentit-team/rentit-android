@@ -33,13 +33,11 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun fetchHomeData() {
-        viewModelScope.launch {
-            setIsLoading(true)
-            fetchCategoryMap()
-            fetchProductList()
-            setIsLoading(false)
-        }
+    suspend fun fetchHomeData() {
+        setIsLoading(true)
+        fetchCategoryMap()
+        fetchProductList()
+        setIsLoading(false)
     }
 
     private suspend fun fetchCategoryMap() {
@@ -80,12 +78,21 @@ class HomeViewModel @Inject constructor(
         emitSideEffect(HomeSideEffect.ScrollToTop)
     }
 
-    fun retryFetchProductList(){
-        _uiState.value = _uiState.value.copy(showServerErrorDialog = false, showNetworkErrorDialog = false)
-        fetchHomeData()
-    }
-
     private fun setIsLoading(isLoading: Boolean) {
         _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    }
+
+    fun retryFetchHomeData() {
+        viewModelScope.launch {
+            fetchHomeData()
+        }
+    }
+
+    fun refreshHomeData() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isRefreshing = true)
+            fetchProductList()
+            _uiState.value = _uiState.value.copy(isRefreshing = false)
+        }
     }
 }

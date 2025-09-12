@@ -12,9 +12,8 @@ data class HomeState(
     val filterParentCategoryId: Int = -1,
     val scrollState: LazyListState = LazyListState(),
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val onlyRentalAvailable: Boolean = false,
-    val showServerErrorDialog: Boolean = false,
-    val showNetworkErrorDialog: Boolean = false,
 ) {
     val filteredProductList: List<ProductWithCategoryModel>
         get() = productList
