@@ -41,7 +41,10 @@ fun ChatListRoute(navHostController: NavHostController) {
     }
 
     ChatListScreen(
-        chatRoomSummaries = uiState.chatRoomSummaries,
+        chatRoomSummaries = uiState.activeChatRoomSummaries,
+        isActiveChatRooms = uiState.isActiveChatRooms,
+        scrollState = uiState.scrollState,
+        onToggleFilter = viewModel::onToggledFilter,
         onItemClick = { navHostController.navigateToChatRoom(it) }
     )
 

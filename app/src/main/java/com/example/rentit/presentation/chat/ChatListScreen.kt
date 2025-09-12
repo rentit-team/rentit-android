@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -29,21 +31,27 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.basicListItemTopDivider
+import com.example.rentit.common.component.layout.EmptyContentScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.toRelativeDayFormat
 import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
+import com.example.rentit.presentation.chat.model.ChatListFilter
 import java.time.OffsetDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListScreen(
     chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
+    scrollState: LazyListState = LazyListState(),
+    isActiveChatRooms: Boolean = true,
+    onToggleFilter: (ChatListFilter) -> Unit = {},
     onItemClick: (String) -> Unit = {},
 ) {
     Column(Modifier
@@ -56,16 +64,59 @@ fun ChatListScreen(
             text = stringResource(id = R.string.title_activity_chat_tab)
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(22.dp))
 
-        ChatListSection(chatRoomSummaries, onItemClick)
+        RentalHistoryFilterSection(isActiveChatRooms, onToggleFilter)
+
+        ChatListSection(isActiveChatRooms, chatRoomSummaries, scrollState, onItemClick)
     }
 }
 
+@Composable
+fun RentalHistoryFilterSection(
+    isActiveChatRooms: Boolean = true,
+    onToggleFilter: (ChatListFilter) -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .screenHorizontalPadding()
+            .padding(bottom = 13.dp),
+        horizontalArrangement = Arrangement.End,
+    ) {
+        FilterButton(
+            title = stringResource(R.string.screen_chat_list_filter_active_chat_room),
+            contentDesc = stringResource(R.string.screen_chat_list_filter_active_chat_room_content_description),
+            isSelected = isActiveChatRooms,
+            onClick = { onToggleFilter(ChatListFilter.ACTIVE) }
+        )
+
+        Spacer(Modifier.width(10.dp))
+
+        FilterButton(
+            title = stringResource(R.string.screen_chat_list_filter_empty_chat_room),
+            contentDesc = stringResource(R.string.screen_chat_list_filter_empty_chat_room_content_description),
+            isSelected = !isActiveChatRooms,
+            onClick = { onToggleFilter(ChatListFilter.EMPTY) }
+        )
+    }
+}
+
+
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListSection(chatRoomSummaries: List<ChatRoomSummaryModel>, onItemClick: (String) -> Unit) {
-    LazyColumn {
+fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<ChatRoomSummaryModel>, scrollState: LazyListState, onItemClick: (String) -> Unit) {
+    val emptyContentText = if(isActiveChatRooms) {
+        stringResource(R.string.screen_chat_list_empty_active_chat_rooms)
+    } else {
+        stringResource(R.string.screen_chat_list_empty_empty_chat_rooms)
+    }
+    if(chatRoomSummaries.isEmpty()) return EmptyContentScreen(text = emptyContentText)
+
+    LazyColumn (
+        modifier = Modifier.fillMaxSize().background(Gray100),
+        state = scrollState
+    ) {
         items(chatRoomSummaries) {
             ChatListItem(
                 lastMessageTime = it.lastMessageTime,
@@ -103,7 +154,6 @@ fun ChatListItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .basicListItemTopDivider()
             .clickable(onClick = onClick)
     ){
         Row(
@@ -141,11 +191,17 @@ fun ChatListItem(
                 }
                 Text(
                     modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     text = productTitle,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
+                    modifier = Modifier.fillMaxWidth(),
                     text = lastMsg,
                     style = MaterialTheme.typography.labelMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = msgColor
                 )
             }

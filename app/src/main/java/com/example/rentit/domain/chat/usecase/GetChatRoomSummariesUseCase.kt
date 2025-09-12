@@ -33,7 +33,7 @@ class GetChatRoomSummariesUseCase @Inject constructor(
                     lastMessage = it.lastMessage,
                     lastMessageTime = parsedLastMessageTime
                 )
-            }
+            }.sortedByDescending { it.lastMessageTime }
         }
     }
 }

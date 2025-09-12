@@ -17,7 +17,7 @@ data class ChatRoomSummaryDto(
     @SerializedName("chatroomId")
     val chatRoomId: String,
 
-    @SerializedName("thumbnailImgUrl")
+    @SerializedName("productThumbnailImgUrl")
     val thumbnailImgUrl: String? = null,
 
     @SerializedName("productTitle")
