@@ -46,6 +46,7 @@ import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.component.item.ProductListItem
+import com.example.rentit.common.component.layout.EmptyContentScreen
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
@@ -321,7 +322,16 @@ fun TabbedListSection(
             }
         }
     } else {
-        EmptyListPlaceHolder(isFirstTabSelected)
+        val text =
+            if(isFirstTabSelected) {
+                stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
+            } else {
+                stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
+            }
+        EmptyContentScreen(
+            modifier = Modifier.background(Gray100),
+            text = text
+        )
     }
 }
 
@@ -345,37 +355,6 @@ fun TabTitle(modifier: Modifier, title: String, isTabSelected: Boolean, onClick:
                     .background(PrimaryBlue500)
             )
         }
-    }
-}
-
-@Composable
-fun EmptyListPlaceHolder(isFirstTabSelected: Boolean = false) {
-    val text =
-        if(isFirstTabSelected) {
-            stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
-        } else {
-            stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
-        }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Gray100),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.weight(0.8f))
-        Image(
-            modifier = Modifier.fillMaxWidth(0.4f),
-            painter = painterResource(id = R.drawable.img_empty_box),
-            contentDescription = stringResource(id = R.string.content_description_for_img_empty_box)
-        )
-        Text(
-            modifier = Modifier.padding(top = 14.dp),
-            text = text,
-            style = MaterialTheme.typography.bodyMedium,
-            color = Gray400
-        )
-        Spacer(modifier = Modifier.weight(2f))
     }
 }
 

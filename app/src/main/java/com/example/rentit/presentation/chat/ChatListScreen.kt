@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,21 +30,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicListItemTopDivider
+import com.example.rentit.common.component.layout.EmptyContentScreen
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.toRelativeDayFormat
 import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
 import com.example.rentit.presentation.chat.model.ChatListFilter
-import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryListSection
-import com.example.rentit.presentation.productdetail.rentalhistory.calendar.RentalHistoryCalendar
-import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import java.time.OffsetDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -66,11 +63,11 @@ fun ChatListScreen(
             text = stringResource(id = R.string.title_activity_chat_tab)
         )
 
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(22.dp))
 
         RentalHistoryFilterSection(isActiveChatRooms, onToggleFilter)
 
-        ChatListSection(chatRoomSummaries, onItemClick)
+        ChatListSection(isActiveChatRooms, chatRoomSummaries, onItemClick)
     }
 }
 
@@ -107,8 +104,17 @@ fun RentalHistoryFilterSection(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ChatListSection(chatRoomSummaries: List<ChatRoomSummaryModel>, onItemClick: (String) -> Unit) {
-    LazyColumn {
+fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<ChatRoomSummaryModel>, onItemClick: (String) -> Unit) {
+    val emptyContentText = if(isActiveChatRooms) {
+        stringResource(R.string.screen_chat_list_empty_active_chat_rooms)
+    } else {
+        stringResource(R.string.screen_chat_list_empty_empty_chat_rooms)
+    }
+    if(chatRoomSummaries.isEmpty()) return EmptyContentScreen(text = emptyContentText)
+
+    LazyColumn (
+        modifier = Modifier.fillMaxSize().background(Gray100)
+    ) {
         items(chatRoomSummaries) {
             ChatListItem(
                 lastMessageTime = it.lastMessageTime,
@@ -146,7 +152,6 @@ fun ChatListItem(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .basicListItemTopDivider()
             .clickable(onClick = onClick)
     ){
         Row(
@@ -184,11 +189,17 @@ fun ChatListItem(
                 }
                 Text(
                     modifier = Modifier.padding(top = 4.dp, bottom = 12.dp),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     text = productTitle,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
+                    modifier = Modifier.fillMaxWidth(),
                     text = lastMsg,
                     style = MaterialTheme.typography.labelMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     color = msgColor
                 )
             }
