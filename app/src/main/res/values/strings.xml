@@ -136,7 +136,7 @@
     <string name="screen_product_like_icon_description">상품 좋아요</string>
     <string name="screen_product_share_icon_description">상품 공유하기</string>
     <string name="screen_product_btn_check_detail_of_use">예약 가능일 확인</string>
-    <string name="screen_product_btn_request">요청 %d건</string>
+    <string name="screen_product_btn_request">진행 중 %d건</string>
     <string name="screen_product_btn_chatting">채팅하기</string>
     <string name="screen_product_btn_reserve">예약하기</string>
 

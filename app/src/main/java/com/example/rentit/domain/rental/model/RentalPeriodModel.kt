@@ -1,4 +1,4 @@
-package com.example.rentit.common.uimodel
+package com.example.rentit.domain.rental.model
 
 import java.time.LocalDate
 

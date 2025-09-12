@@ -2,7 +2,7 @@ package com.example.rentit.data.rental.mapper
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.rentit.common.uimodel.RentalPeriodModel
+import com.example.rentit.domain.rental.model.RentalPeriodModel
 import com.example.rentit.common.util.parseLocalDateOrNull
 import com.example.rentit.common.util.parseLocalDateTimeOrNull
 import com.example.rentit.data.rental.dto.RentalHistoryDto

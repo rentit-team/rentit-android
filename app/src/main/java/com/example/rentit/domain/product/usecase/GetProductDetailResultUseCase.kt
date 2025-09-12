@@ -36,7 +36,13 @@ class GetProductDetailResultUseCase @Inject constructor(
 
             val requestCount = if (isUserOwner) {
                 rentalRepository.getRentalHistoriesByProduct(productId)
-                    .getOrThrow().reservations.filter { it.status == RentalStatus.PENDING }.size
+                    .getOrThrow().reservations.filter {
+                        it.status !in listOf(
+                            RentalStatus.CANCELED,
+                            RentalStatus.REJECTED,
+                            RentalStatus.RETURNED
+                        )
+                    }.size
             } else null
 
             ProductDetailResultModel(productDetailModel, isUserOwner, requestCount)
