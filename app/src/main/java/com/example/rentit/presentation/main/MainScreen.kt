@@ -2,6 +2,10 @@ package com.example.rentit.presentation.main
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -43,7 +47,7 @@ fun MainScreen(
     onCreatePostClick: () -> Unit = {}
 ) {
     Scaffold(
-        bottomBar = { if (showBottomBar) MainBottomBar(currentRoute, onBottomItemClick) },
+        bottomBar = { MainBottomBar(showBottomBar, currentRoute, onBottomItemClick) },
         floatingActionButton = { if (showCreatePostBtn) CreatePostFloatingButton(onCreatePostClick) }
     ) {
         MainNavHost(navHostController, it)
@@ -51,27 +55,32 @@ fun MainScreen(
 }
 
 @Composable
-fun MainBottomBar(currentRoute: String?, onBottomItemClick: (String) -> Unit) {
-    NavigationBar(modifier = Modifier.fillMaxHeight(0.1f), containerColor = Color.White) {
-        BottomNavItem.entries.forEach { item ->
-            NavigationBarItem(
-                modifier = Modifier.fillMaxHeight(),
-                icon = {
-                    Icon(
-                        painter = painterResource(item.iconFor(currentRoute)),
-                        contentDescription = stringResource(item.title),
-                        modifier = Modifier.size(28.dp)
-                    )
-                },
-                colors = NavigationBarItemDefaults.colors(
-                    unselectedIconColor = Gray400,
-                    selectedIconColor = PrimaryBlue500,
-                    indicatorColor = White
-                ),
-                selected = item.isSelected(currentRoute),
-                alwaysShowLabel = false,
-                onClick = { onBottomItemClick(item.screenRoute) },
-            )
+fun MainBottomBar(showBottomBar: Boolean, currentRoute: String?, onBottomItemClick: (String) -> Unit) {
+    AnimatedVisibility(
+        visible = showBottomBar,
+        enter = slideInVertically { it },
+    ) {
+        NavigationBar(modifier = Modifier.fillMaxHeight(0.1f), containerColor = Color.White) {
+            BottomNavItem.entries.forEach { item ->
+                NavigationBarItem(
+                    modifier = Modifier.fillMaxHeight(),
+                    icon = {
+                        Icon(
+                            painter = painterResource(item.iconFor(currentRoute)),
+                            contentDescription = stringResource(item.title),
+                            modifier = Modifier.size(28.dp)
+                        )
+                    },
+                    colors = NavigationBarItemDefaults.colors(
+                        unselectedIconColor = Gray400,
+                        selectedIconColor = PrimaryBlue500,
+                        indicatorColor = White
+                    ),
+                    selected = item.isSelected(currentRoute),
+                    alwaysShowLabel = false,
+                    onClick = { onBottomItemClick(item.screenRoute) },
+                )
+            }
         }
     }
 }
