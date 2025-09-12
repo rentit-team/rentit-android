@@ -18,6 +18,7 @@ data class RentalHistoryState(
     val selectedReservationId: Int? = null,
     val filterMode: RentalHistoryFilter = RentalHistoryFilter.IN_PROGRESS,
     val rentalHistoryList: List<RentalHistoryModel> = emptyList(),
+    val showAccessForbiddenDialog: Boolean = false
 ) {
     val filteredRentalHistoryList: List<RentalHistoryModel>
         get() {

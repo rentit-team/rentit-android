@@ -1,9 +1,11 @@
 package com.example.rentit.presentation.productdetail.rentalhistory
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.core.error.ForbiddenException
 import com.example.rentit.domain.rental.usecase.GetRentalHistoriesUseCase
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +16,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.time.YearMonth
 import javax.inject.Inject
+
+private const val TAG = "RentalHistoryViewModel"
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
@@ -37,20 +41,32 @@ class RentalHistoryViewModel @Inject constructor(
         }
     }
 
+    private fun setIsLoading(isLoading: Boolean) {
+        updateUiState { copy(isLoading = isLoading) }
+    }
+
     private fun initCalendarMonth() {
         val list = _uiState.value.rentalHistoryList.firstOrNull()
         val initMonth = list?.rentalPeriod?.startDate
         initMonth?.let { updateUiState { copy(calendarMonth = YearMonth.from(it)) } }
     }
 
-    suspend fun getProductRequestList(productId: Int){
+    suspend fun loadProductRentalHistories(productId: Int){
+        setIsLoading(true)
         getRentalHistoriesUseCase(productId)
             .onSuccess {
                 updateUiState { copy(rentalHistoryList = it) }
                 initCalendarMonth()
-            }.onFailure {
-
+                Log.i(TAG, "상품 대여 내역 조회 성공: 총 ${it.size}개")
+            }.onFailure { e ->
+                Log.e(TAG, "상품 대여 내역 조회 실패", e)
+                if(e is ForbiddenException) {
+                    updateUiState { copy(showAccessForbiddenDialog = true) }
+                } else {
+                    emitSideEffect(RentalHistorySideEffect.CommonError(e))
+                }
             }
+        setIsLoading(false)
     }
 
     fun updateCalendarMonth(month: Long) {
@@ -79,5 +95,11 @@ class RentalHistoryViewModel @Inject constructor(
 
     suspend fun scrollToTop() {
         _uiState.value.historyListScrollState.animateScrollToItem(0)
+    }
+
+    fun retryLoadHistories(productId: Int) {
+        viewModelScope.launch {
+            loadProductRentalHistories(productId)
+        }
     }
 }
