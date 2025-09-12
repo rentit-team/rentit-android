@@ -2,7 +2,6 @@ package com.example.rentit.presentation.home
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -25,8 +24,6 @@ fun HomeRoute(navHostController: NavHostController) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
     val uiState by viewModel.uiState.collectAsState()
 
-    val scrollState = rememberLazyListState()
-
     LaunchedEffect(Unit) {
         viewModel.fetchHomeData()
         mainViewModel?.setRetryAction(viewModel::fetchHomeData)
@@ -35,19 +32,20 @@ fun HomeRoute(navHostController: NavHostController) {
     LaunchedEffect(Unit) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect {
-                if(it is HomeSideEffect.CommonError) {
-                    mainViewModel?.handleError(it.throwable)
+                when(it) {
+                    HomeSideEffect.ScrollToTop -> {
+                        uiState.scrollState.animateScrollToItem(0)
+                    }
+                    is HomeSideEffect.CommonError -> {
+                        mainViewModel?.handleError(it.throwable)
+                    }
                 }
             }
         }
     }
 
-    LaunchedEffect(uiState.filterParentCategoryId) {
-        scrollState.scrollToItem(0)
-    }
-
     HomeScreen(
-        scrollState = scrollState,
+        scrollState = uiState.scrollState,
         sortedProducts = uiState.filteredProductList,
         parentIdToNameCategoryMap = uiState.parentIdToNameCategoryMap,
         filterParentCategoryId = uiState.filterParentCategoryId,

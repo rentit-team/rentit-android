@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.home
 
+import androidx.compose.foundation.lazy.LazyListState
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.domain.product.model.CategoryModel
 import com.example.rentit.domain.product.model.ProductWithCategoryModel
@@ -9,6 +10,7 @@ data class HomeState(
     val categoryMap: Map<Int, CategoryModel> = emptyMap(),
     val parentIdToNameCategoryMap: Map<Int, String> = emptyMap(),
     val filterParentCategoryId: Int = -1,
+    val scrollState: LazyListState = LazyListState(),
     val isLoading: Boolean = false,
     val onlyRentalAvailable: Boolean = false,
     val showServerErrorDialog: Boolean = false,

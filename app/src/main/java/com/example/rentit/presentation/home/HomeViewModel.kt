@@ -77,6 +77,7 @@ class HomeViewModel @Inject constructor(
 
     fun filterByParentCategory(parentCategoryId: Int) {
         _uiState.value = _uiState.value.copy(filterParentCategoryId = parentCategoryId)
+        emitSideEffect(HomeSideEffect.ScrollToTop)
     }
 
     fun retryFetchProductList(){
