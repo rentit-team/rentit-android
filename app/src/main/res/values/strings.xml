@@ -212,6 +212,10 @@
     <string name="toast_post_server_error">게시물 생성 중 문제가 발생했어요. 잠시 후 다시 시도해주세요.</string>
 
     <!-- 채팅 리스트 -->
+    <string name="screen_chat_list_filter_active_chat_room">채팅 중</string>
+    <string name="screen_chat_list_filter_active_chat_room_content_description">채팅 중인 채팅방만 보기</string>
+    <string name="screen_chat_list_filter_empty_chat_room">빈 채팅방</string>
+    <string name="screen_chat_list_filter_empty_chat_room_content_description">빈 채팅방만 보기</string>
     <string name="screen_chat_list_time_minutes_ago">%d분 전</string>
     <string name="screen_chat_list_time_hours_ago">%d시간 전</string>
     <string name="screen_chat_list_time_days_ago">%d일 전</string>

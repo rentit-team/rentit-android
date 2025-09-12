@@ -14,10 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -29,6 +31,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicListItemTopDivider
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -38,12 +42,18 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.toRelativeDayFormat
 import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
+import com.example.rentit.presentation.chat.model.ChatListFilter
+import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryListSection
+import com.example.rentit.presentation.productdetail.rentalhistory.calendar.RentalHistoryCalendar
+import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import java.time.OffsetDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListScreen(
     chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
+    isActiveChatRooms: Boolean = true,
+    onToggleFilter: (ChatListFilter) -> Unit = {},
     onItemClick: (String) -> Unit = {},
 ) {
     Column(Modifier
@@ -58,9 +68,42 @@ fun ChatListScreen(
 
         Spacer(Modifier.height(20.dp))
 
+        RentalHistoryFilterSection(isActiveChatRooms, onToggleFilter)
+
         ChatListSection(chatRoomSummaries, onItemClick)
     }
 }
+
+@Composable
+fun RentalHistoryFilterSection(
+    isActiveChatRooms: Boolean = true,
+    onToggleFilter: (ChatListFilter) -> Unit = {},
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .screenHorizontalPadding()
+            .padding(bottom = 13.dp),
+        horizontalArrangement = Arrangement.End,
+    ) {
+        FilterButton(
+            title = stringResource(R.string.screen_chat_list_filter_active_chat_room),
+            contentDesc = stringResource(R.string.screen_chat_list_filter_active_chat_room_content_description),
+            isSelected = isActiveChatRooms,
+            onClick = { onToggleFilter(ChatListFilter.ACTIVE) }
+        )
+
+        Spacer(Modifier.width(10.dp))
+
+        FilterButton(
+            title = stringResource(R.string.screen_chat_list_filter_empty_chat_room),
+            contentDesc = stringResource(R.string.screen_chat_list_filter_empty_chat_room_content_description),
+            isSelected = !isActiveChatRooms,
+            onClick = { onToggleFilter(ChatListFilter.EMPTY) }
+        )
+    }
+}
+
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
