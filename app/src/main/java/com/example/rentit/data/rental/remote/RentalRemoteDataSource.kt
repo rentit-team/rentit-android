@@ -1,6 +1,7 @@
 package com.example.rentit.data.rental.remote
 
 import com.example.rentit.common.enums.PhotoRegistrationType
+import com.example.rentit.data.rental.dto.RentalHistoriesResponseDto
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
@@ -16,14 +17,15 @@ class RentalRemoteDataSource @Inject constructor(
     private val rentalApiService: RentalApiService,
     private val photoApiService: PhotoUploadApiService,
 ) {
+    suspend fun getProductRequestList(productId: Int): Response<RentalHistoriesResponseDto> {
+        return rentalApiService.getRentalHistoriesByProduct(productId)
+    }
     suspend fun getRentalDetail(productId: Int, reservationId: Int): Response<RentalDetailResponseDto> {
         return rentalApiService.getRentalDetail(productId, reservationId)
     }
-
     suspend fun postTrackingRegistration(productId: Int, reservationId: Int, body: TrackingRegistrationRequestDto): Response<TrackingRegistrationResponseDto> {
         return rentalApiService.postTrackingRegistration(productId, reservationId, body)
     }
-
     suspend fun getCourierNames(): Response<CourierNamesResponseDto> {
         return rentalApiService.getCourierNames()
     }

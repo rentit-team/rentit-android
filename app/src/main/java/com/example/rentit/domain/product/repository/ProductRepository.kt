@@ -8,7 +8,6 @@ import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
-import com.example.rentit.data.product.dto.RequestHistoryResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
@@ -24,8 +23,6 @@ interface ProductRepository {
     suspend fun getCategories(): Result<CategoryListResponseDto>
 
     suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto>
-
-    suspend fun getProductRequestList(productId: Int): Result<RequestHistoryResponseDto>
 
     suspend fun getChatAccessibility(productId: Int): Result<ChatAccessibilityResponseDto>
 }

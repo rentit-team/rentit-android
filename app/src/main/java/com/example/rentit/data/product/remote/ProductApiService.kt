@@ -8,7 +8,6 @@ import com.example.rentit.data.product.dto.CreatePostResponseDto
 import com.example.rentit.data.product.dto.ProductDetailResponseDto
 import com.example.rentit.data.product.dto.ProductReservedDatesResponseDto
 import com.example.rentit.data.product.dto.ProductListResponseDto
-import com.example.rentit.data.product.dto.RequestHistoryResponseDto
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Response
@@ -47,10 +46,6 @@ interface ProductApiService {
         @Part("payload") payload: RequestBody,
         @Part thumbnailImg: MultipartBody.Part?
     ): Response<CreatePostResponseDto>
-
-    @GET("api/v1/products/{productId}/reservations")
-    @Headers("Content-Type: application/json")
-    suspend fun getProductRequestList(@Path("productId") productId: Int): Response<RequestHistoryResponseDto>
 
     @GET("api/v1/products/{productId}/reservations/chat-access")
     @Headers("Content-Type: application/json")
