@@ -7,10 +7,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun MyProductsRentalRoute() {
+fun MyProductsRentalRoute(navHostController: NavHostController) {
     val viewModel: MyProductsRentalViewModel = hiltViewModel()
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -26,6 +27,6 @@ fun MyProductsRentalRoute() {
         upcomingShipmentCount = uiState.upcomingShipmentCount,
         showNoticeBanner = uiState.showNoticeBanner,
         onFilterChange = viewModel::onFilterChanged,
-        onBackClick = {},
+        onBackClick = navHostController::popBackStack,
     )
 }

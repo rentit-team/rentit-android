@@ -190,7 +190,7 @@ fun ProfileSection(
 fun RowScope.CountBox(label: String, count: Int, clickable: Boolean = false, onClick: () -> Unit = {}) {
     Column(modifier = Modifier
         .weight(1f)
-        .clip(RoundedCornerShape(10.dp))
+        .clip(RoundedCornerShape(4.dp))
         .clickable(clickable) { onClick() }) {
         Text(
             modifier = Modifier.padding(bottom = 2.dp),

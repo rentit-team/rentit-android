@@ -15,6 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.navigation.myproductsrental.navigateToMyProductsRental
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.navigation.setting.navigateToSetting
@@ -47,6 +48,9 @@ fun MyPageRoute(navHostController: NavHostController) {
                     is MyPageSideEffect.NavigateToRentalDetail -> {
                         navHostController.navigateToRentalDetail(it.productId, it.reservationId)
                     }
+                    is MyPageSideEffect.NavigateToMyProductsRental -> {
+                        navHostController.navigateToMyProductsRental()
+                    }
                     MyPageSideEffect.NavigateToSetting -> {
                         navHostController.navigateToSetting()
                     }
@@ -77,7 +81,7 @@ fun MyPageRoute(navHostController: NavHostController) {
         onProductItemClick = viewModel::onProductItemClicked,
         onRentalItemClick = viewModel::onRentalItemClicked,
         onSettingClick = viewModel::onSettingClicked,
-        onMyPendingRentalClick = viewModel::showComingSoonMessage // TODO: 승인/발송 대기 리스트 화면 구현 후 Navigation 연결
+        onMyPendingRentalClick = viewModel::onPendingRentalClicked, // TODO: 승인/발송 대기 리스트 화면 구현 후 Navigation 연결
     )
 
     LoadingScreen(uiState.isLoading)
