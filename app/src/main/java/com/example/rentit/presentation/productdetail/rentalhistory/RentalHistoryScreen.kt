@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.D_DAY_ALERT_THRESHOLD_DAYS
+import com.example.rentit.common.component.ArrowedTextButton
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -61,10 +62,12 @@ fun RentalHistoryScreen(
     filterMode: RentalHistoryFilter,
     calendarMonth: YearMonth,
     historyListScrollState: LazyListState,
+    isListItemExpanded: Boolean,
     onToggleFilter: (RentalHistoryFilter) -> Unit,
     onChangeMonth: (Long) -> Unit = {},
     onRentalDateClick: (Int) -> Unit = {},
     onHistoryClick: (Int) -> Unit = {},
+    onRentalDetailClick: (Int) -> Unit = {},
     onBackClick: () -> Unit,
 ) {
     Scaffold(
@@ -85,7 +88,13 @@ fun RentalHistoryScreen(
                 onToggleFilter = onToggleFilter
             )
 
-            RentalHistoryListSection(rentalHistoryList, historyListScrollState, onHistoryClick)
+            RentalHistoryListSection(
+                rentalHistoryList,
+                historyListScrollState,
+                isListItemExpanded,
+                onHistoryClick,
+                onRentalDetailClick
+            )
         }
     }
 }
@@ -135,7 +144,9 @@ fun RentalHistoryFilterSection(
 fun RentalHistoryListSection(
     rentalHistoryList: List<RentalHistoryModel> = emptyList(),
     lazyListState: LazyListState,
-    onHistoryClick: (Int) -> Unit = {}
+    isListItemExpanded: Boolean,
+    onHistoryClick: (Int) -> Unit = {},
+    onRentalDetailClick: (Int) -> Unit = {}
 ) {
     LazyColumn(
         modifier = Modifier
@@ -149,28 +160,34 @@ fun RentalHistoryListSection(
             when (history.status) {
                 RentalStatus.RENTING -> {
                     RentingListItem(
+                        isExpanded = isListItemExpanded,
                         nickName = history.renterNickName,
                         rentalReturnDate = history.rentalPeriod.endDate,
-                        onClick = { onHistoryClick(history.reservationId) }
+                        onClick = { onHistoryClick(history.reservationId) },
+                        onRentalDetailClick = { onRentalDetailClick(history.reservationId) }
                     )
                 }
 
                 RentalStatus.PAID -> {
                     ReadyToShipListItem(
+                        isExpanded = isListItemExpanded,
                         nickName = history.renterNickName,
                         rentalStartDate = history.rentalPeriod.startDate,
-                        onClick = { onHistoryClick(history.reservationId) }
+                        onClick = { onHistoryClick(history.reservationId) },
+                        onRentalDetailClick = { onRentalDetailClick(history.reservationId) }
                     )
                 }
 
                 else -> {
                     OtherStatusListItem(
+                        isExpanded = isListItemExpanded,
                         status = history.status,
                         nickName = history.renterNickName,
                         rentalStartDate = history.rentalPeriod.startDate,
                         rentalEndDate = history.rentalPeriod.endDate,
                         requestedAt = history.requestedAt,
-                        onClick = { onHistoryClick(history.reservationId) }
+                        onClick = { onHistoryClick(history.reservationId) },
+                        onRentalDetailClick = { onRentalDetailClick(history.reservationId) }
                     )
                 }
             }
@@ -182,23 +199,40 @@ fun RentalHistoryListSection(
 }
 
 @Composable
-private fun RoundedItemRow(onClick: () -> Unit, content: @Composable RowScope.() -> Unit) {
-    Row(
+private fun ExpandableRoundedItem(isExpanded: Boolean = false, onRentalDetailClick: () -> Unit = {}, onClick: () -> Unit, content: @Composable RowScope.() -> Unit) {
+    Column(
         modifier = Modifier
             .clip(RoundedCornerShape(25.dp))
             .background(Gray100)
             .clickable { onClick() }
             .padding(horizontal = 30.dp, vertical = 18.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        content = content
-    )
+        verticalArrangement = Arrangement.spacedBy(14.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            content = content
+        )
+        if(isExpanded) {
+            ArrowedTextButton(
+                text = stringResource(R.string.screen_product_rental_history_button_rental_detail),
+                onClick = onRentalDetailClick
+            )
+        }
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentingListItem(nickName: String = "", rentalReturnDate: LocalDate? = LocalDate.now(), onClick: () -> Unit = {}) {
+fun RentingListItem(
+    nickName: String = "",
+    rentalReturnDate: LocalDate? = LocalDate.now(),
+    isExpanded: Boolean = false,
+    onRentalDetailClick: () -> Unit = {},
+    onClick: () -> Unit = {},
+) {
     val daysBeforeReturn = daysFromToday(rentalReturnDate)
-    RoundedItemRow(onClick) {
+    ExpandableRoundedItem(isExpanded, onRentalDetailClick, onClick) {
         Text(
             text = stringResource(RentalStatus.RENTING.strRes),
             style = MaterialTheme.typography.labelLarge,
@@ -225,10 +259,16 @@ fun RentingListItem(nickName: String = "", rentalReturnDate: LocalDate? = LocalD
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ReadyToShipListItem(nickName: String = "", rentalStartDate: LocalDate? = LocalDate.now(), onClick: () -> Unit = {}) {
+fun ReadyToShipListItem(
+    nickName: String = "",
+    rentalStartDate: LocalDate? = LocalDate.now(),
+    isExpanded: Boolean = false,
+    onRentalDetailClick: () -> Unit = {},
+    onClick: () -> Unit = {},
+) {
     val daysBeforeRent = daysFromToday(rentalStartDate)
     val dDayTextColor = if (daysBeforeRent > D_DAY_ALERT_THRESHOLD_DAYS) AppBlack else AppRed
-    RoundedItemRow(onClick) {
+    ExpandableRoundedItem(isExpanded, onRentalDetailClick, onClick) {
         Text(
             text = stringResource(R.string.rental_status_paid_owner),
             style = MaterialTheme.typography.labelLarge,
@@ -263,9 +303,11 @@ fun OtherStatusListItem(
     rentalStartDate: LocalDate? = LocalDate.now(),
     rentalEndDate: LocalDate? = LocalDate.now(),
     requestedAt: LocalDateTime? = LocalDateTime.now(),
+    isExpanded: Boolean = false,
+    onRentalDetailClick: () -> Unit = {},
     onClick: () -> Unit = {}
 ) {
-    RoundedItemRow(onClick) {
+    ExpandableRoundedItem(isExpanded, onRentalDetailClick, onClick) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
@@ -311,7 +353,11 @@ private fun RentalHistoryScreenPreview() {
             historyListScrollState = remember { LazyListState() },
             onBackClick = {},
             onToggleFilter = {},
-            onChangeMonth = {}
+            onChangeMonth = {},
+            isListItemExpanded = false,
+            onRentalDateClick = {},
+            onHistoryClick = {},
+            onRentalDetailClick = {}
         )
     }
 }

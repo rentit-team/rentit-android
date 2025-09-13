@@ -38,6 +38,9 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
                     is RentalHistorySideEffect.NavigateToRentalDetail -> {
                         navHostController.navigateToRentalDetail(productId, it.reservationId)
                     }
+                    RentalHistorySideEffect.ScrollToTop -> {
+                        uiState.historyListScrollState.animateScrollToItem(0)
+                    }
                     is RentalHistorySideEffect.CommonError -> {
                         mainViewModel?.handleError(it.throwable)
                     }
@@ -46,19 +49,17 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
         }
     }
 
-    LaunchedEffect(uiState.filterMode, uiState.selectedReservationId) {
-        viewModel.scrollToTop()
-    }
-
     RentalHistoryScreen(
         rentalHistoryList = uiState.filteredRentalHistoryList,
         rentalHistoryByDateMap = uiState.rentalHistoryByDateMap,
         filterMode = uiState.filterMode,
         calendarMonth = uiState.calendarMonth,
         historyListScrollState = uiState.historyListScrollState,
+        isListItemExpanded = uiState.isListItemExpanded,
         onChangeMonth = viewModel::updateCalendarMonth,
         onRentalDateClick = viewModel::updateSelectedRentalDate,
         onHistoryClick = viewModel::onHistoryClicked,
+        onRentalDetailClick = viewModel::onRentalDetailClicked,
         onToggleFilter = viewModel::updateFilterMode,
         onBackClick = navHostController::popBackStack,
     )

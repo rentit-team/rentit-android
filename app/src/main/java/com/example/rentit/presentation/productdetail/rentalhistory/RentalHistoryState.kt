@@ -20,6 +20,10 @@ data class RentalHistoryState(
     val rentalHistoryList: List<RentalHistoryModel> = emptyList(),
     val showAccessForbiddenDialog: Boolean = false
 ) {
+
+    val isListItemExpanded: Boolean
+        get() = selectedReservationId != null
+
     val filteredRentalHistoryList: List<RentalHistoryModel>
         get() {
             selectedReservationId?.let { id ->

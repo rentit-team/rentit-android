@@ -45,18 +45,11 @@ class RentalHistoryViewModel @Inject constructor(
         updateUiState { copy(isLoading = isLoading) }
     }
 
-    private fun initCalendarMonth() {
-        val list = _uiState.value.rentalHistoryList.firstOrNull()
-        val initMonth = list?.rentalPeriod?.startDate
-        initMonth?.let { updateUiState { copy(calendarMonth = YearMonth.from(it)) } }
-    }
-
     suspend fun loadProductRentalHistories(productId: Int){
         setIsLoading(true)
         getRentalHistoriesUseCase(productId)
             .onSuccess {
                 updateUiState { copy(rentalHistoryList = it) }
-                initCalendarMonth()
                 Log.i(TAG, "상품 대여 내역 조회 성공: 총 ${it.size}개")
             }.onFailure { e ->
                 Log.e(TAG, "상품 대여 내역 조회 실패", e)
@@ -87,14 +80,22 @@ class RentalHistoryViewModel @Inject constructor(
                 selectedReservationId = null
             )
         }
+        emitSideEffect(RentalHistorySideEffect.ScrollToTop)
     }
 
     fun onHistoryClicked(reservationId: Int) {
-        emitSideEffect(RentalHistorySideEffect.NavigateToRentalDetail(reservationId))
+        val currentId = uiState.value.selectedReservationId
+        currentId?.let {
+            updateUiState { copy(selectedReservationId = null, calendarMonth = YearMonth.now()) }
+        } ?: run {
+            updateUiState { copy(selectedReservationId = reservationId) }
+            val startDate = uiState.value.filteredRentalHistoryList.firstOrNull()?.rentalPeriod?.startDate
+            startDate?.let { updateUiState { copy(calendarMonth = YearMonth.from(it)) } }
+        }
     }
 
-    suspend fun scrollToTop() {
-        _uiState.value.historyListScrollState.animateScrollToItem(0)
+    fun onRentalDetailClicked(reservationId: Int) {
+        emitSideEffect(RentalHistorySideEffect.NavigateToRentalDetail(reservationId))
     }
 
     fun retryLoadHistories(productId: Int) {

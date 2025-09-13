@@ -175,6 +175,7 @@
     <string name="screen_product_rental_history_item_renting_info_1">반납이</string>
     <string name="screen_product_rental_history_item_renting_info_2">남았어요</string>
     <string name="screen_product_rental_history_item_ready_to_ship_info">대여 시작일까지</string>
+
     <string name="screen_product_rental_history_filter_in_progress">진행 중</string>
     <string name="screen_product_rental_history_filter_in_progress_content_description">거래 진행 중인 내역만 보기</string>
     <string name="screen_product_rental_history_filter_accepted">요청 수락</string>
@@ -184,7 +185,10 @@
     <string name="screen_product_rental_history_filter_finished">종료됨</string>
     <string name="screen_product_rental_history_filter_finished_content_description">종료된 내역만 보기</string>
 
+    <string name="screen_product_rental_history_button_rental_detail">대여 상세 보기</string>
+
     <string name="dialog_rental_history_access_forbidden">대여 내역을 조회할 권한이 없어요.</string>
+
 
     <!-- 게시글 생성 -->
     <string name="screen_product_create_image_label">이미지</string>
