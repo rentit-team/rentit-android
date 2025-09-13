@@ -22,7 +22,7 @@ class CreatePostUseCase @Inject constructor(
 ) {
 
     suspend operator fun invoke(
-        thumbnailPart: MultipartBody.Part?,
+        imageParts: List<MultipartBody.Part>?,
         title: String,
         content: String,
         selectedCategoryIdList: List<Int>,
@@ -36,7 +36,7 @@ class CreatePostUseCase @Inject constructor(
             val payloadJson = Gson().toJson(postData)
             val requestBody = payloadJson.toRequestBody("application/json".toMediaTypeOrNull())
 
-            productRepository.createPost(requestBody, thumbnailPart).getOrThrow()
+            productRepository.createPost(requestBody, imageParts).getOrThrow()
         }
     }
 }

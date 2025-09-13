@@ -30,6 +30,9 @@ data class ProductDto(
     @SerializedName("thumbnailImgUrl")
     val thumbnailImgUrl: String?,
 
+    @SerializedName("thumbnailImgs")
+    val imageUrls: List<String>,
+
     @SerializedName("region")
     val region: String?,
 

@@ -121,7 +121,7 @@ fun ProductDetailScreen(
                     .padding(innerPadding)
                     .verticalScroll(state = rememberScrollState())
             ) {
-                ImagePager(imagePagerState, productDetail.imgUrlList, onFullImageShow)
+                ImagePager(imagePagerState, productDetail.imageUrls, onFullImageShow)
                 PostHeader(
                     productDetail.title,
                     productDetail.category,
@@ -159,7 +159,7 @@ fun ProductDetailScreen(
         }
     }
 
-    if(showFullImage) FullImageDialog(fullImagePagerState, productDetail.imgUrlList, onFullImageDismiss)
+    if(showFullImage) FullImageDialog(fullImagePagerState, productDetail.imageUrls, onFullImageDismiss)
 }
 
 @Composable
@@ -344,7 +344,7 @@ private fun Preview() {
         category = listOf("Sports"),
         content = "A sturdy mountain bike suitable for off-road trails.",
         createdAt = "2025-09-01T10:00:00",
-        imgUrlList = listOf("sample.jpg"),
+        imageUrls = listOf("sample.jpg"),
         minPeriod = 3,
         maxPeriod = 5
     )

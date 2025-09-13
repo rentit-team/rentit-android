@@ -22,7 +22,7 @@ object MultipartUtil {
         val requestBody = file.asRequestBody(mimeType.toMediaTypeOrNull())
 
         return MultipartBody.Part.createFormData(
-            "thumbnailImg",
+            "thumbnailImgs",
             file.name,
             requestBody
         )

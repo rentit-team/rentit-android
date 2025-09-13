@@ -38,8 +38,8 @@ class ProductRepositoryImpl @Inject constructor(
         return safeApiCall(productRemoteDataSource::getCategories)
     }
 
-    override suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto> {
-        return safeApiCall { productRemoteDataSource.createPost(payLoad, thumbnailImg) }
+    override suspend fun createPost(payLoad: RequestBody, imageParts: List<MultipartBody.Part>?): Result<CreatePostResponseDto> {
+        return safeApiCall { productRemoteDataSource.createPost(payLoad, imageParts) }
     }
 
     override suspend fun getChatAccessibility(productId: Int): Result<ChatAccessibilityResponseDto> {
