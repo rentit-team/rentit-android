@@ -32,6 +32,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.D_DAY_ALERT_THRESHOLD_DAYS
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -51,8 +52,6 @@ import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalH
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
-
-private const val D_DAY_ALERT_THRESHOLD_DAYS = 3
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

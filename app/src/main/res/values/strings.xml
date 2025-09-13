@@ -19,6 +19,7 @@
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_top_app_bar_menu_icon_description">메뉴</string>
     <string name="common_day_unit">일</string>
+    <string name="common_case_unit">건</string>
     <string name="common_price_unit_per_day">원/일</string>
     <string name="common_price_unit">원</string>
     <string name="common_total">총</string>
@@ -275,6 +276,30 @@
     <string name="screen_mypage_my_activity_count_label_post">게시글</string>
     <string name="screen_mypage_my_activity_count_label_rental">대여 현황</string>
     <string name="screen_mypage_my_activity_count_label_pending">승인/발송 대기</string>
+
+    <!-- 내 상품 대여 현황 -->
+    <string name="screen_my_products_rental_title">내 상품 대여 현황</string>
+
+    <string name="screen_my_products_rental_filter_waiting_for_response">요청 응답 대기</string>
+    <string name="screen_my_products_rental_filter_waiting_for_response_desc">요청 응답 대기 중인 내역만 보기</string>
+    <string name="screen_my_products_rental_filter_waiting_for_shipment">상품 발송 대기</string>
+    <string name="screen_my_products_rental_filter_waiting_for_shipment_desc">상품 발송 대기 중인 내역만 보기</string>
+    <string name="screen_my_products_rental_filter_renting">대여 중</string>
+    <string name="screen_my_products_rental_filter_renting_desc">대여 중인 내역만 보기</string>
+    <string name="screen_my_products_rental_filter_accepted">요청 수락</string>
+    <string name="screen_my_products_rental_filter_accepted_desc">요청 수락한 내역만 보기</string>
+
+    <string name="screen_my_products_rental_notice_waiting_for_response_1">응답</string>
+    <string name="screen_my_products_rental_notice_waiting_for_response_2">을 기다리고 있어요!</string>
+    <string name="screen_my_products_rental_notice_waiting_for_shipment_1">발송 임박 상품</string>
+    <string name="screen_my_products_rental_notice_waiting_for_shipment_2">이 있어요!</string>
+
+    <string name="screen_my_products_rental_info_text_waiting_for_response">의 대여 요청이 있어요</string>
+    <string name="screen_my_products_rental_info_text_waiting_for_shipment">님에게 대여 시작까지</string>
+    <string name="screen_my_products_rental_info_text_renting">님의 반납까지</string>
+    <string name="screen_my_products_rental_info_text_accepted">의 요청 수락된 내역이 있어요</string>
+
+    <string name="screen_my_products_rental_empty_list">내역이 없어요.</string>
 
     <!-- 설정 -->
     <string name="screen_setting_title">설정</string>

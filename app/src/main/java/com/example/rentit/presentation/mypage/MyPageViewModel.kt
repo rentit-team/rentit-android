@@ -4,6 +4,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.domain.user.usecase.GetMyProductsWithCategoryUseCase
 import com.example.rentit.domain.user.usecase.GetMyRentalsWithNearestDueUseCase
@@ -20,7 +21,7 @@ import javax.inject.Inject
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val getMyRentalsWithNearestDueUseCase: GetMyRentalsWithNearestDueUseCase,
-    private val getMyProductsWithCategoryUseCase: GetMyProductsWithCategoryUseCase
+    private val getMyProductsWithCategoryUseCase: GetMyProductsWithCategoryUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MyPageState())
@@ -64,6 +65,18 @@ class MyPageViewModel @Inject constructor(
             }
     }
 
+    private suspend fun getMyPendingRentalCount() {
+        userRepository.getMyProductsRentalList()
+            .onSuccess {
+                _uiState.value = _uiState.value.copy(
+                    myPendingRentalCount = it.rentalHistory
+                        .filter { history -> history.status == RentalStatus.PENDING || history.status == RentalStatus.PAID }.size
+                )
+            }.onFailure { e ->
+                emitSideEffect(MyPageSideEffect.CommonError(e))
+            }
+    }
+
     private suspend fun getMyInfo() {
         userRepository.getMyInfo().onSuccess {
             _uiState.value = _uiState.value.copy(
@@ -75,13 +88,12 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    // TODO: 서버 구현 후 승인/발송 대기 리스트 조회 및 연동
-
     suspend fun loadInitialData() {
         setLoading(true)
         getMyInfo()
         getMyProductList()
         getMyRentalList()
+        getMyPendingRentalCount()
         setLoading(false)
     }
 
@@ -91,6 +103,10 @@ class MyPageViewModel @Inject constructor(
 
     fun onRentalItemClicked(productId: Int, reservationId: Int) {
         emitSideEffect(MyPageSideEffect.NavigateToRentalDetail(productId, reservationId))
+    }
+
+    fun onPendingRentalClicked() {
+        emitSideEffect(MyPageSideEffect.NavigateToMyProductsRental)
     }
 
     fun onSettingClicked() {

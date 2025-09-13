@@ -14,6 +14,7 @@ import com.example.rentit.navigation.auth.authGraph
 import com.example.rentit.navigation.bottomtab.bottomTabGraph
 import com.example.rentit.navigation.chatroom.chatRoomGraph
 import com.example.rentit.navigation.createpost.createPostGraph
+import com.example.rentit.navigation.myproductsrental.myProductsRentalGraph
 import com.example.rentit.navigation.pay.payGraph
 import com.example.rentit.navigation.productdetail.productDetailGraph
 import com.example.rentit.navigation.rentaldetail.rentalDetailGraph
@@ -38,5 +39,6 @@ fun MainNavHost(navHostController: NavHostController, paddingValues: PaddingValu
         createPostGraph(navHostController)
         payGraph(navHostController)
         settingNavGraph(navHostController)
+        myProductsRentalGraph(navHostController)
     }
 }
