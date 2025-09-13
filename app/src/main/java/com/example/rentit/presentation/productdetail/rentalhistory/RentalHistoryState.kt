@@ -63,7 +63,7 @@ data class RentalHistoryState(
                 .filter {
                     val start = it.rentalPeriod.startDate
                     val end = it.rentalPeriod.endDate
-                    start != null && end != null && start.isBefore(end)
+                    start != null && end != null && !start.isAfter(end)
                 }
                 .reversed()
                 .forEach {
