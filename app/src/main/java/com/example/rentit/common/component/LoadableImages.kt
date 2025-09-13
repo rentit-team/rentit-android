@@ -16,7 +16,7 @@ import com.example.rentit.R
 fun LoadableUrlImage(
     modifier: Modifier = Modifier,
     imgUrl: String?,
-    @DrawableRes defaultImageResId: Int,
+    @DrawableRes defaultImageResId: Int = R.drawable.img_thumbnail_placeholder,
     @StringRes defaultDescResId: Int = R.string.common_img_placeholder_description,
     contentScale: ContentScale = ContentScale.Crop
 ) {
