@@ -42,6 +42,7 @@ import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
+import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.common.util.toRelativeTimeFormat
@@ -53,6 +54,7 @@ import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalH
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
+import kotlin.math.abs
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -232,6 +234,24 @@ fun RentingListItem(
     onClick: () -> Unit = {},
 ) {
     val daysBeforeReturn = daysFromToday(rentalReturnDate)
+    val rentalInfoText  = if(daysBeforeReturn < 0) {
+        buildAnnotatedString {
+            append(stringResource(R.string.screen_product_rental_history_item_renting_overdue_info_1))
+            withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(AppRed)) {
+                append(" ${abs(daysBeforeReturn)} ${stringResource(R.string.common_day_unit)} ")
+            }
+            append(stringResource(R.string.screen_product_rental_history_item_renting_overdue_info_2))
+        }
+    } else {
+        buildAnnotatedString {
+            append(stringResource(R.string.screen_product_rental_history_item_renting_info_1))
+            withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(PrimaryBlue500)) {
+                append(" $daysBeforeReturn ${stringResource(R.string.common_day_unit)} ")
+            }
+            append(stringResource(R.string.screen_product_rental_history_item_renting_info_2))
+        }
+    }
+
     ExpandableRoundedItem(isExpanded, onRentalDetailClick, onClick) {
         Text(
             text = stringResource(RentalStatus.RENTING.strRes),
@@ -244,13 +264,7 @@ fun RentingListItem(
         )
         Text(
             modifier = Modifier.weight(1f),
-            text = buildAnnotatedString {
-                append(stringResource(R.string.screen_product_rental_history_item_renting_info_1))
-                withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
-                    append(" $daysBeforeReturn ${stringResource(R.string.common_day_unit)} ")
-                }
-                append(stringResource(R.string.screen_product_rental_history_item_renting_info_2))
-            },
+            text = rentalInfoText,
             style = MaterialTheme.typography.labelMedium,
             textAlign = TextAlign.End
         )
@@ -267,6 +281,7 @@ fun ReadyToShipListItem(
     onClick: () -> Unit = {},
 ) {
     val daysBeforeRent = daysFromToday(rentalStartDate)
+    val dDayText = if(daysBeforeRent >= 0) " D-$daysBeforeRent" else " D+${abs(daysBeforeRent)}"
     val dDayTextColor = if (daysBeforeRent > D_DAY_ALERT_THRESHOLD_DAYS) AppBlack else AppRed
     ExpandableRoundedItem(isExpanded, onRentalDetailClick, onClick) {
         Text(
@@ -286,7 +301,7 @@ fun ReadyToShipListItem(
                     style = MaterialTheme.typography.labelLarge.toSpanStyle()
                         .copy(color = dDayTextColor)
                 ) {
-                    append(" D - $daysBeforeRent")
+                    append(" $dDayText")
                 }
             },
             style = MaterialTheme.typography.labelMedium,
