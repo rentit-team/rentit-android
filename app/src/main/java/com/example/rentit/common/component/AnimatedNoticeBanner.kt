@@ -3,7 +3,7 @@ package com.example.rentit.common.component
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -49,9 +49,7 @@ fun AnimatedNoticeBanner(
 
     AnimatedVisibility(
         visible = visible,
-        enter = scaleIn(
-            initialScale = 0.5f
-        )
+        enter = slideInVertically()
     ) {
         Box(
             modifier = modifier

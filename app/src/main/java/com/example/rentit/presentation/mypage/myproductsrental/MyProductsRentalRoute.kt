@@ -22,6 +22,7 @@ fun MyProductsRentalRoute() {
     MyProductsRentalScreen(
         rentals = uiState.filteredRentalHistories,
         selectedFilter = uiState.selectedFilter,
+        upcomingShipmentCount = uiState.upcomingShipmentCount,
         showNoticeBanner = uiState.showNoticeBanner,
         onFilterChange = viewModel::onFilterChanged,
         onBackClick = {},

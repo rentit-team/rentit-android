@@ -41,12 +41,17 @@ class MyProductsRentalViewModel @Inject constructor(
                         }
                     }
                     updateUiState { copy(rentalHistories = historiesByFilter) }
-                    println(it)
                 }
         }
     }
 
     fun onFilterChanged(filter: MyProductsRentalFilter) {
-        updateUiState { copy(selectedFilter = filter) }
+        updateUiState { copy(selectedFilter = filter, showNoticeBanner = false) }
+        when (filter) {
+            MyProductsRentalFilter.WAITING_FOR_RESPONSE, MyProductsRentalFilter.WAITING_FOR_SHIPMENT -> {
+                updateUiState { copy(showNoticeBanner = true) }
+            }
+            else -> {}
+        }
     }
 }

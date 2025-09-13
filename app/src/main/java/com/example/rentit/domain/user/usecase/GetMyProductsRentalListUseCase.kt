@@ -41,7 +41,7 @@ class GetMyProductsRentalHistoryUseCase @Inject constructor(
                         }
 
                         RentalStatus.PAID, RentalStatus.RENTING -> {
-                            histories.map {
+                            val newHistories = histories.map {
                                 MyProductsRentalModel(
                                     productId = it.productId,
                                     reservationId = it.reservationId,
@@ -51,6 +51,11 @@ class GetMyProductsRentalHistoryUseCase @Inject constructor(
                                     daysBeforeStart = daysFromToday(it.startDate),
                                     daysBeforeReturn = daysFromToday(it.endDate)
                                 )
+                            }
+                            if(status == RentalStatus.PAID) {
+                                newHistories.sortedBy { it.daysBeforeStart }
+                            } else {
+                                newHistories.sortedBy { it.daysBeforeReturn }
                             }
                         }
 

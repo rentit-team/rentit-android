@@ -2,6 +2,7 @@ package com.example.rentit.presentation.mypage.myproductsrental
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,12 +12,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
@@ -46,8 +49,10 @@ import kotlin.math.abs
 fun MyProductsRentalScreen(
     rentals: List<MyProductsRentalModel> = emptyList(),
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
+    upcomingShipmentCount: Int = 0,
     showNoticeBanner: Boolean = true,
     onFilterChange: (MyProductsRentalFilter) -> Unit = {},
+    onItemClick: () -> Unit = {},
     onBackClick: () -> Unit = {}
 ) {
     Scaffold(
@@ -66,10 +71,10 @@ fun MyProductsRentalScreen(
             FilterSection(selectedFilter, onFilterChange)
 
             if(showNoticeBanner) {
-                NoticeBannerSection(selectedFilter)
+                NoticeBannerSection(selectedFilter, upcomingShipmentCount)
             }
 
-            RentalHistoriesSection(selectedFilter, rentals)
+            RentalHistoriesSection(selectedFilter, rentals, onItemClick)
         }
     }
 }
@@ -113,7 +118,7 @@ fun FilterSection(
 }
 
 @Composable
-fun NoticeBannerSection(selectedFilter: MyProductsRentalFilter) {
+fun NoticeBannerSection(selectedFilter: MyProductsRentalFilter, upcomingShipmentCount: Int) {
     val noticeText =
         buildAnnotatedString {
             when (selectedFilter) {
@@ -127,7 +132,7 @@ fun NoticeBannerSection(selectedFilter: MyProductsRentalFilter) {
                 MyProductsRentalFilter.WAITING_FOR_SHIPMENT -> {
                     append(stringResource(R.string.screen_my_products_rental_notice_waiting_for_shipment_1))
                     withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(PrimaryBlue500)) {
-                        append("0 " + stringResource(R.string.common_case_unit))
+                        append(" $upcomingShipmentCount " + stringResource(R.string.common_case_unit))
                     }
                     append(stringResource(R.string.screen_my_products_rental_notice_waiting_for_shipment_2))
                 }
@@ -145,7 +150,8 @@ fun NoticeBannerSection(selectedFilter: MyProductsRentalFilter) {
 @Composable
 fun RentalHistoriesSection(
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
-    rentals: List<MyProductsRentalModel> = emptyList()
+    rentals: List<MyProductsRentalModel> = emptyList(),
+    onItemClick: () -> Unit = {}
 ) {
     if(rentals.isEmpty()) return EmptyContentScreen(text = stringResource(R.string.screen_my_products_rental_empty_list))
 
@@ -154,11 +160,13 @@ fun RentalHistoriesSection(
             RentalHistoryItem(
                 selectedFilter = selectedFilter,
                 productTitle = rentals[i].productTitle,
+                thumbnailImgUrl = rentals[i].productThumbnailUrl,
                 rentalCount = rentals[i].rentalCount,
                 totalExpectRevenue = rentals[i].totalExpectRevenue,
                 renterNickname = rentals[i].renterNickname,
                 daysBeforeStart = rentals[i].daysBeforeStart,
-                daysBeforeReturn = rentals[i].daysBeforeReturn
+                daysBeforeReturn = rentals[i].daysBeforeReturn,
+                onItemClick = onItemClick
             )
         }
     }
@@ -169,11 +177,13 @@ fun RentalHistoriesSection(
 fun RentalHistoryItem(
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
     productTitle: String = "",
+    thumbnailImgUrl: String? = "",
     rentalCount: Int = 0,
     totalExpectRevenue: Int = 0,
     renterNickname: String = "",
     daysBeforeStart: Int = 0,
-    daysBeforeReturn: Int = 0
+    daysBeforeReturn: Int = 0,
+    onItemClick: () -> Unit = { }
 ) {
     val rentalInfoText = getRentalInfoText(
         selectedFilter = selectedFilter,
@@ -186,20 +196,23 @@ fun RentalHistoryItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp),
+            .padding(vertical = 12.dp)
+            .clip(RoundedCornerShape(20.dp))
+            .clickable { onItemClick() },
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.Top
     ) {
         LoadableUrlImage(
             modifier = Modifier
                 .fillMaxWidth(0.25f)
-                .aspectRatio(1f),
-            imgUrl = null,
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(20.dp)),
+            imgUrl = thumbnailImgUrl,
         )
 
         Column {
             Text(
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(vertical = 10.dp),
                 text = productTitle,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

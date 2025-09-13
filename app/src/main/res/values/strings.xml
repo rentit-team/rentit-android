@@ -288,7 +288,7 @@
 
     <string name="screen_my_products_rental_notice_waiting_for_response_1">응답</string>
     <string name="screen_my_products_rental_notice_waiting_for_response_2">을 기다리고 있어요!</string>
-    <string name="screen_my_products_rental_notice_waiting_for_shipment_1">곧 발송해야하는 상품</string>
+    <string name="screen_my_products_rental_notice_waiting_for_shipment_1">발송 임박 상품</string>
     <string name="screen_my_products_rental_notice_waiting_for_shipment_2">이 있어요!</string>
 
     <string name="screen_my_products_rental_info_text_waiting_for_response">의 대여 요청이 있어요</string>
@@ -296,7 +296,7 @@
     <string name="screen_my_products_rental_info_text_renting">님의 반납까지</string>
     <string name="screen_my_products_rental_info_text_accepted">의 요청 수락된 내역이 있어요</string>
 
-    <string name="screen_my_products_rental_empty_list">진행 중인 대여가 없어요.</string>
+    <string name="screen_my_products_rental_empty_list">내역이 없어요.</string>
 
     <!-- 설정 -->
     <string name="screen_setting_title">설정</string>
