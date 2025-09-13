@@ -13,6 +13,7 @@ data class MyPageState(
     val nearestDueItem: NearestDueItemModel? = null,
     val myProductList: List<MyProductItemModel> = emptyList(),
     val myRentalList: List<MyRentalItemModel> = emptyList(),
+    val isRefreshing: Boolean = false,
     val isFirstTabSelected: Boolean = true,
     val isLoading: Boolean = false,
 )

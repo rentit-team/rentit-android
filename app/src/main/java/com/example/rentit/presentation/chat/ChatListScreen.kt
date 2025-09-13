@@ -19,8 +19,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +36,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.FilterButton
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.layout.EmptyContentScreen
+import com.example.rentit.common.component.layout.PullToRefreshLayout
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
@@ -45,12 +48,16 @@ import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
 import com.example.rentit.presentation.chat.model.ChatListFilter
 import java.time.OffsetDateTime
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListScreen(
     chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
     scrollState: LazyListState = LazyListState(),
+    pullToRefreshState: PullToRefreshState = PullToRefreshState(),
     isActiveChatRooms: Boolean = true,
+    isRefreshing: Boolean = false,
+    onRefresh: () -> Unit = {},
     onToggleFilter: (ChatListFilter) -> Unit = {},
     onItemClick: (String) -> Unit = {},
 ) {
@@ -68,7 +75,13 @@ fun ChatListScreen(
 
         RentalHistoryFilterSection(isActiveChatRooms, onToggleFilter)
 
-        ChatListSection(isActiveChatRooms, chatRoomSummaries, scrollState, onItemClick)
+        PullToRefreshLayout(
+            isRefreshing = isRefreshing,
+            pullToRefreshState = pullToRefreshState,
+            onRefresh = onRefresh
+        ) {
+            ChatListSection(isActiveChatRooms, chatRoomSummaries, scrollState, onItemClick)
+        }
     }
 }
 
@@ -209,6 +222,7 @@ fun ChatListItem(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable

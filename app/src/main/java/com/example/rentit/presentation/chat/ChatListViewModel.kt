@@ -57,6 +57,14 @@ class ChatListViewModel @Inject constructor(
         }
     }
 
+    fun refreshChatRoomSummaries() {
+        viewModelScope.launch {
+            updateUiState { copy(isRefreshing = true) }
+            fetchChatRoomSummaries()
+            updateUiState { copy(isRefreshing = false) }
+        }
+    }
+
     fun onToggledFilter(filterMode: ChatListFilter) {
         when(filterMode) {
             ChatListFilter.ACTIVE -> updateUiState { copy(isActiveChatRooms = true) }

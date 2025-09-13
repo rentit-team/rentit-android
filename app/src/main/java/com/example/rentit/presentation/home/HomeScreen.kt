@@ -17,13 +17,14 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.IconButton
-import androidx.compose.material.Text
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,13 +43,13 @@ import com.example.rentit.common.component.basicRoundedGrayBorder
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.item.ProductListItem
-import com.example.rentit.common.component.dialog.NetworkErrorDialog
-import com.example.rentit.common.component.dialog.ServerErrorDialog
 import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.component.layout.PullToRefreshLayout
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.domain.product.model.ProductWithCategoryModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
@@ -56,14 +57,14 @@ fun HomeScreen(
     sortedProducts: List<ProductWithCategoryModel> = emptyList(),
     parentIdToNameCategoryMap: Map<Int, String> = emptyMap(),
     filterParentCategoryId: Int = -1,
+    pullToRefreshState: PullToRefreshState = PullToRefreshState(),
     onlyRentalAvailable: Boolean = false,
     isLoading: Boolean = false,
-    showNetworkErrorDialog: Boolean = false,
-    showServerErrorDialog: Boolean = false,
+    isRefreshing: Boolean = false,
+    onRefresh: () -> Unit = {},
     onToggleRentalAvailableFilter: () -> Unit = {},
     onSelectCategory: (Int) -> Unit = {},
     onProductClick: (Int) -> Unit = {},
-    onRetry: () -> Unit = {}
 ) {
     Column {
 
@@ -77,14 +78,17 @@ fun HomeScreen(
             onSelectCategory
         )
 
-        HomeProductListSection(scrollState, sortedProducts, onProductClick)
+
+        PullToRefreshLayout(
+            isRefreshing = isRefreshing,
+            pullToRefreshState = pullToRefreshState,
+            onRefresh = onRefresh
+        ) {
+            HomeProductListSection(scrollState, sortedProducts, onProductClick)
+        }
     }
 
     LoadingScreen(isLoading)
-
-    if(showNetworkErrorDialog) NetworkErrorDialog({}, onRetry)
-
-    if(showServerErrorDialog) ServerErrorDialog({}, onRetry)
 }
 
 @Composable
@@ -186,8 +190,6 @@ fun CategoryDropDown(
         filterCategoryId,
         stringResource(R.string.screen_home_label_btn_filter_category_default)
     )
-
-
     ExposedDropdownMenuBox(
         modifier = Modifier
             .height(30.dp)
@@ -197,7 +199,10 @@ fun CategoryDropDown(
         onExpandedChange = { expanded = !expanded }
     ) {
         Row(
-            modifier = Modifier.menuAnchor().padding(12.dp, 6.dp).widthIn(min = 50.dp),
+            modifier = Modifier
+                .menuAnchor()
+                .padding(12.dp, 6.dp)
+                .widthIn(min = 50.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -226,6 +231,7 @@ fun CategoryDropDown(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable

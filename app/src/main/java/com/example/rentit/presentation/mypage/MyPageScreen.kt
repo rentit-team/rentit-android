@@ -18,9 +18,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.IconButton
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +46,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.component.item.ProductListItem
 import com.example.rentit.common.component.layout.EmptyContentScreen
+import com.example.rentit.common.component.layout.PullToRefreshLayout
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
@@ -55,6 +58,7 @@ import com.example.rentit.domain.user.model.MyRentalItemModel
 import com.example.rentit.domain.user.model.NearestDueItemModel
 import java.time.LocalDateTime
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(
@@ -66,7 +70,10 @@ fun MyPageScreen(
     nearestDueItem: NearestDueItemModel?,
     myProductList: List<MyProductItemModel>,
     myRentalList: List<MyRentalItemModel>,
+    pullToRefreshState: PullToRefreshState = PullToRefreshState(),
     isFirstTabSelected: Boolean,
+    isRefreshing: Boolean = false,
+    onRefresh: () -> Unit = {},
     onSettingClick: () -> Unit,
     onAlertClick: () -> Unit,
     onMyPendingRentalClick: () -> Unit,
@@ -75,36 +82,43 @@ fun MyPageScreen(
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit
 ) {
-    Column {
-        Column(modifier = Modifier.screenHorizontalPadding()) {
+    PullToRefreshLayout(
+        isRefreshing = isRefreshing,
+        pullToRefreshState = pullToRefreshState,
+        onRefresh = onRefresh
+    ) {
+        Column {
+            Column(modifier = Modifier.screenHorizontalPadding()) {
 
-            TopSection(onAlertClick, onSettingClick)
+                TopSection(onAlertClick, onSettingClick)
 
-            ProfileSection(
-                profileImgUrl = profileImgUrl,
-                nickName = nickName,
-                myProductCount = myProductCount,
-                myValidRentalCount = myValidRentalCount,
-                myPendingRentalCount = myPendingRentalCount,
-                onMyPendingRentalClick = onMyPendingRentalClick
-            )
-
-            if(nearestDueItem != null) {
-                InfoBox(
-                    productTitle = nearestDueItem.productTitle,
-                    remainingRentalDays = nearestDueItem.remainingRentalDays,
-                    onRentalDetailClick = onInfoRentalDetailClick
+                ProfileSection(
+                    profileImgUrl = profileImgUrl,
+                    nickName = nickName,
+                    myProductCount = myProductCount,
+                    myValidRentalCount = myValidRentalCount,
+                    myPendingRentalCount = myPendingRentalCount,
+                    onMyPendingRentalClick = onMyPendingRentalClick
                 )
+
+                if (nearestDueItem != null) {
+                    InfoBox(
+                        productTitle = nearestDueItem.productTitle,
+                        remainingRentalDays = nearestDueItem.remainingRentalDays,
+                        onRentalDetailClick = onInfoRentalDetailClick
+                    )
+                }
             }
+
+            TabbedListSection(
+                isFirstTabSelected = isFirstTabSelected,
+                myProductList = myProductList,
+                myRentList = myRentalList,
+                onTabActive = onTabActive,
+                onProductItemClick = onProductItemClick,
+                onRentalItemClick = onRentalItemClick
+            )
         }
-        TabbedListSection(
-            isFirstTabSelected = isFirstTabSelected,
-            myProductList = myProductList,
-            myRentList = myRentalList,
-            onTabActive = onTabActive,
-            onProductItemClick = onProductItemClick,
-            onRentalItemClick = onRentalItemClick
-        )
     }
 }
 
@@ -414,6 +428,7 @@ fun MyRentalHistoryListItem(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)

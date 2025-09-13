@@ -3,6 +3,8 @@ package com.example.rentit.presentation.mypage
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,6 +22,7 @@ import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.navigation.setting.navigateToSetting
 import com.example.rentit.presentation.main.MainViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageRoute(navHostController: NavHostController) {
@@ -31,6 +34,8 @@ fun MyPageRoute(navHostController: NavHostController) {
     val lifecycle = LocalLifecycleOwner.current.lifecycle
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(Unit) {
         viewModel.loadInitialData()
@@ -70,7 +75,10 @@ fun MyPageRoute(navHostController: NavHostController) {
         nearestDueItem = uiState.nearestDueItem,
         myProductList = uiState.myProductList,
         myRentalList = uiState.myRentalList,
+        pullToRefreshState = pullToRefreshState,
         isFirstTabSelected = uiState.isFirstTabSelected,
+        isRefreshing = uiState.isRefreshing,
+        onRefresh = viewModel::refreshData,
         onAlertClick = viewModel::showComingSoonMessage,
         onInfoRentalDetailClick = viewModel::onInfoRentalDetailClicked,
         onTabActive = viewModel::setTabSelected,

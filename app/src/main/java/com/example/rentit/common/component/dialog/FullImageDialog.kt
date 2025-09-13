@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.rentit.R
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.theme.AppBlack
@@ -28,7 +29,10 @@ fun FullImageDialog(
     onDismiss: () -> Unit,
 ) {
     Dialog(
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
     ) {
         Box(
             modifier = Modifier

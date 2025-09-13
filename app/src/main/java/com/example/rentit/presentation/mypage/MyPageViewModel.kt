@@ -117,4 +117,12 @@ class MyPageViewModel @Inject constructor(
             loadInitialData()
         }
     }
+
+    fun refreshData() {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isRefreshing = true)
+            loadInitialData()
+            _uiState.value = _uiState.value.copy(isRefreshing = false)
+        }
+    }
 }
