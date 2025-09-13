@@ -17,4 +17,16 @@ data class MyProductsRentalState(
         get() = rentalHistories[MyProductsRentalFilter.WAITING_FOR_SHIPMENT]
             ?.count { it.daysBeforeStart <= D_DAY_ALERT_THRESHOLD_DAYS } ?: 0
 
+    val historyCountMap: Map<MyProductsRentalFilter, Int>
+        get() {
+            val initialMap = MyProductsRentalFilter.entries.associateWith { 0 }
+
+            return rentalHistories.mapValues {
+                when(it.key) {
+                    MyProductsRentalFilter.WAITING_FOR_RESPONSE, MyProductsRentalFilter.ACCEPTED
+                        -> it.value.sumOf { history -> history.rentalCount }
+                    else -> it.value.size
+                }
+            }.let { initialMap.plus(it) }
+        }
 }

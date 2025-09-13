@@ -281,10 +281,13 @@
     <string name="screen_my_products_rental_title">내 상품 대여 현황</string>
 
     <string name="screen_my_products_rental_filter_waiting_for_response">요청 응답 대기</string>
+    <string name="screen_my_products_rental_filter_waiting_for_response_desc">요청 응답 대기 중인 내역만 보기</string>
     <string name="screen_my_products_rental_filter_waiting_for_shipment">상품 발송 대기</string>
+    <string name="screen_my_products_rental_filter_waiting_for_shipment_desc">상품 발송 대기 중인 내역만 보기</string>
     <string name="screen_my_products_rental_filter_renting">대여 중</string>
+    <string name="screen_my_products_rental_filter_renting_desc">대여 중인 내역만 보기</string>
     <string name="screen_my_products_rental_filter_accepted">요청 수락</string>
-    <string name="screen_my_products_rental_filter_finished">종료됨</string>
+    <string name="screen_my_products_rental_filter_accepted_desc">요청 수락한 내역만 보기</string>
 
     <string name="screen_my_products_rental_notice_waiting_for_response_1">응답</string>
     <string name="screen_my_products_rental_notice_waiting_for_response_2">을 기다리고 있어요!</string>

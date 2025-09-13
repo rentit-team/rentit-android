@@ -49,6 +49,7 @@ import kotlin.math.abs
 fun MyProductsRentalScreen(
     rentals: List<MyProductsRentalModel> = emptyList(),
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
+    historyCountMap: Map<MyProductsRentalFilter, Int> = emptyMap(),
     upcomingShipmentCount: Int = 0,
     showNoticeBanner: Boolean = true,
     onFilterChange: (MyProductsRentalFilter) -> Unit = {},
@@ -68,7 +69,7 @@ fun MyProductsRentalScreen(
                 .padding(it)
                 .screenHorizontalPadding()
         ) {
-            FilterSection(selectedFilter, onFilterChange)
+            FilterSection(selectedFilter, historyCountMap, onFilterChange)
 
             if(showNoticeBanner) {
                 NoticeBannerSection(selectedFilter, upcomingShipmentCount)
@@ -82,6 +83,7 @@ fun MyProductsRentalScreen(
 @Composable
 fun FilterSection(
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
+    historyCountMap: Map<MyProductsRentalFilter, Int> = emptyMap(),
     onFilterChange: (MyProductsRentalFilter) -> Unit = {}
 ) {
     Row(
@@ -90,30 +92,15 @@ fun FilterSection(
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        FilterButton(
-            title = stringResource(R.string.screen_my_products_rental_filter_waiting_for_response),
-            contentDesc = "",
-            isSelected = selectedFilter == MyProductsRentalFilter.WAITING_FOR_RESPONSE,
-            onClick = { onFilterChange(MyProductsRentalFilter.WAITING_FOR_RESPONSE) }
-        )
-        FilterButton(
-            title = stringResource(R.string.screen_my_products_rental_filter_waiting_for_shipment),
-            contentDesc = "",
-            isSelected = selectedFilter == MyProductsRentalFilter.WAITING_FOR_SHIPMENT,
-            onClick = { onFilterChange(MyProductsRentalFilter.WAITING_FOR_SHIPMENT) }
-        )
-        FilterButton(
-            title = stringResource(R.string.screen_my_products_rental_filter_renting),
-            contentDesc = "",
-            isSelected = selectedFilter == MyProductsRentalFilter.RENTING,
-            onClick = { onFilterChange(MyProductsRentalFilter.RENTING) }
-        )
-        FilterButton(
-            title = stringResource(R.string.screen_my_products_rental_filter_accepted),
-            contentDesc = "",
-            isSelected = selectedFilter == MyProductsRentalFilter.ACCEPTED,
-            onClick = { onFilterChange(MyProductsRentalFilter.ACCEPTED) }
-        )
+        MyProductsRentalFilter.entries.forEach {
+            if(it == MyProductsRentalFilter.NONE) return
+            FilterButton(
+                title = stringResource(it.titleRes) + " ${historyCountMap[it]}",
+                contentDesc = stringResource(it.contentDescRes),
+                isSelected = selectedFilter == it,
+                onClick = { onFilterChange(it) }
+            )
+        }
     }
 }
 
