@@ -4,6 +4,7 @@ import com.example.rentit.data.user.dto.GoogleLoginRequestDto
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
+import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
 import com.example.rentit.data.user.dto.SendPhoneCodeRequestDto
 import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
@@ -46,5 +47,9 @@ class UserRemoteDataSource @Inject constructor(
 
     suspend fun getMyRentalList(): Response<MyRentalListResponseDto> {
         return userApiService.getMyRentalList()
+    }
+
+    suspend fun getMyProductsRentalList(): Response<MyProductsRentalListResponseDto> {
+        return userApiService.getMyProductsRentalList()
     }
 }

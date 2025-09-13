@@ -1,15 +1,13 @@
 package com.example.rentit.domain.user.model
 
-import com.example.rentit.common.enums.RentalStatus
-
 data class MyProductsRentalModel(
     val productId: Int,
     val reservationId: Int,
-    val rentalStatus: RentalStatus,
-    val rentalCount: Int,
+    val productThumbnailUrl: String?,
+    val rentalCount: Int = 0,
     val productTitle: String,
-    val renterNickname: String,
-    val totalExpectRevenue: Int,
-    val daysBeforeStart: Int,
-    val daysBeforeReturn: Int
+    val renterNickname: String = "",
+    val totalExpectRevenue: Int = 0,
+    val daysBeforeStart: Int = 0,
+    val daysBeforeReturn: Int = 0
 )

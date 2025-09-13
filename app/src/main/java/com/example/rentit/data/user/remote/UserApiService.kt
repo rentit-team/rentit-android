@@ -4,6 +4,7 @@ import com.example.rentit.data.user.dto.GoogleLoginRequestDto
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
+import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
 import com.example.rentit.data.user.dto.SendPhoneCodeRequestDto
 import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
@@ -46,4 +47,7 @@ interface UserApiService {
     @Headers("Content-Type: application/json")
     suspend fun getMyRentalList(): Response<MyRentalListResponseDto>
 
+    @GET("api/v1/users/rental-history")
+    @Headers("Content-Type: application/json")
+    suspend fun getMyProductsRentalList(): Response<MyProductsRentalListResponseDto>
 }
