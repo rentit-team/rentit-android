@@ -18,8 +18,8 @@ data class MyProductsRentalDto(
     @SerializedName("productTitle")
     val productTitle: String,
 
-    @SerializedName("productThumbnailImg")
-    val productThumbnailImg: String?,
+    @SerializedName("productThumbnailImgUrl")
+    val productThumbnailImgUrl: String?,
 
     @SerializedName("startDate")
     val startDate: String, // "YYYY-MM-DD"

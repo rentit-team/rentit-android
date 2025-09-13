@@ -273,6 +273,7 @@ fun getRentalInfoText(
                 }
             }
         }
+        else -> return buildAnnotatedString {  }
     }
 }
 

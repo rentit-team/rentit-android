@@ -4,5 +4,6 @@ enum class MyProductsRentalFilter {
     WAITING_FOR_RESPONSE,
     WAITING_FOR_SHIPMENT,
     RENTING,
-    ACCEPTED
+    ACCEPTED,
+    NONE
 }

@@ -33,7 +33,7 @@ class GetMyProductsRentalHistoryUseCase @Inject constructor(
                                         productId = productId,
                                         reservationId = first.reservationId,
                                         rentalCount = records.size,
-                                        productThumbnailUrl = first.productThumbnailImg,
+                                        productThumbnailUrl = first.productThumbnailImgUrl,
                                         productTitle = first.productTitle,
                                         totalExpectRevenue = records.sumOf { it.totalPrice },
                                     )
@@ -45,7 +45,7 @@ class GetMyProductsRentalHistoryUseCase @Inject constructor(
                                 MyProductsRentalModel(
                                     productId = it.productId,
                                     reservationId = it.reservationId,
-                                    productThumbnailUrl = it.productThumbnailImg,
+                                    productThumbnailUrl = it.productThumbnailImgUrl,
                                     productTitle = it.productTitle,
                                     renterNickname = it.renterNickname,
                                     daysBeforeStart = daysFromToday(it.startDate),
