@@ -44,7 +44,7 @@ interface ProductApiService {
     @POST("api/v1/products")
     suspend fun createPost(
         @Part("payload") payload: RequestBody,
-        @Part thumbnailImg: MultipartBody.Part?
+        @Part imageParts: List<MultipartBody.Part>?
     ): Response<CreatePostResponseDto>
 
     @GET("api/v1/products/{productId}/reservations/chat-access")

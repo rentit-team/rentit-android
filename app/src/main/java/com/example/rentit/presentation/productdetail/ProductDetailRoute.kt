@@ -37,8 +37,8 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
 
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val menuDrawerState = rememberModalBottomSheetState()
-    val imagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
-    val fullImagePagerState = rememberPagerState { uiState.productDetail.imgUrlList.size }
+    val imagePagerState = rememberPagerState { uiState.productDetail.imageUrls.size }
+    val fullImagePagerState = rememberPagerState { uiState.productDetail.imageUrls.size }
 
     LaunchedEffect(Unit) {
         viewModel.loadProductDetail(productId)

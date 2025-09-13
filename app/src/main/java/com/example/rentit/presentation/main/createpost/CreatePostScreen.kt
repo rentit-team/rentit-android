@@ -21,15 +21,16 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.RangeSlider
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.RangeSlider
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SliderDefaults
+import androidx.compose.material.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -206,14 +207,6 @@ fun ImageSelectSection(
                 }
             }
         }
-
-        Text(
-            modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
-            text = stringResource(id = R.string.screen_product_create_add_image_guide),
-            style = MaterialTheme.typography.labelMedium,
-            color = Gray400,
-            textAlign = TextAlign.Start
-        )
     }
 }
 
@@ -329,6 +322,7 @@ fun RemovableTagButton(text: String, onRemoveClick: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun RentalPeriodSection(sliderPosition: ClosedFloatingPointRange<Float>, onValueChange: (ClosedFloatingPointRange<Float>) -> Unit) {
     LabeledContent(stringResource(id = R.string.screen_product_create_rental_period_label)) {

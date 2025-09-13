@@ -9,7 +9,7 @@ data class ProductDetailModel(
     val category: List<String>,
     val content: String,
     val createdAt: String,
-    val imgUrlList: List<String?>,
+    val imageUrls: List<String?>,
 ) {
     companion object {
         val EMPTY = ProductDetailModel(
@@ -21,7 +21,7 @@ data class ProductDetailModel(
             category = emptyList(),
             content = "",
             createdAt = "",
-            imgUrlList = emptyList()
+            imageUrls = emptyList()
         )
     }
 }

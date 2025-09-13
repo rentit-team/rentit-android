@@ -22,7 +22,7 @@ interface ProductRepository {
 
     suspend fun getCategories(): Result<CategoryListResponseDto>
 
-    suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Result<CreatePostResponseDto>
+    suspend fun createPost(payLoad: RequestBody, imageParts: List<MultipartBody.Part>?): Result<CreatePostResponseDto>
 
     suspend fun getChatAccessibility(productId: Int): Result<ChatAccessibilityResponseDto>
 }

@@ -31,8 +31,8 @@ class ProductRemoteDataSource @Inject constructor(
     suspend fun getCategories(): Response<CategoryListResponseDto> {
         return productApiService.getCategories()
     }
-    suspend fun createPost(payLoad: RequestBody, thumbnailImg: MultipartBody.Part?): Response<CreatePostResponseDto> {
-        return productApiService.createPost(payLoad, thumbnailImg)
+    suspend fun createPost(payLoad: RequestBody, imageParts: List<MultipartBody.Part>?): Response<CreatePostResponseDto> {
+        return productApiService.createPost(payLoad, imageParts)
     }
     suspend fun getChatAccessibility(productId: Int): Response<ChatAccessibilityResponseDto> {
         return productApiService.getChatAccessibility(productId)

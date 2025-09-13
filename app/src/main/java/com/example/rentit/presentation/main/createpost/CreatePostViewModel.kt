@@ -72,7 +72,7 @@ class CreatePostViewModel @Inject constructor(
     }
 
     fun updateImageUriList(uriList: List<Uri>) {
-        updateState { copy(selectedImgUriList = uriList) }
+        updateState { copy(selectedImgUriList = _uiState.value.selectedImgUriList + uriList) }
     }
 
     fun removeImageUri(uri: Uri){
@@ -153,18 +153,16 @@ class CreatePostViewModel @Inject constructor(
 
         viewModelScope.launch {
             updateState { copy(isLoading = true) }
-            // 서버는 단일 이미지만 지원(임시)하므로 첫 번째 선택 이미지를 업로드 대상으로 사용
             val selectedImageUriList = _uiState.value.selectedImgUriList
-            val thumbnailPart =
+            val imageParts =
                 if (selectedImageUriList.isNotEmpty()) {
-                    MultipartUtil.uriToMultipart(
-                        context = context,
-                        uri = selectedImageUriList[0]
-                    )
+                    selectedImageUriList.mapNotNull {
+                        MultipartUtil.uriToMultipart(context, it)
+                    }
                 } else null
 
             createPostUseCase(
-                thumbnailPart = thumbnailPart,
+                imageParts = imageParts,
                 title = _uiState.value.title,
                 content = _uiState.value.content,
                 selectedCategoryIdList = _uiState.value.selectedCategoryIdList,
