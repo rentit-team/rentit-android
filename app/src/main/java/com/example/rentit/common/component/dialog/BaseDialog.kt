@@ -24,6 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
@@ -47,7 +48,10 @@ fun BaseDialog(
     customContent: @Composable ColumnScope.() -> Unit = {}
 ) {
     Dialog(
-        onDismissRequest = onDismissRequest
+        onDismissRequest = onDismissRequest,
+        properties = DialogProperties(
+            usePlatformDefaultWidth = false
+        )
     ) {
         Box(
             modifier = Modifier

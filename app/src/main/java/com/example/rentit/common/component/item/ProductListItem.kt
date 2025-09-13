@@ -8,13 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +71,8 @@ fun ProductListItem(
         ) {
             LoadableUrlImage(
                 modifier = Modifier
-                    .size(100.dp)
+                    .fillMaxWidth(0.3f)
+                    .aspectRatio(1f)
                     .clip(RoundedCornerShape(20.dp)),
                 imgUrl = thumbnailImgUrl,
                 defaultImageResId = R.drawable.img_thumbnail_placeholder,
@@ -84,11 +84,11 @@ fun ProductListItem(
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        modifier = Modifier.width(160.dp),
+                        modifier = Modifier.weight(1f),
                         maxLines = 1,
                         text = title,
                         overflow = TextOverflow.Ellipsis,

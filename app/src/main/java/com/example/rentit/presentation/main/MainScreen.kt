@@ -3,7 +3,6 @@ package com.example.rentit.presentation.main
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
@@ -59,6 +58,7 @@ fun MainBottomBar(showBottomBar: Boolean, currentRoute: String?, onBottomItemCli
     AnimatedVisibility(
         visible = showBottomBar,
         enter = slideInVertically { it },
+        exit = slideOutVertically { it }
     ) {
         NavigationBar(modifier = Modifier.fillMaxHeight(0.1f), containerColor = Color.White) {
             BottomNavItem.entries.forEach { item ->
