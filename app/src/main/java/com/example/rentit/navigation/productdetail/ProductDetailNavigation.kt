@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.navigation.bottomtab.BottomTabRoute
 import com.example.rentit.presentation.productdetail.ProductDetailRoute
 import com.example.rentit.presentation.productdetail.rentalhistory.RentalHistoryRoute
@@ -48,9 +49,9 @@ fun NavHostController.navigateToReservationComplete(
     )
 }
 
-fun NavHostController.navigateToRentalHistory(productId: Int) {
+fun NavHostController.navigateToRentalHistory(productId: Int, selectedReservationId: Int? = null, initialRentalStatus: RentalStatus? = null) {
     navigate(
-        route = ProductDetailRoute.RentalHistory(productId)
+        route = ProductDetailRoute.RentalHistory(productId, selectedReservationId, initialRentalStatus)
     )
 }
 
@@ -75,6 +76,6 @@ fun NavGraphBuilder.productDetailGraph(navHostController: NavHostController) {
     }
     composable<ProductDetailRoute.RentalHistory> { backStackEntry ->
         val items: ProductDetailRoute.RentalHistory = backStackEntry.toRoute()
-        RentalHistoryRoute(navHostController, items.productId)
+        RentalHistoryRoute(navHostController, items.productId, items.selectedReservationId, items.initialRentalStatus)
     }
 }

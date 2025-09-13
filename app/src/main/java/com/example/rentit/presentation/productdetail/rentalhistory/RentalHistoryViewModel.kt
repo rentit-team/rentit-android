@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.core.error.ForbiddenException
 import com.example.rentit.domain.rental.usecase.GetRentalHistoriesUseCase
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
@@ -45,6 +46,20 @@ class RentalHistoryViewModel @Inject constructor(
         updateUiState { copy(isLoading = isLoading) }
     }
 
+    fun initializeFiltering(initialFilterMode: RentalStatus?, reservationId: Int?) {
+        reservationId?.let { updateSelectedReservationId(reservationId) }
+
+        initialFilterMode?.let {
+            val finishedStatuses = listOf(RentalStatus.CANCELED, RentalStatus.REJECTED, RentalStatus.RETURNED)
+            when(it) {
+                !in finishedStatuses -> updateFilterMode(RentalHistoryFilter.IN_PROGRESS)
+                RentalStatus.PENDING -> updateFilterMode(RentalHistoryFilter.REQUEST)
+                RentalStatus.ACCEPTED -> updateFilterMode(RentalHistoryFilter.ACCEPTED)
+                else -> updateFilterMode(RentalHistoryFilter.FINISHED)
+            }
+        }
+    }
+
     suspend fun loadProductRentalHistories(productId: Int){
         setIsLoading(true)
         getRentalHistoriesUseCase(productId)
@@ -83,7 +98,7 @@ class RentalHistoryViewModel @Inject constructor(
         emitSideEffect(RentalHistorySideEffect.ScrollToTop)
     }
 
-    fun onHistoryClicked(reservationId: Int) {
+    fun updateSelectedReservationId(reservationId: Int) {
         val currentId = uiState.value.selectedReservationId
         currentId?.let {
             updateUiState { copy(selectedReservationId = null, calendarMonth = YearMonth.now()) }

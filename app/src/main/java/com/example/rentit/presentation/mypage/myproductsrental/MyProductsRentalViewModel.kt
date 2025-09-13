@@ -82,4 +82,21 @@ class MyProductsRentalViewModel @Inject constructor(
             else -> {}
         }
     }
+
+    fun onItemClicked(selectedFilter: MyProductsRentalFilter, productId: Int, reservationId: Int) {
+        when (selectedFilter) {
+            MyProductsRentalFilter.WAITING_FOR_SHIPMENT, MyProductsRentalFilter.RENTING -> {
+                emitSideEffect(MyProductsRentalSideEffect.NavigateToProductDetail(productId, reservationId, null))
+            }
+            MyProductsRentalFilter.WAITING_FOR_RESPONSE, MyProductsRentalFilter.ACCEPTED -> {
+                val rentalStatus = when (selectedFilter) {
+                    MyProductsRentalFilter.WAITING_FOR_RESPONSE -> RentalStatus.PENDING
+                    MyProductsRentalFilter.ACCEPTED -> RentalStatus.ACCEPTED
+                    else -> null
+                }
+                emitSideEffect(MyProductsRentalSideEffect.NavigateToProductDetail(productId, null, rentalStatus))
+            }
+            else -> {}
+        }
+    }
 }

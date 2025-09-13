@@ -171,7 +171,7 @@
     <string name="screen_request_confirm_btn_complete">완료</string>
 
     <!-- 상품 대여 내역 -->
-    <string name="screen_product_rental_history_title">대여 내역</string>
+    <string name="screen_product_rental_history_title">상품 대여 내역</string>
     <string name="screen_product_rental_history_item_renting_info_1">반납이</string>
     <string name="screen_product_rental_history_item_renting_info_2">남았어요</string>
     <string name="screen_product_rental_history_item_ready_to_ship_info">대여 시작일까지</string>
