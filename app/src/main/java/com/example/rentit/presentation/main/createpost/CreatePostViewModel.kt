@@ -72,7 +72,7 @@ class CreatePostViewModel @Inject constructor(
     }
 
     fun updateImageUriList(uriList: List<Uri>) {
-        updateState { copy(selectedImgUriList = uriList) }
+        updateState { copy(selectedImgUriList = _uiState.value.selectedImgUriList + uriList) }
     }
 
     fun removeImageUri(uri: Uri){
