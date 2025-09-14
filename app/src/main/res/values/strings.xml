@@ -18,6 +18,7 @@
 
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_top_app_bar_menu_icon_description">메뉴</string>
+    <string name="common_top_app_bar_download_receipt_icon_description">거래 증빙 서류 다운로드</string>
     <string name="common_day_unit">일</string>
     <string name="common_case_unit">건</string>
     <string name="common_price_unit_per_day">원/일</string>
