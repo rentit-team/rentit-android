@@ -9,6 +9,7 @@ import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.TrackingRegistrationRequestType
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
+import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.domain.rental.repository.RentalRepository
@@ -26,6 +27,7 @@ private const val TAG = "RentalDetailViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
+    private val chatRepository: ChatRepository,
     private val rentalRepository: RentalRepository,
     private val getRentalDetailUseCase: GetRentalDetailUseCase,
     private val registerTrackingUseCase: RegisterTrackingUseCase,
@@ -35,6 +37,8 @@ class RentalDetailViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<RentalDetailSideEffect>()
     val sideEffect: SharedFlow<RentalDetailSideEffect> = _sideEffect
+
+    private var chatRoomId: String? = null
 
     private fun emitSideEffect(sideEffect: RentalDetailSideEffect) {
         viewModelScope.launch {
@@ -64,6 +68,7 @@ class RentalDetailViewModel @Inject constructor(
                     rentalDetailStatusModel = it.rentalDetailStatusModel,
                     role = it.role
                 )
+                chatRoomId = it.chatRoomId
                 Log.i(TAG, "대여 상세 조회 성공: Product Id: $productId, Reservation Id: $reservationId")
             }.onFailure { e ->
                 Log.e(TAG, "대여 상세 조회 실패", e)
@@ -240,5 +245,21 @@ class RentalDetailViewModel @Inject constructor(
 
     fun navigateToRentalPhotoCheck() {
         emitSideEffect(RentalDetailSideEffect.NavigateToRentalPhotoCheck)
+    }
+
+    fun onChattingClicked(productId: Int) {
+        if(chatRoomId == null) {
+            viewModelScope.launch {
+                chatRepository.postNewChat(productId)
+                    .onSuccess {
+                        chatRoomId = it.data.chatRoomId
+                        chatRoomId?.let { id -> emitSideEffect(RentalDetailSideEffect.NavigateToChatRoom(id)) }
+                    }.onFailure {
+                        emitSideEffect(RentalDetailSideEffect.ToastChatRoomError)
+                    }
+            }
+        } else {
+            emitSideEffect(RentalDetailSideEffect.NavigateToChatRoom(chatRoomId!!))
+        }
     }
 }

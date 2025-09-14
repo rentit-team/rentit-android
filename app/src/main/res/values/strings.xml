@@ -49,6 +49,7 @@
     <string name="common_dialog_accept_request_btn_accept">수락하기</string>
     <string name="toast_accept_rental_success">대여 요청이 정상적으로 승인되었어요.</string>
     <string name="toast_accept_rental_failed">요청 수락에 실패했어요. 잠시 후 다시 시도해 주세요.</string>
+    <string name="toast_chat_room_error">채팅방을 찾을 수 없어요.</string>
 
     <string name="common_calendar_left_chevron_description">다음달로 이동</string>
     <string name="common_calendar_right_chevron_description">이전달로 이동</string>
@@ -322,6 +323,8 @@
     <string name="screen_transaction_proof_download_btn_description">%s부터 %s까지 %s 대여 내역에 대한 거래 증빙 서류 다운로드</string>
 
     <!-- 대여 상세 -->
+    <string name="screen_rental_detail_chat_floating_button">상대방과 채팅하기</string>
+
     <string name="screen_rental_detail_task_check_box_icon_done">%s 완료</string>
     <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
 

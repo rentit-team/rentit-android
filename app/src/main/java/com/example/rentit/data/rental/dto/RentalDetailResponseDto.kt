@@ -15,6 +15,9 @@ data class RentalDto(
     @SerializedName("reservationId")
     val reservationId: Int,
 
+    @SerializedName("chatroomId")
+    val chatroomId: String?,
+
     @SerializedName("renter")
     val renter: RenterDto,
 

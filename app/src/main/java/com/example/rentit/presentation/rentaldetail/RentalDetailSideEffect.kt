@@ -7,6 +7,7 @@ sealed class RentalDetailSideEffect {
     data object NavigateToPhotoBeforeRent: RentalDetailSideEffect()
     data object NavigateToPhotoBeforeReturn: RentalDetailSideEffect()
     data object NavigateToRentalPhotoCheck: RentalDetailSideEffect()
+    data class NavigateToChatRoom(val chatRoomId: String): RentalDetailSideEffect()
     data object ToastErrorGetCourierNames: RentalDetailSideEffect()
     data object ToastSuccessTrackingRegistration: RentalDetailSideEffect()
     data object ToastErrorTrackingRegistration: RentalDetailSideEffect()
@@ -14,5 +15,6 @@ sealed class RentalDetailSideEffect {
     data object ToastCancelRentalFailed: RentalDetailSideEffect()
     data object ToastAcceptRentalSuccess: RentalDetailSideEffect()
     data object ToastAcceptRentalFailed: RentalDetailSideEffect()
+    data object ToastChatRoomError: RentalDetailSideEffect()
     data class CommonError(val throwable: Throwable): RentalDetailSideEffect()
 }

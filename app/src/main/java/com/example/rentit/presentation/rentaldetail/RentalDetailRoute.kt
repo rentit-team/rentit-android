@@ -19,6 +19,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.dialog.RequestAcceptDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.enums.RentalRole
+import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToPhotoBeforeRent
@@ -68,26 +69,32 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                     RentalDetailSideEffect.NavigateToRentalPhotoCheck -> {
                         navHostController.navigateToRentalPhotoCheck(productId, reservationId)
                     }
+                    is RentalDetailSideEffect.NavigateToChatRoom -> {
+                        navHostController.navigateToChatRoom(it.chatRoomId)
+                    }
                     RentalDetailSideEffect.ToastErrorGetCourierNames -> {
                         Toast.makeText(context, context.getString(R.string.toast_error_get_courier_names), Toast.LENGTH_SHORT).show()
                     }
                     RentalDetailSideEffect.ToastSuccessTrackingRegistration -> {
-                        Toast.makeText(context, context.getString(R.string.toast_success_post_tracking_registration), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_success_post_tracking_registration, Toast.LENGTH_SHORT).show()
                     }
                     RentalDetailSideEffect.ToastErrorTrackingRegistration -> {
-                        Toast.makeText(context, context.getString(R.string.toast_error_post_tracking_registration), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_error_post_tracking_registration, Toast.LENGTH_SHORT).show()
                     }
                     RentalDetailSideEffect.ToastCancelRentalSuccess -> {
-                        Toast.makeText(context, context.getString(R.string.toast_cancel_rental_success), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_cancel_rental_success, Toast.LENGTH_SHORT).show()
                     }
                     RentalDetailSideEffect.ToastCancelRentalFailed -> {
-                        Toast.makeText(context, context.getString(R.string.toast_cancel_rental_failed), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_cancel_rental_failed, Toast.LENGTH_SHORT).show()
                     }
                     RentalDetailSideEffect.ToastAcceptRentalSuccess -> {
-                        Toast.makeText(context, context.getString(R.string.toast_accept_rental_success), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_accept_rental_success, Toast.LENGTH_SHORT).show()
                     }
                     RentalDetailSideEffect.ToastAcceptRentalFailed -> {
-                        Toast.makeText(context, context.getString(R.string.toast_accept_rental_failed), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_accept_rental_failed, Toast.LENGTH_SHORT).show()
+                    }
+                    RentalDetailSideEffect.ToastChatRoomError -> {
+                        Toast.makeText(context, R.string.toast_chat_room_error, Toast.LENGTH_SHORT).show()
                     }
                     is RentalDetailSideEffect.CommonError -> {
                         mainViewModel?.handleError(it.throwable)
@@ -115,6 +122,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                 onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
                 onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck,
                 onRentalSummaryClick = viewModel::navigateToProductDetail,
+                onChattingClick = { viewModel.onChattingClicked(productId) },
             )
         }
         RentalRole.RENTER -> {
@@ -128,6 +136,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                 onTrackingNumTaskClick = viewModel::showTrackingRegDialog,
                 onCheckPhotoClick = viewModel::navigateToRentalPhotoCheck,
                 onRentalSummaryClick = viewModel::navigateToProductDetail,
+                onChattingClick = { viewModel.onChattingClicked(productId) },
             )
         }
         RentalRole.DEFAULT -> { }

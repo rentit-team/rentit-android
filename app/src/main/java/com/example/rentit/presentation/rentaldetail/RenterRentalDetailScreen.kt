@@ -4,6 +4,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.ExtendedFAB
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto
@@ -40,10 +44,19 @@ fun RentalDetailRenterScreen(
     onTrackingNumTaskClick: () -> Unit,
     onPhotoTaskClick: () -> Unit,
     onCheckPhotoClick: () -> Unit,
-    onRentalSummaryClick: () -> Unit
+    onRentalSummaryClick: () -> Unit,
+    onChattingClick: () -> Unit
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), onBackClick = onBackPressed) }
+        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), onBackClick = onBackPressed) },
+        floatingActionButton = {
+            ExtendedFAB(
+                modifier = Modifier.padding(bottom = 16.dp),
+                iconRes = R.drawable.ic_chat,
+                textRes = R.string.screen_rental_detail_chat_floating_button,
+                onClick = onChattingClick
+            )
+        }
     ) {
         Column(modifier = Modifier.padding(it).verticalScroll(scrollState)) {
             when(uiModel) {
@@ -57,6 +70,7 @@ fun RentalDetailRenterScreen(
                     RenterReturnedContent(uiModel, onCheckPhotoClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Unknown -> Unit
             }
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
@@ -68,6 +82,7 @@ private fun Preview() {
     val sample1 = RentalDetailResponseDto(
         rental = RentalDto(
             reservationId = 1001,
+            chatroomId = null,
             renter = RenterDto(userId = 101, nickname = "김철수"),
             status = RentalStatus.RENTING,
             product = ProductDto(
@@ -112,7 +127,8 @@ private fun Preview() {
             onTrackingNumTaskClick = { },
             onPhotoTaskClick = { },
             onCheckPhotoClick = { },
-            onRentalSummaryClick = { }
+            onRentalSummaryClick = { },
+            onChattingClick = { }
         )
     }
 }
