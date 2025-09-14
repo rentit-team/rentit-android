@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.common.enums.TrackingRegistrationRequestType
+import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.domain.chat.repository.ChatRepository
@@ -171,7 +171,7 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     /** 운송장 등록 */
-    fun confirmTrackingReg(requestType: TrackingRegistrationRequestType, productId: Int, reservationId: Int) {
+    fun confirmTrackingReg(requestType: RentalProcessType, productId: Int, reservationId: Int) {
         viewModelScope.launch {
             registerTrackingUseCase(
                 productId = productId,

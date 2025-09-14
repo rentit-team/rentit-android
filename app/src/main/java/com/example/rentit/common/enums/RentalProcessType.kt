@@ -1,5 +1,5 @@
 package com.example.rentit.common.enums
 
-enum class TrackingRegistrationRequestType {
+enum class RentalProcessType {
     RENTAL, RETURN, NONE
 }

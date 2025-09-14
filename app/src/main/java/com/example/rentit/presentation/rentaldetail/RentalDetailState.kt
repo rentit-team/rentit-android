@@ -1,7 +1,7 @@
 package com.example.rentit.presentation.rentaldetail
 
 import com.example.rentit.common.enums.RentalRole
-import com.example.rentit.common.enums.TrackingRegistrationRequestType
+import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
@@ -17,10 +17,10 @@ data class RentalDetailState(
     val requestAcceptDialog: RequestAcceptDialogUiModel? = null,
     val showCancelDialog: Boolean = false,
 ) {
-    val trackingRegisterRequestType: TrackingRegistrationRequestType
+    val trackingRegisterRequestType: RentalProcessType
         get() = when(rentalDetailStatusModel) {
-            is RentalDetailStatusModel.Paid -> TrackingRegistrationRequestType.RENTAL
-            is RentalDetailStatusModel.Renting -> TrackingRegistrationRequestType.RETURN
-            else -> TrackingRegistrationRequestType.NONE
+            is RentalDetailStatusModel.Paid -> RentalProcessType.RENTAL
+            is RentalDetailStatusModel.Renting -> RentalProcessType.RETURN
+            else -> RentalProcessType.NONE
         }
 }
