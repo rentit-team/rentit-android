@@ -31,6 +31,7 @@ import com.example.rentit.navigation.rentaldetail.navigateToRentalPhotoCheck
 import com.example.rentit.presentation.main.MainViewModel
 import com.example.rentit.presentation.rentaldetail.dialog.RentalCancelDialog
 import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationDialog
+import com.example.rentit.presentation.rentaldetail.dialog.TransactionReceiptConfirmDialog
 import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -126,7 +127,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                 uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
                 onBackClick = viewModel::navigateBack,
-                onTransactionReceiptClick = { viewModel.loadTransactionReceipt(context, productId, reservationId) },
+                onTransactionReceiptClick = viewModel::showTransactionReceiptConfirmDialog,
                 onRequestResponseClick = viewModel::showRequestAcceptDialog,
                 onCancelRentClick = viewModel::showCancelDialog,
                 onPhotoTaskClick = viewModel::navigateToPhotoBeforeRent,
@@ -141,7 +142,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                 uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
                 onBackClick = viewModel::navigateBack,
-                onTransactionReceiptClick = { viewModel.loadTransactionReceipt(context, productId, reservationId) },
+                onTransactionReceiptClick = viewModel::showTransactionReceiptConfirmDialog,
                 onPayClick = viewModel::navigateToPay,
                 onCancelRentClick = viewModel::showCancelDialog,
                 onPhotoTaskClick = viewModel::navigateToPhotoBeforeReturn,
@@ -155,6 +156,13 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
     }
 
     LoadingScreen(uiState.isLoading)
+
+    if(uiState.showTransactionReceiptConfirmDialog) {
+        TransactionReceiptConfirmDialog(
+            onDismiss = viewModel::dismissTransactionReceiptConfirmDialog,
+            onConfirmClick = { viewModel.fetchTransactionReceipt(context, productId, reservationId) },
+        )
+    }
 
     uiState.requestAcceptDialog?.let {
         RequestAcceptDialog(

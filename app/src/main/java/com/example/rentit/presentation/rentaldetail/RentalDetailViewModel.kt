@@ -62,26 +62,6 @@ class RentalDetailViewModel @Inject constructor(
         )
     }
 
-    /** 거래 증빙 서류 가져오기 */
-    fun loadTransactionReceipt(context: Context, productId: Int, reservationId: Int) {
-        viewModelScope.launch(Dispatchers.IO) {
-            rentalRepository.getRentalReceipt(productId, reservationId, RentalProcessType.RENTAL)
-                .onSuccess {
-                    val file = File(context.cacheDir, "rental-receipt-$reservationId.pdf")
-
-                    it.byteStream().use { inputStream ->
-                        file.outputStream().use { outputStream ->
-                            inputStream.copyTo(outputStream)
-                        }
-                    }
-                    emitSideEffect(RentalDetailSideEffect.DocumentLoadSuccess(file))
-                }.onFailure {
-                    emitSideEffect(RentalDetailSideEffect.ToastDocumentLoadFailed)
-                }
-
-        }
-    }
-
     /** 대여 상세 정보 조회 */
     suspend fun getRentalDetail(productId: Int, reservationId: Int) {
         setLoading(true)
@@ -104,6 +84,38 @@ class RentalDetailViewModel @Inject constructor(
         viewModelScope.launch {
             getRentalDetail(productId, reservationId)
         }
+    }
+
+    /** 거래 증빙 서류 가져오기 */
+    fun fetchTransactionReceipt(context: Context, productId: Int, reservationId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            setLoading(true)
+            rentalRepository.getRentalReceipt(productId, reservationId, RentalProcessType.RENTAL)
+                .onSuccess {
+                    val file = File(context.cacheDir, "rental-receipt-$reservationId.pdf")
+
+                    it.byteStream().use { inputStream ->
+                        file.outputStream().use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                    }
+                    emitSideEffect(RentalDetailSideEffect.DocumentLoadSuccess(file))
+                    dismissTransactionReceiptConfirmDialog()
+                    Log.i(TAG, "거래 증빙 서류 가져오기 성공: Product Id: $productId, Reservation Id: $reservationId")
+                }.onFailure { e ->
+                    Log.e(TAG, "거래 증빙 서류 가져오기 실패", e)
+                    emitSideEffect(RentalDetailSideEffect.ToastDocumentLoadFailed)
+                }
+            setLoading(false)
+        }
+    }
+
+    fun showTransactionReceiptConfirmDialog() {
+        _uiState.value = _uiState.value.copy(showTransactionReceiptConfirmDialog = true)
+    }
+
+    fun dismissTransactionReceiptConfirmDialog() {
+        _uiState.value = _uiState.value.copy(showTransactionReceiptConfirmDialog = false)
     }
 
     /** 요청 수락 */
