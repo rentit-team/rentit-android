@@ -38,7 +38,8 @@ import com.example.rentit.presentation.rentaldetail.content.renter.RenterReturne
 fun RentalDetailRenterScreen(
     uiModel: RentalDetailStatusModel,
     scrollState: ScrollState,
-    onBackPressed: () -> Unit,
+    onBackClick: () -> Unit,
+    onTransactionReceiptClick: () -> Unit,
     onPayClick: () -> Unit,
     onCancelRentClick: () -> Unit,
     onTrackingNumTaskClick: () -> Unit,
@@ -48,7 +49,14 @@ fun RentalDetailRenterScreen(
     onChattingClick: () -> Unit
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title), onBackClick = onBackPressed) },
+        topBar = {
+            CommonTopAppBar (
+                title = stringResource(R.string.screen_rental_detail_title),
+                showTransactionReceipt = true,
+                onBackClick = onBackClick,
+                onTransactionReceiptClick = onTransactionReceiptClick
+            )
+        },
         floatingActionButton = {
             ExtendedFAB(
                 modifier = Modifier.padding(bottom = 16.dp),
@@ -121,7 +129,8 @@ private fun Preview() {
         RentalDetailRenterScreen(
             uiModel = sample2.toModel(),
             scrollState = rememberScrollState(),
-            onBackPressed =  { },
+            onBackClick =  { },
+            onTransactionReceiptClick = { },
             onPayClick = { },
             onCancelRentClick = { },
             onTrackingNumTaskClick = { },

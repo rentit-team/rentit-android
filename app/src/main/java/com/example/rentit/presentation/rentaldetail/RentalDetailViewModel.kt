@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.rentaldetail
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -15,11 +16,13 @@ import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.domain.rental.repository.RentalRepository
 import com.example.rentit.domain.rental.usecase.GetRentalDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 private const val TAG = "RentalDetailViewModel"
@@ -57,6 +60,26 @@ class RentalDetailViewModel @Inject constructor(
             showTrackingRegDialog = false,
             showTrackingNumberEmptyError = false
         )
+    }
+
+    /** 거래 증빙 서류 가져오기 */
+    fun loadTransactionReceipt(context: Context, productId: Int, reservationId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            rentalRepository.getRentalReceipt(productId, reservationId, RentalProcessType.RENTAL)
+                .onSuccess {
+                    val file = File(context.cacheDir, "rental-receipt-$reservationId.pdf")
+
+                    it.byteStream().use { inputStream ->
+                        file.outputStream().use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                    }
+                    emitSideEffect(RentalDetailSideEffect.DocumentLoadSuccess(file))
+                }.onFailure {
+                    emitSideEffect(RentalDetailSideEffect.ToastDocumentLoadFailed)
+                }
+
+        }
     }
 
     /** 대여 상세 정보 조회 */

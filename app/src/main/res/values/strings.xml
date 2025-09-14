@@ -409,6 +409,9 @@
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_leading_text">지연 보상금</string>
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_tail_text">이 지급될 예정이에요.</string>
 
+    <!-- 거래 증빙 서류 가져오기 Dialog -->
+    <string name="toast_load_transaction_receipt_failed">파일을 가져오는 중에 문제가 발생했어요. 잠시 후 다시 시도해주세요.</string>
+
     <!-- Unknown Dialog -->
     <string name="dialog_rental_detail_unknown_title">대여 정보가 존재하지 않아요.</string>
     <string name="dialog_rental_detail_unknown_confirm_btn">확인</string>

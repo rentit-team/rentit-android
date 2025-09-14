@@ -39,6 +39,7 @@ fun OwnerRentalDetailScreen(
     uiModel: RentalDetailStatusModel,
     scrollState: ScrollState,
     onBackClick: () -> Unit,
+    onTransactionReceiptClick: () -> Unit,
     onRequestResponseClick: () -> Unit,
     onCancelRentClick: () -> Unit,
     onPhotoTaskClick: () -> Unit,
@@ -48,7 +49,14 @@ fun OwnerRentalDetailScreen(
     onChattingClick: () -> Unit,
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title)) { onBackClick() } },
+        topBar = {
+            CommonTopAppBar (
+                title = stringResource(R.string.screen_rental_detail_title),
+                showTransactionReceipt = true,
+                onBackClick = onBackClick,
+                onTransactionReceiptClick = onTransactionReceiptClick
+            )
+        },
         floatingActionButton = {
             ExtendedFAB(
                 modifier = Modifier.padding(bottom = 16.dp),
@@ -124,6 +132,7 @@ private fun OwnerRentalDetailScreenPreview() {
             sample2.toModel(),
             rememberScrollState(),
             onBackClick = {},
+            onTransactionReceiptClick = {},
             onRequestResponseClick = {},
             onCancelRentClick = {},
             onPhotoTaskClick = {},

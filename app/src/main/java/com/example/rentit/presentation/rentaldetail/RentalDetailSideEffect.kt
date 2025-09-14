@@ -1,6 +1,9 @@
 package com.example.rentit.presentation.rentaldetail
 
+import java.io.File
+
 sealed class RentalDetailSideEffect {
+    data class DocumentLoadSuccess(val file: File) : RentalDetailSideEffect()
     data object NavigateBack: RentalDetailSideEffect()
     data object NavigateToProductDetail: RentalDetailSideEffect()
     data object NavigateToPay: RentalDetailSideEffect()
@@ -8,6 +11,7 @@ sealed class RentalDetailSideEffect {
     data object NavigateToPhotoBeforeReturn: RentalDetailSideEffect()
     data object NavigateToRentalPhotoCheck: RentalDetailSideEffect()
     data class NavigateToChatRoom(val chatRoomId: String): RentalDetailSideEffect()
+    data object ToastDocumentLoadFailed : RentalDetailSideEffect()
     data object ToastErrorGetCourierNames: RentalDetailSideEffect()
     data object ToastSuccessTrackingRegistration: RentalDetailSideEffect()
     data object ToastErrorTrackingRegistration: RentalDetailSideEffect()

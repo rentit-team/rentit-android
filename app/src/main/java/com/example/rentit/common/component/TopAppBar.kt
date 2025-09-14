@@ -26,10 +26,10 @@ fun CommonTopAppBar(
     modifier: Modifier = Modifier,
     title: String = "",
     showMenu: Boolean = false,
-    showDownLoadReceipt: Boolean = false,
+    showTransactionReceipt: Boolean = false,
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
-    onDownLoadReceiptClick: () -> Unit = {},
+    onTransactionReceiptClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -66,9 +66,9 @@ fun CommonTopAppBar(
                 )
             }
         }
-        if(showDownLoadReceipt) {
+        if(showTransactionReceipt) {
             IconButton(
-                onClick = onDownLoadReceiptClick,
+                onClick = onTransactionReceiptClick,
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 6.dp)
             ) {
                 Icon(
