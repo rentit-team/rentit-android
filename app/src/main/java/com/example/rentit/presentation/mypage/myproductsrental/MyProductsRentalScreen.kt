@@ -53,7 +53,7 @@ fun MyProductsRentalScreen(
     upcomingShipmentCount: Int = 0,
     showNoticeBanner: Boolean = true,
     onFilterChange: (MyProductsRentalFilter) -> Unit = {},
-    onItemClick: () -> Unit = {},
+    onItemClick: (selectedFilter: MyProductsRentalFilter, productId: Int, reservationId: Int) -> Unit,
     onBackClick: () -> Unit = {}
 ) {
     Scaffold(
@@ -138,7 +138,7 @@ fun NoticeBannerSection(selectedFilter: MyProductsRentalFilter, upcomingShipment
 fun RentalHistoriesSection(
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
     rentals: List<MyProductsRentalModel> = emptyList(),
-    onItemClick: () -> Unit = {}
+    onItemClick: (selectedFilter: MyProductsRentalFilter, productId: Int, reservationId: Int) -> Unit
 ) {
     if(rentals.isEmpty()) return EmptyContentScreen(text = stringResource(R.string.screen_my_products_rental_empty_list))
 
@@ -153,7 +153,7 @@ fun RentalHistoriesSection(
                 renterNickname = rentals[i].renterNickname,
                 daysBeforeStart = rentals[i].daysBeforeStart,
                 daysBeforeReturn = rentals[i].daysBeforeReturn,
-                onItemClick = onItemClick
+                onItemClick = { onItemClick(selectedFilter, rentals[i].productId, rentals[i].reservationId) }
             )
         }
     }
@@ -286,6 +286,7 @@ fun MyProductsRentalPreview() {
             rentals = emptyList(),
             selectedFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
             onFilterChange = {},
+            onItemClick = { _, _, _ -> },
             onBackClick = {}
         )
     }

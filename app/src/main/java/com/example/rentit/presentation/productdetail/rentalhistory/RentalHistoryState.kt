@@ -20,6 +20,10 @@ data class RentalHistoryState(
     val rentalHistoryList: List<RentalHistoryModel> = emptyList(),
     val showAccessForbiddenDialog: Boolean = false
 ) {
+
+    val isListItemExpanded: Boolean
+        get() = selectedReservationId != null
+
     val filteredRentalHistoryList: List<RentalHistoryModel>
         get() {
             selectedReservationId?.let { id ->
@@ -59,7 +63,7 @@ data class RentalHistoryState(
                 .filter {
                     val start = it.rentalPeriod.startDate
                     val end = it.rentalPeriod.endDate
-                    start != null && end != null && start.isBefore(end)
+                    start != null && end != null && !start.isAfter(end)
                 }
                 .reversed()
                 .forEach {

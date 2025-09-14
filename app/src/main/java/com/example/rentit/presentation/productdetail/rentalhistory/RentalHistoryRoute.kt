@@ -12,13 +12,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.presentation.main.MainViewModel
 import com.example.rentit.presentation.productdetail.rentalhistory.dialog.AccessForbiddenDialog
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
+fun RentalHistoryRoute(navHostController: NavHostController, productId: Int, selectedReservationId: Int?, initialRentalStatus: RentalStatus?, ) {
     val backStackEntry = navHostController.currentBackStackEntry
     val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
 
@@ -28,6 +29,7 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
 
     LaunchedEffect(productId) {
         viewModel.loadProductRentalHistories(productId)
+        viewModel.initializeFiltering(initialRentalStatus, selectedReservationId)
         mainViewModel?.setRetryAction { viewModel.retryLoadHistories(productId) }
     }
 
@@ -38,6 +40,9 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
                     is RentalHistorySideEffect.NavigateToRentalDetail -> {
                         navHostController.navigateToRentalDetail(productId, it.reservationId)
                     }
+                    RentalHistorySideEffect.ScrollToTop -> {
+                        uiState.historyListScrollState.animateScrollToItem(0)
+                    }
                     is RentalHistorySideEffect.CommonError -> {
                         mainViewModel?.handleError(it.throwable)
                     }
@@ -46,19 +51,17 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int) {
         }
     }
 
-    LaunchedEffect(uiState.filterMode, uiState.selectedReservationId) {
-        viewModel.scrollToTop()
-    }
-
     RentalHistoryScreen(
         rentalHistoryList = uiState.filteredRentalHistoryList,
         rentalHistoryByDateMap = uiState.rentalHistoryByDateMap,
         filterMode = uiState.filterMode,
         calendarMonth = uiState.calendarMonth,
         historyListScrollState = uiState.historyListScrollState,
+        isListItemExpanded = uiState.isListItemExpanded,
         onChangeMonth = viewModel::updateCalendarMonth,
         onRentalDateClick = viewModel::updateSelectedRentalDate,
-        onHistoryClick = viewModel::onHistoryClicked,
+        onHistoryClick = viewModel::updateSelectedReservationId,
+        onRentalDetailClick = viewModel::onRentalDetailClicked,
         onToggleFilter = viewModel::updateFilterMode,
         onBackClick = navHostController::popBackStack,
     )

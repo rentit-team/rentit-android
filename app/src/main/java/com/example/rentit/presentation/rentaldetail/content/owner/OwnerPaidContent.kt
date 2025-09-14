@@ -14,6 +14,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.ArrowedTextButton
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
@@ -22,7 +23,6 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalPay
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.components.ArrowedTextButton
 import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
