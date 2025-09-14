@@ -1,6 +1,7 @@
 package com.example.rentit.domain.rental.repository
 
 import com.example.rentit.common.enums.PhotoRegistrationType
+import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.data.rental.dto.RentalHistoriesResponseDto
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
@@ -10,6 +11,7 @@ import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 
 interface RentalRepository {
     suspend fun getRentalHistoriesByProduct(productId: Int): Result<RentalHistoriesResponseDto>
@@ -25,4 +27,6 @@ interface RentalRepository {
     suspend fun postPhotoRegistration(productId: Int, reservationId: Int, type: PhotoRegistrationType, images: List<MultipartBody.Part>): Result<PhotoRegistrationResponseDto>
 
     suspend fun getRentalPhotos(productId: Int, reservationId: Int): Result<RentalPhotoResponseDto>
+
+    suspend fun getRentalReceipt(productId: Int, reservationId: Int, type: RentalProcessType): Result<ResponseBody>
 }

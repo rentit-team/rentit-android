@@ -1,6 +1,7 @@
 package com.example.rentit.data.rental.remote
 
 import com.example.rentit.common.enums.PhotoRegistrationType
+import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.data.rental.dto.RentalHistoriesResponseDto
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
 import com.example.rentit.data.rental.dto.PhotoRegistrationResponseDto
@@ -10,6 +11,7 @@ import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -37,5 +39,8 @@ class RentalRemoteDataSource @Inject constructor(
     }
     suspend fun getRentalPhotos(productId: Int, reservationId: Int): Response<RentalPhotoResponseDto> {
         return rentalApiService.getRentalPhotos(productId, reservationId)
+    }
+    suspend fun getRentalReceipt(productId: Int, reservationId: Int, type: RentalProcessType): Response<ResponseBody> {
+        return rentalApiService.getRentalReceipt(productId, reservationId, type)
     }
 }

@@ -1,6 +1,7 @@
 package com.example.rentit.data.rental.repositoryImpl
 
 import com.example.rentit.common.enums.PhotoRegistrationType
+import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.core.network.safeApiCall
 import com.example.rentit.data.rental.dto.RentalHistoriesResponseDto
 import com.example.rentit.data.rental.dto.CourierNamesResponseDto
@@ -13,6 +14,7 @@ import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.data.rental.remote.RentalRemoteDataSource
 import com.example.rentit.domain.rental.repository.RentalRepository
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import javax.inject.Inject
 
 class RentalRepositoryImpl @Inject constructor(
@@ -44,5 +46,9 @@ class RentalRepositoryImpl @Inject constructor(
 
     override suspend fun getRentalPhotos(productId: Int, reservationId: Int): Result<RentalPhotoResponseDto> {
         return safeApiCall { rentalRemoteDataSource.getRentalPhotos(productId, reservationId) }
+    }
+
+    override suspend fun getRentalReceipt(productId: Int, reservationId: Int, type: RentalProcessType): Result<ResponseBody> {
+        return safeApiCall { rentalRemoteDataSource.getRentalReceipt(productId, reservationId, type) }
     }
 }
