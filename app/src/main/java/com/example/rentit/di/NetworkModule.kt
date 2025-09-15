@@ -1,6 +1,6 @@
 package com.example.rentit.di
 
-import com.example.rentit.core.network.AuthInterceptor
+import com.example.rentit.core.network.AccessTokenInterceptor
 import com.example.rentit.core.network.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
@@ -34,19 +34,19 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthInterceptor(authInterceptor: AuthInterceptor): Interceptor = authInterceptor
+    fun provideAuthInterceptor(accessTokenInterceptor: AccessTokenInterceptor): Interceptor = accessTokenInterceptor
 
     /** Default OkHttpClient */
     @Provides
     @Singleton
     fun provideOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
+        accessTokenInterceptor: AccessTokenInterceptor,
         tokenAuthenticator: TokenAuthenticator,
     ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(authInterceptor)
+            .addInterceptor(accessTokenInterceptor)
             .authenticator(tokenAuthenticator)
             .build()
 
@@ -67,12 +67,12 @@ object NetworkModule {
     @Singleton
     fun providePhotoUploadOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
-        authInterceptor: AuthInterceptor,
+        accessTokenInterceptor: AccessTokenInterceptor,
         tokenAuthenticator: TokenAuthenticator
     ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor(authInterceptor)
+            .addInterceptor(accessTokenInterceptor)
             .authenticator(tokenAuthenticator)
             .build()
 
@@ -94,9 +94,11 @@ object NetworkModule {
     @Singleton
     fun provideRefreshTokenOkHttpClient(
         loggingInterceptor: HttpLoggingInterceptor,
+        accessTokenInterceptor: AccessTokenInterceptor
     ): OkHttpClient =
         OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC))
+            .addInterceptor(accessTokenInterceptor)
             .build()
 
     @RefreshTokenOkHttpClient
