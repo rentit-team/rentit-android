@@ -1,6 +1,7 @@
 package com.example.rentit.presentation.mypage
 
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -61,6 +62,7 @@ class MyPageViewModel @Inject constructor(
                     nearestDueItem = it.nearestDueItem
                 )
             }.onFailure { e ->
+                Log.e("MyPageViewModel", "getMyRentalList: $e")
                 emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }

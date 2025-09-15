@@ -1,6 +1,7 @@
 package com.example.rentit.domain.user.usecase
 
 import com.example.rentit.core.error.UnauthorizedException
+import com.example.rentit.domain.auth.respository.AuthRepository
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
 
@@ -14,11 +15,12 @@ import javax.inject.Inject
  */
 
 class CheckUserSessionUseCase @Inject constructor(
+    private val authRepository: AuthRepository,
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(): Result<Long> {
         return runCatching {
-            val token = userRepository.getTokenFromPrefs()
+            val token = authRepository.getAccessTokenFromPrefs()
             if(token.isNullOrEmpty()) throw UnauthorizedException()
 
             val localUserId = userRepository.getAuthUserIdFromPrefs()

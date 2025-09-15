@@ -1,4 +1,4 @@
-package com.example.rentit.data.user.dto
+package com.example.rentit.data.auth.dto
 
 import com.google.gson.annotations.SerializedName
 

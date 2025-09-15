@@ -40,19 +40,19 @@ fun LoginRoute(navHostController: NavHostController) {
                         navHostController.navigateToJoinPhoneVerification(sideEffect.name, sideEffect.email)
                     }
                     LoginSideEffect.ToastGoogleSignInError -> {
-                        Toast.makeText(context, context.getString(R.string.toast_google_sign_in_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_google_sign_in_error, Toast.LENGTH_SHORT).show()
                     }
                     LoginSideEffect.ToastGoogleSignInFailed -> {
-                        Toast.makeText(context, context.getString(R.string.toast_google_sign_in_failed), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_google_sign_in_failed, Toast.LENGTH_SHORT).show()
                     }
                     is LoginSideEffect.ToastGreetingMessage -> {
-                        Toast.makeText(context, context.getString(R.string.toast_greeting_message, sideEffect.name), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, context.getString(R.string.toast_greeting_message, sideEffect.nickname), Toast.LENGTH_SHORT).show()
                     }
                     LoginSideEffect.ToastLoginFailed -> {
-                        Toast.makeText(context, context.getString(R.string.toast_authentication_failed), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_authentication_failed, Toast.LENGTH_SHORT).show()
                     }
                     LoginSideEffect.ToastLoginServerError -> {
-                        Toast.makeText(context, context.getString(R.string.toast_server_error), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.toast_server_error, Toast.LENGTH_SHORT).show()
                     }
                 }
             }
