@@ -1,11 +1,13 @@
 package com.example.rentit.data.user.repositoryImpl
 
+import com.example.rentit.core.error.BadRequestException
 import com.example.rentit.core.network.safeApiCall
 import com.example.rentit.data.user.dto.GoogleLoginResponseDto
 import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
+import com.example.rentit.data.user.dto.RefreshAccessTokenResponseDto
 import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
 import com.example.rentit.data.user.dto.VerifyPhoneCodeResponseDto
 import com.example.rentit.data.user.local.UserPrefsDataSource
@@ -19,6 +21,15 @@ class UserRepositoryImpl @Inject constructor(
 ): UserRepository {
     override suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
         return safeApiCall { remoteDataSource.googleLogin(code, redirectUri) }
+    }
+
+    override suspend fun refreshAccessToken(): Result<RefreshAccessTokenResponseDto> {
+        val refreshToken = prefsDataSource.getRefreshTokenFromPrefs()
+        return if(refreshToken == null) {
+            Result.failure(BadRequestException("refresh token is null"))
+        } else {
+            safeApiCall { remoteDataSource.refreshAccessToken(refreshToken) }
+        }
     }
 
     override suspend fun sendPhoneCode(phoneNumber: String): Result<SendPhoneCodeResponseDto> {

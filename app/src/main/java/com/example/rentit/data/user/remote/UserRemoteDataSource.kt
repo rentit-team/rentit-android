@@ -6,6 +6,8 @@ import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
+import com.example.rentit.data.user.dto.RefreshAccessTokenRequestDto
+import com.example.rentit.data.user.dto.RefreshAccessTokenResponseDto
 import com.example.rentit.data.user.dto.SendPhoneCodeRequestDto
 import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
 import com.example.rentit.data.user.dto.SignUpRequestDto
@@ -20,6 +22,11 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun googleLogin(code: String, redirectUri: String): Response<GoogleLoginResponseDto> {
         val request = GoogleLoginRequestDto(code, redirectUri)
         return userApiService.googleLogin(request)
+    }
+
+    suspend fun refreshAccessToken(refreshToken: String): Response<RefreshAccessTokenResponseDto> {
+        val request = RefreshAccessTokenRequestDto(refreshToken)
+        return userApiService.refreshAccessToken(request)
     }
 
     suspend fun signUp(name: String, email: String, nickname: String, profileImageUrl: String): Response<Unit> {

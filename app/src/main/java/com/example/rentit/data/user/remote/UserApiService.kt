@@ -6,6 +6,8 @@ import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
+import com.example.rentit.data.user.dto.RefreshAccessTokenRequestDto
+import com.example.rentit.data.user.dto.RefreshAccessTokenResponseDto
 import com.example.rentit.data.user.dto.SendPhoneCodeRequestDto
 import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
 import com.example.rentit.data.user.dto.SignUpRequestDto
@@ -22,6 +24,10 @@ interface UserApiService {
     @POST("api/v1/auth/google")
     @Headers("Content-Type: application/json")
     suspend fun googleLogin(@Body request: GoogleLoginRequestDto): Response<GoogleLoginResponseDto>
+
+    @POST("api/v1/auth/refresh")
+    @Headers("Content-Type: application/json")
+    suspend fun refreshAccessToken(@Body request: RefreshAccessTokenRequestDto): Response<RefreshAccessTokenResponseDto>
 
     @POST("api/v1/users/phone-verification/request")
     @Headers("Content-Type: application/json")
