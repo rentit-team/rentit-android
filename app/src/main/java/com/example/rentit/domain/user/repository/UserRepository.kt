@@ -25,10 +25,6 @@ interface UserRepository {
 
     suspend fun getMyProductsRentalList(): Result<MyProductsRentalListResponseDto>
 
-    fun getAuthUserIdFromPrefs(): Long
-
-    fun saveAuthUserIdToPrefs(authUserId: Long)
-
     fun getRefreshTokenFromPrefs(): String?
 
     fun getAccessTokenFromPrefs(): String?
@@ -36,6 +32,14 @@ interface UserRepository {
     fun saveRefreshTokenToPrefs(token: String)
 
     fun saveAccessTokenToPrefs(token: String)
+
+    fun getAuthUserIdFromPrefs(): Long
+
+    fun saveAuthUserIdToPrefs(authUserId: Long)
+
+    fun getAuthNicknameFromPrefs(): String
+
+    fun saveAuthNicknameToPrefs(nickname: String)
 
     fun clearPrefs()
 }

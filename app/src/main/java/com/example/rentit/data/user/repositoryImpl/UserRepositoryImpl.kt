@@ -49,10 +49,6 @@ class UserRepositoryImpl @Inject constructor(
         return safeApiCall(remoteDataSource::getMyProductsRentalList)
     }
 
-    override fun getAuthUserIdFromPrefs(): Long = prefsDataSource.getAuthUserIdFromPrefs()
-
-    override fun saveAuthUserIdToPrefs(authUserId: Long) = prefsDataSource.saveAuthUserIdToPrefs(authUserId)
-
     override fun getRefreshTokenFromPrefs(): String? = prefsDataSource.getRefreshTokenFromPrefs()
 
     override fun saveRefreshTokenToPrefs(token: String) = prefsDataSource.saveRefreshTokenToPrefs(token)
@@ -60,6 +56,14 @@ class UserRepositoryImpl @Inject constructor(
     override fun getAccessTokenFromPrefs(): String? = prefsDataSource.getAccessTokenFromPrefs()
 
     override fun saveAccessTokenToPrefs(token: String) = prefsDataSource.saveAccessTokenToPrefs(token)
+
+    override fun getAuthUserIdFromPrefs(): Long = prefsDataSource.getAuthUserIdFromPrefs()
+
+    override fun saveAuthUserIdToPrefs(authUserId: Long) = prefsDataSource.saveAuthUserIdToPrefs(authUserId)
+
+    override fun getAuthNicknameFromPrefs(): String = prefsDataSource.getAuthNicknameFromPrefs()
+
+    override fun saveAuthNicknameToPrefs(nickname: String) = prefsDataSource.saveAuthNicknameToPrefs(nickname)
 
     override fun clearPrefs() = prefsDataSource.clearPrefs()
 }

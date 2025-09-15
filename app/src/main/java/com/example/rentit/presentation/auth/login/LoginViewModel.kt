@@ -30,12 +30,12 @@ class LoginViewModel @Inject constructor(
             loginAndInitializeAuthUseCase(authCode)
                 .onSuccess {
                     if(it.isRegistered) {
-                        _sideEffect.emit(LoginSideEffect.ToastGreetingMessage(it.userName))
+                        _sideEffect.emit(LoginSideEffect.ToastGreetingMessage(it.userNickname))
                         _sideEffect.emit(LoginSideEffect.NavigateToHome)
                     } else {
                         navigateToJoin(it.userEmail, it.userName)
                     }
-                    Log.i(TAG, "로그인 성공: ${it.userName}")
+                    Log.i(TAG, "로그인 성공: ${it.userEmail}")
                 }.onFailure { e ->
                     if (e is ConflictException) {
                         emitLoginFailure()

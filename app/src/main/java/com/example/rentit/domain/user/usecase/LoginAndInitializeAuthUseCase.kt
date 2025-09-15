@@ -27,14 +27,18 @@ class LoginAndInitializeAuthUseCase @Inject constructor(
                 userRepository.saveRefreshTokenToPrefs(data.refreshToken.token)
                 userRepository.saveAccessTokenToPrefs(data.accessToken.token)
 
-                val userId = userRepository.getMyInfo().getOrThrow().data.userId
-                userRepository.saveAuthUserIdToPrefs(userId)
+                val userData = userRepository.getMyInfo().getOrThrow().data
+                userRepository.saveAuthUserIdToPrefs(userData.userId)
+                userRepository.saveAuthNicknameToPrefs(userData.nickname)
             }
+
+            val nickname = userRepository.getAuthNicknameFromPrefs()
 
             LoginResultModel(
                 isRegistered = data.isUserRegistered,
+                userNickname = nickname,
                 userName = data.user.name,
-                userEmail = data.user.email
+                userEmail = data.user.email,
             )
         }.onFailure {
             userRepository.clearPrefs()
