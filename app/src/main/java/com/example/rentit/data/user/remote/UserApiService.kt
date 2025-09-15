@@ -6,8 +6,6 @@ import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
-import com.example.rentit.data.user.dto.RefreshAccessTokenRequestDto
-import com.example.rentit.data.user.dto.RefreshAccessTokenResponseDto
 import com.example.rentit.data.user.dto.SendPhoneCodeRequestDto
 import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
 import com.example.rentit.data.user.dto.SignUpRequestDto

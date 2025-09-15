@@ -1,7 +1,7 @@
 package com.example.rentit.data.auth.remote
 
-import com.example.rentit.data.user.dto.RefreshAccessTokenRequestDto
-import com.example.rentit.data.user.dto.RefreshAccessTokenResponseDto
+import com.example.rentit.data.auth.dto.RefreshAccessTokenRequestDto
+import com.example.rentit.data.auth.dto.RefreshAccessTokenResponseDto
 import retrofit2.Response
 import javax.inject.Inject
 
