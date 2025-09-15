@@ -4,6 +4,8 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -12,8 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.ExtendedFAB
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto
@@ -35,15 +39,32 @@ fun OwnerRentalDetailScreen(
     uiModel: RentalDetailStatusModel,
     scrollState: ScrollState,
     onBackClick: () -> Unit,
+    onTransactionReceiptClick: () -> Unit,
     onRequestResponseClick: () -> Unit,
     onCancelRentClick: () -> Unit,
     onPhotoTaskClick: () -> Unit,
     onTrackingNumTaskClick: () -> Unit,
     onCheckPhotoClick: () -> Unit,
     onRentalSummaryClick: () -> Unit,
+    onChattingClick: () -> Unit,
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_rental_detail_title)) { onBackClick() } }
+        topBar = {
+            CommonTopAppBar (
+                title = stringResource(R.string.screen_rental_detail_title),
+                showTransactionReceipt = true,
+                onBackClick = onBackClick,
+                onTransactionReceiptClick = onTransactionReceiptClick
+            )
+        },
+        floatingActionButton = {
+            ExtendedFAB(
+                modifier = Modifier.padding(bottom = 16.dp),
+                iconRes = R.drawable.ic_chat,
+                textRes = R.string.screen_rental_detail_chat_floating_button,
+                onClick = onChattingClick
+            )
+        }
     ) {
         Column(modifier = Modifier
             .padding(it)
@@ -59,6 +80,7 @@ fun OwnerRentalDetailScreen(
                     OwnerReturnedContent(uiModel, onCheckPhotoClick, onRentalSummaryClick)
                 is RentalDetailStatusModel.Unknown -> Unit
             }
+            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
@@ -70,6 +92,7 @@ private fun OwnerRentalDetailScreenPreview() {
     val sample1 = RentalDetailResponseDto(
         rental = RentalDto(
             reservationId = 1001,
+            chatroomId = null,
             renter = RenterDto(userId = 101, nickname = "김철수"),
             status = RentalStatus.PENDING,
             product = ProductDto(
@@ -109,12 +132,14 @@ private fun OwnerRentalDetailScreenPreview() {
             sample2.toModel(),
             rememberScrollState(),
             onBackClick = {},
+            onTransactionReceiptClick = {},
             onRequestResponseClick = {},
             onCancelRentClick = {},
             onPhotoTaskClick = {},
             onTrackingNumTaskClick = {},
             onCheckPhotoClick = {},
-            onRentalSummaryClick = {}
+            onRentalSummaryClick = {},
+            onChattingClick = {}
         )
     }
 }

@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
@@ -24,11 +23,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentit.R
+import com.example.rentit.common.component.AnimatedNoticeBanner
+import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray100
+import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.uimodel.PriceSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
@@ -62,9 +63,7 @@ fun RenterRentingContent(
         )
     )
 
-    if (rentingData.status.noticeBannerStrRes != null) {
-        NoticeBanner(noticeText = AnnotatedString(stringResource(rentingData.status.noticeBannerStrRes)))
-    }
+    NoticeBannerSection(rentingData.status)
 
     RentalInfoSection(
         title = stringResource(rentingData.status.strRes),
@@ -107,6 +106,33 @@ fun RenterRentingContent(
         returnTrackingNumber = rentingData.returnTrackingNumber,
         returnCourierName = rentingData.returnCourierName
     )
+}
+
+@Composable
+fun NoticeBannerSection(rentingData: RentingStatus) {
+    val noticeText = buildAnnotatedString {
+        when (rentingData) {
+            RentingStatus.RENTING_RETURN_DAY -> {
+                append(stringResource(R.string.screen_rental_detail_renter_return_day_notice_text_1))
+                withStyle(style = SpanStyle(color = PrimaryBlue500)) {
+                    append(" " + stringResource(R.string.screen_rental_detail_renter_return_day_notice_text_2))
+                }
+                append(stringResource(R.string.screen_rental_detail_renter_return_day_notice_text_3))
+            }
+
+            RentingStatus.RENTING_OVERDUE -> {
+                append(stringResource(R.string.screen_rental_detail_renter_return_overdue_notice_text_1))
+                withStyle(style = SpanStyle(color = AppRed)) {
+                    append(" " + stringResource(R.string.screen_rental_detail_renter_return_overdue_notice_text_2))
+                }
+                append(stringResource(R.string.screen_rental_detail_renter_return_overdue_notice_text_3))
+            }
+
+            else -> {}
+        }
+    }
+
+    AnimatedNoticeBanner(modifier = Modifier.screenHorizontalPadding(), noticeText = noticeText)
 }
 
 @Composable

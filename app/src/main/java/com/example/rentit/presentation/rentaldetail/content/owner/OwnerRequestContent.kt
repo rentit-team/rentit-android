@@ -7,21 +7,23 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.AnimatedNoticeBanner
 import com.example.rentit.common.component.ArrowedTextButton
+import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.RentalStatus
+import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.uimodel.PriceSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
@@ -47,17 +49,7 @@ fun OwnerRequestContent(
         )
     )
 
-    when {
-        requestData.isPending -> NoticeBanner(noticeText = buildAnnotatedString {
-            append(stringResource(R.string.screen_rental_detail_owner_request_notice_new_request))
-        })
-        requestData.isAccepted -> NoticeBanner(noticeText = buildAnnotatedString {
-            withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
-                append(stringResource(R.string.screen_rental_detail_owner_request_notice_pay))
-            }
-            append(stringResource(R.string.screen_rental_detail_owner_request_notice_wait))
-        })
-    }
+    NoticeBannerSection(requestData.isPending, requestData.isAccepted)
 
     RentalInfoSection(
         title = stringResource(requestData.status.strRes),
@@ -91,6 +83,33 @@ fun OwnerRequestContent(
             )
         }
     }
+}
+
+@Composable
+fun NoticeBannerSection(isPending: Boolean, isAccepted: Boolean) {
+    val noticeText = buildAnnotatedString {
+        when {
+            isPending -> {
+                append(stringResource(R.string.screen_rental_detail_owner_request_notice_new_request_1))
+                withStyle(style = SpanStyle(color = PrimaryBlue500)) {
+                    append(" " + stringResource(R.string.screen_rental_detail_owner_request_notice_new_request_2))
+                }
+                append(stringResource(R.string.screen_rental_detail_owner_request_notice_new_request_3))
+            }
+
+            isAccepted -> {
+                append(stringResource(R.string.screen_rental_detail_owner_request_notice_pay_1))
+                withStyle(style = SpanStyle(color = PrimaryBlue500)) {
+                    append(" " + stringResource(R.string.screen_rental_detail_owner_request_notice_pay_2))
+                }
+                append(stringResource(R.string.screen_rental_detail_owner_request_notice_pay_3))
+            }
+
+            else -> {}
+        }
+    }
+
+    AnimatedNoticeBanner(modifier = Modifier.screenHorizontalPadding(), noticeText = noticeText)
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

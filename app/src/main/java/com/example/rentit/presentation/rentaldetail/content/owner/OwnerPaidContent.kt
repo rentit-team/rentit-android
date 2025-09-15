@@ -10,20 +10,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.AnimatedNoticeBanner
 import com.example.rentit.common.component.ArrowedTextButton
+import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray400
+import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.uimodel.PriceSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
-import com.example.rentit.presentation.rentaldetail.components.NoticeBanner
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTaskSection
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
@@ -48,7 +52,7 @@ fun OwnerPaidContent(
         )
     )
 
-    NoticeBanner(noticeText = AnnotatedString(stringResource(R.string.screen_rental_detail_owner_paid_notice_complete_requirement)))
+    NoticeBannerSection()
 
     RentalInfoSection(
         title = stringResource(R.string.rental_status_paid_owner),
@@ -92,6 +96,20 @@ fun OwnerPaidContent(
             onClick = onCancelRentClick
         )
     }
+}
+
+@Composable
+fun NoticeBannerSection() {
+    AnimatedNoticeBanner(
+        modifier = Modifier.screenHorizontalPadding(),
+        noticeText = buildAnnotatedString {
+            append(stringResource(R.string.screen_rental_detail_owner_paid_notice_complete_requirement_1))
+            withStyle(style = SpanStyle(color = PrimaryBlue500)) {
+                append(" " + stringResource(R.string.screen_rental_detail_owner_paid_notice_complete_requirement_2))
+            }
+            append(stringResource(R.string.screen_rental_detail_owner_paid_notice_complete_requirement_3))
+        }
+    )
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

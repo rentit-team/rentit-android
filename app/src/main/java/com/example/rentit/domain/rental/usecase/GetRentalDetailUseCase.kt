@@ -41,6 +41,7 @@ class GetRentalDetailUseCase @Inject constructor(
 
             RentalDetailModel(
                 role = role,
+                chatRoomId = rentalDetail.rental.chatroomId,
                 rentalDetailStatusModel = rentalDetailStatusModel
             )
         }

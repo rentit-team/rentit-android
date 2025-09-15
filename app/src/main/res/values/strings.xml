@@ -18,6 +18,7 @@
 
     <string name="common_top_app_bar_back_icon_description">뒤로가기</string>
     <string name="common_top_app_bar_menu_icon_description">메뉴</string>
+    <string name="common_top_app_bar_download_receipt_icon_description">거래 증빙 서류 다운로드</string>
     <string name="common_day_unit">일</string>
     <string name="common_case_unit">건</string>
     <string name="common_price_unit_per_day">원/일</string>
@@ -49,6 +50,7 @@
     <string name="common_dialog_accept_request_btn_accept">수락하기</string>
     <string name="toast_accept_rental_success">대여 요청이 정상적으로 승인되었어요.</string>
     <string name="toast_accept_rental_failed">요청 수락에 실패했어요. 잠시 후 다시 시도해 주세요.</string>
+    <string name="toast_chat_room_error">채팅방을 찾을 수 없어요.</string>
 
     <string name="common_calendar_left_chevron_description">다음달로 이동</string>
     <string name="common_calendar_right_chevron_description">이전달로 이동</string>
@@ -322,6 +324,8 @@
     <string name="screen_transaction_proof_download_btn_description">%s부터 %s까지 %s 대여 내역에 대한 거래 증빙 서류 다운로드</string>
 
     <!-- 대여 상세 -->
+    <string name="screen_rental_detail_chat_floating_button">상대방과 채팅하기</string>
+
     <string name="screen_rental_detail_task_check_box_icon_done">%s 완료</string>
     <string name="screen_rental_detail_task_check_box_icon_not_done">%s 미완료</string>
 
@@ -359,12 +363,19 @@
     <string name="screen_rental_detail_owner_total_profit_price_label_deposit">지연 보상금</string>
     <string name="screen_rental_detail_owner_total_profit_price_label_total">총 정산 금액</string>
 
-    <string name="screen_rental_detail_renter_request_notice_pay">결제</string>
-    <string name="screen_rental_detail_renter_request_notice_wait">를 기다리고 있어요!</string>
+    <string name="screen_rental_detail_renter_request_notice_request_1">판매자의</string>
+    <string name="screen_rental_detail_renter_request_notice_request_2">승인</string>
+    <string name="screen_rental_detail_renter_request_notice_request_3">을 기다리고 있어요.</string>
+    <string name="screen_rental_detail_renter_request_notice_pay_1">결제</string>
+    <string name="screen_rental_detail_renter_request_notice_pay_2">를 기다리고 있어요!</string>
     <string name="screen_rental_detail_renter_request_btn_pay">결제하고 예약 확정하기</string>
 
-    <string name="screen_rental_detail_renter_return_day_notice_text">오늘은 반납일이에요. 24시간 이내 반납을 진행해주세요.</string>
-    <string name="screen_rental_detail_renter_return_overdue_notice_text">반납이 지연되고 있어요. 반납 등록을 완료해주세요.</string>
+    <string name="screen_rental_detail_renter_return_day_notice_text_1">오늘은</string>
+    <string name="screen_rental_detail_renter_return_day_notice_text_2">반납일</string>
+    <string name="screen_rental_detail_renter_return_day_notice_text_3">이에요. 24시간 이내 반납을 진행해주세요.</string>
+    <string name="screen_rental_detail_renter_return_overdue_notice_text_1">반납이 </string>
+    <string name="screen_rental_detail_renter_return_overdue_notice_text_2">지연</string>
+    <string name="screen_rental_detail_renter_return_overdue_notice_text_3">되고 있어요. 반납 등록을 완료해주세요.</string>
 
     <string name="screen_rental_detail_renter_return_task_title">반납 등록</string>
     <string name="screen_rental_detail_renter_return_task_info">아래 항목을 완료하면 반납이 접수돼요.</string>
@@ -379,12 +390,17 @@
     <string name="screen_rental_detail_renter_renting_overdue_warning_middle_text">되고 있어요.\n현재까지 보증금에서 </string>
     <string name="screen_rental_detail_renter_renting_overdue_warning_tail_text">이 차감되었어요.</string>
 
-    <string name="screen_rental_detail_owner_request_notice_new_request">새로운 대여 요청이 도착했어요!</string>
-    <string name="screen_rental_detail_owner_request_notice_pay">결제</string>
-    <string name="screen_rental_detail_owner_request_notice_wait">를 기다리고 있어요!</string>
+    <string name="screen_rental_detail_owner_request_notice_new_request_1">새로운</string>
+    <string name="screen_rental_detail_owner_request_notice_new_request_2">대여 요청</string>
+    <string name="screen_rental_detail_owner_request_notice_new_request_3">이 도착했어요!</string>
+    <string name="screen_rental_detail_owner_request_notice_pay_1">상대방의</string>
+    <string name="screen_rental_detail_owner_request_notice_pay_2">결제</string>
+    <string name="screen_rental_detail_owner_request_notice_pay_3">를 기다리고 있어요!</string>
     <string name="screen_rental_detail_owner_request_btn_request_response">요청 응답하기</string>
 
-    <string name="screen_rental_detail_owner_paid_notice_complete_requirement">남은 단계를 완료하고 거래를 확정하세요!</string>
+    <string name="screen_rental_detail_owner_paid_notice_complete_requirement_1">남은 단계를 완료하고</string>
+    <string name="screen_rental_detail_owner_paid_notice_complete_requirement_2">거래를 확정</string>
+    <string name="screen_rental_detail_owner_paid_notice_complete_requirement_3">하세요!</string>
     <string name="screen_rental_detail_owner_paid_sending_task_title">상품 발송</string>
     <string name="screen_rental_detail_owner_paid_sending_task_info">아래 항목을 완료해야 추후에 정산이 진행돼요.</string>
     <string name="screen_rental_detail_owner_paid_sending_task_photo">발송 전 사진 등록</string>
@@ -392,6 +408,13 @@
 
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_leading_text">지연 보상금</string>
     <string name="screen_rental_detail_owner_renting_overdue_info_reward_tail_text">이 지급될 예정이에요.</string>
+
+    <!-- 거래 증빙 서류 가져오기 Dialog -->
+    <string name="dialog_transaction_receipt_confirm_title">거래 증빙 서류를 가져올까요?</string>
+    <string name="dialog_transaction_receipt_confirm_content">이 거래에 대한 정보를 확인하고 다운로드할 수 있어요. 이 문서는 분쟁 발생 시 필요한 증빙 자료로 활용할 수 있어요.</string>
+    <string name="dialog_transaction_receipt_confirm_btn">열기</string>
+
+    <string name="toast_load_transaction_receipt_failed">파일을 가져오는 중에 문제가 발생했어요. 잠시 후 다시 시도해주세요.</string>
 
     <!-- Unknown Dialog -->
     <string name="dialog_rental_detail_unknown_title">대여 정보가 존재하지 않아요.</string>

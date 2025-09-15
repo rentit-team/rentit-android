@@ -1,24 +1,28 @@
 package com.example.rentit.presentation.rentaldetail
 
+import android.content.Context
 import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.common.enums.TrackingRegistrationRequestType
+import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
+import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.domain.rental.repository.RentalRepository
 import com.example.rentit.domain.rental.usecase.GetRentalDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 private const val TAG = "RentalDetailViewModel"
@@ -26,6 +30,7 @@ private const val TAG = "RentalDetailViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
+    private val chatRepository: ChatRepository,
     private val rentalRepository: RentalRepository,
     private val getRentalDetailUseCase: GetRentalDetailUseCase,
     private val registerTrackingUseCase: RegisterTrackingUseCase,
@@ -35,6 +40,8 @@ class RentalDetailViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<RentalDetailSideEffect>()
     val sideEffect: SharedFlow<RentalDetailSideEffect> = _sideEffect
+
+    private var chatRoomId: String? = null
 
     private fun emitSideEffect(sideEffect: RentalDetailSideEffect) {
         viewModelScope.launch {
@@ -64,6 +71,7 @@ class RentalDetailViewModel @Inject constructor(
                     rentalDetailStatusModel = it.rentalDetailStatusModel,
                     role = it.role
                 )
+                chatRoomId = it.chatRoomId
                 Log.i(TAG, "대여 상세 조회 성공: Product Id: $productId, Reservation Id: $reservationId")
             }.onFailure { e ->
                 Log.e(TAG, "대여 상세 조회 실패", e)
@@ -76,6 +84,38 @@ class RentalDetailViewModel @Inject constructor(
         viewModelScope.launch {
             getRentalDetail(productId, reservationId)
         }
+    }
+
+    /** 거래 증빙 서류 가져오기 */
+    fun fetchTransactionReceipt(context: Context, productId: Int, reservationId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            setLoading(true)
+            rentalRepository.getRentalReceipt(productId, reservationId, RentalProcessType.RENTAL)
+                .onSuccess {
+                    val file = File(context.cacheDir, "rental-receipt-$reservationId.pdf")
+
+                    it.byteStream().use { inputStream ->
+                        file.outputStream().use { outputStream ->
+                            inputStream.copyTo(outputStream)
+                        }
+                    }
+                    emitSideEffect(RentalDetailSideEffect.DocumentLoadSuccess(file))
+                    dismissTransactionReceiptConfirmDialog()
+                    Log.i(TAG, "거래 증빙 서류 가져오기 성공: Product Id: $productId, Reservation Id: $reservationId")
+                }.onFailure { e ->
+                    Log.e(TAG, "거래 증빙 서류 가져오기 실패", e)
+                    emitSideEffect(RentalDetailSideEffect.ToastDocumentLoadFailed)
+                }
+            setLoading(false)
+        }
+    }
+
+    fun showTransactionReceiptConfirmDialog() {
+        _uiState.value = _uiState.value.copy(showTransactionReceiptConfirmDialog = true)
+    }
+
+    fun dismissTransactionReceiptConfirmDialog() {
+        _uiState.value = _uiState.value.copy(showTransactionReceiptConfirmDialog = false)
     }
 
     /** 요청 수락 */
@@ -166,7 +206,7 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     /** 운송장 등록 */
-    fun confirmTrackingReg(requestType: TrackingRegistrationRequestType, productId: Int, reservationId: Int) {
+    fun confirmTrackingReg(requestType: RentalProcessType, productId: Int, reservationId: Int) {
         viewModelScope.launch {
             registerTrackingUseCase(
                 productId = productId,
@@ -240,5 +280,21 @@ class RentalDetailViewModel @Inject constructor(
 
     fun navigateToRentalPhotoCheck() {
         emitSideEffect(RentalDetailSideEffect.NavigateToRentalPhotoCheck)
+    }
+
+    fun onChattingClicked(productId: Int) {
+        if(chatRoomId == null) {
+            viewModelScope.launch {
+                chatRepository.postNewChat(productId)
+                    .onSuccess {
+                        chatRoomId = it.data.chatRoomId
+                        chatRoomId?.let { id -> emitSideEffect(RentalDetailSideEffect.NavigateToChatRoom(id)) }
+                    }.onFailure {
+                        emitSideEffect(RentalDetailSideEffect.ToastChatRoomError)
+                    }
+            }
+        } else {
+            emitSideEffect(RentalDetailSideEffect.NavigateToChatRoom(chatRoomId!!))
+        }
     }
 }

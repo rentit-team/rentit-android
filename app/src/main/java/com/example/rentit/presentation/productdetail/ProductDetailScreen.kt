@@ -25,7 +25,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
@@ -47,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
+import com.example.rentit.common.component.ExtendedFAB
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.dialog.FullImageDialog
 import com.example.rentit.common.component.formatPeriodTextWithLabel
@@ -113,7 +113,13 @@ fun ProductDetailScreen(
                 onChattingClick = onChattingClick
             )
         },
-        floatingActionButton = { UsageDetailButton(onBottomSheetShow) }
+        floatingActionButton = {
+            ExtendedFAB(
+                iconRes = R.drawable.ic_calendar,
+                textRes = R.string.screen_product_btn_check_detail_of_use,
+                onClick = onBottomSheetShow
+            )
+        }
     ) { innerPadding ->
         if(productDetail != ProductDetailModel.EMPTY) {
             Column(
@@ -293,21 +299,6 @@ fun PostBottomBar(
             MiniButton(false, stringResource(id = R.string.screen_product_btn_chatting), onChattingClick)
             MiniButton(true, stringResource(id = R.string.screen_product_btn_reserve), onResvRequestClick)
         }
-    }
-}
-
-@Composable
-fun UsageDetailButton(onClick: () -> Unit) {
-    ExtendedFloatingActionButton(
-        containerColor = Color.White,
-        onClick = onClick,
-    ) {
-        Image(
-            modifier = Modifier.padding(end = 8.dp),
-            painter = painterResource(id = R.drawable.ic_calendar),
-            contentDescription = stringResource(id = R.string.screen_product_btn_check_detail_of_use)
-        )
-        Text(text = stringResource(id = R.string.screen_product_btn_check_detail_of_use))
     }
 }
 

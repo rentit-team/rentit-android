@@ -1,6 +1,6 @@
 package com.example.rentit.domain.rental.usecase
 
-import com.example.rentit.common.enums.TrackingRegistrationRequestType
+import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.data.rental.dto.TrackingRegistrationRequestDto
 import com.example.rentit.data.rental.dto.TrackingRegistrationResponseDto
 import com.example.rentit.domain.rental.repository.RentalRepository
@@ -19,7 +19,7 @@ class RegisterTrackingUseCase @Inject constructor(
     suspend operator fun invoke(
         productId: Int,
         reservationId: Int,
-        type: TrackingRegistrationRequestType,
+        type: RentalProcessType,
         courierName: String,
         trackingNumber: String
     ): Result<TrackingRegistrationResponseDto?> {
@@ -28,7 +28,7 @@ class RegisterTrackingUseCase @Inject constructor(
             return Result.failure(IllegalArgumentException())
         }
 
-        if(type == TrackingRegistrationRequestType.NONE) {
+        if(type == RentalProcessType.NONE) {
             return Result.failure(Exception("Tracking Register type is NONE"))
         }
 

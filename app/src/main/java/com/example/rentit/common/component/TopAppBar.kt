@@ -26,8 +26,10 @@ fun CommonTopAppBar(
     modifier: Modifier = Modifier,
     title: String = "",
     showMenu: Boolean = false,
+    showTransactionReceipt: Boolean = false,
     onBackClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
+    onTransactionReceiptClick: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -52,13 +54,25 @@ fun CommonTopAppBar(
             style = MaterialTheme.typography.bodyLarge,
             color = AppBlack
         )
-        if(showMenu){
+        if(showMenu) {
             IconButton(
                 onClick = onMenuClick,
                 modifier = Modifier.align(Alignment.CenterEnd).padding(end = 6.dp)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_dots),
+                    contentDescription = stringResource(id = R.string.common_top_app_bar_menu_icon_description),
+                    tint = AppBlack
+                )
+            }
+        }
+        if(showTransactionReceipt) {
+            IconButton(
+                onClick = onTransactionReceiptClick,
+                modifier = Modifier.align(Alignment.CenterEnd).padding(end = 6.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_receipt),
                     contentDescription = stringResource(id = R.string.common_top_app_bar_menu_icon_description),
                     tint = AppBlack
                 )
@@ -71,6 +85,6 @@ fun CommonTopAppBar(
 @Composable
 fun TopAppBarPreview() {
     RentItTheme {
-        CommonTopAppBar(Modifier, "제목")
+        CommonTopAppBar(Modifier, "제목", false, true)
     }
 }
