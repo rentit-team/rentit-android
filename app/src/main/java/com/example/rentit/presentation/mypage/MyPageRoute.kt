@@ -74,7 +74,7 @@ fun MyPageRoute(navHostController: NavHostController) {
         profileImgUrl = uiState.profileImgUrl,
         nickName = uiState.nickName,
         myProductCount = uiState.myProductCount,
-        myValidRentalCount = uiState.myValidRentalCount,
+        myRentingCount = uiState.myValidRentalCount,
         myPendingRentalCount = uiState.myPendingRentalCount,
         nearestDueItem = uiState.nearestDueItem,
         myProductList = uiState.myProductList,

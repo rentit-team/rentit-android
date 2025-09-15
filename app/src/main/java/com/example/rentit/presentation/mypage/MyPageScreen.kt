@@ -65,7 +65,7 @@ fun MyPageScreen(
     profileImgUrl: String?,
     nickName: String = "",
     myProductCount: Int = 0,
-    myValidRentalCount: Int = 0,
+    myRentingCount: Int = 0,
     myPendingRentalCount: Int = 0,
     nearestDueItem: NearestDueItemModel?,
     myProductList: List<MyProductItemModel>,
@@ -96,7 +96,7 @@ fun MyPageScreen(
                     profileImgUrl = profileImgUrl,
                     nickName = nickName,
                     myProductCount = myProductCount,
-                    myValidRentalCount = myValidRentalCount,
+                    myRentingCount = myRentingCount,
                     myPendingRentalCount = myPendingRentalCount,
                     onMyPendingRentalClick = onMyPendingRentalClick
                 )
@@ -163,7 +163,7 @@ fun ProfileSection(
     profileImgUrl: String? = null,
     nickName: String = "",
     myProductCount: Int = 0,
-    myValidRentalCount: Int = 0,
+    myRentingCount: Int = 0,
     myPendingRentalCount: Int = 0,
     onMyPendingRentalClick: () -> Unit = {}
 ) {
@@ -193,7 +193,7 @@ fun ProfileSection(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myProductCount)
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myValidRentalCount)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myRentingCount)
                 CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount, true, onMyPendingRentalClick)
             }
         }
@@ -473,7 +473,7 @@ fun MyPageScreenPreview() {
             profileImgUrl = "https://example.com/profile.jpg",
             nickName = "홍길동",
             myProductCount = sampleMyProductList.size,
-            myValidRentalCount = sampleMyRentalList.size,
+            myRentingCount = sampleMyRentalList.size,
             myPendingRentalCount = 0,
             nearestDueItem = sampleNearestDueItem,
             myProductList = sampleMyProductList,

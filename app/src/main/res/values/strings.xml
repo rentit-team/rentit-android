@@ -287,7 +287,7 @@
     <string name="screen_mypage_text_tab_list_rental_empty">대여 내역이 없어요.</string>
 
     <string name="screen_mypage_my_activity_count_label_post">게시글</string>
-    <string name="screen_mypage_my_activity_count_label_rental">대여 현황</string>
+    <string name="screen_mypage_my_activity_count_label_rental">대여 중</string>
     <string name="screen_mypage_my_activity_count_label_pending">승인/발송 대기</string>
 
     <!-- 내 상품 대여 현황 -->
