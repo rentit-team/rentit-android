@@ -324,6 +324,12 @@
     <string name="screen_setting_label_logout">로그아웃</string>
     <string name="screen_setting_description_clickable_list_item">%s 바로가기</string>
 
+    <string name="dialog_logout_confirm_title">로그아웃할까요?</string>
+    <string name="dialog_logout_confirm_content">다시 로그인하면 언제든 서비스를 바로 이용할 수 있어요.</string>
+    <string name="dialog_logout_confirm_btn_confirm">확인</string>
+
+    <string name="toast_logout_complete">로그아웃이 완료되었어요.</string>
+
     <!-- 거래 증빙 서류 다운로드 -->
     <string name="screen_transaction_proof_title">거래 증빙 서류 다운로드</string>
     <string name="screen_transaction_proof_download_btn_description">%s부터 %s까지 %s 대여 내역에 대한 거래 증빙 서류 다운로드</string>
