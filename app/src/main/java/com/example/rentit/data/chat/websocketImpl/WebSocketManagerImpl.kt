@@ -25,7 +25,7 @@ class WebSocketManagerImpl @Inject constructor(
     private var stompLifecycleDisposable: Disposable? = null
     private var sendDisposable: Disposable? = null
 
-    private fun getToken() = userRepository.getTokenFromPrefs()
+    private fun getAccessToken() = userRepository.getAccessTokenFromPrefs()
     private fun getAuthUserId() = userRepository.getAuthUserIdFromPrefs()
 
     private fun clearDisposable() {
@@ -64,7 +64,7 @@ class WebSocketManagerImpl @Inject constructor(
     }
 
     override fun connect(chatroomId: String, onMessageReceived: (MessageResponseDto) -> Unit, onError: (Throwable) -> Unit) {
-        val token = getToken()
+        val token = getAccessToken()
 
         clearDisposable()
         stompClient = Stomp.over(Stomp.ConnectionProvider.OKHTTP, URL)

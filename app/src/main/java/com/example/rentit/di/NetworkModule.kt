@@ -35,7 +35,7 @@ object NetworkModule {
             .addInterceptor(loggingInterceptor)
             .addInterceptor {
                 val request = it.request().newBuilder()
-                    .addHeader("Authorization", "Bearer ${userPrefsDataSource.getTokenFromPrefs()}")
+                    .addHeader("Authorization", "Bearer ${userPrefsDataSource.getAccessTokenFromPrefs()}")
                     .build()
                 it.proceed(request)
             }
@@ -66,7 +66,7 @@ object NetworkModule {
             .addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC))
             .addInterceptor {
                 val request = it.request().newBuilder()
-                    .addHeader("Authorization", "Bearer ${userPrefsDataSource.getTokenFromPrefs()}")
+                    .addHeader("Authorization", "Bearer ${userPrefsDataSource.getAccessTokenFromPrefs()}")
                     .build()
                 it.proceed(request)
             }

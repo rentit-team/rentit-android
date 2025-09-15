@@ -29,9 +29,13 @@ interface UserRepository {
 
     fun saveAuthUserIdToPrefs(authUserId: Long)
 
-    fun getTokenFromPrefs(): String?
+    fun getRefreshTokenFromPrefs(): String?
 
-    fun saveTokenToPrefs(token: String)
+    fun getAccessTokenFromPrefs(): String?
+
+    fun saveRefreshTokenToPrefs(token: String)
+
+    fun saveAccessTokenToPrefs(token: String)
 
     fun clearPrefs()
 }

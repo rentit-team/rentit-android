@@ -4,11 +4,8 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.BuildConfig
 import com.example.rentit.core.error.ConflictException
-import com.example.rentit.core.error.UnauthorizedException
-import com.example.rentit.domain.user.repository.UserRepository
-import com.example.rentit.domain.user.usecase.InitializeAuthUseCase
+import com.example.rentit.domain.user.usecase.LoginAndInitializeAuthUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,8 +19,7 @@ private const val TAG = "LoginViewModel"
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val initializeAuthUseCase: InitializeAuthUseCase
+    private val loginAndInitializeAuthUseCase: LoginAndInitializeAuthUseCase
 ) : ViewModel() {
 
     private val _sideEffect = MutableSharedFlow<LoginSideEffect>()
@@ -31,17 +27,16 @@ class LoginViewModel @Inject constructor(
 
     private fun loginWithGoogleAuthCode(authCode: String) {
         viewModelScope.launch {
-            userRepository.googleLogin(authCode, BuildConfig.GOOGLE_REDIRECT_URI)
+            loginAndInitializeAuthUseCase(authCode)
                 .onSuccess {
-                    val userName = it.data.user.name
-                    if(it.data.isUserRegistered){
-                        handleAuthenticatedUser(it.data.accessToken.token, userName)
+                    if(it.isRegistered) {
+                        _sideEffect.emit(LoginSideEffect.ToastGreetingMessage(it.userName))
+                        _sideEffect.emit(LoginSideEffect.NavigateToHome)
                     } else {
-                        navigateToJoin(it.data.user.email, userName)
+                        navigateToJoin(it.userEmail, it.userName)
                     }
-                    Log.i(TAG, "로그인 성공: $userName")
-                }
-                .onFailure { e ->
+                    Log.i(TAG, "로그인 성공: ${it.userName}")
+                }.onFailure { e ->
                     if (e is ConflictException) {
                         emitLoginFailure()
                         Log.w(TAG, "구글 SSO 충돌: $e")
@@ -55,22 +50,6 @@ class LoginViewModel @Inject constructor(
 
     private suspend fun navigateToJoin(email: String, name: String) {
         _sideEffect.emit(LoginSideEffect.NavigateToJoin(email, name))
-    }
-
-    private suspend fun handleAuthenticatedUser(token: String, name: String) {
-        initializeAuthUseCase.invoke(token)
-            .onSuccess {
-                _sideEffect.emit(LoginSideEffect.ToastGreetingMessage(name))
-                _sideEffect.emit(LoginSideEffect.NavigateToHome)
-            }.onFailure { e ->
-                if (e is UnauthorizedException) {
-                    emitLoginFailure()
-                    Log.w(TAG, "유효하지 않은 토큰으로 사용자 정보 조회 실패: $e")
-                } else {
-                    emitLoginServerError()
-                    Log.e(TAG, "사용자 정보 조회 중 서버 에러", e)
-                }
-            }
     }
 
     private suspend fun emitLoginServerError() {

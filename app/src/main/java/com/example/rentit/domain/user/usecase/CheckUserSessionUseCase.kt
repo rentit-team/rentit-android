@@ -18,7 +18,7 @@ class CheckUserSessionUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(): Result<Long> {
         return runCatching {
-            val token = userRepository.getTokenFromPrefs()
+            val token = userRepository.getAccessTokenFromPrefs()
             if(token.isNullOrEmpty()) throw UnauthorizedException()
 
             val localUserId = userRepository.getAuthUserIdFromPrefs()

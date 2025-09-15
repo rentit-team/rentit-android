@@ -53,9 +53,13 @@ class UserRepositoryImpl @Inject constructor(
 
     override fun saveAuthUserIdToPrefs(authUserId: Long) = prefsDataSource.saveAuthUserIdToPrefs(authUserId)
 
-    override fun getTokenFromPrefs(): String? = prefsDataSource.getTokenFromPrefs()
+    override fun getRefreshTokenFromPrefs(): String? = prefsDataSource.getRefreshTokenFromPrefs()
 
-    override fun saveTokenToPrefs(token: String) = prefsDataSource.saveTokenToPrefs(token)
+    override fun saveRefreshTokenToPrefs(token: String) = prefsDataSource.saveRefreshTokenToPrefs(token)
+
+    override fun getAccessTokenFromPrefs(): String? = prefsDataSource.getAccessTokenFromPrefs()
+
+    override fun saveAccessTokenToPrefs(token: String) = prefsDataSource.saveAccessTokenToPrefs(token)
 
     override fun clearPrefs() = prefsDataSource.clearPrefs()
 }
