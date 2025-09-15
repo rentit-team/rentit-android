@@ -1,6 +1,7 @@
 package com.example.rentit.domain.user.usecase
 
 import com.example.rentit.BuildConfig
+import com.example.rentit.domain.auth.respository.AuthRepository
 import com.example.rentit.domain.user.model.LoginResultModel
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
@@ -16,7 +17,8 @@ import javax.inject.Inject
  */
 
 class LoginAndInitializeAuthUseCase @Inject constructor(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val authRepository: AuthRepository
 ) {
     suspend operator fun invoke(authCode: String): Result<LoginResultModel> {
         return runCatching {
@@ -24,8 +26,8 @@ class LoginAndInitializeAuthUseCase @Inject constructor(
             val data = response.data
 
             if(data.isUserRegistered) {
-                userRepository.saveRefreshTokenToPrefs(data.refreshToken.token)
-                userRepository.saveAccessTokenToPrefs(data.accessToken.token)
+                authRepository.saveRefreshTokenToPrefs(data.refreshToken.token)
+                authRepository.saveAccessTokenToPrefs(data.accessToken.token)
 
                 val userData = userRepository.getMyInfo().getOrThrow().data
                 userRepository.saveAuthUserIdToPrefs(userData.userId)

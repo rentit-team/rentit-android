@@ -5,5 +5,11 @@ interface AuthRepository {
 
     fun getAccessTokenFromPrefs(): String?
 
+    fun saveAccessTokenToPrefs(token: String)
+
+    fun getRefreshTokenFromPrefs(): String?
+
+    fun saveRefreshTokenToPrefs(token: String)
+
     fun clearPrefs()
 }

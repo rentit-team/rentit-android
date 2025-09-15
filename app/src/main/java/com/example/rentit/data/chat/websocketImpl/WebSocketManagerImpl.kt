@@ -3,6 +3,7 @@ package com.example.rentit.data.chat.websocketImpl
 import android.util.Log
 import com.example.rentit.data.chat.dto.MessageRequestDto
 import com.example.rentit.data.chat.dto.MessageResponseDto
+import com.example.rentit.domain.auth.respository.AuthRepository
 import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.user.repository.UserRepository
 import com.google.gson.Gson
@@ -18,6 +19,7 @@ private const val TAG = "WebSocket"
 private const val URL = "ws://api.rentit.o-r.kr:8080/ws/chat/websocket"
 
 class WebSocketManagerImpl @Inject constructor(
+    private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
 ): WebSocketManager {
     private var stompClient: StompClient? = null
@@ -25,7 +27,7 @@ class WebSocketManagerImpl @Inject constructor(
     private var stompLifecycleDisposable: Disposable? = null
     private var sendDisposable: Disposable? = null
 
-    private fun getAccessToken() = userRepository.getAccessTokenFromPrefs()
+    private fun getAccessToken() = authRepository.getAccessTokenFromPrefs()
     private fun getAuthUserId() = userRepository.getAuthUserIdFromPrefs()
 
     private fun clearDisposable() {
