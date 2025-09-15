@@ -58,6 +58,11 @@
     <string name="util_formatted_period">%s (%s) ~ %s (%s) · %d일</string>
     <string name="util_error_rental_period_unavailable">기간 정보 없음</string>
 
+    <!-- 세션 만료 Dialog-->
+    <string name="dialog_session_expired_title">세션이 만료되었어요</string>
+    <string name="dialog_session_expired_content">서비스를 계속 이용하려면 다시 로그인이 필요해요.</string>
+    <string name="dialog_session_expired_confirm_button">확인</string>
+
     <!-- 서버/네트워크 에러 Dialog -->
     <string name="dialog_server_connect_error_title">서버와 연결할 수 없어요</string>
     <string name="dialog_server_connect_error_content">서버와 연결에 실패했어요. 다시 시도해주세요.</string>
