@@ -82,8 +82,36 @@ object NetworkModule {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
+    /** Refresh Token OkHttpClient */
+    @RefreshTokenOkHttpClient
+    @Provides
+    @Singleton
+    fun provideRefreshTokenOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+    ): OkHttpClient =
+        OkHttpClient.Builder()
+            .addInterceptor(loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC))
+            .build()
+
+    @RefreshTokenOkHttpClient
+    @Provides
+    @Singleton
+    fun provideRefreshTokenRetrofit(
+        @RefreshTokenOkHttpClient client: OkHttpClient
+    ): Retrofit =
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
 }
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class UploadOkHttpClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class RefreshTokenOkHttpClient

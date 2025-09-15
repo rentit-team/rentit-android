@@ -25,10 +25,6 @@ interface UserApiService {
     @Headers("Content-Type: application/json")
     suspend fun googleLogin(@Body request: GoogleLoginRequestDto): Response<GoogleLoginResponseDto>
 
-    @POST("api/v1/auth/refresh")
-    @Headers("Content-Type: application/json")
-    suspend fun refreshAccessToken(@Body request: RefreshAccessTokenRequestDto): Response<RefreshAccessTokenResponseDto>
-
     @POST("api/v1/users/phone-verification/request")
     @Headers("Content-Type: application/json")
     suspend fun sendPhoneCode(@Body request: SendPhoneCodeRequestDto): Response<SendPhoneCodeResponseDto>

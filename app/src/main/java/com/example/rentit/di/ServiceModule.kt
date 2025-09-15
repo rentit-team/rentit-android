@@ -1,5 +1,6 @@
 package com.example.rentit.di
 
+import com.example.rentit.data.auth.remote.AuthApiService
 import com.example.rentit.data.chat.remote.ChatApiService
 import com.example.rentit.data.product.remote.ProductApiService
 import com.example.rentit.data.rental.remote.PhotoUploadApiService
@@ -37,5 +38,10 @@ object ServiceModule {
     @Provides
     fun providePhotoUploadApiService(@UploadOkHttpClient retrofit: Retrofit): PhotoUploadApiService {
         return retrofit.create(PhotoUploadApiService::class.java)
+    }
+
+    @Provides
+    fun provideAuthApiService(@RefreshTokenOkHttpClient retrofit: Retrofit): AuthApiService {
+        return retrofit.create(AuthApiService::class.java)
     }
 }
