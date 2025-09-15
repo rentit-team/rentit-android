@@ -13,6 +13,8 @@ class RefreshAccessTokenUseCase @Inject constructor(
     suspend operator fun invoke(): Result<String> {
         return runCatching {
             authRepository.refreshAccessToken().getOrThrow()
+        }.onSuccess {
+            authRepository.saveAccessTokenToPrefs(it)
         }.onFailure {
             authRepository.clearPrefs()
         }

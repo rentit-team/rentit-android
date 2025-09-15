@@ -1,8 +1,8 @@
-package com.example.rentit.domain.user.usecase
+package com.example.rentit.domain.auth.usecase
 
 import com.example.rentit.BuildConfig
 import com.example.rentit.domain.auth.respository.AuthRepository
-import com.example.rentit.domain.user.model.LoginResultModel
+import com.example.rentit.domain.auth.model.LoginResultModel
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class LoginAndInitializeAuthUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(authCode: String): Result<LoginResultModel> {
         return runCatching {
-            val response = userRepository.googleLogin(authCode, BuildConfig.GOOGLE_REDIRECT_URI).getOrThrow()
+            val response = authRepository.googleLogin(authCode, BuildConfig.GOOGLE_REDIRECT_URI).getOrThrow()
             val data = response.data
 
             if(data.isUserRegistered) {

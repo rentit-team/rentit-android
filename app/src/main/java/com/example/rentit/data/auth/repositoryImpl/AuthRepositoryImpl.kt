@@ -2,6 +2,7 @@ package com.example.rentit.data.auth.repositoryImpl
 
 import com.example.rentit.core.error.BadRequestException
 import com.example.rentit.core.network.safeApiCall
+import com.example.rentit.data.auth.dto.GoogleLoginResponseDto
 import com.example.rentit.data.auth.local.AuthPrefsDataSource
 import com.example.rentit.data.auth.remote.AuthRemoteDataSource
 import com.example.rentit.domain.auth.respository.AuthRepository
@@ -11,6 +12,10 @@ class AuthRepositoryImpl @Inject constructor(
     private val prefsDataSource: AuthPrefsDataSource,
     private val remoteDataSource: AuthRemoteDataSource
 ): AuthRepository {
+    override suspend fun googleLogin(code: String, redirectUri: String): Result<GoogleLoginResponseDto> {
+        return safeApiCall { remoteDataSource.googleLogin(code, redirectUri) }
+    }
+
     override suspend fun refreshAccessToken(): Result<String> {
         val refreshToken = prefsDataSource.getRefreshTokenFromPrefs()
         return if (refreshToken == null) {

@@ -1,4 +1,4 @@
-package com.example.rentit.domain.user.model
+package com.example.rentit.domain.auth.model
 
 data class LoginResultModel(
     val isRegistered: Boolean,
