@@ -46,4 +46,8 @@ class SettingViewModel @Inject constructor(
         emitSideEffect(SettingSideEffect.ToastLogoutComplete)
         emitSideEffect(SettingSideEffect.NavigateToLogin)
     }
+
+    fun showComingSoonMessage() {
+        emitSideEffect(SettingSideEffect.ToastComingSoon)
+    }
 }
