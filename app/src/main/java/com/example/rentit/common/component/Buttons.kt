@@ -112,20 +112,27 @@ private val iconSize = 10.dp
 fun ArrowedTextButton(
     modifier: Modifier = Modifier,
     text: String,
+    color: Color = AppBlack,
     onClick: () -> Unit,
 ) {
     TextButton(
-        modifier = modifier.height(buttonHeight),
+        modifier = modifier.height(buttonHeight).semantics { contentDescription = text },
         onClick = onClick,
         contentPadding = PaddingValues(horizontal = buttonHorizontalPadding),
-        colors = ButtonDefaults.textButtonColors(contentColor = AppBlack)
+        colors = ButtonDefaults.textButtonColors(contentColor = color)
     ) {
         Text(
             text = text,
-            style = MaterialTheme.typography.labelLarge
+            style = MaterialTheme.typography.labelLarge,
+            color = color
         )
         Spacer(Modifier.padding(textIconSpacing))
-        Icon(modifier = Modifier.size(iconSize), painter = painterResource(R.drawable.ic_chevron_right), contentDescription = null)
+        Icon(
+            modifier = Modifier.size(iconSize),
+            painter = painterResource(R.drawable.ic_chevron_right),
+            contentDescription = null,
+            tint = color
+        )
     }
 }
 

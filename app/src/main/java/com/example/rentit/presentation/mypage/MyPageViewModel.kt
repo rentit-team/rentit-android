@@ -9,6 +9,7 @@ import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.domain.user.usecase.GetMyProductsWithCategoryUseCase
 import com.example.rentit.domain.user.usecase.GetMyRentalsWithNearestDueUseCase
+import com.example.rentit.presentation.mypage.model.MyPageTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "MyPageViewModel"
 
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
@@ -48,7 +51,9 @@ class MyPageViewModel @Inject constructor(
                     myProductList = it,
                     myProductCount = it.size
                 )
+                Log.i(TAG, "내 상품 조회 성공: ${it.size}개")
             }.onFailure { e ->
+                Log.e(TAG, "내 상품 조회 실패", e)
                 emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
@@ -61,8 +66,9 @@ class MyPageViewModel @Inject constructor(
                     myValidRentalCount = it.myValidRentalCount,
                     nearestDueItem = it.nearestDueItem
                 )
+                Log.i(TAG, "내 대여 조회 성공: ${it.myRentalList.size}개")
             }.onFailure { e ->
-                Log.e("MyPageViewModel", "getMyRentalList: $e")
+                Log.e(TAG, "내 대여 조회 실패", e)
                 emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
@@ -74,7 +80,9 @@ class MyPageViewModel @Inject constructor(
                     myPendingRentalCount = it.rentalHistory
                         .filter { history -> history.status == RentalStatus.PENDING || history.status == RentalStatus.PAID }.size
                 )
+                Log.i(TAG, "내 상품에 대한 대여 조회 성공: ${it.rentalHistory.size}개")
             }.onFailure { e ->
+                Log.e(TAG, "내 상품에 대한 대여 조회 실패", e)
                 emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
@@ -107,7 +115,15 @@ class MyPageViewModel @Inject constructor(
         emitSideEffect(MyPageSideEffect.NavigateToRentalDetail(productId, reservationId))
     }
 
-    fun onPendingRentalClicked() {
+    fun onMyProductCountClicked() {
+        _uiState.value = _uiState.value.copy(currentTab = MyPageTab.MY_PRODUCT)
+    }
+
+    fun onMyRentingCountClicked() {
+        _uiState.value = _uiState.value.copy(currentTab = MyPageTab.MY_RENTAL)
+    }
+
+    fun onMyPendingRentalClicked() {
         emitSideEffect(MyPageSideEffect.NavigateToMyProductsRental)
     }
 
@@ -122,8 +138,8 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun setTabSelected() {
-        _uiState.value = _uiState.value.copy(isFirstTabSelected = !uiState.value.isFirstTabSelected)
+    fun setTabSelected(selectedTab: MyPageTab) {
+        _uiState.value = _uiState.value.copy(currentTab = selectedTab)
     }
 
     fun showComingSoonMessage() {

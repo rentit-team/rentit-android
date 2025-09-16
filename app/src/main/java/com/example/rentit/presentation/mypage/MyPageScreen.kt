@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.ArrowedTextButton
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -53,10 +55,13 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.common.util.toRelativeTimeFormat
+import com.example.rentit.domain.rental.model.RentingStatus
 import com.example.rentit.domain.user.model.MyProductItemModel
 import com.example.rentit.domain.user.model.MyRentalItemModel
 import com.example.rentit.domain.user.model.NearestDueItemModel
+import com.example.rentit.presentation.mypage.model.MyPageTab
 import java.time.LocalDateTime
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -65,20 +70,22 @@ fun MyPageScreen(
     profileImgUrl: String?,
     nickName: String = "",
     myProductCount: Int = 0,
-    myValidRentalCount: Int = 0,
+    myRentingCount: Int = 0,
     myPendingRentalCount: Int = 0,
     nearestDueItem: NearestDueItemModel?,
     myProductList: List<MyProductItemModel>,
     myRentalList: List<MyRentalItemModel>,
     pullToRefreshState: PullToRefreshState = PullToRefreshState(),
-    isFirstTabSelected: Boolean,
+    currentTab: MyPageTab,
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     onSettingClick: () -> Unit,
     onAlertClick: () -> Unit,
-    onMyPendingRentalClick: () -> Unit,
+    onMyProductCountClick: () -> Unit,
+    onMyRentingCountClick: () -> Unit,
+    onMyPendingRentalCountClick: () -> Unit,
     onInfoRentalDetailClick: () -> Unit,
-    onTabActive: () -> Unit,
+    onTabActive: (MyPageTab) -> Unit,
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit
 ) {
@@ -96,9 +103,11 @@ fun MyPageScreen(
                     profileImgUrl = profileImgUrl,
                     nickName = nickName,
                     myProductCount = myProductCount,
-                    myValidRentalCount = myValidRentalCount,
+                    myRentingCount = myRentingCount,
                     myPendingRentalCount = myPendingRentalCount,
-                    onMyPendingRentalClick = onMyPendingRentalClick
+                    onMyProductCountClick = onMyProductCountClick,
+                    onMyRentingCountClick = onMyRentingCountClick,
+                    onMyPendingRentalCountClick = onMyPendingRentalCountClick
                 )
 
                 if (nearestDueItem != null) {
@@ -111,7 +120,7 @@ fun MyPageScreen(
             }
 
             TabbedListSection(
-                isFirstTabSelected = isFirstTabSelected,
+                currentTab = currentTab,
                 myProductList = myProductList,
                 myRentList = myRentalList,
                 onTabActive = onTabActive,
@@ -133,7 +142,9 @@ fun TopSection(onAlertClick: () -> Unit = {}, onSettingClick: () -> Unit = {}) {
             text = stringResource(id = R.string.title_activity_my_page_tab),
             style = MaterialTheme.typography.bodyLarge
         )
-        IconButton(modifier = Modifier.padding(end = 8.dp).size(30.dp), onClick = onAlertClick) {
+        IconButton(modifier = Modifier
+            .padding(end = 8.dp)
+            .size(30.dp), onClick = onAlertClick) {
             Box {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_bell),
@@ -163,18 +174,18 @@ fun ProfileSection(
     profileImgUrl: String? = null,
     nickName: String = "",
     myProductCount: Int = 0,
-    myValidRentalCount: Int = 0,
+    myRentingCount: Int = 0,
     myPendingRentalCount: Int = 0,
-    onMyPendingRentalClick: () -> Unit = {}
+    onMyProductCountClick: () -> Unit = {},
+    onMyRentingCountClick: () -> Unit = {},
+    onMyPendingRentalCountClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier.padding(bottom = 26.dp),
         verticalAlignment = Alignment.Bottom
     ) {
         LoadableUrlImage(
-            modifier = Modifier
-                .size(70.dp)
-                .clip(CircleShape),
+            modifier = Modifier.size(70.dp).clip(CircleShape),
             imgUrl = profileImgUrl,
             defaultImageResId = R.drawable.img_profile_placeholder,
             defaultDescResId = R.string.content_description_for_img_profile_placeholder
@@ -192,9 +203,9 @@ fun ProfileSection(
                     .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myProductCount)
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myValidRentalCount)
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount, true, onMyPendingRentalClick)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myProductCount, true, onMyProductCountClick)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myRentingCount, true, onMyRentingCountClick)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount, true, onMyPendingRentalCountClick)
             }
         }
     }
@@ -225,65 +236,84 @@ fun InfoBox(
     remainingRentalDays: Int = 0,
     onRentalDetailClick: () -> Unit = {}
 ) {
+    val rentingStatus = RentingStatus.fromDaysFromReturnDate(remainingRentalDays)
+    val highlightColor = if(rentingStatus == RentingStatus.RENTING_IN_USE) PrimaryBlue500 else rentingStatus.textColor
+    val infoText = getRentalInfoText(rentingStatus, remainingRentalDays, highlightColor)
+    val buttonText = stringResource(
+        when(rentingStatus) {
+            RentingStatus.RENTING_IN_USE -> R.string.screen_mypage_info_button_rental_detail
+            RentingStatus.RENTING_OVERDUE, RentingStatus.RENTING_RETURN_DAY -> R.string.screen_mypage_info_button_return
+        }
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
             .background(Gray100)
-            .padding(20.dp, 18.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row {
-            Text(
-                text = stringResource(R.string.screen_mypage_info_text_1),
-                style = MaterialTheme.typography.labelMedium
-            )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            if(rentingStatus == RentingStatus.RENTING_RETURN_DAY) {
+                Text(
+                    text = stringResource(R.string.screen_mypage_info_text_return_day_1) + " ",
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
             Text(
                 modifier = Modifier.weight(1f, fill = false),
-                text = " $productTitle ",
+                text = "$productTitle ",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
-                text = buildAnnotatedString {
-                    append(stringResource(R.string.screen_mypage_info_text_2))
-                    withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(color = PrimaryBlue500)) {
-                        append(" $remainingRentalDays")
-                        append(stringResource(R.string.screen_mypage_info_text_3))
-                    }
-                    append(stringResource(R.string.screen_mypage_info_text_4))
-                },
+                text = infoText,
                 style = MaterialTheme.typography.labelMedium
             )
         }
-        Row(
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .clickable { onRentalDetailClick() },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.padding(end = 5.dp),
-                text = stringResource(id = R.string.screen_mypage_check_usage_history),
-                style = MaterialTheme.typography.bodySmall,
-                color = PrimaryBlue500
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_chevron_right),
-                contentDescription = stringResource(id = R.string.content_description_for_ic_chevron_right),
-                tint = PrimaryBlue500
-            )
+        ArrowedTextButton(
+            text = buttonText,
+            color = highlightColor,
+            onClick = onRentalDetailClick
+        )
+    }
+}
+
+@Composable
+fun getRentalInfoText(rentingStatus: RentingStatus, remainingRentalDays: Int, highlightColor: Color): AnnotatedString {
+    return when (rentingStatus) {
+        RentingStatus.RENTING_IN_USE, RentingStatus.RENTING_OVERDUE -> {
+            val endTextRes = if(rentingStatus == RentingStatus.RENTING_IN_USE) R.string.screen_mypage_info_text_left else R.string.screen_mypage_info_text_overdue
+            buildAnnotatedString {
+                append(stringResource(R.string.screen_mypage_info_text_1))
+                withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(color = highlightColor)) {
+                    append(" ${abs(remainingRentalDays)}${stringResource(R.string.common_day_unit)} ")
+                }
+                append(stringResource(endTextRes))
+            }
+        }
+        RentingStatus.RENTING_RETURN_DAY -> {
+            buildAnnotatedString {
+                append(stringResource(R.string.screen_mypage_info_text_return_day_2))
+                withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(color = rentingStatus.textColor)) {
+                    append(" " + stringResource(R.string.screen_mypage_info_text_return_day_3))
+                }
+                append(stringResource(R.string.screen_mypage_info_text_return_day_4))
+            }
         }
     }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TabbedListSection(
-    isFirstTabSelected: Boolean,
+    currentTab: MyPageTab,
     myProductList: List<MyProductItemModel>,
     myRentList: List<MyRentalItemModel>,
-    onTabActive: () -> Unit,
+    onTabActive: (MyPageTab) -> Unit,
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit,
 ) {
@@ -291,20 +321,20 @@ fun TabbedListSection(
         TabTitle(
             modifier = Modifier.weight(1F),
             title = stringResource(id = R.string.screen_mypage_tab_title_my_product),
-            isTabSelected = isFirstTabSelected,
-            onClick = onTabActive
+            isTabSelected = currentTab == MyPageTab.MY_PRODUCT,
+            onClick = { onTabActive(MyPageTab.MY_PRODUCT) }
         )
         TabTitle(
             modifier = Modifier.weight(1F),
             title = stringResource(id = R.string.screen_mypage_tab_title_on_rent),
-            isTabSelected = !isFirstTabSelected,
-            onClick = onTabActive
+            isTabSelected = currentTab == MyPageTab.MY_RENTAL,
+            onClick = { onTabActive(MyPageTab.MY_RENTAL) }
         )
     }
 
     CommonDivider()
 
-    if (isFirstTabSelected && myProductList.isNotEmpty()) {
+    if (currentTab == MyPageTab.MY_PRODUCT && myProductList.isNotEmpty()) {
         LazyColumn(modifier = Modifier.background(Gray100)) {
             items(myProductList, key = { it.productId }) {
                 ProductListItem(
@@ -319,7 +349,7 @@ fun TabbedListSection(
                 ) { onProductItemClick(it.productId) }
             }
         }
-    } else if(!isFirstTabSelected && myRentList.isNotEmpty()) {
+    } else if(currentTab == MyPageTab.MY_RENTAL && myRentList.isNotEmpty()) {
         LazyColumn(modifier = Modifier.background(Gray100)) {
             items(myRentList, key = { it.reservationId }) {
                 MyRentalHistoryListItem(
@@ -333,11 +363,9 @@ fun TabbedListSection(
             }
         }
     } else {
-        val text =
-            if(isFirstTabSelected) {
-                stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
-            } else {
-                stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
+        val text = when (currentTab) {
+                MyPageTab.MY_PRODUCT -> stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
+                MyPageTab.MY_RENTAL -> stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
             }
         EmptyContentScreen(
             modifier = Modifier.background(Gray100),
@@ -473,15 +501,17 @@ fun MyPageScreenPreview() {
             profileImgUrl = "https://example.com/profile.jpg",
             nickName = "홍길동",
             myProductCount = sampleMyProductList.size,
-            myValidRentalCount = sampleMyRentalList.size,
+            myRentingCount = sampleMyRentalList.size,
             myPendingRentalCount = 0,
             nearestDueItem = sampleNearestDueItem,
             myProductList = sampleMyProductList,
             myRentalList = sampleMyRentalList,
-            isFirstTabSelected = true,
+            currentTab = MyPageTab.MY_RENTAL,
             onSettingClick = {},
             onAlertClick = {},
-            onMyPendingRentalClick = {},
+            onMyProductCountClick = {},
+            onMyRentingCountClick = {},
+            onMyPendingRentalCountClick = {},
             onInfoRentalDetailClick = {},
             onTabActive = {},
             onProductItemClick = {},

@@ -26,17 +26,18 @@ class GetMyRentalsWithNearestDueUseCase @Inject constructor(
         return runCatching {
             val response = userRepository.getMyRentalList().getOrThrow()
 
-            val myRentalList = response.myReservations.map { it.toMyRentalItemModel() }
-            val nearestDueItem = response.nearestDueItem?.toModel()
-            val myValidRentalCount = myRentalList.count {
-                it.status !in listOf(
-                    RentalStatus.CANCELED,
-                    RentalStatus.REJECTED,
-                    RentalStatus.PENDING
-                )
-            }
+            val myRentalList = response.myReservations
+                .map { it.toMyRentalItemModel() }
+                .let { items ->
+                    val (renting, others) = items.partition { it.status == RentalStatus.RENTING }
+                    // RENTING 항목을 앞에, 나머지를 뒤에 배치
+                    renting + others
+                }
 
-            MyRentalsWithNearestDueModel(myRentalList, myValidRentalCount, nearestDueItem)
+            val nearestDueItem = response.nearestDueItem?.toModel()
+            val myRentingCount = myRentalList.count { it.status == RentalStatus.RENTING }
+
+            MyRentalsWithNearestDueModel(myRentalList, myRentingCount, nearestDueItem)
         }
     }
 }
