@@ -20,7 +20,6 @@ fun RentalTaskSection(
     policyText: String? = null,
     photoTaskLabel: String,
     trackingNumTaskLabel: String,
-    isTaskAvailable: Boolean,
     isPhotoRegistered: Boolean,
     isTrackingNumRegistered: Boolean,
     onPhotoTaskClick: () -> Unit = {},
@@ -44,13 +43,11 @@ fun RentalTaskSection(
         )
         TaskCheckBox(
             taskText = photoTaskLabel,
-            isTaskEnable = isTaskAvailable,
             isDone = isPhotoRegistered,
             onClick = onPhotoTaskClick
         )
         TaskCheckBox(
             taskText = trackingNumTaskLabel,
-            isTaskEnable = isTaskAvailable,
             isDone = isTrackingNumRegistered,
             onClick = onTrackingNumTaskClick
         )
@@ -74,7 +71,6 @@ private fun Preview() {
             policyText = "※ 등록 후에는 수정이 어렵습니다.",
             photoTaskLabel = "반납 사진 등록",
             trackingNumTaskLabel = "운송장 번호 입력",
-            isTaskAvailable = true,
             isPhotoRegistered = true,
             isTrackingNumRegistered = false
         ) {

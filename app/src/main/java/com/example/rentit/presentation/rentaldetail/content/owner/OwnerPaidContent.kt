@@ -71,7 +71,6 @@ fun OwnerPaidContent(
         guideText = stringResource(R.string.screen_rental_detail_owner_paid_sending_task_info),
         photoTaskLabel = stringResource(R.string.screen_rental_detail_owner_paid_sending_task_photo),
         trackingNumTaskLabel = stringResource(R.string.screen_rental_detail_owner_paid_sending_task_tracking_num),
-        isTaskAvailable = true,
         isPhotoRegistered = paidData.isSendingPhotoRegistered,
         isTrackingNumRegistered = paidData.isSendingTrackingNumRegistered,
         onPhotoTaskClick = onPhotoTaskClick,
