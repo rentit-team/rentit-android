@@ -12,6 +12,7 @@ data class RentalDetailState(
     val trackingNumber: String = "",
     val trackingCourierNames: List<String> = emptyList(),
     val isLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val showTransactionReceiptConfirmDialog: Boolean = false,
     val showTrackingNumberEmptyError: Boolean = false,
     val showTrackingRegDialog: Boolean = false,

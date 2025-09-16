@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.ExtendedFAB
+import com.example.rentit.common.component.layout.PullToRefreshLayout
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto
@@ -33,11 +36,15 @@ import com.example.rentit.presentation.rentaldetail.content.owner.OwnerRentingCo
 import com.example.rentit.presentation.rentaldetail.content.owner.OwnerRequestContent
 import com.example.rentit.presentation.rentaldetail.content.owner.OwnerReturnedContent
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OwnerRentalDetailScreen(
     uiModel: RentalDetailStatusModel,
     scrollState: ScrollState,
+    pullToRefreshState: PullToRefreshState,
+    isRefreshing: Boolean = false,
+    onRefresh: () -> Unit = {},
     onBackClick: () -> Unit,
     onTransactionReceiptClick: () -> Unit,
     onRequestResponseClick: () -> Unit,
@@ -66,25 +73,49 @@ fun OwnerRentalDetailScreen(
             )
         }
     ) {
-        Column(modifier = Modifier
-            .padding(it)
-            .verticalScroll(scrollState)) {
-            when(uiModel) {
-                is RentalDetailStatusModel.Request ->
-                    OwnerRequestContent(uiModel, onRequestResponseClick, onCancelRentClick, onRentalSummaryClick)
-                is RentalDetailStatusModel.Paid ->
-                    OwnerPaidContent(uiModel, onPhotoTaskClick, onTrackingNumTaskClick, onCancelRentClick, onRentalSummaryClick)
-                is RentalDetailStatusModel.Renting ->
-                    OwnerRentingContent(uiModel, onRentalSummaryClick)
-                is RentalDetailStatusModel.Returned ->
-                    OwnerReturnedContent(uiModel, onCheckPhotoClick, onRentalSummaryClick)
-                is RentalDetailStatusModel.Unknown -> Unit
+        PullToRefreshLayout(
+            isRefreshing = isRefreshing,
+            pullToRefreshState = pullToRefreshState,
+            onRefresh = onRefresh
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(it)
+                    .verticalScroll(scrollState)
+            ) {
+                when (uiModel) {
+                    is RentalDetailStatusModel.Request ->
+                        OwnerRequestContent(
+                            uiModel,
+                            onRequestResponseClick,
+                            onCancelRentClick,
+                            onRentalSummaryClick
+                        )
+
+                    is RentalDetailStatusModel.Paid ->
+                        OwnerPaidContent(
+                            uiModel,
+                            onPhotoTaskClick,
+                            onTrackingNumTaskClick,
+                            onCancelRentClick,
+                            onRentalSummaryClick
+                        )
+
+                    is RentalDetailStatusModel.Renting ->
+                        OwnerRentingContent(uiModel, onRentalSummaryClick)
+
+                    is RentalDetailStatusModel.Returned ->
+                        OwnerReturnedContent(uiModel, onCheckPhotoClick, onRentalSummaryClick)
+
+                    is RentalDetailStatusModel.Unknown -> Unit
+                }
+                Spacer(modifier = Modifier.height(100.dp))
             }
-            Spacer(modifier = Modifier.height(100.dp))
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
@@ -129,8 +160,9 @@ private fun OwnerRentalDetailScreenPreview() {
 
     RentItTheme {
         OwnerRentalDetailScreen(
-            sample2.toModel(),
-            rememberScrollState(),
+            uiModel = sample2.toModel(),
+            scrollState = rememberScrollState(),
+            pullToRefreshState = PullToRefreshState(),
             onBackClick = {},
             onTransactionReceiptClick = {},
             onRequestResponseClick = {},
