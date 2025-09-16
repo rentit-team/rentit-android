@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import com.example.rentit.navigation.bottomtab.BottomTabRoute
 import com.example.rentit.presentation.rentaldetail.RentalDetailRoute
 import com.example.rentit.presentation.rentaldetail.photobeforerent.PhotoBeforeRentRoute
 import com.example.rentit.presentation.rentaldetail.rentalphotocheck.RentalPhotoCheckRoute
@@ -15,6 +16,16 @@ fun NavHostController.navigateToRentalDetail(productId: Int, reservationId: Int)
     navigate(
         route = RentalDetailRoute.RentalDetail(productId, reservationId)
     )
+}
+
+fun NavHostController.navigateToRentalDetailPopUpToHome(productId: Int, reservationId: Int) {
+    navigate(
+        route = RentalDetailRoute.RentalDetail(productId, reservationId)
+    ) {
+        popUpTo(BottomTabRoute.Home.route) {
+            inclusive = false
+        }
+    }
 }
 
 fun NavHostController.navigateToRentalPhotoCheck(productId: Int, reservationId: Int) {

@@ -12,9 +12,11 @@ sealed class ProductDetailRoute {
 
     @Serializable
     data class ReservationComplete(
+        val productId: Int,
+        val reservationId: Int,
         val rentalStartDate: String,
         val rentalEndDate: String,
-        val formattedTotalPrice: String,
+        val totalPrice: Int,
     ) : ProductDetailRoute()
 
     @Serializable

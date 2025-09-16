@@ -17,7 +17,6 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.component.layout.LoadingScreen
-import com.example.rentit.common.util.formatPrice
 import com.example.rentit.navigation.productdetail.navigateToReservationComplete
 import com.example.rentit.presentation.main.MainViewModel
 
@@ -44,9 +43,11 @@ fun ReservationRoute(navHostController: NavHostController, productId: Int) {
                 when (it) {
                     is ReservationSideEffect.NavigateToReservationComplete -> {
                         navHostController.navigateToReservationComplete(
+                            productId = productId,
+                            reservationId = it.reservationId,
                             rentalStartDate = it.rentalStartDate,
                             rentalEndDate = it.rentalEndDate,
-                            formattedTotalPrice = formatPrice(it.totalPrice)
+                            totalPrice = it.totalPrice
                         )
                     }
                     ReservationSideEffect.ToastInvalidPeriod -> {

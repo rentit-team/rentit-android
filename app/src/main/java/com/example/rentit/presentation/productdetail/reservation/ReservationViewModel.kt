@@ -90,7 +90,6 @@ class ReservationViewModel @Inject constructor(
         val selectedPeriod = _uiState.value.selectedPeriod
         val minPeriod = _uiState.value.minPeriod
         val maxPeriod = _uiState.value.maxPeriod
-        val totalPrice = _uiState.value.totalPrice
 
         viewModelScope.launch {
             setLoading(true)
@@ -105,9 +104,10 @@ class ReservationViewModel @Inject constructor(
             ).onSuccess {
                 emitSideEffect(
                     ReservationSideEffect.NavigateToReservationComplete(
+                        reservationId = it.data.reservationId,
                         rentalStartDate = startDate,
                         rentalEndDate = endDate,
-                        totalPrice = totalPrice
+                        totalPrice = it.data.totalAmount
                     )
                 )
                 Log.i(TAG, "대여 예약 성공: ${it.data.reservationId}")
