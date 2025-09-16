@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
@@ -213,28 +214,19 @@ fun ImagePager(pagerState: PagerState, imgUrlList: List<String?>, onClick: () ->
 
 
 @Composable
-fun PostHeader(title: String, category: List<String>, creationDate: String, onLikeClick: () -> Unit, onShareClick: () -> Unit) {
+fun PostHeader(title: String, categories: List<String>, creationDate: String, onLikeClick: () -> Unit, onShareClick: () -> Unit) {
     Row(Modifier
         .fillMaxWidth()
         .screenHorizontalPadding()
-        .padding(vertical = 16.dp),
+        .padding(top = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.Bottom
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        Column {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Text(text = title, style = MaterialTheme.typography.bodyLarge)
-            }
-            Text(
-                modifier = Modifier.padding(top = 5.dp),
-                text = "${category.joinToString(" · ") }  $creationDate",
-                style = MaterialTheme.typography.labelMedium,
-                color = Gray400
-            )
-        }
+        Text(
+            modifier = Modifier.weight(1f, false),
+            text = title,
+            style = MaterialTheme.typography.bodyLarge
+        )
         Row(modifier = Modifier.offset(x = 10.dp), verticalAlignment = Alignment.CenterVertically) {
             IconButton(onLikeClick) {
                 Image(
@@ -249,6 +241,26 @@ fun PostHeader(title: String, category: List<String>, creationDate: String, onLi
                 )
             }
         }
+    }
+    Row(
+        modifier = Modifier.fillMaxWidth().screenHorizontalPadding().padding(bottom = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp)
+    ) {
+        Text(
+            modifier = Modifier.weight(1f, false),
+            text = if(categories.isNotEmpty()) categories.joinToString(" · ") else stringResource(R.string.common_empty_category),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            style = MaterialTheme.typography.labelMedium,
+            color = Gray400
+        )
+
+        Text(
+            text = creationDate,
+            style = MaterialTheme.typography.labelMedium,
+            color = Gray400
+        )
     }
 }
 

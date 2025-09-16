@@ -28,6 +28,7 @@
     <string name="common_loadable_uri_img_content_description">사진</string>
     <string name="common_tag_btn_icon_check_description">선택된 태그</string>
     <string name="common_removable_tag_btn_icon_delete_description">태그 지우기</string>
+    <string name="common_empty_category">카테고리 없음</string>
 
     <string name="common_dialog_btn_close">닫기</string>
 
@@ -124,7 +125,6 @@
     <string name="screen_main_btn_create_post_content_description">상품 등록</string>
 
     <!-- 게시글 리스트 아이템 -->
-    <string name="product_list_item_text_empty_category">카테고리 없음</string>
     <string name="product_list_item_period_btn_check_request">요청 확인하기</string>
 
     <!-- 홈 -->
