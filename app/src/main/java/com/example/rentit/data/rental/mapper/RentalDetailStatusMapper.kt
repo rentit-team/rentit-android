@@ -7,7 +7,7 @@ import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
-import com.example.rentit.domain.rental.model.RentingStatus
+import com.example.rentit.common.enums.RentingStatus
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
@@ -55,7 +55,7 @@ fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
         }
 
         RentalStatus.RENTING -> {
-            val daysFromReturnDate = daysFromToday(rental.endDate) + 1
+            val daysFromReturnDate = daysFromToday(rental.endDate)
             val rentingStatus = RentingStatus.fromDaysFromReturnDate(daysFromReturnDate)
             val isReturnAvailable = daysFromReturnDate <= 0
 

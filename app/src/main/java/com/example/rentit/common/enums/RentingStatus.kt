@@ -1,4 +1,4 @@
-package com.example.rentit.domain.rental.model
+package com.example.rentit.common.enums
 
 import androidx.annotation.StringRes
 import androidx.compose.ui.graphics.Color

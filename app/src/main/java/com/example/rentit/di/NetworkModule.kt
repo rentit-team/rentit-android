@@ -22,7 +22,6 @@ object NetworkModule {
     private const val BASE_URL = "http://api.rentit.o-r.kr:8080/"
 
     @Provides
-    @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor =
         HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY

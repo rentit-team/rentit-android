@@ -13,6 +13,6 @@ enum class RentalStatus(@StringRes val strRes: Int, val color: Color) {
     REJECTED(R.string.rental_status_rejected, Gray400),
     PAID(R.string.rental_status_paid, PrimaryBlue500),
     RENTING(R.string.rental_status_renting, SecondaryYellow),
-    RETURNED(R.string.rental_status_returned, PrimaryBlue500),
+    RETURNED(R.string.rental_status_returned, Gray400),
     CANCELED(R.string.rental_status_canceled, Gray400)
 }

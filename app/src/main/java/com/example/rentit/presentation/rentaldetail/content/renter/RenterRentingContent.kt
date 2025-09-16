@@ -36,7 +36,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalTas
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
-import com.example.rentit.domain.rental.model.RentingStatus
+import com.example.rentit.common.enums.RentingStatus
 import kotlin.math.abs
 
 /**
