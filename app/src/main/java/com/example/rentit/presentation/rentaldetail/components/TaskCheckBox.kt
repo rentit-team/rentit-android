@@ -41,7 +41,6 @@ private val spacerSize = 8.dp
 @Composable
 fun TaskCheckBox(
     modifier: Modifier = Modifier,
-    isTaskEnable: Boolean,
     taskText: String,
     isDone: Boolean = false,
     onClick: () -> Unit = {},
@@ -50,7 +49,6 @@ fun TaskCheckBox(
     val iconDescription =
         if (isDone) stringResource(R.string.screen_rental_detail_task_check_box_icon_done, taskText)
         else stringResource(R.string.screen_rental_detail_task_check_box_icon_not_done, taskText)
-    val isButtonEnable = !isDone && isTaskEnable
 
     OutlinedButton(
         modifier = modifier
@@ -64,7 +62,7 @@ fun TaskCheckBox(
             disabledContainerColor = Gray100
         ),
         onClick = onClick,
-        enabled = isButtonEnable
+        enabled = !isDone
     ) {
         Row(
             modifier = modifier
@@ -91,7 +89,6 @@ private fun Preview() {
     RentItTheme {
         TaskCheckBox(
             taskText = "대여 전 사진 등록",
-            isTaskEnable = true,
         )
     }
 }

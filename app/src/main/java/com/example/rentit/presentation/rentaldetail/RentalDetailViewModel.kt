@@ -83,9 +83,17 @@ class RentalDetailViewModel @Inject constructor(
         setLoading(false)
     }
 
-    fun retryLoadRentalDetail(productId: Int, reservationId: Int) {
+    fun reloadData(productId: Int, reservationId: Int) {
         viewModelScope.launch {
             getRentalDetail(productId, reservationId)
+        }
+    }
+
+    fun refreshData(productId: Int, reservationId: Int) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isRefreshing = true)
+            getRentalDetail(productId, reservationId)
+            _uiState.value = _uiState.value.copy(isRefreshing = false)
         }
     }
 

@@ -103,7 +103,6 @@ private fun Preview() {
         basicRentalFee = 90_000,
         deposit = 10_000 * 3,
         rentalTrackingNumber = null,
-        isReturnAvailable = false,
         isReturnPhotoRegistered = false,
         isReturnTrackingNumRegistered = false,
         rentalCourierName = null,

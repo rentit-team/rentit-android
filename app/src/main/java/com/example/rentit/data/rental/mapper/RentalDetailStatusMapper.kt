@@ -57,7 +57,6 @@ fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
         RentalStatus.RENTING -> {
             val daysFromReturnDate = daysFromToday(rental.endDate)
             val rentingStatus = RentingStatus.fromDaysFromReturnDate(daysFromReturnDate)
-            val isReturnAvailable = daysFromReturnDate <= 0
 
             RentalDetailStatusModel.Renting(
                 status = rentingStatus,
@@ -70,7 +69,6 @@ fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
                 returnTrackingNumber = rental.returnTrackingNumber,
                 returnCourierName = rental.returnCourierName,
                 isOverdue = rentingStatus == RentingStatus.RENTING_OVERDUE,
-                isReturnAvailable = isReturnAvailable,
                 isReturnPhotoRegistered = rental.returnStatus.isPhotoRegistered,
                 isReturnTrackingNumRegistered = rental.returnStatus.isTrackingNumberRegistered,
             )

@@ -39,7 +39,6 @@ sealed class RentalDetailStatusModel {
         val returnTrackingNumber: String?,
         val returnCourierName: String?,
         val isOverdue: Boolean,
-        val isReturnAvailable: Boolean,
         val isReturnPhotoRegistered: Boolean,
         val isReturnTrackingNumRegistered: Boolean
     ): RentalDetailStatusModel()

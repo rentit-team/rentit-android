@@ -6,6 +6,8 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -34,6 +36,7 @@ import com.example.rentit.presentation.rentaldetail.dialog.TrackingRegistrationD
 import com.example.rentit.presentation.rentaldetail.dialog.TransactionReceiptConfirmDialog
 import java.io.File
 
+@OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalDetailRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
@@ -46,10 +49,11 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val scrollState = rememberScrollState()
+    val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(Unit) {
         viewModel.getRentalDetail(productId, reservationId)
-        mainViewModel?.setRetryAction { viewModel.retryLoadRentalDetail(productId, reservationId) }
+        mainViewModel?.setRetryAction { viewModel.reloadData(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
@@ -129,6 +133,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
             OwnerRentalDetailScreen(
                 uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
+                pullToRefreshState = pullToRefreshState,
+                isRefreshing = uiState.isRefreshing,
+                onRefresh = { viewModel.refreshData(productId, reservationId) },
                 onBackClick = viewModel::navigateBack,
                 onTransactionReceiptClick = viewModel::showTransactionReceiptConfirmDialog,
                 onRequestResponseClick = viewModel::showRequestAcceptDialog,
@@ -144,6 +151,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
             RentalDetailRenterScreen(
                 uiModel = uiState.rentalDetailStatusModel,
                 scrollState = scrollState,
+                pullToRefreshState = pullToRefreshState,
+                isRefreshing = uiState.isRefreshing,
+                onRefresh = { viewModel.refreshData(productId, reservationId) },
                 onBackClick = viewModel::navigateBack,
                 onTransactionReceiptClick = viewModel::showTransactionReceiptConfirmDialog,
                 onPayClick = viewModel::navigateToPay,
