@@ -54,7 +54,7 @@ fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -
             .widthIn(max = LocalConfiguration.current.screenWidthDp.dp * 0.6f)
             .clip(RoundedCornerShape(20.dp))
             .background(if(isSender) PrimaryBlue500 else Color.White)
-            .padding(vertical = 12.dp, horizontal = 12.dp)
+            .padding(vertical = 16.dp, horizontal = 18.dp)
     ) {
         Column {
             Text(
