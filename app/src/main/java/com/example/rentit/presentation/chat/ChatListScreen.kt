@@ -155,7 +155,7 @@ fun ChatListItem(
     val formatLastMsgTime = lastMessageTime?.let { "· " + it.toRelativeDayFormat() } ?: ""
 
     val lastMsg = when (lastMessage) {
-        AutoMessageType.REQUEST_ACCEPT.code -> stringResource(R.string.auto_msg_type_request_accept_title)
+        AutoMessageType.REQUEST_ACCEPTED.code -> stringResource(R.string.auto_msg_type_request_accept_title)
         AutoMessageType.COMPLETE_PAY.code -> stringResource(R.string.auto_msg_type_pay_complete_title)
         "" -> stringResource(R.string.screen_chat_list_empty_chat_message)
         else -> lastMessage

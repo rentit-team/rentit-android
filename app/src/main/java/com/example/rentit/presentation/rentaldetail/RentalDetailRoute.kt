@@ -104,6 +104,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                     RentalDetailSideEffect.ToastAcceptRentalFailed -> {
                         Toast.makeText(context, R.string.toast_accept_rental_failed, Toast.LENGTH_SHORT).show()
                     }
+                    RentalDetailSideEffect.ToastAcceptedMessageSendSuccess -> {
+                        Toast.makeText(context, R.string.toast_accepted_message_send_success, Toast.LENGTH_SHORT).show()
+                    }
                     RentalDetailSideEffect.ToastChatRoomError -> {
                         Toast.makeText(context, R.string.toast_chat_room_error, Toast.LENGTH_SHORT).show()
                     }

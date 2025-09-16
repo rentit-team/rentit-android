@@ -39,7 +39,7 @@ fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -
     var content = ""
     var btnText = ""
     when (type) {
-        AutoMessageType.REQUEST_ACCEPT -> {
+        AutoMessageType.REQUEST_ACCEPTED -> {
             title = stringResource(R.string.auto_msg_type_request_accept_title)
             content = stringResource(R.string.auto_msg_type_request_accept_content)
             btnText = stringResource(R.string.auto_msg_type_request_accept_btn_text)
@@ -71,7 +71,7 @@ fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -
                 style = MaterialTheme.typography.bodyMedium.copy(lineBreak = LineBreak.Simple),
                 color = if(isSender) Color.White else AppBlack
             )
-            if(type == AutoMessageType.REQUEST_ACCEPT){
+            if(type == AutoMessageType.REQUEST_ACCEPTED){
                 Button(
                     onClick = onPayClick,
                     enabled = isPayButtonAvailable,
