@@ -53,7 +53,7 @@ fun ProductListItem(
         if (categories.isNotEmpty()) {
             categories.joinToString(" · ")
         } else {
-            stringResource(R.string.product_list_item_text_empty_category)
+            stringResource(R.string.common_empty_category)
         }
 
     Box(
