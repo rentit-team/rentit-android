@@ -18,6 +18,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private const val TAG = "MyPageViewModel"
+
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
@@ -49,7 +51,9 @@ class MyPageViewModel @Inject constructor(
                     myProductList = it,
                     myProductCount = it.size
                 )
+                Log.i(TAG, "내 상품 조회 성공: ${it.size}개")
             }.onFailure { e ->
+                Log.e(TAG, "내 상품 조회 실패", e)
                 emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
@@ -62,8 +66,9 @@ class MyPageViewModel @Inject constructor(
                     myValidRentalCount = it.myValidRentalCount,
                     nearestDueItem = it.nearestDueItem
                 )
+                Log.i(TAG, "내 대여 조회 성공: ${it.myRentalList.size}개")
             }.onFailure { e ->
-                Log.e("MyPageViewModel", "getMyRentalList: $e")
+                Log.e(TAG, "내 대여 조회 실패", e)
                 emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
@@ -75,7 +80,9 @@ class MyPageViewModel @Inject constructor(
                     myPendingRentalCount = it.rentalHistory
                         .filter { history -> history.status == RentalStatus.PENDING || history.status == RentalStatus.PAID }.size
                 )
+                Log.i(TAG, "내 상품에 대한 대여 조회 성공: ${it.rentalHistory.size}개")
             }.onFailure { e ->
+                Log.e(TAG, "내 상품에 대한 대여 조회 실패", e)
                 emitSideEffect(MyPageSideEffect.CommonError(e))
             }
     }
