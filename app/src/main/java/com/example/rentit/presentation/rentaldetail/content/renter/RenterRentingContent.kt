@@ -63,7 +63,9 @@ fun RenterRentingContent(
         )
     )
 
-    NoticeBannerSection(rentingData.status)
+    if(rentingData.status in listOf(RentingStatus.RENTING_RETURN_DAY, RentingStatus.RENTING_OVERDUE)) {
+        NoticeBannerSection(rentingData.status)
+    }
 
     RentalInfoSection(
         title = stringResource(rentingData.status.strRes),

@@ -49,7 +49,9 @@ fun OwnerRequestContent(
         )
     )
 
-    NoticeBannerSection(requestData.isPending, requestData.isAccepted)
+    if(requestData.isPending || requestData.isAccepted) {
+        NoticeBannerSection(requestData.isPending, requestData.isAccepted)
+    }
 
     RentalInfoSection(
         title = stringResource(requestData.status.strRes),
