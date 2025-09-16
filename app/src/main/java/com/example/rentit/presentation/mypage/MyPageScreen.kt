@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.ArrowedTextButton
 import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.screenHorizontalPadding
@@ -53,10 +55,12 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.common.util.toRelativeTimeFormat
+import com.example.rentit.domain.rental.model.RentingStatus
 import com.example.rentit.domain.user.model.MyProductItemModel
 import com.example.rentit.domain.user.model.MyRentalItemModel
 import com.example.rentit.domain.user.model.NearestDueItemModel
 import java.time.LocalDateTime
+import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.O)
@@ -111,7 +115,7 @@ fun MyPageScreen(
             }
 
             TabbedListSection(
-                isFirstTabSelected = isFirstTabSelected,
+                 isFirstTabSelected = isFirstTabSelected,
                 myProductList = myProductList,
                 myRentList = myRentalList,
                 onTabActive = onTabActive,
@@ -225,56 +229,75 @@ fun InfoBox(
     remainingRentalDays: Int = 0,
     onRentalDetailClick: () -> Unit = {}
 ) {
+    val rentingStatus = RentingStatus.fromDaysFromReturnDate(remainingRentalDays)
+    val highlightColor = if(rentingStatus == RentingStatus.RENTING_IN_USE) PrimaryBlue500 else rentingStatus.textColor
+    val infoText = getRentalInfoText(rentingStatus, remainingRentalDays, highlightColor)
+    val buttonText = stringResource(
+        when(rentingStatus) {
+            RentingStatus.RENTING_IN_USE -> R.string.screen_mypage_info_button_rental_detail
+            RentingStatus.RENTING_OVERDUE, RentingStatus.RENTING_RETURN_DAY -> R.string.screen_mypage_info_button_return
+        }
+    )
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
             .background(Gray100)
-            .padding(20.dp, 18.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 18.dp, bottom = 10.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row {
-            Text(
-                text = stringResource(R.string.screen_mypage_info_text_1),
-                style = MaterialTheme.typography.labelMedium
-            )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+            if(rentingStatus == RentingStatus.RENTING_RETURN_DAY) {
+                Text(
+                    text = stringResource(R.string.screen_mypage_info_text_return_day_1) + " ",
+                    style = MaterialTheme.typography.labelMedium
+                )
+            }
             Text(
                 modifier = Modifier.weight(1f, fill = false),
-                text = " $productTitle ",
+                text = "$productTitle ",
                 overflow = TextOverflow.Ellipsis,
                 maxLines = 1,
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
-                text = buildAnnotatedString {
-                    append(stringResource(R.string.screen_mypage_info_text_2))
-                    withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(color = PrimaryBlue500)) {
-                        append(" $remainingRentalDays")
-                        append(stringResource(R.string.screen_mypage_info_text_3))
-                    }
-                    append(stringResource(R.string.screen_mypage_info_text_4))
-                },
+                text = infoText,
                 style = MaterialTheme.typography.labelMedium
             )
         }
-        Row(
-            modifier = Modifier
-                .padding(top = 4.dp)
-                .clickable { onRentalDetailClick() },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                modifier = Modifier.padding(end = 5.dp),
-                text = stringResource(id = R.string.screen_mypage_check_usage_history),
-                style = MaterialTheme.typography.bodySmall,
-                color = PrimaryBlue500
-            )
-            Icon(
-                painter = painterResource(id = R.drawable.ic_chevron_right),
-                contentDescription = stringResource(id = R.string.content_description_for_ic_chevron_right),
-                tint = PrimaryBlue500
-            )
+        ArrowedTextButton(
+            text = buttonText,
+            color = highlightColor,
+            onClick = onRentalDetailClick
+        )
+    }
+}
+
+@Composable
+fun getRentalInfoText(rentingStatus: RentingStatus, remainingRentalDays: Int, highlightColor: Color): AnnotatedString {
+    return when (rentingStatus) {
+        RentingStatus.RENTING_IN_USE, RentingStatus.RENTING_OVERDUE -> {
+            val endTextRes = if(rentingStatus == RentingStatus.RENTING_IN_USE) R.string.screen_mypage_info_text_left else R.string.screen_mypage_info_text_overdue
+            buildAnnotatedString {
+                append(stringResource(R.string.screen_mypage_info_text_1))
+                withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(color = highlightColor)) {
+                    append(" ${abs(remainingRentalDays)}${stringResource(R.string.common_day_unit)} ")
+                }
+                append(stringResource(endTextRes))
+            }
+        }
+        RentingStatus.RENTING_RETURN_DAY -> {
+            buildAnnotatedString {
+                append(stringResource(R.string.screen_mypage_info_text_return_day_2))
+                withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle().copy(color = rentingStatus.textColor)) {
+                    append(" " + stringResource(R.string.screen_mypage_info_text_return_day_3))
+                }
+                append(stringResource(R.string.screen_mypage_info_text_return_day_4))
+            }
         }
     }
+
 }
 
 @RequiresApi(Build.VERSION_CODES.O)

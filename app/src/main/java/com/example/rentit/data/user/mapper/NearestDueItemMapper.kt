@@ -9,7 +9,7 @@ import com.example.rentit.domain.user.model.NearestDueItemModel
 fun NearestDueItemDto.toModel() =
     NearestDueItemModel(
         reservationId = reservationId,
-        productId = 0,  // TODO: API 수정 후 productId 값 변경
+        productId = productId,
         productTitle = productTitle,
         remainingRentalDays = daysUntilReturn
     )

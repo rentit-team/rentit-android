@@ -276,11 +276,15 @@
     <!-- 마이페이지 -->
     <string name="screen_mypage_btn_my_activity">나의 활동 내역</string>
     <string name="screen_mypage_btn_new">NEW</string>
-    <string name="screen_mypage_info_text_1">내가 대여한</string>
-    <string name="screen_mypage_info_text_2">의 반납일이</string>
-    <string name="screen_mypage_info_text_3">일&#160;</string>
-    <string name="screen_mypage_info_text_4">남았어요!</string>
-    <string name="screen_mypage_check_usage_history">대여 정보 확인하기</string>
+    <string name="screen_mypage_info_text_return_day_1">오늘은</string>
+    <string name="screen_mypage_info_text_return_day_2">의</string>
+    <string name="screen_mypage_info_text_return_day_3">반납일</string>
+    <string name="screen_mypage_info_text_return_day_4">이에요! 반납을 진행해주세요.</string>
+    <string name="screen_mypage_info_text_1">의 반납일이</string>
+    <string name="screen_mypage_info_text_left">남았어요.</string>
+    <string name="screen_mypage_info_text_overdue">지났어요. 즉시 반납해주세요!</string>
+    <string name="screen_mypage_info_button_rental_detail">대여 정보 확인하기</string>
+    <string name="screen_mypage_info_button_return">상품 반납하기</string>
     <string name="screen_mypage_tab_title_my_product">내 물건</string>
     <string name="screen_mypage_tab_title_on_rent">내 대여</string>
     <string name="screen_mypage_text_tab_list_product_empty">게시글이 없어요.</string>

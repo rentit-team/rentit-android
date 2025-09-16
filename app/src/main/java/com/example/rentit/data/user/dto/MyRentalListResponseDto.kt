@@ -36,6 +36,9 @@ data class NearestDueItemDto(
     @SerializedName("reservationId")
     val reservationId: Int,
 
+    @SerializedName("productId")
+    val productId: Int,
+
     @SerializedName("productTitle")
     val productTitle: String,
 
