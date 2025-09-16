@@ -2,6 +2,7 @@ package com.example.rentit.presentation.productdetail.reservation
 
 sealed class ReservationSideEffect {
     data class NavigateToReservationComplete(
+        val reservationId: Int,
         val rentalStartDate: String,
         val rentalEndDate: String,
         val totalPrice: Int

@@ -14,12 +14,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.example.rentit.R
 import com.example.rentit.common.component.CommonButton
 import com.example.rentit.common.component.CommonDivider
@@ -29,17 +28,17 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.formatPrice
 import com.example.rentit.common.util.formatRentalPeriod
-import com.example.rentit.navigation.bottomtab.navigateToHome
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReservationCompleteScreen(
-    navHostController: NavHostController,
     rentalStartDate: String,
     rentalEndDate: String,
-    formattedTotalPrice: String,
-    ) {
+    totalPrice: Int,
+    onConfirmClick: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -59,7 +58,7 @@ fun ReservationCompleteScreen(
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
-            Text(text = formatRentalPeriod(navHostController.context, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
+            Text(text = formatRentalPeriod(LocalContext.current, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
         CommonDivider()
         Row(modifier = Modifier
@@ -69,13 +68,17 @@ fun ReservationCompleteScreen(
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_total_price), style = MaterialTheme.typography.bodyLarge)
-            Text(text = "$formattedTotalPrice 원",
+            Text(text = "${formatPrice(totalPrice)} 원",
                 style = MaterialTheme.typography.bodyLarge,
                 color = PrimaryBlue500)
         }
-        CommonButton(text = "완료", containerColor = Gray100, contentColor = AppBlack, modifier = Modifier.padding(top = 52.dp)) {
-            navHostController.navigateToHome()
-        }
+        CommonButton(
+            text = "완료",
+            containerColor = Gray100,
+            contentColor = AppBlack,
+            modifier = Modifier.padding(top = 52.dp),
+            onClick = onConfirmClick
+        )
     }
 }
 
@@ -85,10 +88,10 @@ fun ReservationCompleteScreen(
 private fun Preview() {
     RentItTheme {
         ReservationCompleteScreen(
-            rememberNavController(),
             rentalStartDate = "2025-07-12",
             rentalEndDate = "2025-07-16",
-            formattedTotalPrice = "45,000"
+            totalPrice = 45_000,
+            {}
         )
     }
 }

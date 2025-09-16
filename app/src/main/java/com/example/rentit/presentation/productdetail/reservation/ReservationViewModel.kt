@@ -90,9 +90,10 @@ class ReservationViewModel @Inject constructor(
         val selectedPeriod = _uiState.value.selectedPeriod
         val minPeriod = _uiState.value.minPeriod
         val maxPeriod = _uiState.value.maxPeriod
-        val totalPrice = _uiState.value.totalPrice
 
         viewModelScope.launch {
+            setLoading(true)
+            setRequestButtonEnable(false)
             postReservationUseCase(
                 productId = productId,
                 minPeriod = minPeriod,
@@ -103,9 +104,10 @@ class ReservationViewModel @Inject constructor(
             ).onSuccess {
                 emitSideEffect(
                     ReservationSideEffect.NavigateToReservationComplete(
+                        reservationId = it.data.reservationId,
                         rentalStartDate = startDate,
                         rentalEndDate = endDate,
-                        totalPrice = totalPrice
+                        totalPrice = it.data.totalAmount
                     )
                 )
                 Log.i(TAG, "대여 예약 성공: ${it.data.reservationId}")
@@ -113,6 +115,8 @@ class ReservationViewModel @Inject constructor(
                 Log.e(TAG, "대여 예약 실패", e)
                 handlePostResvError(e)
             }
+            setRequestButtonEnable(true)
+            setLoading(false)
         }
     }
 
@@ -147,5 +151,9 @@ class ReservationViewModel @Inject constructor(
 
     fun dismissResvAlreadyExistDialog() {
         _uiState.value = _uiState.value.copy(showResvAlreadyExistDialog = false)
+    }
+
+    fun setRequestButtonEnable(enabled: Boolean) {
+        _uiState.value = _uiState.value.copy(isRequestButtonEnabled = enabled)
     }
 }

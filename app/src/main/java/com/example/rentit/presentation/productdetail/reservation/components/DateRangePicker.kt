@@ -117,7 +117,7 @@ fun TotalPeriodText(period: Int) {
 @Composable
 fun DateBox(date: String, isSelectingDate: Boolean, onDateClick: () -> Unit) {
     Box(modifier = Modifier
-        .width(120.dp)
+        .width(110.dp)
         .height(40.dp)
         .basicRoundedGrayBorder(if (isSelectingDate) PrimaryBlue500 else Gray200)
         .clip(RoundedCornerShape(20.dp))

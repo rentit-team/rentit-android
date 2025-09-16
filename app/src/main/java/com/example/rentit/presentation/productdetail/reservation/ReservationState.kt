@@ -15,6 +15,7 @@ data class ReservationState(
     val deposit: Int = 0,
     val reservedDateList: List<String> = emptyList(),
     val isLoading: Boolean = false,
+    val isRequestButtonEnabled: Boolean = true,
     val showAccessNotAllowedDialog: Boolean = false,
     val showResvAlreadyExistDialog: Boolean = false
 ) {
