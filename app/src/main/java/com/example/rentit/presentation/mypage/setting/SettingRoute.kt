@@ -33,6 +33,9 @@ fun SettingRoute(navHostController: NavHostController) {
                     is SettingSideEffect.ToastLogoutComplete -> {
                         Toast.makeText(context, R.string.toast_logout_complete, Toast.LENGTH_SHORT).show()
                     }
+                    SettingSideEffect.ToastComingSoon -> {
+                        Toast.makeText(context, context.getString(R.string.common_toast_feat_coming_soon), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
@@ -40,6 +43,10 @@ fun SettingRoute(navHostController: NavHostController) {
 
     SettingScreen(
         onBackPressed = navHostController::popBackStack,
+        onRegisterAccountClick = viewModel::showComingSoonMessage,
+        onCheatingReportFormClick = { },
+        onKeywordAlertSettingClick = viewModel::showComingSoonMessage,
+        onSafetyGuideClick = viewModel::showComingSoonMessage,
         onLogoutClick = viewModel::showLogoutConfirmDialog
     )
 
