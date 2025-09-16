@@ -51,6 +51,7 @@ fun ReservationScreen(
     rentalPrice: Int = 0,
     totalPrice: Int = 0,
     deposit: Int = 0,
+    isRequestButtonEnabled: Boolean = true,
     onBackClick: () -> Unit,
     onReservationClick: () -> Unit,
     onSetRentalStartDate: (LocalDate?) -> Unit,
@@ -71,6 +72,7 @@ fun ReservationScreen(
                 text = stringResource(id = R.string.screen_resv_request_btn_resv_request),
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White,
+                enabled = isRequestButtonEnabled,
                 onClick = onReservationClick
             )
         }

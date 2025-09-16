@@ -73,6 +73,7 @@ fun ReservationRoute(navHostController: NavHostController, productId: Int) {
         rentalPrice = uiState.totalRentalPrice,
         totalPrice = uiState.totalPrice,
         deposit = uiState.deposit,
+        isRequestButtonEnabled = uiState.isRequestButtonEnabled,
         onBackClick = navHostController::popBackStack,
         onReservationClick = { viewModel.postResv(productId) },
         onSetRentalStartDate = viewModel::setRentalStartDate,
