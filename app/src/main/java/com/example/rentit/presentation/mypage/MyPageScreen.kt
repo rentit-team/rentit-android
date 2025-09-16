@@ -59,6 +59,7 @@ import com.example.rentit.domain.rental.model.RentingStatus
 import com.example.rentit.domain.user.model.MyProductItemModel
 import com.example.rentit.domain.user.model.MyRentalItemModel
 import com.example.rentit.domain.user.model.NearestDueItemModel
+import com.example.rentit.presentation.mypage.model.MyPageTab
 import java.time.LocalDateTime
 import kotlin.math.abs
 
@@ -75,14 +76,16 @@ fun MyPageScreen(
     myProductList: List<MyProductItemModel>,
     myRentalList: List<MyRentalItemModel>,
     pullToRefreshState: PullToRefreshState = PullToRefreshState(),
-    isFirstTabSelected: Boolean,
+    currentTab: MyPageTab,
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = {},
     onSettingClick: () -> Unit,
     onAlertClick: () -> Unit,
-    onMyPendingRentalClick: () -> Unit,
+    onMyProductCountClick: () -> Unit,
+    onMyRentingCountClick: () -> Unit,
+    onMyPendingRentalCountClick: () -> Unit,
     onInfoRentalDetailClick: () -> Unit,
-    onTabActive: () -> Unit,
+    onTabActive: (MyPageTab) -> Unit,
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit
 ) {
@@ -102,7 +105,9 @@ fun MyPageScreen(
                     myProductCount = myProductCount,
                     myRentingCount = myRentingCount,
                     myPendingRentalCount = myPendingRentalCount,
-                    onMyPendingRentalClick = onMyPendingRentalClick
+                    onMyProductCountClick = onMyProductCountClick,
+                    onMyRentingCountClick = onMyRentingCountClick,
+                    onMyPendingRentalCountClick = onMyPendingRentalCountClick
                 )
 
                 if (nearestDueItem != null) {
@@ -115,7 +120,7 @@ fun MyPageScreen(
             }
 
             TabbedListSection(
-                 isFirstTabSelected = isFirstTabSelected,
+                currentTab = currentTab,
                 myProductList = myProductList,
                 myRentList = myRentalList,
                 onTabActive = onTabActive,
@@ -137,7 +142,9 @@ fun TopSection(onAlertClick: () -> Unit = {}, onSettingClick: () -> Unit = {}) {
             text = stringResource(id = R.string.title_activity_my_page_tab),
             style = MaterialTheme.typography.bodyLarge
         )
-        IconButton(modifier = Modifier.padding(end = 8.dp).size(30.dp), onClick = onAlertClick) {
+        IconButton(modifier = Modifier
+            .padding(end = 8.dp)
+            .size(30.dp), onClick = onAlertClick) {
             Box {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_bell),
@@ -169,16 +176,16 @@ fun ProfileSection(
     myProductCount: Int = 0,
     myRentingCount: Int = 0,
     myPendingRentalCount: Int = 0,
-    onMyPendingRentalClick: () -> Unit = {}
+    onMyProductCountClick: () -> Unit = {},
+    onMyRentingCountClick: () -> Unit = {},
+    onMyPendingRentalCountClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier.padding(bottom = 26.dp),
         verticalAlignment = Alignment.Bottom
     ) {
         LoadableUrlImage(
-            modifier = Modifier
-                .size(70.dp)
-                .clip(CircleShape),
+            modifier = Modifier.size(70.dp).clip(CircleShape),
             imgUrl = profileImgUrl,
             defaultImageResId = R.drawable.img_profile_placeholder,
             defaultDescResId = R.string.content_description_for_img_profile_placeholder
@@ -196,9 +203,9 @@ fun ProfileSection(
                     .padding(top = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myProductCount)
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myRentingCount)
-                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount, true, onMyPendingRentalClick)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_post), myProductCount, true, onMyProductCountClick)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_rental), myRentingCount, true, onMyRentingCountClick)
+                CountBox(stringResource(R.string.screen_mypage_my_activity_count_label_pending), myPendingRentalCount, true, onMyPendingRentalCountClick)
             }
         }
     }
@@ -303,10 +310,10 @@ fun getRentalInfoText(rentingStatus: RentingStatus, remainingRentalDays: Int, hi
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TabbedListSection(
-    isFirstTabSelected: Boolean,
+    currentTab: MyPageTab,
     myProductList: List<MyProductItemModel>,
     myRentList: List<MyRentalItemModel>,
-    onTabActive: () -> Unit,
+    onTabActive: (MyPageTab) -> Unit,
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit,
 ) {
@@ -314,20 +321,20 @@ fun TabbedListSection(
         TabTitle(
             modifier = Modifier.weight(1F),
             title = stringResource(id = R.string.screen_mypage_tab_title_my_product),
-            isTabSelected = isFirstTabSelected,
-            onClick = onTabActive
+            isTabSelected = currentTab == MyPageTab.MY_PRODUCT,
+            onClick = { onTabActive(MyPageTab.MY_PRODUCT) }
         )
         TabTitle(
             modifier = Modifier.weight(1F),
             title = stringResource(id = R.string.screen_mypage_tab_title_on_rent),
-            isTabSelected = !isFirstTabSelected,
-            onClick = onTabActive
+            isTabSelected = currentTab == MyPageTab.MY_RENTAL,
+            onClick = { onTabActive(MyPageTab.MY_RENTAL) }
         )
     }
 
     CommonDivider()
 
-    if (isFirstTabSelected && myProductList.isNotEmpty()) {
+    if (currentTab == MyPageTab.MY_PRODUCT && myProductList.isNotEmpty()) {
         LazyColumn(modifier = Modifier.background(Gray100)) {
             items(myProductList, key = { it.productId }) {
                 ProductListItem(
@@ -342,7 +349,7 @@ fun TabbedListSection(
                 ) { onProductItemClick(it.productId) }
             }
         }
-    } else if(!isFirstTabSelected && myRentList.isNotEmpty()) {
+    } else if(currentTab == MyPageTab.MY_RENTAL && myRentList.isNotEmpty()) {
         LazyColumn(modifier = Modifier.background(Gray100)) {
             items(myRentList, key = { it.reservationId }) {
                 MyRentalHistoryListItem(
@@ -356,11 +363,9 @@ fun TabbedListSection(
             }
         }
     } else {
-        val text =
-            if(isFirstTabSelected) {
-                stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
-            } else {
-                stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
+        val text = when (currentTab) {
+                MyPageTab.MY_PRODUCT -> stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
+                MyPageTab.MY_RENTAL -> stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
             }
         EmptyContentScreen(
             modifier = Modifier.background(Gray100),
@@ -501,10 +506,12 @@ fun MyPageScreenPreview() {
             nearestDueItem = sampleNearestDueItem,
             myProductList = sampleMyProductList,
             myRentalList = sampleMyRentalList,
-            isFirstTabSelected = true,
+            currentTab = MyPageTab.MY_RENTAL,
             onSettingClick = {},
             onAlertClick = {},
-            onMyPendingRentalClick = {},
+            onMyProductCountClick = {},
+            onMyRentingCountClick = {},
+            onMyPendingRentalCountClick = {},
             onInfoRentalDetailClick = {},
             onTabActive = {},
             onProductItemClick = {},

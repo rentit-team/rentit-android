@@ -80,7 +80,7 @@ fun MyPageRoute(navHostController: NavHostController) {
         myProductList = uiState.myProductList,
         myRentalList = uiState.myRentalList,
         pullToRefreshState = pullToRefreshState,
-        isFirstTabSelected = uiState.isFirstTabSelected,
+        currentTab = uiState.currentTab,
         isRefreshing = uiState.isRefreshing,
         onRefresh = viewModel::refreshData,
         onAlertClick = viewModel::showComingSoonMessage,
@@ -89,7 +89,9 @@ fun MyPageRoute(navHostController: NavHostController) {
         onProductItemClick = viewModel::onProductItemClicked,
         onRentalItemClick = viewModel::onRentalItemClicked,
         onSettingClick = viewModel::onSettingClicked,
-        onMyPendingRentalClick = viewModel::onPendingRentalClicked,
+        onMyProductCountClick = viewModel::onMyProductCountClicked,
+        onMyRentingCountClick = viewModel::onMyRentingCountClicked,
+        onMyPendingRentalCountClick = viewModel::onMyPendingRentalClicked,
     )
 
     LoadingScreen(uiState.isLoading)

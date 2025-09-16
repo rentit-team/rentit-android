@@ -9,6 +9,7 @@ import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.domain.user.repository.UserRepository
 import com.example.rentit.domain.user.usecase.GetMyProductsWithCategoryUseCase
 import com.example.rentit.domain.user.usecase.GetMyRentalsWithNearestDueUseCase
+import com.example.rentit.presentation.mypage.model.MyPageTab
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,7 +108,15 @@ class MyPageViewModel @Inject constructor(
         emitSideEffect(MyPageSideEffect.NavigateToRentalDetail(productId, reservationId))
     }
 
-    fun onPendingRentalClicked() {
+    fun onMyProductCountClicked() {
+        _uiState.value = _uiState.value.copy(currentTab = MyPageTab.MY_PRODUCT)
+    }
+
+    fun onMyRentingCountClicked() {
+        _uiState.value = _uiState.value.copy(currentTab = MyPageTab.MY_RENTAL)
+    }
+
+    fun onMyPendingRentalClicked() {
         emitSideEffect(MyPageSideEffect.NavigateToMyProductsRental)
     }
 
@@ -122,8 +131,8 @@ class MyPageViewModel @Inject constructor(
         }
     }
 
-    fun setTabSelected() {
-        _uiState.value = _uiState.value.copy(isFirstTabSelected = !uiState.value.isFirstTabSelected)
+    fun setTabSelected(selectedTab: MyPageTab) {
+        _uiState.value = _uiState.value.copy(currentTab = selectedTab)
     }
 
     fun showComingSoonMessage() {
