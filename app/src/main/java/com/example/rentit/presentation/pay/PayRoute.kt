@@ -43,6 +43,9 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
                     PaySideEffect.ToastPayFailed -> {
                         Toast.makeText(context, context.getString(R.string.toast_pay_result_failed), Toast.LENGTH_SHORT).show()
                     }
+                    PaySideEffect.ToastPaidMessageSendSuccess -> {
+                        Toast.makeText(context, context.getString(R.string.toast_pay_result_paid_message_send_success), Toast.LENGTH_SHORT).show()
+                    }
                     PaySideEffect.NavigateBack -> {
                         navHostController.popBackStack()
                     }
