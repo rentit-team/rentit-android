@@ -53,6 +53,7 @@ import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.common.util.toRelativeTimeFormat
 import com.example.rentit.common.enums.RentingStatus
@@ -408,6 +409,14 @@ fun MyRentalHistoryListItem(
     requestedAt: String,
     onItemClick: () -> Unit = {},
 ) {
+    val rentingStatus = status.takeIf { status == RentalStatus.RENTING }?.let {
+        val daysFromReturnDate = daysFromToday(endDate)
+        RentingStatus.fromDaysFromReturnDate(daysFromReturnDate)
+    }
+
+    val statusTextRes = rentingStatus?.let { rentingStatus.strRes } ?: status.strRes
+    val statusColor = rentingStatus?.let { rentingStatus.textColor } ?: status.color
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -437,9 +446,9 @@ fun MyRentalHistoryListItem(
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
-                    text = stringResource(status.strRes),
+                    text = stringResource(statusTextRes),
                     style = MaterialTheme.typography.labelMedium,
-                    color = status.color
+                    color = statusColor
                 )
             }
             Text(
