@@ -24,7 +24,7 @@ fun SettingScreen(
     versionText: String = "v.1.1.0",
     onBackPressed: () -> Unit = {},
     onRegisterAccountClick: () -> Unit = {},
-    onTransactionProofClick: () -> Unit = {},
+    onCheatingReportFormClick: () -> Unit = {},
     onKeywordAlertSettingClick: () -> Unit = {},
     onSafetyGuideClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {}
@@ -36,7 +36,7 @@ fun SettingScreen(
 
             SettingListItem(stringResource(R.string.screen_setting_label_register_account), onRegisterAccountClick)
 
-            SettingListItem(stringResource(R.string.screen_setting_label_transaction_proof), onTransactionProofClick)
+            SettingListItem(stringResource(R.string.screen_setting_label_cheating_report_form), onCheatingReportFormClick)
 
             SettingListItem(stringResource(R.string.screen_setting_label_keyword_alert_setting), onKeywordAlertSettingClick)
 

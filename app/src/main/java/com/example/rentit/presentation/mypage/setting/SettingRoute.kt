@@ -13,7 +13,6 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.navigation.auth.navigateToLogin
-import com.example.rentit.navigation.setting.navigateToTransactionProof
 import com.example.rentit.presentation.mypage.setting.dialog.LogoutConfirmDialog
 
 @Composable
@@ -41,7 +40,6 @@ fun SettingRoute(navHostController: NavHostController) {
 
     SettingScreen(
         onBackPressed = navHostController::popBackStack,
-        onTransactionProofClick = navHostController::navigateToTransactionProof,
         onLogoutClick = viewModel::showLogoutConfirmDialog
     )
 

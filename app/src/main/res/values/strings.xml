@@ -321,7 +321,7 @@
     <!-- 설정 -->
     <string name="screen_setting_title">설정</string>
     <string name="screen_setting_label_register_account">계좌 정보 등록</string>
-    <string name="screen_setting_label_transaction_proof">거래 증빙 서류 다운로드</string>
+    <string name="screen_setting_label_cheating_report_form">사기 거래 신고 템플릿 다운로드</string>
     <string name="screen_setting_label_keyword_alert_setting">키워드 알림 설정</string>
     <string name="screen_setting_label_safety_guide">거래 안전 가이드</string>
     <string name="screen_setting_label_version_info">버전 정보</string>
@@ -333,10 +333,6 @@
     <string name="dialog_logout_confirm_btn_confirm">확인</string>
 
     <string name="toast_logout_complete">로그아웃이 완료되었어요.</string>
-
-    <!-- 거래 증빙 서류 다운로드 -->
-    <string name="screen_transaction_proof_title">거래 증빙 서류 다운로드</string>
-    <string name="screen_transaction_proof_download_btn_description">%s부터 %s까지 %s 대여 내역에 대한 거래 증빙 서류 다운로드</string>
 
     <!-- 대여 상세 -->
     <string name="screen_rental_detail_chat_floating_button">상대방과 채팅하기</string>
