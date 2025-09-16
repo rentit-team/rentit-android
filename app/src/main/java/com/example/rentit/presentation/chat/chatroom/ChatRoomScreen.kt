@@ -53,11 +53,13 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
+import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
 import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
+import com.example.rentit.common.enums.RentingStatus
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMessageBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMessageBubble
 import java.time.LocalDate
@@ -194,6 +196,14 @@ private fun RequestInfo(
 ) {
     val periodText = formatRentalPeriod(LocalContext.current, startDate, endDate)
 
+    val rentingStatus = status.takeIf { status == RentalStatus.RENTING }?.let {
+        val daysFromReturnDate = daysFromToday(endDate)
+        RentingStatus.fromDaysFromReturnDate(daysFromReturnDate)
+    }
+
+    val statusTextRes = rentingStatus?.let { rentingStatus.strRes } ?: status.strRes
+    val statusColor = rentingStatus?.let { rentingStatus.textColor } ?: status.color
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -203,9 +213,9 @@ private fun RequestInfo(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = stringResource(status.strRes),
+            text = stringResource(statusTextRes),
             style = MaterialTheme.typography.labelLarge,
-            color = status.color
+            color = statusColor
         )
         Text(
             text = periodText,

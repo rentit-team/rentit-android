@@ -24,7 +24,7 @@ import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
-import com.example.rentit.domain.rental.model.RentingStatus
+import com.example.rentit.common.enums.RentingStatus
 import kotlin.math.abs
 
 /**

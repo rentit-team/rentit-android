@@ -49,6 +49,7 @@ import com.example.rentit.common.util.toRelativeTimeFormat
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryDateModel
 import com.example.rentit.domain.rental.model.RentalHistoryModel
+import com.example.rentit.common.enums.RentingStatus
 import com.example.rentit.presentation.productdetail.rentalhistory.calendar.RentalHistoryCalendar
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import java.time.LocalDate
@@ -234,6 +235,7 @@ fun RentingListItem(
     onClick: () -> Unit = {},
 ) {
     val daysBeforeReturn = daysFromToday(rentalReturnDate)
+    val rentingStatus = RentingStatus.fromDaysFromReturnDate(daysBeforeReturn)
     val rentalInfoText  = if(daysBeforeReturn < 0) {
         buildAnnotatedString {
             append(stringResource(R.string.screen_product_rental_history_item_renting_overdue_info_1))
@@ -254,9 +256,9 @@ fun RentingListItem(
 
     ExpandableRoundedItem(isExpanded, onRentalDetailClick, onClick) {
         Text(
-            text = stringResource(RentalStatus.RENTING.strRes),
+            text = stringResource(rentingStatus.strRes),
             style = MaterialTheme.typography.labelLarge,
-            color = RentalStatus.RENTING.color
+            color = rentingStatus.textColor
         )
         Text(
             text = nickName,
