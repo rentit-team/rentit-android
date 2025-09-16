@@ -4,9 +4,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
+import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -21,6 +23,7 @@ private const val MIN_LOADING_DURATION = 500L    // 즉시 전환 방지를 위�
 
 @HiltViewModel
 class PayViewModel @Inject constructor(
+    private val webSocketManager: WebSocketManager,
     private val rentalRepository: RentalRepository
 ): ViewModel() {
 
@@ -29,6 +32,8 @@ class PayViewModel @Inject constructor(
 
     private val _sideEffect = MutableSharedFlow<PaySideEffect>()
     val sideEffect: SharedFlow<PaySideEffect> = _sideEffect
+
+    private var chatRoomId: String? = null
 
     private fun emitSideEffect(sideEffect: PaySideEffect) {
         viewModelScope.launch {
@@ -49,6 +54,7 @@ class PayViewModel @Inject constructor(
                     endDate = rental.endDate,
                     totalPrice = rental.totalAmount
                 )
+                chatRoomId = it.rental.chatroomId
                 _uiState.value = _uiState.value.copy(
                     rentalSummary = rentalSummary,
                     depositAmount = rental.depositAmount
@@ -64,19 +70,20 @@ class PayViewModel @Inject constructor(
         viewModelScope.launch {
             setLoading(true)
             delay(MIN_LOADING_DURATION)
-            try {
-                rentalRepository.updateRentalStatus(
-                    productId,
-                    reservationId,
-                    UpdateRentalStatusRequestDto(RentalStatus.PAID)
-                ).onSuccess {
-                    showPayResultDialog()
-                }.onFailure {
-                    emitSideEffect(PaySideEffect.ToastPayFailed)
+            rentalRepository.updateRentalStatus(
+                productId,
+                reservationId,
+                UpdateRentalStatusRequestDto(RentalStatus.PAID)
+            ).onSuccess {
+                showPayResultDialog()
+                chatRoomId?.let {
+                    connectWebSocket(it)
+                    sendPayCompleteMessage(it)
                 }
-            } finally {
-                setLoading(false)
+            }.onFailure {
+                emitSideEffect(PaySideEffect.ToastPayFailed)
             }
+            setLoading(false)
         }
     }
 
@@ -102,5 +109,29 @@ class PayViewModel @Inject constructor(
         viewModelScope.launch {
             getPayInfo(productId, reservationId)
         }
+    }
+
+    /**
+     * WebSocket 채팅: 결제 완료 자동 메시지 전송
+     * - 옵션 기능이므로 에러 발생 시 별도로 대응하지 않음
+     */
+    private fun connectWebSocket(chatRoomId: String) {
+        webSocketManager.connect(
+            chatRoomId = chatRoomId,
+            onMessageReceived = { },
+            onError = { }
+        )
+    }
+
+    private fun sendPayCompleteMessage(chatRoomId: String) {
+        webSocketManager.sendMessage(
+            chatRoomId = chatRoomId,
+            message = AutoMessageType.COMPLETE_PAY.code,
+            onSuccess = {
+                emitSideEffect(PaySideEffect.ToastPaidMessageSendSuccess)
+                webSocketManager.disconnect()
+            },
+            onError = { }
+        )
     }
 }

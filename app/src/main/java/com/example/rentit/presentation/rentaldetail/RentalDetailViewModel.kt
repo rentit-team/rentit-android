@@ -6,11 +6,13 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.domain.chat.repository.ChatRepository
+import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.domain.rental.repository.RentalRepository
@@ -30,6 +32,7 @@ private const val TAG = "RentalDetailViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
+    private val webSocketManager: WebSocketManager,
     private val chatRepository: ChatRepository,
     private val rentalRepository: RentalRepository,
     private val getRentalDetailUseCase: GetRentalDetailUseCase,
@@ -126,6 +129,10 @@ class RentalDetailViewModel @Inject constructor(
                 reservationId,
                 UpdateRentalStatusRequestDto(RentalStatus.ACCEPTED)
             ).onSuccess {
+                chatRoomId?.let {
+                    connectWebSocket(it)
+                    sendPayCompleteMessage(it)
+                }
                 toastAcceptSuccess()
                 dismissRequestAcceptDialog()
                 getRentalDetail(productId, reservationId)
@@ -155,6 +162,30 @@ class RentalDetailViewModel @Inject constructor(
 
     private fun toastAcceptSuccess() {
         emitSideEffect(RentalDetailSideEffect.ToastAcceptRentalSuccess)
+    }
+
+    /**
+     * WebSocket 채팅: 대여 요청 수락 시 자동 메시지 전송 (결제 유도 메세지)
+     * - 옵션 기능이므로 에러 발생 시 별도로 대응하지 않음
+     */
+    private fun connectWebSocket(chatRoomId: String) {
+        webSocketManager.connect(
+            chatRoomId = chatRoomId,
+            onMessageReceived = { },
+            onError = { }
+        )
+    }
+
+    private fun sendPayCompleteMessage(chatRoomId: String) {
+        webSocketManager.sendMessage(
+            chatRoomId = chatRoomId,
+            message = AutoMessageType.REQUEST_ACCEPTED.code,
+            onSuccess = {
+                emitSideEffect(RentalDetailSideEffect.ToastAcceptedMessageSendSuccess)
+                webSocketManager.disconnect()
+            },
+            onError = { }
+        )
     }
 
     /** 대여 취소 */

@@ -47,8 +47,8 @@ fun SentMessageBubble(msg: String, sentAt: String) {
             color = Gray400
         )
         when (msg) {
-            AutoMessageType.REQUEST_ACCEPT.code -> {
-                AutoMessageBubble(true, AutoMessageType.REQUEST_ACCEPT)
+            AutoMessageType.REQUEST_ACCEPTED.code -> {
+                AutoMessageBubble(true, AutoMessageType.REQUEST_ACCEPTED)
             }
             AutoMessageType.COMPLETE_PAY.code -> {
                 AutoMessageBubble(true, AutoMessageType.COMPLETE_PAY)

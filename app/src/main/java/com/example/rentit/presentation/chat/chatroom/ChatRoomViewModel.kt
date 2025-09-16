@@ -59,14 +59,6 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
-    private fun onMessageReceived(message: MessageResponseDto) {
-        val previousMessages = _uiState.value.messages
-        val newMessage = convertMessageUseCase.execute(message)
-
-        _uiState.value = _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
-        emitSideEffect(ChatRoomSideEffect.MessageReceived)
-    }
-
     suspend fun fetchChatRoomData(chatRoomId: String) {
         setIsLoading(true)
         runCatching {
@@ -132,9 +124,25 @@ class ChatRoomViewModel @Inject constructor(
         }
     }
 
+    fun retryFetchChatRoomData(chatRoomId: String){
+        viewModelScope.launch {
+            fetchChatRoomData(chatRoomId)
+            connectWebSocket(chatRoomId)
+        }
+    }
+
+    /** WebSocket 채팅 */
+    private fun onMessageReceived(message: MessageResponseDto) {
+        val previousMessages = _uiState.value.messages
+        val newMessage = convertMessageUseCase.execute(message)
+
+        _uiState.value = _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
+        emitSideEffect(ChatRoomSideEffect.MessageReceived)
+    }
+
     fun connectWebSocket(chatRoomId: String) {
         webSocketManager.connect(
-            chatroomId = chatRoomId,
+            chatRoomId = chatRoomId,
             onMessageReceived = ::onMessageReceived,
             onError = { emitSideEffect(ChatRoomSideEffect.ToastChatDisconnect) }
         )
@@ -152,12 +160,5 @@ class ChatRoomViewModel @Inject constructor(
     fun disconnectWebSocket() {
         webSocketManager.disconnect()
         resetMessages()
-    }
-
-    fun retryFetchChatRoomData(chatRoomId: String){
-        viewModelScope.launch {
-            fetchChatRoomData(chatRoomId)
-            connectWebSocket(chatRoomId)
-        }
     }
 }

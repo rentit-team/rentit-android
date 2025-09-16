@@ -65,7 +65,7 @@ class WebSocketManagerImpl @Inject constructor(
             })
     }
 
-    override fun connect(chatroomId: String, onMessageReceived: (MessageResponseDto) -> Unit, onError: (Throwable) -> Unit) {
+    override fun connect(chatRoomId: String, onMessageReceived: (MessageResponseDto) -> Unit, onError: (Throwable) -> Unit) {
         val token = getAccessToken()
 
         clearDisposable()
@@ -73,15 +73,15 @@ class WebSocketManagerImpl @Inject constructor(
 
         subscribeLifeCycle(onError)
         stompClient?.connect(listOf(StompHeader("Authorization", "Bearer $token")))
-        subscribeTopic(chatroomId, onMessageReceived, onError)
+        subscribeTopic(chatRoomId, onMessageReceived, onError)
     }
 
-    override fun sendMessage(chatroomId: String, message: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
+    override fun sendMessage(chatRoomId: String, message: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
         val authUserId = getAuthUserId()
-        val dto = MessageRequestDto(chatroomId, authUserId, message)
+        val dto = MessageRequestDto(chatRoomId, authUserId, message)
         val json = Gson().toJson(dto)
 
-        sendDisposable = stompClient?.send("/app/chatroom.$chatroomId", json)
+        sendDisposable = stompClient?.send("/app/chatroom.$chatRoomId", json)
             ?.subscribe({
                 Log.i(TAG, "Message sent")
                 onSuccess()

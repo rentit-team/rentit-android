@@ -52,8 +52,8 @@ fun ReceivedMessageBubble(msg: String, sentAt: String, senderNickname: String, o
             )
             Row(verticalAlignment = Alignment.Bottom) {
                 when (msg) {
-                    AutoMessageType.REQUEST_ACCEPT.code -> {
-                        AutoMessageBubble(false, AutoMessageType.REQUEST_ACCEPT, onPayClick = onPayClick)
+                    AutoMessageType.REQUEST_ACCEPTED.code -> {
+                        AutoMessageBubble(false, AutoMessageType.REQUEST_ACCEPTED, onPayClick = onPayClick)
                     }
                     AutoMessageType.COMPLETE_PAY.code -> {
                         AutoMessageBubble(false, AutoMessageType.COMPLETE_PAY)
