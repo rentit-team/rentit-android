@@ -24,8 +24,8 @@ fun NavHostController.navigateToLogin(
 
 
 fun NavHostController.navigateToJoinPhoneVerification(
-    name: String?,
-    email: String?,
+    name: String,
+    email: String,
 ) {
     navigate(
         route = AuthRoute.JoinPhoneVerification(name, email)
@@ -34,8 +34,8 @@ fun NavHostController.navigateToJoinPhoneVerification(
 
 
 fun NavHostController.navigateToJoinNickname(
-    name: String?,
-    email: String?,
+    name: String,
+    email: String,
 ) {
     navigate(
         route = AuthRoute.JoinNickname(name, email)

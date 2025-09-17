@@ -18,7 +18,7 @@ import com.example.rentit.navigation.auth.navigateToLogin
 private const val TAG = "Join"
 
 @Composable
-fun JoinNicknameRoute(navHostController: NavHostController, name: String?, email: String?) {
+fun JoinNicknameRoute(navHostController: NavHostController, name: String, email: String) {
 
     val joinNicknameViewModel: JoinNicknameViewModel = hiltViewModel()
     var nickname by remember { mutableStateOf("") }
