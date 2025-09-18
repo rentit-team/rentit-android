@@ -5,8 +5,6 @@ import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
-import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
-import com.example.rentit.data.user.dto.VerifyPhoneCodeResponseDto
 import com.example.rentit.data.user.local.UserPrefsDataSource
 import com.example.rentit.data.user.remote.UserRemoteDataSource
 import com.example.rentit.domain.user.repository.UserRepository
@@ -16,19 +14,6 @@ class UserRepositoryImpl @Inject constructor(
     private val prefsDataSource: UserPrefsDataSource,
     private val remoteDataSource: UserRemoteDataSource
 ): UserRepository {
-
-    override suspend fun sendPhoneCode(phoneNumber: String): Result<SendPhoneCodeResponseDto> {
-        return safeApiCall { remoteDataSource.sendPhoneCode(phoneNumber) }
-    }
-
-    override suspend fun verifyPhoneCode(phoneNumber: String, code: String): Result<VerifyPhoneCodeResponseDto> {
-        return safeApiCall { remoteDataSource.verifyPhoneCode(phoneNumber, code) }
-    }
-
-    override suspend fun signUp(name: String, email: String, nickname: String, profileImageUrl: String): Result<Unit> {
-        return safeApiCall { remoteDataSource.signUp(name, email, nickname, profileImageUrl) }
-    }
-
     override suspend fun getMyInfo(): Result<MyInfoResponseDto> {
         return safeApiCall(remoteDataSource::getMyInfo)
     }

@@ -3,7 +3,7 @@ package com.example.rentit.presentation.auth.join.nickname
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.domain.user.repository.UserRepository
+import com.example.rentit.domain.auth.respository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +16,7 @@ private const val TAG = "JoinNicknameViewModel"
 
 @HiltViewModel
 class JoinNicknameViewModel @Inject constructor(
-    private val repository: UserRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(JoinNicknameState())
@@ -55,7 +55,7 @@ class JoinNicknameViewModel @Inject constructor(
         viewModelScope.launch {
             setIsLoading(true)
             setButtonEnabled(false)
-            repository.signUp(name, email, nickname, profileImageUrl)
+            authRepository.signUp(name, email, nickname, profileImageUrl)
                 .onSuccess {
                     Log.i(TAG, "회원가입 - 닉네임 설정 성공")
                     emitSideEffect(JoinNicknameSideEffect.JoinNicknameSuccess)

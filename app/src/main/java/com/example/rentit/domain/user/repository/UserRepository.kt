@@ -4,16 +4,8 @@ import com.example.rentit.data.user.dto.MyInfoResponseDto
 import com.example.rentit.data.user.dto.MyProductListResponseDto
 import com.example.rentit.data.user.dto.MyProductsRentalListResponseDto
 import com.example.rentit.data.user.dto.MyRentalListResponseDto
-import com.example.rentit.data.user.dto.SendPhoneCodeResponseDto
-import com.example.rentit.data.user.dto.VerifyPhoneCodeResponseDto
 
 interface UserRepository {
-    suspend fun sendPhoneCode(phoneNumber: String): Result<SendPhoneCodeResponseDto>
-
-    suspend fun verifyPhoneCode(phoneNumber: String, code: String): Result<VerifyPhoneCodeResponseDto>
-
-    suspend fun signUp(name: String, email: String, nickname: String, profileImageUrl: String): Result<Unit>
-
     suspend fun getMyInfo(): Result<MyInfoResponseDto>
 
     suspend fun getMyProductList(): Result<MyProductListResponseDto>
