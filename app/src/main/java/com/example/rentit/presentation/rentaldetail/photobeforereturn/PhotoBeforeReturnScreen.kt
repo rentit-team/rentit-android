@@ -34,6 +34,7 @@ import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUriImage
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicRoundedGrayBorder
+import com.example.rentit.common.component.dialog.FullImageDialog
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray300
@@ -48,12 +49,15 @@ fun PhotoBeforeReturnScreen(
     takenPhotoCnt: Int,
     beforePhotoUrl: String,
     takenPhotoUri: Uri,
+    showFullImageDialog: Boolean,
     isLastPage: Boolean,
     isRegisterAvailable: Boolean,
     isNextAvailable: Boolean,
     isBackAvailable: Boolean,
+    onFullImageDialogDismiss: () -> Unit,
     onPageNext: () -> Unit,
     onPageBack: () -> Unit,
+    onBeforeImageClick: () -> Unit,
     onTakePhoto: () -> Unit,
     onRegister: () -> Unit
 ) {
@@ -84,11 +88,19 @@ fun PhotoBeforeReturnScreen(
             PhotoWithTakePhotoButton(
                 beforePhotoUrl = beforePhotoUrl,
                 takenPhotoUri = takenPhotoUri,
+                onBeforeImageClick = onBeforeImageClick,
                 onTakePhoto = onTakePhoto
             )
 
             Spacer(Modifier.weight(2f))
         }
+    }
+
+    if(showFullImageDialog){
+        FullImageDialog(
+            imageUrls = beforePhotoUrl,
+            onDismiss = onFullImageDialogDismiss
+        )
     }
 }
 
@@ -150,6 +162,7 @@ private fun BottomButtons(
 fun PhotoWithTakePhotoButton(
     beforePhotoUrl: String?,
     takenPhotoUri: Uri,
+    onBeforeImageClick: () -> Unit = {},
     onTakePhoto: () -> Unit,
 ) {
     val btnContentDesc = stringResource(R.string.screen_photo_before_rent_take_photo_btn_content_description)
@@ -157,7 +170,9 @@ fun PhotoWithTakePhotoButton(
     Row(horizontalArrangement = Arrangement.spacedBy(18.dp)) {
         Box(Modifier
             .photoBoxModifier()
-            .weight(1F)) {
+            .weight(1F)
+            .clickable { onBeforeImageClick() }
+        ) {
             LoadableUrlImage(
                 modifier = Modifier.fillMaxSize(),
                 imgUrl = beforePhotoUrl,
@@ -213,8 +228,11 @@ fun PhotoBeforeReturnScreenPreview() {
             isRegisterAvailable = false,
             isNextAvailable = false,
             isBackAvailable = false,
+            showFullImageDialog = false,
+            onFullImageDialogDismiss = { },
             onPageNext = { },
             onPageBack = { },
+            onBeforeImageClick = { },
             onTakePhoto = { },
             onRegister = { },
         )

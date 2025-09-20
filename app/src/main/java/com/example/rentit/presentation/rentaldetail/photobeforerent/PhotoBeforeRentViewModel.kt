@@ -37,7 +37,7 @@ class PhotoBeforeRentViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(takenPhotoUris = _uiState.value.takenPhotoUris - uri)
     }
 
-    fun uploadPhotos(productId: Int, reservationId: Int, ) {
+    fun uploadPhotos(productId: Int, reservationId: Int) {
         val files = takePhotoFiles.map { MultipartUtil.fileToMultipart(it) }
         viewModelScope.launch {
             setUploading(true)
