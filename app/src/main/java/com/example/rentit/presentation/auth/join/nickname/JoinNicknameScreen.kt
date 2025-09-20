@@ -33,6 +33,7 @@ import com.example.rentit.common.component.InputErrorMessage
 fun JoinNicknameScreen(
     nickname: String,
     showNicknameBlankError: Boolean,
+    buttonEnabled: Boolean,
     onBackPressed: () -> Unit,
     onNicknameChange: (String) -> Unit,
     onCompleteClick: () -> Unit
@@ -49,6 +50,7 @@ fun JoinNicknameScreen(
                     .screenHorizontalPadding()
                     .paddingForBottomBarButton(),
                 text = stringResource(R.string.screen_join_nickname_btn_text),
+                enabled = buttonEnabled,
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White
             ) { onCompleteClick() }
@@ -104,6 +106,7 @@ fun JoinNicknameScreenPreview() {
         JoinNicknameScreen(
             nickname = "",
             showNicknameBlankError = true,
+            buttonEnabled = true,
             onNicknameChange = {},
             onBackPressed = {},
             onCompleteClick = {}

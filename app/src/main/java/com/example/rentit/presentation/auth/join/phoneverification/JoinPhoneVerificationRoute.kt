@@ -17,7 +17,7 @@ import com.example.rentit.navigation.auth.navigateToJoinNickname
 
 
 @Composable
-fun JoinPhoneVerificationRoute(navHostController: NavHostController, name: String?, email: String?) {
+fun JoinPhoneVerificationRoute(navHostController: NavHostController, name: String, email: String) {
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current

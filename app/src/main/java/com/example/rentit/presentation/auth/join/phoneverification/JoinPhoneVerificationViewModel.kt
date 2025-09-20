@@ -3,7 +3,7 @@ package com.example.rentit.presentation.auth.join.phoneverification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.core.error.ForbiddenException
-import com.example.rentit.domain.user.repository.UserRepository
+import com.example.rentit.domain.auth.respository.AuthRepository
 import com.example.rentit.presentation.auth.join.phoneverification.model.VerificationError
 import com.example.rentit.presentation.auth.join.phoneverification.model.toUiMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class JoinPhoneVerificationViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(JoinPhoneVerificationState())
@@ -33,7 +33,7 @@ class JoinPhoneVerificationViewModel @Inject constructor(
         val phoneNumber = _state.value.phoneNumber
 
         viewModelScope.launch {
-            userRepository.sendPhoneCode(phoneNumber)
+            authRepository.sendPhoneCode(phoneNumber)
                 .onSuccess {
                     startRemainingTimeCountdown(it.expiresIn)
                 }
@@ -61,7 +61,7 @@ class JoinPhoneVerificationViewModel @Inject constructor(
         val code = _state.value.code
 
         viewModelScope.launch {
-            userRepository.verifyPhoneCode(phoneNumber, code)
+            authRepository.verifyPhoneCode(phoneNumber, code)
                 .onSuccess {
                     if (!it.verified) {
                         updateErrorMessage(VerificationError.from(it.message))
