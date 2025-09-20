@@ -18,8 +18,7 @@ import com.example.rentit.presentation.rentaldetail.components.rememberTakePhoto
 
 @Composable
 fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: PhotoBeforeReturnViewModel = hiltViewModel()
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -29,7 +28,7 @@ fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int,
 
     LaunchedEffect(Unit) {
         viewModel.fetchBeforePhotoUrls(productId, reservationId)
-        mainViewModel?.setRetryAction { viewModel.retryFetchBeforePhotoUrls(productId, reservationId) }
+        mainViewModel.setRetryAction { viewModel.retryFetchBeforePhotoUrls(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
@@ -46,7 +45,7 @@ fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int,
                         Toast.makeText(context, R.string.toast_photo_upload_failed, Toast.LENGTH_SHORT).show()
                     }
                     is PhotoBeforeReturnSideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }

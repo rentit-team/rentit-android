@@ -14,8 +14,7 @@ import com.example.rentit.presentation.main.MainViewModel
 
 @Composable
 fun RentalPhotoCheckRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val viewModel: RentalPhotoCheckViewModel = hiltViewModel()
@@ -23,14 +22,14 @@ fun RentalPhotoCheckRoute(navHostController: NavHostController, productId: Int, 
 
     LaunchedEffect(Unit) {
         viewModel.fetchPhotoUrls(productId, reservationId)
-        mainViewModel?.setRetryAction { viewModel.retryFetchPhotoUrls(productId, reservationId) }
+        mainViewModel.setRetryAction { viewModel.retryFetchPhotoUrls(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect {
                 if(it is RentalPhotoCheckSideEffect.CommonError) {
-                    mainViewModel?.handleError(it.throwable)
+                    mainViewModel.handleError(it.throwable)
                 }
             }
         }

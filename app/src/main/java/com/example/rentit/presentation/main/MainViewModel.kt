@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.io.IOException
 import javax.inject.Inject
@@ -23,9 +24,8 @@ class MainViewModel @Inject constructor(): ViewModel() {
 
     private var retryAction: () -> Unit = {}
 
-    private fun updateState(transformation: MainState.() -> MainState) {
-        val currentState = _uiState.value
-        _uiState.value = currentState.transformation()
+    private fun updateState(transform: MainState.() -> MainState) {
+        _uiState.update(transform)
     }
 
     private fun emitSideEffect(sideEffect: MainSideEffect) {
@@ -64,6 +64,6 @@ class MainViewModel @Inject constructor(): ViewModel() {
                 showServerErrorDialog = false
             )
         }
-        retryAction.invoke()
+        retryAction()
     }
 }

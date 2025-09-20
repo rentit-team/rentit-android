@@ -21,8 +21,7 @@ import com.example.rentit.presentation.main.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListRoute(navHostController: NavHostController) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: ChatListViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -32,14 +31,14 @@ fun ChatListRoute(navHostController: NavHostController) {
 
     LaunchedEffect(Unit) {
         viewModel.fetchChatRoomSummaries()
-        mainViewModel?.setRetryAction(viewModel::retryFetchChatRoomSummaries)
+        mainViewModel.setRetryAction(viewModel::retryFetchChatRoomSummaries)
     }
 
     LaunchedEffect(Unit) {
         lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
             viewModel.sideEffect.collect {
                 if(it is ChatListSideEffect.CommonError) {
-                    mainViewModel?.handleError(it.throwable)
+                    mainViewModel.handleError(it.throwable)
                 }
             }
         }

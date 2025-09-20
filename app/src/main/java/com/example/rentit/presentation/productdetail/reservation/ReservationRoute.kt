@@ -23,8 +23,7 @@ import com.example.rentit.presentation.main.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReservationRoute(navHostController: NavHostController, productId: Int) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: ReservationViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -34,7 +33,7 @@ fun ReservationRoute(navHostController: NavHostController, productId: Int) {
 
     LaunchedEffect(Unit) {
         viewModel.loadInitialData(productId)
-        mainViewModel?.setRetryAction { viewModel.retryDataLoad(productId) }
+        mainViewModel.setRetryAction { viewModel.retryDataLoad(productId) }
     }
 
     LaunchedEffect(Unit) {
@@ -57,7 +56,7 @@ fun ReservationRoute(navHostController: NavHostController, productId: Int) {
                         Toast.makeText(context, R.string.toast_post_resv_failed, Toast.LENGTH_SHORT).show()
                     }
                     is ReservationSideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }

@@ -27,8 +27,7 @@ import com.example.rentit.presentation.main.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageRoute(navHostController: NavHostController) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: MyPageViewModel = hiltViewModel()
     val context = LocalContext.current
@@ -40,7 +39,7 @@ fun MyPageRoute(navHostController: NavHostController) {
 
     LaunchedEffect(Unit) {
         viewModel.loadInitialData()
-        mainViewModel?.setRetryAction(viewModel::reloadData)
+        mainViewModel.setRetryAction(viewModel::reloadData)
     }
 
     LaunchedEffect(Unit) {
@@ -63,7 +62,7 @@ fun MyPageRoute(navHostController: NavHostController) {
                         Toast.makeText(context, context.getString(R.string.common_toast_feat_coming_soon), Toast.LENGTH_SHORT).show()
                     }
                     is MyPageSideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }

@@ -33,8 +33,7 @@ import com.example.rentit.presentation.main.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: ChatRoomViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -48,7 +47,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
     LaunchedEffect(Unit) {
         viewModel.fetchChatRoomData(chatRoomId)
         viewModel.connectWebSocket(chatRoomId)
-        mainViewModel?.setRetryAction { viewModel.retryFetchChatRoomData(chatRoomId) }
+        mainViewModel.setRetryAction { viewModel.retryFetchChatRoomData(chatRoomId) }
     }
 
     LaunchedEffect(Unit) {
@@ -88,7 +87,7 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
                         Toast.makeText(context, context.getString(R.string.toast_payment_product_not_found), Toast.LENGTH_SHORT).show()
                     }
                     is ChatRoomSideEffect.CommonError -> {
-                        mainViewModel?.handleError(sideEffect.throwable)
+                        mainViewModel.handleError(sideEffect.throwable)
                     }
                 }
             }
