@@ -49,7 +49,7 @@ import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.ExtendedFAB
 import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.dialog.FullImageDialog
+import com.example.rentit.common.component.dialog.FullImagePagerDialog
 import com.example.rentit.common.component.formatPeriodTextWithLabel
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
@@ -166,7 +166,7 @@ fun ProductDetailScreen(
         }
     }
 
-    if(showFullImage) FullImageDialog(fullImagePagerState, productDetail.imageUrls, onFullImageDismiss)
+    if(showFullImage) FullImagePagerDialog(fullImagePagerState, productDetail.imageUrls, onFullImageDismiss)
 }
 
 @Composable

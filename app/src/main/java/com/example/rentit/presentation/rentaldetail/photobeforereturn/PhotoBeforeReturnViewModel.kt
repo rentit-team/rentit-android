@@ -71,6 +71,14 @@ class PhotoBeforeReturnViewModel @Inject constructor(
                 _uiState.value.copy(currentPageIndex = _uiState.value.currentPageIndex - 1)
     }
 
+    fun onBeforeImageClicked() {
+        _uiState.value = _uiState.value.copy(showFullImageDialog = true)
+    }
+
+    fun onFullImageDialogDismiss() {
+        _uiState.value = _uiState.value.copy(showFullImageDialog = false)
+    }
+
     fun onTakePhotoSuccess(uri: Uri, file: File) {
         val index = _uiState.value.currentPageIndex
         updatePhotoAtIndex(index, uri)
