@@ -20,8 +20,7 @@ import com.example.rentit.presentation.main.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeRoute(navHostController: NavHostController) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: HomeViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -31,7 +30,7 @@ fun HomeRoute(navHostController: NavHostController) {
 
     LaunchedEffect(Unit) {
         viewModel.fetchHomeData()
-        mainViewModel?.setRetryAction(viewModel::retryFetchHomeData)
+        mainViewModel.setRetryAction(viewModel::retryFetchHomeData)
     }
 
     LaunchedEffect(Unit) {
@@ -42,7 +41,8 @@ fun HomeRoute(navHostController: NavHostController) {
                         uiState.scrollState.animateScrollToItem(0)
                     }
                     is HomeSideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        println("error: ${it.throwable.message}")
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }

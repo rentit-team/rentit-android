@@ -18,8 +18,7 @@ import com.example.rentit.presentation.main.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyProductsRentalRoute(navHostController: NavHostController) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: MyProductsRentalViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -28,7 +27,7 @@ fun MyProductsRentalRoute(navHostController: NavHostController) {
 
     LaunchedEffect(Unit) {
         viewModel.getMyProductsRentalHistories()
-        mainViewModel?.setRetryAction(viewModel::reloadData)
+        mainViewModel.setRetryAction(viewModel::reloadData)
     }
 
     LaunchedEffect(Unit) {
@@ -36,7 +35,7 @@ fun MyProductsRentalRoute(navHostController: NavHostController) {
             viewModel.sideEffect.collect {
                 when(it) {
                     is MyProductsRentalSideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                     is MyProductsRentalSideEffect.NavigateToProductDetail -> {
                         navHostController.navigateToRentalHistory(it.productId, it.selectedReservationId, it.rentalStatus)

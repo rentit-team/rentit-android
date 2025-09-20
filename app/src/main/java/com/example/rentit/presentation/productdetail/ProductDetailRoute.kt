@@ -27,8 +27,7 @@ import com.example.rentit.presentation.productdetail.dialog.ChatUnavailableDialo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: ProductDetailViewModel = hiltViewModel()
     val context = LocalContext.current
@@ -42,7 +41,7 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
 
     LaunchedEffect(Unit) {
         viewModel.loadProductDetail(productId)
-        mainViewModel?.setRetryAction { viewModel.retryLoadProductDetail(productId) }
+        mainViewModel.setRetryAction { viewModel.retryLoadProductDetail(productId) }
     }
 
     LaunchedEffect(Unit) {
@@ -62,7 +61,7 @@ fun ProductDetailRoute(navHostController: NavHostController, productId: Int) {
                         Toast.makeText(context, R.string.common_toast_feat_coming_soon, Toast.LENGTH_SHORT).show()
                     }
                     is ProductDetailSideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }

@@ -20,8 +20,7 @@ import com.example.rentit.presentation.productdetail.rentalhistory.dialog.Access
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryRoute(navHostController: NavHostController, productId: Int, selectedReservationId: Int?, initialRentalStatus: RentalStatus?, ) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val viewModel: RentalHistoryViewModel = hiltViewModel()
     val lifecycle = LocalLifecycleOwner.current.lifecycle
@@ -30,7 +29,7 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int, sel
     LaunchedEffect(productId) {
         viewModel.loadProductRentalHistories(productId)
         viewModel.initializeFiltering(initialRentalStatus, selectedReservationId)
-        mainViewModel?.setRetryAction { viewModel.retryLoadHistories(productId) }
+        mainViewModel.setRetryAction { viewModel.retryLoadHistories(productId) }
     }
 
     LaunchedEffect(Unit) {
@@ -44,7 +43,7 @@ fun RentalHistoryRoute(navHostController: NavHostController, productId: Int, sel
                         uiState.historyListScrollState.animateScrollToItem(0)
                     }
                     is RentalHistorySideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }

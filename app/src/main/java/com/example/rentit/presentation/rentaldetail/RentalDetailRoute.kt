@@ -40,8 +40,7 @@ import java.io.File
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalDetailRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -53,7 +52,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
 
     LaunchedEffect(Unit) {
         viewModel.getRentalDetail(productId, reservationId)
-        mainViewModel?.setRetryAction { viewModel.reloadData(productId, reservationId) }
+        mainViewModel.setRetryAction { viewModel.reloadData(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
@@ -115,7 +114,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
                         Toast.makeText(context, R.string.toast_chat_room_error, Toast.LENGTH_SHORT).show()
                     }
                     is RentalDetailSideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }

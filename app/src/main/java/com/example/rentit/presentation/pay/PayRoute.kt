@@ -20,8 +20,7 @@ import com.example.rentit.presentation.main.MainViewModel
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PayRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
-    val backStackEntry = navHostController.currentBackStackEntry
-    val mainViewModel: MainViewModel? = backStackEntry?.let { hiltViewModel(it) }
+    val mainViewModel: MainViewModel = hiltViewModel()
 
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
@@ -33,7 +32,7 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
 
     LaunchedEffect(Unit) {
         viewModel.getPayInfo(productId, reservationId)
-        mainViewModel?.setRetryAction { viewModel.reloadData(productId, reservationId) }
+        mainViewModel.setRetryAction { viewModel.reloadData(productId, reservationId) }
     }
 
     LaunchedEffect(Unit) {
@@ -50,7 +49,7 @@ fun PayRoute(navHostController: NavHostController, productId: Int, reservationId
                         navHostController.popBackStack()
                     }
                     is PaySideEffect.CommonError -> {
-                        mainViewModel?.handleError(it.throwable)
+                        mainViewModel.handleError(it.throwable)
                     }
                 }
             }
