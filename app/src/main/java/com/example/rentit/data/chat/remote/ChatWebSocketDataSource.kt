@@ -1,16 +1,15 @@
-package com.example.rentit.data.chat.websocketImpl
+package com.example.rentit.data.chat.remote
 
 import android.util.Log
 import com.example.rentit.data.chat.dto.MessageRequestDto
 import com.example.rentit.data.chat.dto.MessageResponseDto
 import com.example.rentit.domain.auth.respository.AuthRepository
-import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.user.repository.UserRepository
 import com.google.gson.Gson
-import ua.naiksoftware.stomp.Stomp
-import ua.naiksoftware.stomp.StompClient
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
+import ua.naiksoftware.stomp.Stomp
+import ua.naiksoftware.stomp.StompClient
 import ua.naiksoftware.stomp.dto.LifecycleEvent
 import ua.naiksoftware.stomp.dto.StompHeader
 import javax.inject.Inject
@@ -18,10 +17,10 @@ import javax.inject.Inject
 private const val TAG = "WebSocket"
 private const val URL = "ws://api.rentit.o-r.kr:8080/ws/chat/websocket"
 
-class WebSocketManagerImpl @Inject constructor(
+class ChatWebSocketDataSource @Inject constructor(
     private val authRepository: AuthRepository,
     private val userRepository: UserRepository,
-): WebSocketManager {
+) {
     private var stompClient: StompClient? = null
     private var topicDisposable: Disposable? = null
     private var stompLifecycleDisposable: Disposable? = null
@@ -65,7 +64,7 @@ class WebSocketManagerImpl @Inject constructor(
             })
     }
 
-    override fun connect(chatRoomId: String, onMessageReceived: (MessageResponseDto) -> Unit, onError: (Throwable) -> Unit) {
+    fun connect(chatRoomId: String, onMessageReceived: (MessageResponseDto) -> Unit, onError: (Throwable) -> Unit) {
         val token = getAccessToken()
 
         clearDisposable()
@@ -76,7 +75,7 @@ class WebSocketManagerImpl @Inject constructor(
         subscribeTopic(chatRoomId, onMessageReceived, onError)
     }
 
-    override fun sendMessage(chatRoomId: String, message: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
+    fun sendMessage(chatRoomId: String, message: String, onSuccess: () -> Unit, onError: (Throwable) -> Unit) {
         val authUserId = getAuthUserId()
         val dto = MessageRequestDto(chatRoomId, authUserId, message)
         val json = Gson().toJson(dto)
@@ -90,7 +89,7 @@ class WebSocketManagerImpl @Inject constructor(
             })
     }
 
-    override fun disconnect() {
+    fun disconnect() {
         clearDisposable()
         stompClient?.disconnect()
         stompClient = null
