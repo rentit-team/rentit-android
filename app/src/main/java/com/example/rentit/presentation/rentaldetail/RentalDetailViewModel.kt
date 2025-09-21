@@ -12,7 +12,6 @@ import com.example.rentit.common.enums.RentalProcessType
 import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.domain.chat.repository.ChatRepository
-import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.domain.rental.repository.RentalRepository
@@ -32,7 +31,6 @@ private const val TAG = "RentalDetailViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
-    private val webSocketManager: WebSocketManager,
     private val chatRepository: ChatRepository,
     private val rentalRepository: RentalRepository,
     private val getRentalDetailUseCase: GetRentalDetailUseCase,
@@ -177,7 +175,7 @@ class RentalDetailViewModel @Inject constructor(
      * - 옵션 기능이므로 에러 발생 시 별도로 대응하지 않음
      */
     private fun connectWebSocket(chatRoomId: String) {
-        webSocketManager.connect(
+        chatRepository.connectWebSocket(
             chatRoomId = chatRoomId,
             onMessageReceived = { },
             onError = { }
@@ -185,12 +183,12 @@ class RentalDetailViewModel @Inject constructor(
     }
 
     private fun sendPayCompleteMessage(chatRoomId: String) {
-        webSocketManager.sendMessage(
+        chatRepository.sendMessage(
             chatRoomId = chatRoomId,
             message = AutoMessageType.REQUEST_ACCEPTED.code,
             onSuccess = {
                 emitSideEffect(RentalDetailSideEffect.ToastAcceptedMessageSendSuccess)
-                webSocketManager.disconnect()
+                chatRepository.disconnectWebSocket()
             },
             onError = { }
         )

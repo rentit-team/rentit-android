@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.core.error.ForbiddenException
 import com.example.rentit.data.chat.dto.MessageResponseDto
+import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
-import com.example.rentit.domain.chat.websocket.WebSocketManager
 import com.example.rentit.domain.product.model.PaymentValidationResult
 import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
 import com.example.rentit.domain.product.usecase.ValidatePaymentProcessUseCase
@@ -27,7 +27,7 @@ private const val TAG = "ChatRoomViewModel"
 @RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
-    private val webSocketManager: WebSocketManager,
+    private val chatRepository: ChatRepository,
     private val convertMessageUseCase: ConvertMessageUseCase,
     private val validatePaymentProcessUseCase: ValidatePaymentProcessUseCase,
     private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
@@ -141,7 +141,7 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     fun connectWebSocket(chatRoomId: String) {
-        webSocketManager.connect(
+        chatRepository.connectWebSocket(
             chatRoomId = chatRoomId,
             onMessageReceived = ::onMessageReceived,
             onError = { emitSideEffect(ChatRoomSideEffect.ToastChatDisconnect) }
@@ -150,7 +150,9 @@ class ChatRoomViewModel @Inject constructor(
 
     fun sendMessage(chatRoomId: String, message: String) {
         if(message.isNotBlank()){
-            webSocketManager.sendMessage(chatRoomId, message,
+            chatRepository.sendMessage(
+                chatRoomId = chatRoomId,
+                message = message,
                 onSuccess = { emitSideEffect(ChatRoomSideEffect.MessageSendSuccess) },
                 onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
             )
@@ -158,7 +160,7 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     fun disconnectWebSocket() {
-        webSocketManager.disconnect()
+        chatRepository.disconnectWebSocket()
         resetMessages()
     }
 }

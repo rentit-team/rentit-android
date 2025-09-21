@@ -8,7 +8,7 @@ import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.uimodel.RentalSummaryUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
-import com.example.rentit.domain.chat.websocket.WebSocketManager
+import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -23,7 +23,7 @@ private const val MIN_LOADING_DURATION = 500L    // 즉시 전환 방지를 위�
 
 @HiltViewModel
 class PayViewModel @Inject constructor(
-    private val webSocketManager: WebSocketManager,
+    private val chatRepository: ChatRepository,
     private val rentalRepository: RentalRepository
 ): ViewModel() {
 
@@ -116,7 +116,7 @@ class PayViewModel @Inject constructor(
      * - 옵션 기능이므로 에러 발생 시 별도로 대응하지 않음
      */
     private fun connectWebSocket(chatRoomId: String) {
-        webSocketManager.connect(
+        chatRepository.connectWebSocket(
             chatRoomId = chatRoomId,
             onMessageReceived = { },
             onError = { }
@@ -124,12 +124,12 @@ class PayViewModel @Inject constructor(
     }
 
     private fun sendPayCompleteMessage(chatRoomId: String) {
-        webSocketManager.sendMessage(
+        chatRepository.sendMessage(
             chatRoomId = chatRoomId,
             message = AutoMessageType.COMPLETE_PAY.code,
             onSuccess = {
                 emitSideEffect(PaySideEffect.ToastPaidMessageSendSuccess)
-                webSocketManager.disconnect()
+                chatRepository.disconnectWebSocket()
             },
             onError = { }
         )
