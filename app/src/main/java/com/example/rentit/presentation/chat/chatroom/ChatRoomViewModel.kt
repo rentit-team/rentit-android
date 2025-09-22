@@ -118,7 +118,7 @@ class ChatRoomViewModel @Inject constructor(
     /** WebSocket 채팅 */
     private fun onMessageReceived(message: MessageResponseDto) {
         val previousMessages = _uiState.value.messages
-        val newMessage = convertMessageUseCase.execute(message)
+        val newMessage = convertMessageUseCase(message)
 
         updateUiState { copy(messages = listOf(newMessage) + previousMessages) }
         emitSideEffect(ChatRoomSideEffect.MessageReceived)

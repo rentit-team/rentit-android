@@ -19,9 +19,9 @@ import javax.inject.Inject
 class ConvertMessageUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    fun execute(messageResponse: MessageResponseDto): ChatMessageModel {
+    operator fun invoke(messageResponse: MessageResponseDto): ChatMessageModel {
         val authUserId = userRepository.getAuthUserIdFromPrefs()
 
-        return messageResponse.toChatMessageModel(authUserId)
+        return messageResponse.toChatMessageModel(authUserId == messageResponse.senderId)
     }
 }
