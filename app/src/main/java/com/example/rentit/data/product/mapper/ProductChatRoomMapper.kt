@@ -1,10 +1,10 @@
 package com.example.rentit.data.product.mapper
 
 import com.example.rentit.data.product.dto.ProductDto
-import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
+import com.example.rentit.domain.chat.model.ChatRoomProductSummaryModel
 
 fun ProductDto.toChatRoomSummaryModel() =
-    ProductChatRoomSummaryModel(
+    ChatRoomProductSummaryModel(
         productId = productId,
         thumbnailImgUrl = thumbnailImgUrl,
         status = status,

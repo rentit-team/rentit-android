@@ -3,9 +3,13 @@ package com.example.rentit.domain.chat.usecase
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.rentit.core.error.ForbiddenException
-import com.example.rentit.domain.chat.model.ChatMessageModel
+import com.example.rentit.data.chat.mapper.toModel
+import com.example.rentit.data.product.mapper.toChatRoomSummaryModel
+import com.example.rentit.data.rental.mapper.toChatRoomSummaryModel
 import com.example.rentit.domain.chat.model.ChatRoomDetailModel
 import com.example.rentit.domain.chat.repository.ChatRepository
+import com.example.rentit.domain.product.repository.ProductRepository
+import com.example.rentit.domain.rental.repository.RentalRepository
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject
 
@@ -19,6 +23,8 @@ import javax.inject.Inject
 
 @RequiresApi(Build.VERSION_CODES.O)
 class GetChatRoomDetailUseCase @Inject constructor(
+    private val productRepository: ProductRepository,
+    private val rentalRepository: RentalRepository,
     private val userRepository: UserRepository,
     private val chatRepository: ChatRepository
 ) {
@@ -31,24 +37,23 @@ class GetChatRoomDetailUseCase @Inject constructor(
         return runCatching {
             val authUserId = userRepository.getAuthUserIdFromPrefs()
             val chatRoomDetail = chatRepository.getChatDetail(chatRoomId, DEFAULT_PAGE, DEFAULT_PAGE_SIZE).getOrThrow()
+            val productId = chatRoomDetail.chatRoom.productId
+            val reservationId = chatRoomDetail.chatRoom.reservationId
             val participants = chatRoomDetail.chatRoom.participants
 
             if(participants.find { it.userId == authUserId } == null) throw ForbiddenException()
+            val partnerNickname = participants.find { it.userId != authUserId }?.nickname ?: ""
 
-            val partner = participants.find { it.userId != authUserId }
+            val rentalSummary = rentalRepository.getRentalDetail(productId, reservationId).map { it.rental.toChatRoomSummaryModel() }.getOrThrow()
+            val productSummary = productRepository.getProductDetail(productId).map { it.product.toChatRoomSummaryModel() }.getOrThrow()
 
             ChatRoomDetailModel(
-                reservationId = chatRoomDetail.chatRoom.reservationId,
-                productId = chatRoomDetail.chatRoom.productId,
-                partnerNickname = partner?.nickname ?: "",
-                messages = chatRoomDetail.messages.map {
-                    ChatMessageModel(
-                        messageId = it.messageId,
-                        isMine = it.sender.userId == authUserId,
-                        message = it.content,
-                        sentAt = it.sentAt
-                    )
-                }
+                rentalSummary = rentalSummary,
+                productSummary = productSummary,
+                reservationId = reservationId,
+                productId = productId,
+                partnerNickname = partnerNickname,
+                messages = chatRoomDetail.messages.map { it.toModel(it.sender.userId == authUserId) }
             )
         }
     }

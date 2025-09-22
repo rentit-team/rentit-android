@@ -11,14 +11,13 @@ import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase
 import com.example.rentit.domain.chat.usecase.GetChatRoomDetailUseCase
 import com.example.rentit.domain.product.model.PaymentValidationResult
-import com.example.rentit.domain.product.usecase.GetChatRoomProductSummaryUseCase
 import com.example.rentit.domain.product.usecase.ValidatePaymentProcessUseCase
-import com.example.rentit.domain.rental.usecase.GetChatRoomRentalSummaryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -30,8 +29,6 @@ class ChatRoomViewModel @Inject constructor(
     private val chatRepository: ChatRepository,
     private val convertMessageUseCase: ConvertMessageUseCase,
     private val validatePaymentProcessUseCase: ValidatePaymentProcessUseCase,
-    private val getChatRoomRentalSummaryUseCase: GetChatRoomRentalSummaryUseCase,
-    private val getChatRoomProductSummaryUseCase: GetChatRoomProductSummaryUseCase,
     private val getChatRoomDetailUseCase: GetChatRoomDetailUseCase
 ): ViewModel() {
 
@@ -39,18 +36,10 @@ class ChatRoomViewModel @Inject constructor(
     val uiState: StateFlow<ChatRoomState> = _uiState
 
     private val _sideEffect = MutableSharedFlow<ChatRoomSideEffect>()
-    val sideEffect = _sideEffect.asSharedFlow()
+    val sideEffect: SharedFlow<ChatRoomSideEffect> = _sideEffect
 
-    private fun resetMessages() {
-        _uiState.value = _uiState.value.copy(messages = emptyList())
-    }
-
-    private fun showForbiddenChatAccessDialog() {
-        _uiState.value = _uiState.value.copy(showForbiddenChatAccessDialog = true)
-    }
-
-    private fun setIsLoading(isLoading: Boolean) {
-        _uiState.value = _uiState.value.copy(isLoading = isLoading)
+    private fun updateUiState(transform: ChatRoomState.() -> ChatRoomState) {
+        _uiState.update(transform)
     }
 
     private fun emitSideEffect(sideEffect: ChatRoomSideEffect) {
@@ -60,29 +49,24 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     suspend fun fetchChatRoomData(chatRoomId: String) {
-        setIsLoading(true)
-        runCatching {
-            val chatRoomDetail = getChatRoomDetailUseCase(chatRoomId).getOrThrow()
-            val productSummary = getChatRoomProductSummaryUseCase(chatRoomDetail.productId).getOrThrow()
-            val rentalSummary = getChatRoomRentalSummaryUseCase(chatRoomDetail.productId,chatRoomDetail.reservationId).getOrThrow()
-            _uiState.value = _uiState.value.copy(
-                partnerNickname = chatRoomDetail.partnerNickname,
-                messages = chatRoomDetail.messages,
-                productSummary = productSummary,
-                rentalSummary = rentalSummary
-            )
-        }.onFailure { e ->
-                Log.e(TAG, "채팅방 로드 에러", e)
-            when (e) {
-                is ForbiddenException -> {
-                    showForbiddenChatAccessDialog()
-                }
-                else -> {
-                    emitSideEffect(ChatRoomSideEffect.CommonError(e))
+        updateUiState { copy(isLoading = true) }
+        getChatRoomDetailUseCase(chatRoomId)
+            .onSuccess {
+                updateUiState { copy(
+                    partnerNickname = it.partnerNickname,
+                    messages = it.messages,
+                    productSummary = it.productSummary,
+                    rentalSummary = it.rentalSummary
+                ) }
+                Log.i(TAG, "채팅방 데이터 로드 성공")
+            }.onFailure { e ->
+                Log.e(TAG, "채팅방 데이터 로드 실패", e)
+                when (e) {
+                    is ForbiddenException -> updateUiState { copy(showForbiddenChatAccessDialog = true) }
+                    else -> emitSideEffect(ChatRoomSideEffect.CommonError(e))
                 }
             }
-        }
-        setIsLoading(false)
+        updateUiState { copy(isLoading = false) }
     }
 
     fun onPayClicked() {
@@ -136,7 +120,7 @@ class ChatRoomViewModel @Inject constructor(
         val previousMessages = _uiState.value.messages
         val newMessage = convertMessageUseCase.execute(message)
 
-        _uiState.value = _uiState.value.copy(messages = listOf(newMessage) + previousMessages)
+        updateUiState { copy(messages = listOf(newMessage) + previousMessages) }
         emitSideEffect(ChatRoomSideEffect.MessageReceived)
     }
 
@@ -149,18 +133,18 @@ class ChatRoomViewModel @Inject constructor(
     }
 
     fun sendMessage(chatRoomId: String, message: String) {
-        if(message.isNotBlank()){
-            chatRepository.sendMessage(
-                chatRoomId = chatRoomId,
-                message = message,
-                onSuccess = { emitSideEffect(ChatRoomSideEffect.MessageSendSuccess) },
-                onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
-            )
-        }
+        if(message.isBlank()) return
+
+        chatRepository.sendMessage(
+            chatRoomId = chatRoomId,
+            message = message,
+            onSuccess = { emitSideEffect(ChatRoomSideEffect.MessageSendSuccess) },
+            onError = { emitSideEffect(ChatRoomSideEffect.ToastMessageSendFailed) }
+        )
     }
 
     fun disconnectWebSocket() {
         chatRepository.disconnectWebSocket()
-        resetMessages()
+        updateUiState { copy(messages = emptyList()) }
     }
 }
