@@ -2,7 +2,7 @@ package com.example.rentit.domain.rental.model
 
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.RentingStatus
-import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 
 
 sealed class RentalDetailStatusModel {

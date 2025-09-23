@@ -27,8 +27,8 @@ import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.component.layout.LoadingScreen
 import com.example.rentit.common.component.screenHorizontalPadding
-import com.example.rentit.common.uimodel.PriceSummaryUiModel
-import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500

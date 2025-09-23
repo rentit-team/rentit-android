@@ -1,6 +1,6 @@
 package com.example.rentit.presentation.pay
 
-import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 
 data class PayState (
     val rentalSummary: RentalSummaryUiModel = RentalSummaryUiModel.EMPTY,

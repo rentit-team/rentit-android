@@ -14,11 +14,11 @@ import com.example.rentit.R
 import com.example.rentit.common.component.ArrowedTextButton
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.uimodel.PriceSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
-import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
 /**

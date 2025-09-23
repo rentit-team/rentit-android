@@ -13,8 +13,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.component.TitledContainer
-import com.example.rentit.common.component.RentalSummary
-import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.components.RentalSummary
+import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.common.theme.AppBlack
 
 @RequiresApi(Build.VERSION_CODES.O)

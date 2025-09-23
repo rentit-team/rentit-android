@@ -9,7 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.enums.RentalProcessType
-import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
+import com.example.rentit.presentation.rentaldetail.model.RequestAcceptDialogUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.rental.usecase.RegisterTrackingUseCase

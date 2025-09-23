@@ -6,7 +6,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.uimodel.PriceSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
 import com.example.rentit.common.component.TitledContainer
 import com.example.rentit.common.component.PriceSummary
 

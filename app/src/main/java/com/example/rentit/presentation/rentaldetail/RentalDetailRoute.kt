@@ -178,7 +178,9 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
 
     uiState.requestAcceptDialog?.let {
         RequestAcceptDialog(
-            uiModel = it,
+            startDate = it.startDate,
+            endDate = it.endDate,
+            expectedRevenue = it.expectedRevenue,
             onDismiss = viewModel::dismissRequestAcceptDialog,
             onAccept = { viewModel.acceptRequest(productId, reservationId) },
         )
