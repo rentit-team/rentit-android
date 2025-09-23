@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.presentation.rentaldetail.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
@@ -79,7 +80,7 @@ fun RentalSummary(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
-private fun Preview() {
+private fun RentalSummaryPreview() {
     RentItTheme {
         RentalSummary(
             productTitle = "캐논 EOS 550D",

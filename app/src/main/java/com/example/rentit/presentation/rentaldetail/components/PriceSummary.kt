@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.presentation.rentaldetail.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -15,11 +15,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
+import com.example.rentit.common.component.CommonDivider
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.presentation.rentaldetail.components.LabeledValue
-import com.example.rentit.common.uimodel.PriceSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
 
 /**
  * 비용 내역과 총합을 나타내는 UI 컴포넌트
@@ -69,7 +69,7 @@ fun PriceSummary(
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
-private fun Preview() {
+private fun PriceSummaryPreview() {
     val priceItems = listOf(
         PriceSummaryUiModel(label = "기본 대여료", price = 30_000),
         PriceSummaryUiModel(label = "지연 보상금 (2일)", price = 60_000)
