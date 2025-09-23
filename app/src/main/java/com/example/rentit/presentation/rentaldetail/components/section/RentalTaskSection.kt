@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.component.TitledContainer
+import com.example.rentit.presentation.rentaldetail.components.TitledContainer
 import com.example.rentit.presentation.rentaldetail.components.TaskCheckBox
 
 @Composable

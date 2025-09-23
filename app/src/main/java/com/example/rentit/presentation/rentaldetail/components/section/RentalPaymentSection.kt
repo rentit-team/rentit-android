@@ -7,7 +7,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
-import com.example.rentit.common.component.TitledContainer
+import com.example.rentit.presentation.rentaldetail.components.TitledContainer
 import com.example.rentit.presentation.rentaldetail.components.PriceSummary
 
 @Composable
