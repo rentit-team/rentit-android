@@ -57,8 +57,8 @@ import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.common.util.formatPrice
 import com.example.rentit.common.util.formatRentalPeriod
 import com.example.rentit.domain.chat.model.ChatMessageModel
-import com.example.rentit.domain.product.model.ProductChatRoomSummaryModel
-import com.example.rentit.domain.rental.model.RentalChatRoomSummaryModel
+import com.example.rentit.domain.chat.model.ChatRoomProductSummaryModel
+import com.example.rentit.domain.chat.model.ChatRoomRentalSummaryModel
 import com.example.rentit.common.enums.RentingStatus
 import com.example.rentit.presentation.chat.chatroom.components.ReceivedMessageBubble
 import com.example.rentit.presentation.chat.chatroom.components.SentMessageBubble
@@ -70,8 +70,8 @@ fun ChatroomScreen(
     messageText: TextFieldValue,
     partnerNickname: String?,
     messages: List<ChatMessageModel>,
-    productSummary: ProductChatRoomSummaryModel?,
-    rentalSummary: RentalChatRoomSummaryModel?,
+    productSummary: ChatRoomProductSummaryModel?,
+    rentalSummary: ChatRoomRentalSummaryModel?,
     messageScrollState: LazyListState,
     inputScrollState: ScrollState,
     onPayClick: () -> Unit,
@@ -339,7 +339,7 @@ fun ChatRoomScreenPreview() {
     )
 
 // 샘플 상품 요약
-    val sampleProduct = ProductChatRoomSummaryModel(
+    val sampleProduct = ChatRoomProductSummaryModel(
         thumbnailImgUrl = "https://example.com/product_thumbnail.jpg",
         title = "캠핑용 텐트",
         status = ProductStatus.AVAILABLE,
@@ -350,7 +350,7 @@ fun ChatRoomScreenPreview() {
     )
 
 // 샘플 대여 요약
-    val sampleRental = RentalChatRoomSummaryModel(
+    val sampleRental = ChatRoomRentalSummaryModel(
         reservationId = 12345,
         status = RentalStatus.PENDING,
         startDate = LocalDate.of(2025, 9, 1),
