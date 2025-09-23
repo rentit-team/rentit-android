@@ -1,4 +1,4 @@
-package com.example.rentit.common.component.dialog
+package com.example.rentit.presentation.rentaldetail.dialog
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
+import com.example.rentit.common.component.dialog.BaseDialog
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
@@ -24,7 +24,9 @@ import com.example.rentit.common.util.formatRentalPeriod
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestAcceptDialog(
-    uiModel: RequestAcceptDialogUiModel,
+    startDate: String,
+    endDate: String,
+    expectedRevenue: Int,
     onDismiss: () -> Unit,
     onAccept: () -> Unit,
 ) {
@@ -41,7 +43,7 @@ fun RequestAcceptDialog(
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = formatRentalPeriod(LocalContext.current, uiModel.startDate,uiModel.endDate),
+            text = formatRentalPeriod(LocalContext.current, startDate,endDate),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray800
         )
@@ -56,7 +58,7 @@ fun RequestAcceptDialog(
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = "${formatPrice(uiModel.expectedRevenue)} ${stringResource(R.string.common_price_unit)}",
+                text = "${formatPrice(expectedRevenue)} ${stringResource(R.string.common_price_unit)}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }
@@ -69,10 +71,9 @@ fun RequestAcceptDialog(
 private fun Preview() {
     RentItTheme {
         RequestAcceptDialog(
-            RequestAcceptDialogUiModel(
             "2025-08-17",
             "2025-08-20",
-            40000),
+            40000,
             onDismiss = {},
             onAccept = {})
     }

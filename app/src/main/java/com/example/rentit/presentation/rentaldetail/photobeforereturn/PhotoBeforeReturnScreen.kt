@@ -34,7 +34,7 @@ import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.LoadableUriImage
 import com.example.rentit.common.component.LoadableUrlImage
 import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.dialog.FullImageDialog
+import com.example.rentit.presentation.rentaldetail.dialog.FullImageDialog
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray300
