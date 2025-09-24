@@ -2,6 +2,7 @@ package com.example.rentit.presentation.productdetail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +46,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.component.CommonTopAppBar
 import com.example.rentit.common.component.ExtendedFAB
 import com.example.rentit.common.component.LoadableUrlImage
@@ -321,7 +321,7 @@ fun MiniButton(isOutlinedButton: Boolean, text: String, onClick: () -> Unit) {
         modifier = Modifier
             .height(38.dp)
             .padding(start = 9.dp),
-        border = if(isOutlinedButton) CommonBorders.basicBorder() else null,
+        border =  BorderStroke(1.dp, Gray200),
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if(isOutlinedButton) Color.White else PrimaryBlue500

@@ -2,6 +2,7 @@ package com.example.rentit.common.component
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -71,7 +72,7 @@ fun FilterButton(
         modifier = modifier.height(30.dp).semantics { contentDescription = contentDesc },
         onClick = onClick,
         shape = RoundedCornerShape(20.dp),
-        border = CommonBorders.basicBorder(borderColor),
+        border = BorderStroke(1.dp, borderColor),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(
