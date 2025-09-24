@@ -15,8 +15,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.BaseDialog
-import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.component.dialog.RentItBaseDialog
+import com.example.rentit.common.component.layout.RentItLoadingScreen
 import com.example.rentit.navigation.productdetail.navigateToReservationComplete
 import com.example.rentit.presentation.main.MainViewModel
 
@@ -80,10 +80,10 @@ fun ReservationRoute(navHostController: NavHostController, productId: Int) {
         onSetRentalEndDate = viewModel::setRentalEndDate
     )
 
-    LoadingScreen(uiState.isLoading)
+    RentItLoadingScreen(uiState.isLoading)
 
     if(uiState.showAccessNotAllowedDialog) {
-        BaseDialog(
+        RentItBaseDialog(
             title = stringResource(R.string.dialog_owner_access_not_allowed_title),
             content = stringResource(R.string.dialog_owner_access_not_allowed_content),
             confirmBtnText = stringResource(R.string.common_dialog_btn_close),
@@ -93,7 +93,7 @@ fun ReservationRoute(navHostController: NavHostController, productId: Int) {
     }
 
     if(uiState.showResvAlreadyExistDialog) {
-        BaseDialog(
+        RentItBaseDialog(
             title = stringResource(R.string.dialog_resv_already_exist_title),
             content = stringResource(R.string.dialog_resv_already_exist_content),
             confirmBtnText = stringResource(R.string.common_dialog_btn_close),

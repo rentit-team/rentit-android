@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.item
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -39,7 +40,7 @@ private object CommonTextFieldDefaults {
 }
 
 @Composable
-fun CommonTextField(
+fun RentItTextField(
     modifier: Modifier = Modifier,
     value: String,
     enabled: Boolean = true,
@@ -77,7 +78,7 @@ fun CommonTextField(
             // 텍스트 필드 테두리와 배경 설정
             Box(
                 modifier = Modifier
-                    .basicRoundedGrayBorder(color = borderColor)
+                    .rentItBasicRoundedGrayBorder(color = borderColor)
                     .padding(CommonTextFieldDefaults.InnerPaddingValue),
                 contentAlignment = placeholderAlignment
             ) {
@@ -96,7 +97,7 @@ fun CommonTextField(
 
 
 @Composable
-fun CommonTextField(
+fun RentItTextField(
     modifier: Modifier = Modifier,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
@@ -134,7 +135,7 @@ fun CommonTextField(
             // 텍스트 필드 테두리와 배경 설정
             Box(
                 modifier = Modifier
-                    .basicRoundedGrayBorder(color = borderColor)
+                    .rentItBasicRoundedGrayBorder(color = borderColor)
                     .padding(CommonTextFieldDefaults.InnerPaddingValue),
                 contentAlignment = placeholderAlignment
             ) {
@@ -155,7 +156,7 @@ fun CommonTextField(
 @Composable
 fun PreviewBaseTextField() {
     RentItTheme {
-        CommonTextField(
+        RentItTextField(
             value = "",
             onValueChange = { },
             placeholder = "Place Holder",

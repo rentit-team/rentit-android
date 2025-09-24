@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.component.layout.RentItLoadingScreen
 import com.example.rentit.navigation.myproductsrental.navigateToMyProductsRental
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
@@ -93,5 +93,5 @@ fun MyPageRoute(navHostController: NavHostController) {
         onMyPendingRentalCountClick = viewModel::onMyPendingRentalClicked,
     )
 
-    LoadingScreen(uiState.isLoading)
+    RentItLoadingScreen(uiState.isLoading)
 }

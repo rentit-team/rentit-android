@@ -25,7 +25,7 @@ private const val imageWidthFraction = 0.4f
 private val textTopPadding = 16.dp
 
 @Composable
-fun EmptyContentScreen(
+fun RentItEmptyContentScreen(
     modifier: Modifier = Modifier,
     text: String = ""
 ) {
@@ -51,6 +51,6 @@ fun EmptyContentScreen(
 @Preview
 fun EmptyContentScreenPreview() {
     RentItTheme {
-        EmptyContentScreen()
+        RentItEmptyContentScreen()
     }
 }

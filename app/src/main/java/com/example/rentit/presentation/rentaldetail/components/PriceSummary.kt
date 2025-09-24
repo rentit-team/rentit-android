@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonDivider
+import com.example.rentit.common.component.item.RentItDivider
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
@@ -47,7 +47,7 @@ fun PriceSummary(
             )
         }
 
-        CommonDivider(modifier.padding(top = dividerTopPadding, bottom = dividerBottomPadding))
+        RentItDivider(modifier.padding(top = dividerTopPadding, bottom = dividerBottomPadding))
 
         Row(
             modifier = modifier.fillMaxWidth(),

@@ -22,7 +22,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.presentation.rentaldetail.dialog.RequestAcceptDialog
-import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.component.layout.RentItLoadingScreen
 import com.example.rentit.common.enums.RentalRole
 import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.navigation.pay.navigateToPay
@@ -167,7 +167,7 @@ fun RentalDetailRoute(navHostController: NavHostController, productId: Int, rese
         RentalRole.DEFAULT -> { }
     }
 
-    LoadingScreen(uiState.isLoading)
+    RentItLoadingScreen(uiState.isLoading)
 
     if(uiState.showTransactionReceiptConfirmDialog) {
         TransactionReceiptConfirmDialog(

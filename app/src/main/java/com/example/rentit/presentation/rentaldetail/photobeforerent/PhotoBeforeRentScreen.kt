@@ -29,11 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.item.RemovableImageBox
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItBasicButton
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.component.item.RentItRemovableImageBox
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray400
@@ -53,9 +53,9 @@ fun PhotoBeforeRentScreen(
     onRegister: () -> Unit,
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar {} },
-        bottomBar = { CommonButton(
-                modifier = Modifier.screenHorizontalPadding().padding(bottom = 30.dp),
+        topBar = { RentItTopAppBar {} },
+        bottomBar = { RentItBasicButton(
+                modifier = Modifier.rentItScreenHorizontalPadding().padding(bottom = 30.dp),
                 text = stringResource(R.string.screen_photo_before_rent_btn_registration),
                 enabled = isRegisterEnabled,
                 containerColor = if (isRegisterEnabled) PrimaryBlue500 else Gray200,
@@ -67,7 +67,7 @@ fun PhotoBeforeRentScreen(
         Column(
             Modifier
                 .padding(it)
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
         ) {
 
             PhotoBeforeRentGuide(minPhotoCnt, maxPhotoCnt)
@@ -107,7 +107,7 @@ fun TakePhotoButton(maxPhotoCnt: Int, isMaxPhotoTaken: Boolean = false, onTakePh
             .fillMaxWidth()
             .fillMaxHeight(0.4f)
             .clip(RoundedCornerShape(20.dp))
-            .basicRoundedGrayBorder()
+            .rentItBasicRoundedGrayBorder()
             .clickable(enabled = !isMaxPhotoTaken) { onTakePhoto() },
         contentAlignment = Alignment.Center
     ) {
@@ -134,7 +134,7 @@ fun TakenPhotos(photoList: List<Uri>, onRemoveClick: (Uri) -> Unit) {
             .padding(top = 20.dp)
     ) {
         photoList.forEach { uri ->
-            RemovableImageBox(140.dp, 4f / 3f, uri) { onRemoveClick(it) }
+            RentItRemovableImageBox(140.dp, 4f / 3f, uri) { onRemoveClick(it) }
             Spacer(Modifier.width(10.dp))
         }
     }

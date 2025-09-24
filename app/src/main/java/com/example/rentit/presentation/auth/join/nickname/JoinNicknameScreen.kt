@@ -19,15 +19,15 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonTextField
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.paddingForBottomBarButton
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItBasicButton
+import com.example.rentit.common.component.item.RentItTextField
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.renItPaddingForBottomBarButton
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.component.InputErrorMessage
+import com.example.rentit.common.component.item.RentItInputErrorMessage
 
 @Composable
 fun JoinNicknameScreen(
@@ -40,15 +40,15 @@ fun JoinNicknameScreen(
 ) {
     Scaffold(
         topBar = {
-            CommonTopAppBar(
+            RentItTopAppBar(
                 title = stringResource(id = R.string.screen_join_title),
             ) { onBackPressed() }
         },
         bottomBar = {
-            CommonButton(
+            RentItBasicButton(
                 modifier = Modifier
-                    .screenHorizontalPadding()
-                    .paddingForBottomBarButton(),
+                    .rentItScreenHorizontalPadding()
+                    .renItPaddingForBottomBarButton(),
                 text = stringResource(R.string.screen_join_nickname_btn_text),
                 enabled = buttonEnabled,
                 containerColor = PrimaryBlue500,
@@ -60,7 +60,7 @@ fun JoinNicknameScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.White)
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
                 .padding(it),
             horizontalAlignment = Alignment.Start
         ) {
@@ -68,14 +68,14 @@ fun JoinNicknameScreen(
 
             HighlightedHeadline()
 
-            CommonTextField(
+            RentItTextField(
                 value = nickname,
                 onValueChange = onNicknameChange,
                 placeholder = stringResource(R.string.app_name)
             )
 
             if (nickname.isBlank() && showNicknameBlankError) {
-                InputErrorMessage( stringResource(id = R.string.screen_join_nickname_empty_notification))
+                RentItInputErrorMessage( stringResource(id = R.string.screen_join_nickname_empty_notification))
             }
 
             Spacer(modifier = Modifier.weight(1f))

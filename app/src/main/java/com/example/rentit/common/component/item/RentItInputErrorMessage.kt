@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.item
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -13,7 +13,7 @@ import com.example.rentit.common.theme.AppRed
  */
 
 @Composable
-fun InputErrorMessage(text: String) {
+fun RentItInputErrorMessage(text: String) {
     Text(
         modifier = Modifier.padding(top = 10.dp, start = 12.dp, end = 12.dp),
         text = text,

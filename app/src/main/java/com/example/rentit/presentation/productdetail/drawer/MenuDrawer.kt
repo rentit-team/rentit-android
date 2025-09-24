@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.RentItTheme
 
@@ -31,7 +31,7 @@ fun MenuDrawer(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight(0.22f)
-            .screenHorizontalPadding(),
+            .rentItScreenHorizontalPadding(),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         TextButton(

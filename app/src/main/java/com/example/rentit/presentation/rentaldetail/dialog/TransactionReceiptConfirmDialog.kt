@@ -5,12 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.dialog.RentItBaseDialog
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
 fun TransactionReceiptConfirmDialog(onDismiss: () -> Unit = {}, onConfirmClick: () -> Unit = {}) {
-    BaseDialog(
+    RentItBaseDialog(
         title = stringResource(R.string.dialog_transaction_receipt_confirm_title),
         content = stringResource(R.string.dialog_transaction_receipt_confirm_content),
         closeBtnText = stringResource(R.string.common_dialog_btn_close),

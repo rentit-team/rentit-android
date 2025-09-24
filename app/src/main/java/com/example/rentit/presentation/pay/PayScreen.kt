@@ -22,11 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.dialog.BaseDialog
-import com.example.rentit.common.component.layout.LoadingScreen
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItBasicButton
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.dialog.RentItBaseDialog
+import com.example.rentit.common.component.layout.RentItLoadingScreen
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.common.theme.AppBlack
@@ -63,14 +63,14 @@ fun PayScreen(
 
     Scaffold(
         topBar = {
-            CommonTopAppBar(
+            RentItTopAppBar(
                 title = stringResource(R.string.screen_pay_title)
             ) { onBackClick() }
         },
         bottomBar = {
-            CommonButton(
+            RentItBasicButton(
                 modifier = Modifier
-                    .screenHorizontalPadding()
+                    .rentItScreenHorizontalPadding()
                     .padding(bottom = 30.dp),
                 text = stringResource(R.string.screen_pay_btn_text),
                 containerColor = PrimaryBlue500,
@@ -102,7 +102,7 @@ fun PayScreen(
     // 로딩 상태
     // 1. 최소 로딩: 결제가 너무 빨리 완료되므로 즉시 전환 방지를 위한 UX용
     // 2. 데이터 로딩: 결제 정보를 가져올 때 표시
-    LoadingScreen(isLoading)
+    RentItLoadingScreen(isLoading)
 }
 
 @Composable
@@ -122,7 +122,7 @@ fun PaymentGuide() {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(vertical = 28.dp)
     ) {
         PolicyText(R.string.screen_pay_policy_title_1)
@@ -146,7 +146,7 @@ fun PayResultDialog(
     onClose: () -> Unit = {},
     onConfirm: () -> Unit = {},
 ) {
-    BaseDialog(
+    RentItBaseDialog(
         title = stringResource(R.string.dialog_pay_result_success_title),
         confirmBtnText = stringResource(R.string.dialog_pay_result_btn_confirm),
         isBackgroundClickable = false,

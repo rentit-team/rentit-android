@@ -24,20 +24,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.formatPeriodText
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.formatter.formatPeriodText
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.common.component.toRelativeTimeFormat
+import com.example.rentit.common.component.formatter.toRelativeTimeFormat
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun ProductListItem(
+fun RentItProductListItem(
     title: String = "",
     price: Int = 0,
     thumbnailImgUrl: String? = null,
@@ -63,11 +62,11 @@ fun ProductListItem(
     {
         Row(
             modifier = Modifier
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
                 .padding(vertical = 22.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LoadableUrlImage(
+            RentItLoadableUrlImage(
                 modifier = Modifier
                     .fillMaxWidth(0.3f)
                     .aspectRatio(1f)
@@ -145,7 +144,7 @@ fun ProductListItem(
 @Composable
 fun ProductListItemPreview() {
     RentItTheme {
-        ProductListItem(
+        RentItProductListItem(
             status = ProductStatus.AVAILABLE,
             createdAt = "2025-03-22T12:00:00",
         )

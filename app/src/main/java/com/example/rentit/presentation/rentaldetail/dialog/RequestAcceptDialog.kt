@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.dialog.RentItBaseDialog
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
@@ -30,7 +30,7 @@ fun RequestAcceptDialog(
     onDismiss: () -> Unit,
     onAccept: () -> Unit,
 ) {
-    BaseDialog(
+    RentItBaseDialog(
         title = stringResource(R.string.common_dialog_accept_request_title),
         confirmBtnText = stringResource(R.string.common_dialog_accept_request_btn_accept),
         closeBtnText = stringResource(R.string.common_dialog_btn_close),

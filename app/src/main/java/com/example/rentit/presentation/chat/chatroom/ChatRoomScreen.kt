@@ -42,10 +42,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.formatPeriodText
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.component.formatter.formatPeriodText
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
@@ -82,7 +82,7 @@ fun ChatroomScreen(
     navigateBack: () -> Unit
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(onBackClick = navigateBack) },
+        topBar = { RentItTopAppBar(onBackClick = navigateBack) },
         bottomBar = {
             BottomInputBar(
                 value = messageText,
@@ -140,12 +140,12 @@ private fun ProductInfoSection(
 
     Row(
         modifier = Modifier
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 20.dp)
             .clickable { onSectionClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LoadableUrlImage(
+        RentItLoadableUrlImage(
             modifier = Modifier
                 .size(60.dp)
                 .clip(RoundedCornerShape(15.dp)),
@@ -207,7 +207,7 @@ private fun RequestInfo(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 20.dp)
             .clickable { onSectionClick() },
         horizontalArrangement = Arrangement.SpaceBetween
@@ -265,7 +265,7 @@ private fun BottomInputBar(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White)
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(top = 14.dp, bottom = 32.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(12.dp)

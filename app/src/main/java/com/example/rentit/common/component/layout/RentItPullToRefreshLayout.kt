@@ -13,7 +13,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PullToRefreshLayout(
+fun RentItPullToRefreshLayout(
     isRefreshing: Boolean,
     pullToRefreshState: PullToRefreshState,
     onRefresh: () -> Unit,

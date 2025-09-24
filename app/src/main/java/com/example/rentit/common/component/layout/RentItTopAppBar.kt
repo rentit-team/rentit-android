@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.layout
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CommonTopAppBar(
+fun RentItTopAppBar(
     modifier: Modifier = Modifier,
     title: String = "",
     showMenu: Boolean = false,
@@ -85,6 +85,6 @@ fun CommonTopAppBar(
 @Composable
 fun TopAppBarPreview() {
     RentItTheme {
-        CommonTopAppBar(Modifier, "제목", false, true)
+        RentItTopAppBar(Modifier, "제목", false, true)
     }
 }

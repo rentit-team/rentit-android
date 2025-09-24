@@ -15,7 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.rentit.R
-import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.item.RentItLoadableUrlImage
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.RentItTheme
 
@@ -41,7 +41,7 @@ fun FullImageDialog(
                 ) { onDismiss() },
             contentAlignment = Alignment.Center
         ) {
-            LoadableUrlImage(
+            RentItLoadableUrlImage(
                 modifier = Modifier.fillMaxHeight(0.7f),
                 imgUrl = imageUrls,
                 defaultImageResId = R.drawable.img_placeholder,

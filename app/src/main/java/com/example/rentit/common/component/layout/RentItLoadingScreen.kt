@@ -15,7 +15,7 @@ import androidx.compose.ui.graphics.Color
 import com.example.rentit.common.theme.PrimaryBlue500
 
 @Composable
-fun LoadingScreen(isLoading: Boolean = true) {
+fun RentItLoadingScreen(isLoading: Boolean = true) {
     AnimatedVisibility(
         visible = isLoading,
         enter = EnterTransition.None,

@@ -26,9 +26,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonTextField
-import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.item.RentItTextField
+import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.component.dialog.RentItBaseDialog
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -45,7 +45,7 @@ fun TrackingRegistrationDialog(
     onDismiss: () -> Unit,
     onConfirm: () -> Unit,
 ) {
-    BaseDialog(
+    RentItBaseDialog(
         title = stringResource(R.string.dialog_rental_detail_tracking_regs_title),
         confirmBtnText = stringResource(R.string.dialog_rental_detail_tracking_regs_btn_confirm),
         closeBtnText = stringResource(R.string.common_dialog_btn_close),
@@ -64,7 +64,7 @@ fun TrackingRegistrationDialog(
             text = stringResource(R.string.dialog_rental_detail_tracking_regs_label_tracking_num),
             style = MaterialTheme.typography.bodyLarge
         )
-        CommonTextField(
+        RentItTextField(
             modifier = Modifier.fillMaxWidth().padding(bottom = 10.dp),
             value = trackingNumber,
             onValueChange = onTrackingNumberChange,
@@ -96,7 +96,7 @@ fun DeliveryCompanyDropDown(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
-            .basicRoundedGrayBorder(color = borderColor),
+            .rentItBasicRoundedGrayBorder(color = borderColor),
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {

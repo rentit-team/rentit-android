@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.item
 
 import android.net.Uri
 import androidx.annotation.DrawableRes
@@ -13,7 +13,7 @@ import coil.request.ImageRequest
 import com.example.rentit.R
 
 @Composable
-fun LoadableUrlImage(
+fun RentItLoadableUrlImage(
     modifier: Modifier = Modifier,
     imgUrl: String?,
     @DrawableRes defaultImageResId: Int = R.drawable.img_thumbnail_placeholder,
@@ -34,7 +34,7 @@ fun LoadableUrlImage(
 }
 
 @Composable
-fun LoadableUriImage(
+fun RentItLoadableUriImage(
     modifier: Modifier = Modifier,
     imgUri: Uri?,
     @StringRes defaultDescResId: Int = R.string.common_loadable_uri_img_content_description,

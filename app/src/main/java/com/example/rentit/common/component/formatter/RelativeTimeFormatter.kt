@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.formatter
 
 import android.os.Build
 import androidx.annotation.RequiresApi

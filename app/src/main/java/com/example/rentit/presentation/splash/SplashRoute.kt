@@ -9,7 +9,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.component.layout.RentItLoadingScreen
 import com.example.rentit.navigation.auth.navigateToLogin
 import com.example.rentit.navigation.bottomtab.navigateToHome
 import com.example.rentit.presentation.main.MainViewModel
@@ -41,5 +41,5 @@ fun SplashRoute(navHostController: NavHostController) {
         }
     }
 
-    LoadingScreen(isLoading)
+    RentItLoadingScreen(isLoading)
 }

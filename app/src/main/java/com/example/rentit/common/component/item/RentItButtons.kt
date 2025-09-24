@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.item
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -38,7 +38,7 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
-fun CommonButton(modifier: Modifier = Modifier, text: String, enabled: Boolean = true, containerColor: Color, contentColor: Color, onClick: () -> Unit) {
+fun RentItBasicButton(modifier: Modifier = Modifier, text: String, enabled: Boolean = true, containerColor: Color, contentColor: Color, onClick: () -> Unit) {
     Button(
         onClick = onClick,
         enabled = enabled,
@@ -58,7 +58,7 @@ fun CommonButton(modifier: Modifier = Modifier, text: String, enabled: Boolean =
 }
 
 @Composable
-fun FilterButton(
+fun RentItFilterButton(
     modifier: Modifier = Modifier,
     title: String,
     contentDesc: String = "",
@@ -98,7 +98,7 @@ private val textIconSpacing = 4.dp
 private val iconSize = 10.dp
 
 @Composable
-fun ArrowedTextButton(
+fun RentItArrowedTextButton(
     modifier: Modifier = Modifier,
     text: String,
     color: Color = AppBlack,
@@ -126,7 +126,7 @@ fun ArrowedTextButton(
 }
 
 @Composable
-fun ExtendedFAB(modifier: Modifier = Modifier, @DrawableRes iconRes: Int, @StringRes textRes: Int, onClick: () -> Unit) {
+fun RentItExtendedFAB(modifier: Modifier = Modifier, @DrawableRes iconRes: Int, @StringRes textRes: Int, onClick: () -> Unit) {
     val text = stringResource(textRes)
     ExtendedFloatingActionButton(
         modifier = modifier.semantics { contentDescription = text },
@@ -152,10 +152,10 @@ fun ExtendedFAB(modifier: Modifier = Modifier, @DrawableRes iconRes: Int, @Strin
 fun ButtonPreview(){
     RentItTheme {
         Column(){
-            CommonButton(text = "Button", containerColor = PrimaryBlue500, contentColor = Color.White) {}
-            FilterButton(title = "Button") {}
-            ArrowedTextButton(text = "Button") {}
-            ExtendedFAB(iconRes = R.drawable.ic_camera, textRes = com.google.android.gms.base.R.string.common_signin_button_text) {}
+            RentItBasicButton(text = "Button", containerColor = PrimaryBlue500, contentColor = Color.White) {}
+            RentItFilterButton(title = "Button") {}
+            RentItArrowedTextButton(text = "Button") {}
+            RentItExtendedFAB(iconRes = R.drawable.ic_camera, textRes = com.google.android.gms.base.R.string.common_signin_button_text) {}
         }
     }
 }

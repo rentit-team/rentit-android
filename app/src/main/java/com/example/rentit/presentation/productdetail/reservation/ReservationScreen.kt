@@ -24,12 +24,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.formatPeriodTextWithLabel
-import com.example.rentit.common.component.paddingForBottomBarButton
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItBasicButton
+import com.example.rentit.common.component.item.RentItDivider
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.formatter.formatPeriodTextWithLabel
+import com.example.rentit.common.component.renItPaddingForBottomBarButton
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
@@ -59,16 +59,16 @@ fun ReservationScreen(
 ) {
     Scaffold(
         topBar = {
-            CommonTopAppBar(
+            RentItTopAppBar(
                 title = stringResource(id = R.string.screen_resv_request_app_bar_title),
                 onBackClick = onBackClick
             )
         },
         bottomBar = {
-            CommonButton(
+            RentItBasicButton(
                 modifier = Modifier
-                    .screenHorizontalPadding()
-                    .paddingForBottomBarButton(),
+                    .rentItScreenHorizontalPadding()
+                    .renItPaddingForBottomBarButton(),
                 text = stringResource(id = R.string.screen_resv_request_btn_resv_request),
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White,
@@ -115,7 +115,7 @@ fun PeriodGuideText(minPeriod: Int?, maxPeriod: Int?) {
 
 @Composable
 fun PriceSection(rentalPrice: Int, deposit: Int, totalPrice: Int){
-    Column(Modifier.screenHorizontalPadding()) {
+    Column(Modifier.rentItScreenHorizontalPadding()) {
         LabelValueRow(Modifier.padding(top = 30.dp, bottom = 10.dp)) {
             Text(
                 text = stringResource(
@@ -147,7 +147,7 @@ fun PriceSection(rentalPrice: Int, deposit: Int, totalPrice: Int){
                 color = PrimaryBlue500
             )
         }
-        CommonDivider()
+        RentItDivider()
         LabelValueRow(Modifier.padding(top = 14.dp)) {
             Text(
                 text = stringResource(

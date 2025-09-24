@@ -23,20 +23,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.basicRoundedGrayBorder
+import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.RentItTheme
 import androidx.core.net.toUri
-import com.example.rentit.common.component.LoadableUriImage
 
 @Composable
-fun RemovableImageBox(width: Dp, aspectRatio: Float, imageUri: Uri, onImageRemoveClick: (Uri) -> Unit) {
+fun RentItRemovableImageBox(width: Dp, aspectRatio: Float, imageUri: Uri, onImageRemoveClick: (Uri) -> Unit) {
     Box(modifier = Modifier
         .width(width)
         .aspectRatio(aspectRatio)
         .clip(RoundedCornerShape(20.dp))
-        .basicRoundedGrayBorder()) {
-        LoadableUriImage(
+        .rentItBasicRoundedGrayBorder()) {
+        RentItLoadableUriImage(
             modifier = Modifier.fillMaxWidth(),
             imgUri = imageUri,
             defaultDescResId = R.string.screen_product_create_selected_image_description
@@ -64,7 +63,7 @@ fun RemovableImageBox(width: Dp, aspectRatio: Float, imageUri: Uri, onImageRemov
 @Preview(showBackground = true)
 private fun RemovableImageBoxPreview() {
     RentItTheme {
-        RemovableImageBox(
+        RentItRemovableImageBox(
             width = 160.dp,
             aspectRatio = 4f/3f,
             imageUri = "".toUri(),

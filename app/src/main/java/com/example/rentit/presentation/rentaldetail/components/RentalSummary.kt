@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.item.RentItLoadableUrlImage
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
@@ -48,7 +48,7 @@ fun RentalSummary(
     onClick: () -> Unit = {}
 ) {
     Row(modifier.fillMaxWidth().clickable(isClickable) { onClick() }, verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
-        LoadableUrlImage(
+        RentItLoadableUrlImage(
             modifier = Modifier.fillMaxSize(imageFraction).aspectRatio(1f).clip(RoundedCornerShape(20.dp)),
             imgUrl = thumbnailImgUrl,
             defaultImageResId = R.drawable.img_thumbnail_placeholder,

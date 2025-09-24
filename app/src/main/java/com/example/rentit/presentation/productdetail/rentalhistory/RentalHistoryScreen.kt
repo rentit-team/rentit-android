@@ -33,10 +33,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.D_DAY_ALERT_THRESHOLD_DAYS
-import com.example.rentit.common.component.ArrowedTextButton
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.FilterButton
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItArrowedTextButton
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.item.RentItFilterButton
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.AppRed
@@ -45,7 +45,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatRentalPeriod
-import com.example.rentit.common.component.toRelativeTimeFormat
+import com.example.rentit.common.component.formatter.toRelativeTimeFormat
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryDateModel
 import com.example.rentit.domain.rental.model.RentalHistoryModel
@@ -75,7 +75,7 @@ fun RentalHistoryScreen(
 ) {
     Scaffold(
         topBar = {
-            CommonTopAppBar(
+            RentItTopAppBar(
                 title = stringResource(R.string.screen_product_rental_history_title),
                 onBackClick = onBackClick
             )
@@ -110,30 +110,30 @@ fun RentalHistoryFilterSection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(vertical = 13.dp),
         horizontalArrangement = Arrangement.spacedBy(9.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FilterButton(
+        RentItFilterButton(
             title = stringResource(R.string.screen_product_rental_history_filter_in_progress),
             contentDesc = stringResource(R.string.screen_product_rental_history_filter_in_progress_content_description),
             isSelected = filterMode == RentalHistoryFilter.IN_PROGRESS,
             onClick = { onToggleFilter(RentalHistoryFilter.IN_PROGRESS) }
         )
-        FilterButton(
+        RentItFilterButton(
             title = stringResource(R.string.screen_product_rental_history_filter_accepted),
             contentDesc = stringResource(R.string.screen_product_rental_history_filter_accepted_content_description),
             isSelected = filterMode == RentalHistoryFilter.ACCEPTED,
             onClick = { onToggleFilter(RentalHistoryFilter.ACCEPTED) }
         )
-        FilterButton(
+        RentItFilterButton(
             title = stringResource(R.string.screen_product_rental_history_filter_request),
             contentDesc = stringResource(R.string.screen_product_rental_history_filter_request_content_description),
             isSelected = filterMode == RentalHistoryFilter.REQUEST,
             onClick = { onToggleFilter(RentalHistoryFilter.REQUEST) }
         )
-        FilterButton(
+        RentItFilterButton(
             title = stringResource(R.string.screen_product_rental_history_filter_finished),
             contentDesc = stringResource(R.string.screen_product_rental_history_filter_finished_content_description),
             isSelected = filterMode == RentalHistoryFilter.FINISHED,
@@ -154,7 +154,7 @@ fun RentalHistoryListSection(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .screenHorizontalPadding(),
+            .rentItScreenHorizontalPadding(),
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
@@ -217,7 +217,7 @@ private fun ExpandableRoundedItem(isExpanded: Boolean = false, onRentalDetailCli
             content = content
         )
         if(isExpanded) {
-            ArrowedTextButton(
+            RentItArrowedTextButton(
                 text = stringResource(R.string.screen_product_rental_history_button_rental_detail),
                 onClick = onRentalDetailClick
             )

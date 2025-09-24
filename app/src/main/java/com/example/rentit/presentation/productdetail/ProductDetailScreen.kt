@@ -46,12 +46,12 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.ExtendedFAB
-import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.item.RentItExtendedFAB
+import com.example.rentit.common.component.item.RentItLoadableUrlImage
 import com.example.rentit.presentation.productdetail.dialog.FullImagePagerDialog
-import com.example.rentit.common.component.formatPeriodTextWithLabel
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.formatter.formatPeriodTextWithLabel
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
@@ -96,7 +96,7 @@ fun ProductDetailScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CommonTopAppBar(
+            RentItTopAppBar(
                 showMenu = isUserOwner,
                 onBackClick = onBackClick,
                 onMenuClick = onMenuDrawerShow
@@ -115,7 +115,7 @@ fun ProductDetailScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFAB(
+            RentItExtendedFAB(
                 iconRes = R.drawable.ic_calendar,
                 textRes = R.string.screen_product_btn_check_detail_of_use,
                 onClick = onBottomSheetShow
@@ -138,7 +138,7 @@ fun ProductDetailScreen(
                 )
                 Text(
                     modifier = Modifier
-                        .screenHorizontalPadding()
+                        .rentItScreenHorizontalPadding()
                         .fillMaxSize(),
                     text = productDetail.content,
                     style = MaterialTheme.typography.bodyMedium,
@@ -185,7 +185,7 @@ fun ImagePager(pagerState: PagerState, imgUrlList: List<String?>, onClick: () ->
                 .fillMaxWidth()
                 .clickable { onClick() }
         ) { page ->
-            LoadableUrlImage(
+            RentItLoadableUrlImage(
                 modifier = Modifier.height(290.dp),
                 imgUrl = imgUrlList[page],
                 defaultImageResId = R.drawable.img_placeholder,
@@ -217,7 +217,7 @@ fun ImagePager(pagerState: PagerState, imgUrlList: List<String?>, onClick: () ->
 fun PostHeader(title: String, categories: List<String>, creationDate: String, onLikeClick: () -> Unit, onShareClick: () -> Unit) {
     Row(Modifier
         .fillMaxWidth()
-        .screenHorizontalPadding()
+        .rentItScreenHorizontalPadding()
         .padding(top = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -243,7 +243,7 @@ fun PostHeader(title: String, categories: List<String>, creationDate: String, on
         }
     }
     Row(
-        modifier = Modifier.fillMaxWidth().screenHorizontalPadding().padding(bottom = 20.dp),
+        modifier = Modifier.fillMaxWidth().rentItScreenHorizontalPadding().padding(bottom = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -286,7 +286,7 @@ fun PostBottomBar(
     )
     Row(modifier = Modifier
         .fillMaxWidth()
-        .screenHorizontalPadding()
+        .rentItScreenHorizontalPadding()
         .padding(vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Column(

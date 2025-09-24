@@ -46,13 +46,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonTextField
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.InputErrorMessage
-import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.item.RemovableImageBox
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItBasicButton
+import com.example.rentit.common.component.item.RentItTextField
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.item.RentItInputErrorMessage
+import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.component.item.RentItRemovableImageBox
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
@@ -91,13 +91,13 @@ fun CreatePostScreen(
     onPostClick: () -> Unit
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(onBackClick = onBackClick) }
+        topBar = { RentItTopAppBar(onBackClick = onBackClick) }
     ) {
         Column(
             Modifier
                 .fillMaxSize()
                 .padding(it)
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
                 .verticalScroll(state = rememberScrollState())
         ) {
             ImageSelectSection(
@@ -134,7 +134,7 @@ fun CreatePostScreen(
                 onPriceChange = onPriceChange
             )
 
-            CommonButton(
+            RentItBasicButton(
                 text = stringResource(id = R.string.screen_product_create_complete_btn_text),
                 containerColor = PrimaryBlue500,
                 contentColor = Color.White,
@@ -177,14 +177,14 @@ fun ImageSelectSection(
     LabeledContent(stringResource(id = R.string.screen_product_create_image_label)) {
         Row(Modifier.horizontalScroll(state = rememberScrollState())) {
             selectedImgUriList.forEach { uri ->
-                RemovableImageBox(imageBoxWidth, imageBoxAspectRatio, uri, onImageRemoveClick)
+                RentItRemovableImageBox(imageBoxWidth, imageBoxAspectRatio, uri, onImageRemoveClick)
                 Spacer(Modifier.width(10.dp))
             }
             Box(
                 modifier = Modifier
                     .width(imageBoxWidth)
                     .aspectRatio(imageBoxAspectRatio)
-                    .basicRoundedGrayBorder()
+                    .rentItBasicRoundedGrayBorder()
                     .clickable { onAddImageBoxClick() }) {
                 Column(
                     modifier = Modifier
@@ -214,13 +214,13 @@ fun ImageSelectSection(
 fun TitleSection(title: String, showEmptyTitleError: Boolean, onTitleChange: (String) -> Unit) {
     LabeledContent(stringResource(id = R.string.screen_product_create_title_label)) {
         Column {
-            CommonTextField(
+            RentItTextField(
                 value = title,
                 onValueChange = onTitleChange,
                 placeholder = stringResource(id = R.string.screen_product_create_title_placeholder)
             )
             if(showEmptyTitleError){
-                InputErrorMessage(
+                RentItInputErrorMessage(
                     text = stringResource(R.string.screen_product_create_empty_error_title)
                 )
             }
@@ -232,7 +232,7 @@ fun TitleSection(title: String, showEmptyTitleError: Boolean, onTitleChange: (St
 fun ContentSection(content: String, showEmptyContentError: Boolean, onContentChange: (String) -> Unit) {
     LabeledContent(stringResource(id = R.string.screen_product_create_content_label)){
         Column {
-            CommonTextField(
+            RentItTextField(
                 value = content,
                 onValueChange = onContentChange,
                 placeholder = stringResource(id = R.string.screen_product_create_content_placeholder),
@@ -243,7 +243,7 @@ fun ContentSection(content: String, showEmptyContentError: Boolean, onContentCha
                 placeholderAlignment = Alignment.TopStart
             )
             if(showEmptyContentError){
-                InputErrorMessage(
+                RentItInputErrorMessage(
                     text = stringResource(R.string.screen_product_create_empty_error_content)
                 )
             }
@@ -301,7 +301,7 @@ fun RemovableTagButton(text: String, onRemoveClick: () -> Unit) {
         modifier = Modifier
             .height(40.dp)
             .clip(RoundedCornerShape(25.dp))
-            .basicRoundedGrayBorder(color = PrimaryBlue500)
+            .rentItBasicRoundedGrayBorder(color = PrimaryBlue500)
             .padding(horizontal = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -364,7 +364,7 @@ fun PriceInputSection(price: Int, showEmptyPriceError: Boolean, onPriceChange: (
     LabeledContent(stringResource(id = R.string.screen_product_create_price_label)) {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                CommonTextField(
+                RentItTextField(
                     value = TextFieldValue(
                         text = formattedPrice,
                         selection = TextRange(formattedPrice.length)    // 커서를 항상 맨 뒤로 이동
@@ -384,7 +384,7 @@ fun PriceInputSection(price: Int, showEmptyPriceError: Boolean, onPriceChange: (
                 )
             }
             if(showEmptyPriceError){
-                InputErrorMessage(
+                RentItInputErrorMessage(
                     text = stringResource(R.string.screen_product_create_empty_error_price)
                 )
             }

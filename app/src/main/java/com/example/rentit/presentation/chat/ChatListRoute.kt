@@ -13,7 +13,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.component.layout.RentItLoadingScreen
 import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.presentation.main.MainViewModel
 
@@ -55,5 +55,5 @@ fun ChatListRoute(navHostController: NavHostController) {
         onItemClick = { navHostController.navigateToChatRoom(it) }
     )
 
-    LoadingScreen(uiState.isLoading)
+    RentItLoadingScreen(uiState.isLoading)
 }

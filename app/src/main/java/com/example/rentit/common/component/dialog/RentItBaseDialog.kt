@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -37,7 +37,7 @@ private val contentBottomPadding = 16.dp
 private val dialogBoxRadius = 28.dp
 
 @Composable
-fun BaseDialog(
+fun RentItBaseDialog(
     title: String,
     content: String? = null,
     closeBtnText: String? = null,
@@ -57,7 +57,7 @@ fun BaseDialog(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Gray300.copy(alpha = 0.5f))
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
                 .clickable(
                     enabled = isBackgroundClickable,
                     // 터치 효과 제거
@@ -121,7 +121,7 @@ fun BaseDialog(
 @Composable
 private fun Preview() {
     RentItTheme {
-        BaseDialog(
+        RentItBaseDialog(
             title = "Dialog 제목",
             content = "Dialog 세부 내용",
             closeBtnText = null,

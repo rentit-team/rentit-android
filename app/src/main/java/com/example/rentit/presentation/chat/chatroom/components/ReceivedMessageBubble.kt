@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.LoadableUrlImage
+import com.example.rentit.common.component.item.RentItLoadableUrlImage
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
@@ -37,7 +37,7 @@ fun ReceivedMessageBubble(msg: String, sentAt: String, senderNickname: String, o
     val msgTime = formatDateTime(sentAt)
 
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 12.dp)) {
-        LoadableUrlImage(
+        RentItLoadableUrlImage(
             modifier = Modifier.size(36.dp).clip(CircleShape),
             imgUrl = "url",
             defaultImageResId = R.drawable.img_profile_placeholder,

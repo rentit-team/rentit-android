@@ -39,23 +39,23 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.ArrowedTextButton
-import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItArrowedTextButton
+import com.example.rentit.common.component.item.RentItDivider
+import com.example.rentit.common.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.common.component.item.ProductListItem
-import com.example.rentit.common.component.layout.EmptyContentScreen
-import com.example.rentit.common.component.layout.PullToRefreshLayout
+import com.example.rentit.common.component.item.RentItProductListItem
+import com.example.rentit.common.component.layout.RentItEmptyContentScreen
+import com.example.rentit.common.component.layout.RentItPullToRefreshLayout
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.common.util.formatRentalPeriod
-import com.example.rentit.common.component.toRelativeTimeFormat
+import com.example.rentit.common.component.formatter.toRelativeTimeFormat
 import com.example.rentit.common.enums.RentingStatus
 import com.example.rentit.domain.user.model.MyProductItemModel
 import com.example.rentit.domain.user.model.MyRentalItemModel
@@ -90,13 +90,13 @@ fun MyPageScreen(
     onProductItemClick: (Int) -> Unit,
     onRentalItemClick: (Int, Int) -> Unit
 ) {
-    PullToRefreshLayout(
+    RentItPullToRefreshLayout(
         isRefreshing = isRefreshing,
         pullToRefreshState = pullToRefreshState,
         onRefresh = onRefresh
     ) {
         Column {
-            Column(modifier = Modifier.screenHorizontalPadding()) {
+            Column(modifier = Modifier.rentItScreenHorizontalPadding()) {
 
                 TopSection(onAlertClick, onSettingClick)
 
@@ -185,7 +185,7 @@ fun ProfileSection(
         modifier = Modifier.padding(bottom = 26.dp),
         verticalAlignment = Alignment.Bottom
     ) {
-        LoadableUrlImage(
+        RentItLoadableUrlImage(
             modifier = Modifier.size(70.dp).clip(CircleShape),
             imgUrl = profileImgUrl,
             defaultImageResId = R.drawable.img_profile_placeholder,
@@ -274,7 +274,7 @@ fun InfoBox(
                 style = MaterialTheme.typography.labelMedium
             )
         }
-        ArrowedTextButton(
+        RentItArrowedTextButton(
             text = buttonText,
             color = highlightColor,
             onClick = onRentalDetailClick
@@ -333,12 +333,12 @@ fun TabbedListSection(
         )
     }
 
-    CommonDivider()
+    RentItDivider()
 
     if (currentTab == MyPageTab.MY_PRODUCT && myProductList.isNotEmpty()) {
         LazyColumn(modifier = Modifier.background(Gray100)) {
             items(myProductList, key = { it.productId }) {
-                ProductListItem(
+                RentItProductListItem(
                     title = it.title,
                     price = it.price,
                     thumbnailImgUrl = it.thumbnailImgUrl,
@@ -368,7 +368,7 @@ fun TabbedListSection(
                 MyPageTab.MY_PRODUCT -> stringResource(id = R.string.screen_mypage_text_tab_list_product_empty)
                 MyPageTab.MY_RENTAL -> stringResource(id = R.string.screen_mypage_text_tab_list_rental_empty)
             }
-        EmptyContentScreen(
+        RentItEmptyContentScreen(
             modifier = Modifier.background(Gray100),
             text = text
         )
@@ -422,11 +422,11 @@ fun MyRentalHistoryListItem(
             .fillMaxWidth()
             .background(Color.White)
             .clickable { onItemClick() }
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(vertical = 25.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        LoadableUrlImage(
+        RentItLoadableUrlImage(
             modifier = Modifier
                 .size(70.dp)
                 .clip(RoundedCornerShape(20.dp)),

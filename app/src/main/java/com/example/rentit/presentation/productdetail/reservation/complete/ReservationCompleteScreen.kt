@@ -20,9 +20,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItBasicButton
+import com.example.rentit.common.component.item.RentItDivider
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
@@ -42,7 +42,7 @@ fun ReservationCompleteScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 100.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -60,7 +60,7 @@ fun ReservationCompleteScreen(
                 id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
             Text(text = formatRentalPeriod(LocalContext.current, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
-        CommonDivider()
+        RentItDivider()
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp),
@@ -72,7 +72,7 @@ fun ReservationCompleteScreen(
                 style = MaterialTheme.typography.bodyLarge,
                 color = PrimaryBlue500)
         }
-        CommonButton(
+        RentItBasicButton(
             text = "완료",
             containerColor = Gray100,
             contentColor = AppBlack,

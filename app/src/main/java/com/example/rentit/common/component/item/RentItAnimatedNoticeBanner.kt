@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.item
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -36,7 +36,7 @@ private val bannerPadding = 13.dp
 private val bannerCornerRadius = 15.dp
 
 @Composable
-fun AnimatedNoticeBanner(
+fun RentItAnimatedNoticeBanner(
     modifier: Modifier = Modifier,
     noticeText: AnnotatedString,
     bgColor: Color = PrimaryBlue300
@@ -74,7 +74,7 @@ fun AnimatedNoticeBanner(
 @Preview(showBackground = true)
 private fun Preview() {
     RentItTheme {
-        AnimatedNoticeBanner(
+        RentItAnimatedNoticeBanner(
             noticeText = buildAnnotatedString {
                 withStyle(style = MaterialTheme.typography.labelLarge.toSpanStyle()) {
                     append("렌팃")

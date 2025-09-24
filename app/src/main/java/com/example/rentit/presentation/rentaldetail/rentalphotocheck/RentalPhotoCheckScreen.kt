@@ -26,11 +26,11 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.component.item.RentItBasicButton
+import com.example.rentit.common.component.layout.RentItTopAppBar
+import com.example.rentit.common.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.component.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
@@ -51,7 +51,7 @@ fun RentalPhotoCheckScreen(
     onBackPressed: () -> Unit,
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar { onBackPressed() } },
+        topBar = { RentItTopAppBar { onBackPressed() } },
         bottomBar = {
             BottomButtons(
                 currentPageNumber = currentPageNumber,
@@ -63,7 +63,7 @@ fun RentalPhotoCheckScreen(
             )
         }
     ) {
-        Column(Modifier.padding(it).screenHorizontalPadding()){
+        Column(Modifier.padding(it).rentItScreenHorizontalPadding()){
 
             PhotoGuideText(totalPageCnt, currentPageNumber)
 
@@ -102,9 +102,9 @@ private fun PhotoPreviewBox(photoUrl: String?) {
             .fillMaxWidth()
             .fillMaxHeight(0.6f)
             .clip(RoundedCornerShape(20.dp))
-            .basicRoundedGrayBorder(),
+            .rentItBasicRoundedGrayBorder(),
     ) {
-        LoadableUrlImage(
+        RentItLoadableUrlImage(
             modifier = Modifier.fillMaxSize(),
             imgUrl = photoUrl,
             defaultImageResId = R.drawable.img_placeholder,
@@ -127,10 +127,10 @@ private fun BeforeAfterPhoto(
                 .width(140.dp)
                 .aspectRatio(4f / 3f)
                 .clip(RoundedCornerShape(20.dp))
-                .basicRoundedGrayBorder()
+                .rentItBasicRoundedGrayBorder()
                 .clickable { onClick(photoUrl) }
         ) {
-            LoadableUrlImage(
+            RentItLoadableUrlImage(
                 modifier = Modifier.fillMaxWidth(),
                 imgUrl = photoUrl,
                 defaultImageResId = R.drawable.img_placeholder,
@@ -174,12 +174,12 @@ private fun BottomButtons(
 ) {
     Row(
         Modifier
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 30.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         if (isBackAvailable) {
-            CommonButton(
+            RentItBasicButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.screen_rental_photo_check_btn_back),
                 containerColor = PrimaryBlue500,
@@ -187,7 +187,7 @@ private fun BottomButtons(
             ) { onPageBack() }
         }
         if (isNextAvailable) {
-            CommonButton(
+            RentItBasicButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(
                     R.string.screen_rental_photo_check_btn_next,

@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 import com.example.rentit.common.theme.Gray100
 
 @Composable
-fun CommonDivider(modifier: Modifier = Modifier) {
+fun RentItDivider(modifier: Modifier = Modifier) {
     Box(modifier = modifier
         .fillMaxWidth()
         .height(1.dp)

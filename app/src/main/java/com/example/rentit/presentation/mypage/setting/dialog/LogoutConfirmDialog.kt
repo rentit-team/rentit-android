@@ -3,11 +3,11 @@ package com.example.rentit.presentation.mypage.setting.dialog
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.component.dialog.RentItBaseDialog
 
 @Composable
 fun LogoutConfirmDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
-    BaseDialog(
+    RentItBaseDialog(
         title = stringResource(R.string.dialog_logout_confirm_title),
         content = stringResource(R.string.dialog_logout_confirm_content),
         confirmBtnText = stringResource(R.string.dialog_logout_confirm_btn_confirm),

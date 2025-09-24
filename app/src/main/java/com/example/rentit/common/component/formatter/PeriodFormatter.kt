@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.component.formatter
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
