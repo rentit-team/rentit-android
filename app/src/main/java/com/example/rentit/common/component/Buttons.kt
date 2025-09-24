@@ -87,18 +87,6 @@ fun FilterButton(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ButtonPreview(){
-    RentItTheme {
-        Column(){
-            CommonButton(text = "Button", containerColor = PrimaryBlue500, contentColor = Color.White) {}
-            FilterButton(title = "Button") {}
-        }
-    }
-}
-
-
 /**
  * 텍스트와 오른쪽 화살표 (>) 아이콘이 포함된 버튼 컴포넌트
  */
@@ -154,5 +142,19 @@ fun ExtendedFAB(modifier: Modifier = Modifier, @DrawableRes iconRes: Int, @Strin
             text = text,
             style = MaterialTheme.typography.labelLarge,
         )
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun ButtonPreview(){
+    RentItTheme {
+        Column(){
+            CommonButton(text = "Button", containerColor = PrimaryBlue500, contentColor = Color.White) {}
+            FilterButton(title = "Button") {}
+            ArrowedTextButton(text = "Button") {}
+            ExtendedFAB(iconRes = R.drawable.ic_camera, textRes = com.google.android.gms.base.R.string.common_signin_button_text) {}
+        }
     }
 }

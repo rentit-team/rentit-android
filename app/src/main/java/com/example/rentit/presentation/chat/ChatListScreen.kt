@@ -43,7 +43,7 @@ import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.toRelativeDayFormat
+import com.example.rentit.common.component.toRelativeDayFormat
 import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
 import com.example.rentit.presentation.chat.model.ChatListFilter
 import java.time.OffsetDateTime

@@ -25,7 +25,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.basicListItemTopDivider
 import com.example.rentit.common.component.formatPeriodText
 import com.example.rentit.common.component.screenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
@@ -33,7 +32,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.formatPrice
-import com.example.rentit.common.util.toRelativeTimeFormat
+import com.example.rentit.common.component.toRelativeTimeFormat
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -59,7 +58,6 @@ fun ProductListItem(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .basicListItemTopDivider()
             .background(Color.White)
             .clickable { onClick() })
     {

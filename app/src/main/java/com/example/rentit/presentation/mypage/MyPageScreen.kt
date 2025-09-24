@@ -55,7 +55,7 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.common.util.formatRentalPeriod
-import com.example.rentit.common.util.toRelativeTimeFormat
+import com.example.rentit.common.component.toRelativeTimeFormat
 import com.example.rentit.common.enums.RentingStatus
 import com.example.rentit.domain.user.model.MyProductItemModel
 import com.example.rentit.domain.user.model.MyRentalItemModel
