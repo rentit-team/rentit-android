@@ -81,13 +81,12 @@ fun OffsetDateTime.toRelativeDayFormat(): String {
     val diffDays = Duration.between(this.toLocalDate().atStartOfDay(), now.atStartOfDay()).toDays()
 
     return when {
-        diffDays == 0L -> {
+        diffDays < 2L -> {
             val formatter = DateTimeFormatter.ofPattern("a h:mm")
             this.format(formatter)
         }
-        diffDays in 1..29 -> stringResource(R.string.screen_chat_list_time_days_ago, diffDays)
-        diffDays > 29 -> stringResource(R.string.screen_chat_list_time_months_ago, diffDays / 30)
-        else -> ""
+        diffDays in 2..29 -> stringResource(R.string.screen_chat_list_time_days_ago, diffDays)
+        else -> stringResource(R.string.screen_chat_list_time_months_ago, diffDays / 30)
     }
 }
 /**
