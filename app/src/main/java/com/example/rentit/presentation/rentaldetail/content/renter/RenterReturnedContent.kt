@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItArrowedTextButton
+import com.example.rentit.common.ui.component.item.RentItArrowedTextButton
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel

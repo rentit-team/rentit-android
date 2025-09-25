@@ -22,16 +22,16 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItBasicButton
-import com.example.rentit.common.component.item.RentItTextField
-import com.example.rentit.common.component.layout.RentItTopAppBar
-import com.example.rentit.common.component.renItPaddingForBottomBarButton
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItBasicButton
+import com.example.rentit.common.ui.component.item.RentItTextField
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.extension.renItPaddingForBottomBarButton
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.White
-import com.example.rentit.common.component.item.RentItInputErrorMessage
+import com.example.rentit.common.ui.component.item.RentItInputErrorMessage
 
 const val PHONE_NUMBER_DIGITS_LENGTH = 11
 const val PHONE_NUMBER_SECOND_SPLIT_MIN = 8

@@ -17,9 +17,9 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItAnimatedNoticeBanner
-import com.example.rentit.common.component.item.RentItArrowedTextButton
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItAnimatedNoticeBanner
+import com.example.rentit.common.ui.component.item.RentItArrowedTextButton
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme

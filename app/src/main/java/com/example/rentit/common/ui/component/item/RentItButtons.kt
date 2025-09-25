@@ -1,4 +1,4 @@
-package com.example.rentit.common.component.item
+package com.example.rentit.common.ui.component.item
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

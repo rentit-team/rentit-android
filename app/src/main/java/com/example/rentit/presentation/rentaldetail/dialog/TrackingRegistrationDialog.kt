@@ -26,9 +26,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItTextField
-import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
-import com.example.rentit.common.component.dialog.RentItBaseDialog
+import com.example.rentit.common.ui.component.item.RentItTextField
+import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.ui.component.dialog.RentItBaseDialog
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500

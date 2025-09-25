@@ -1,4 +1,4 @@
-package com.example.rentit.common.component.item
+package com.example.rentit.common.ui.component.item
 
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.RentItTheme
 import androidx.core.net.toUri

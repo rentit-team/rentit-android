@@ -11,7 +11,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
-import com.example.rentit.common.component.layout.RentItLoadingScreen
+import com.example.rentit.common.ui.component.layout.RentItLoadingScreen
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.presentation.main.MainViewModel

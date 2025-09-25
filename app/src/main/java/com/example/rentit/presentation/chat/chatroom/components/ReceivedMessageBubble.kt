@@ -23,7 +23,7 @@ import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.ui.component.item.RentItLoadableUrlImage
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme

@@ -22,11 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItBasicButton
-import com.example.rentit.common.component.layout.RentItTopAppBar
-import com.example.rentit.common.component.dialog.RentItBaseDialog
-import com.example.rentit.common.component.layout.RentItLoadingScreen
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItBasicButton
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.dialog.RentItBaseDialog
+import com.example.rentit.common.ui.component.layout.RentItLoadingScreen
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.common.theme.AppBlack

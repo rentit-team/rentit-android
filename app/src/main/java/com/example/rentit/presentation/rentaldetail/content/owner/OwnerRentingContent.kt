@@ -22,7 +22,7 @@ import com.example.rentit.presentation.rentaldetail.components.section.RentalInf
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
 import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.common.util.priceFormatter
+import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.common.enums.RentingStatus
 import kotlin.math.abs

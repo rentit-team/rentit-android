@@ -1,4 +1,4 @@
-package com.example.rentit.common.component.layout
+package com.example.rentit.common.ui.component.layout
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition

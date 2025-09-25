@@ -33,10 +33,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.util.D_DAY_ALERT_THRESHOLD_DAYS
-import com.example.rentit.common.component.item.RentItArrowedTextButton
-import com.example.rentit.common.component.layout.RentItTopAppBar
-import com.example.rentit.common.component.item.RentItFilterButton
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItArrowedTextButton
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItFilterButton
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.AppRed
@@ -44,8 +44,8 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.rentalPeriodFormatter
-import com.example.rentit.common.component.formatter.toRelativeTimeFormat
+import com.example.rentit.common.ui.formatter.rentalPeriodFormatter
+import com.example.rentit.common.ui.formatter.toRelativeTimeFormat
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryDateModel
 import com.example.rentit.domain.rental.model.RentalHistoryModel

@@ -24,9 +24,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.calendar.CalendarDate
-import com.example.rentit.common.component.calendar.CalendarHeader
-import com.example.rentit.common.component.calendar.DayOfWeek
+import com.example.rentit.common.ui.component.calendar.CalendarDate
+import com.example.rentit.common.ui.component.calendar.CalendarHeader
+import com.example.rentit.common.ui.component.calendar.DayOfWeek
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
 import java.time.YearMonth

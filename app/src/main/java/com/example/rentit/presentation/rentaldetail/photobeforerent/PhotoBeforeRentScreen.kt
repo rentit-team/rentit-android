@@ -29,11 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItBasicButton
-import com.example.rentit.common.component.layout.RentItTopAppBar
-import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
-import com.example.rentit.common.component.item.RentItRemovableImageBox
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItBasicButton
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.ui.component.item.RentItRemovableImageBox
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.Gray400

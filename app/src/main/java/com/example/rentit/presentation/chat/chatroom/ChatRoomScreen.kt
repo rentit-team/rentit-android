@@ -42,10 +42,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.layout.RentItTopAppBar
-import com.example.rentit.common.component.item.RentItLoadableUrlImage
-import com.example.rentit.common.component.formatter.formatPeriodText
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.ui.formatter.formatPeriodText
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
@@ -54,8 +54,8 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.daysFromToday
-import com.example.rentit.common.util.priceFormatter
-import com.example.rentit.common.util.rentalPeriodFormatter
+import com.example.rentit.common.ui.formatter.priceFormatter
+import com.example.rentit.common.ui.formatter.rentalPeriodFormatter
 import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.chat.model.ChatRoomProductSummaryModel
 import com.example.rentit.domain.chat.model.ChatRoomRentalSummaryModel

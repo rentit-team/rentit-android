@@ -46,19 +46,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItBasicButton
-import com.example.rentit.common.component.item.RentItTextField
-import com.example.rentit.common.component.layout.RentItTopAppBar
-import com.example.rentit.common.component.item.RentItInputErrorMessage
-import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
-import com.example.rentit.common.component.item.RentItRemovableImageBox
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItBasicButton
+import com.example.rentit.common.ui.component.item.RentItTextField
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItInputErrorMessage
+import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.ui.component.item.RentItRemovableImageBox
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.priceFormatter
+import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.domain.product.model.CategoryModel
 import com.example.rentit.presentation.main.createpost.drawer.CategoryTagDrawer
 

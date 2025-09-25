@@ -27,11 +27,11 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.rentit.common.component.rentItBasicRoundedGrayBorder
-import com.example.rentit.common.component.calendar.CalendarDate
-import com.example.rentit.common.component.calendar.CalendarHeader
-import com.example.rentit.common.component.calendar.DayOfWeek
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.ui.component.calendar.CalendarDate
+import com.example.rentit.common.ui.component.calendar.CalendarHeader
+import com.example.rentit.common.ui.component.calendar.DayOfWeek
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme

@@ -1,4 +1,4 @@
-package com.example.rentit.common.component.item
+package com.example.rentit.common.ui.component.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

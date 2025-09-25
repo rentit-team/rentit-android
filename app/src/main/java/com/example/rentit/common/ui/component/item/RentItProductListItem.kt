@@ -1,4 +1,4 @@
-package com.example.rentit.common.component.item
+package com.example.rentit.common.ui.component.item
 
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -24,14 +24,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.formatter.formatPeriodText
-import com.example.rentit.common.component.rentItScreenHorizontalPadding
+import com.example.rentit.common.ui.formatter.formatPeriodText
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.priceFormatter
-import com.example.rentit.common.component.formatter.toRelativeTimeFormat
+import com.example.rentit.common.ui.formatter.priceFormatter
+import com.example.rentit.common.ui.formatter.toRelativeTimeFormat
 import java.time.LocalDateTime
 
 @RequiresApi(Build.VERSION_CODES.O)

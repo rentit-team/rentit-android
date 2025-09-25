@@ -1,4 +1,4 @@
-package com.example.rentit.common.component.item
+package com.example.rentit.common.ui.component.item
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme

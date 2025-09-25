@@ -18,9 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.layout.RentItTopAppBar
-import com.example.rentit.common.component.item.RentItExtendedFAB
-import com.example.rentit.common.component.layout.RentItPullToRefreshLayout
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItExtendedFAB
+import com.example.rentit.common.ui.component.layout.RentItPullToRefreshLayout
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto

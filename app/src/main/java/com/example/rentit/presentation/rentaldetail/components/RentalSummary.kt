@@ -21,11 +21,11 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.ui.component.item.RentItLoadableUrlImage
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.priceFormatter
-import com.example.rentit.common.util.rentalPeriodFormatter
+import com.example.rentit.common.ui.formatter.priceFormatter
+import com.example.rentit.common.ui.formatter.rentalPeriodFormatter
 
 /**
 * 대여 정보(상품 사진, 게시글 제목, 대여 기간, 총 금액)을 함께 표시하는 UI 컴포넌트

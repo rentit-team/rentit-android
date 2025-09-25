@@ -3,7 +3,7 @@ package com.example.rentit.presentation.rentaldetail.dialog
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.RentItBaseDialog
+import com.example.rentit.common.ui.component.dialog.RentItBaseDialog
 
 @Composable
 fun RentalCancelDialog(onDismiss: () -> Unit, onCancelAccept: () -> Unit) {

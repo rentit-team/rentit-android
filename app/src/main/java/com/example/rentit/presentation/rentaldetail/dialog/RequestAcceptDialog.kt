@@ -15,11 +15,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.RentItBaseDialog
+import com.example.rentit.common.ui.component.dialog.RentItBaseDialog
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.priceFormatter
-import com.example.rentit.common.util.rentalPeriodFormatter
+import com.example.rentit.common.ui.formatter.priceFormatter
+import com.example.rentit.common.ui.formatter.rentalPeriodFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

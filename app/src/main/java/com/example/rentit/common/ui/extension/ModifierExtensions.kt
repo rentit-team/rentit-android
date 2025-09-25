@@ -1,4 +1,4 @@
-package com.example.rentit.common.component
+package com.example.rentit.common.ui.extension
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.padding
