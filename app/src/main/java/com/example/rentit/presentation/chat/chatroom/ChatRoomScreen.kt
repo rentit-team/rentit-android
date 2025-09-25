@@ -54,8 +54,8 @@ import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.daysFromToday
-import com.example.rentit.common.util.formatPrice
-import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.priceFormatter
+import com.example.rentit.common.util.rentalPeriodFormatter
 import com.example.rentit.domain.chat.model.ChatMessageModel
 import com.example.rentit.domain.chat.model.ChatRoomProductSummaryModel
 import com.example.rentit.domain.chat.model.ChatRoomRentalSummaryModel
@@ -134,7 +134,7 @@ private fun ProductInfoSection(
     maxPeriod: Int?,
     onSectionClick: () -> Unit
 ) {
-    val priceText = formatPrice(price)
+    val priceText = priceFormatter(price)
     val unitText = stringResource(R.string.common_price_unit_per_day)
     val periodText = formatPeriodText(minPeriod, maxPeriod)
 
@@ -194,7 +194,7 @@ private fun RequestInfo(
     endDate: LocalDate?,
     onSectionClick: () -> Unit
 ) {
-    val periodText = formatRentalPeriod(LocalContext.current, startDate, endDate)
+    val periodText = rentalPeriodFormatter(LocalContext.current, startDate, endDate)
 
     val rentingStatus = status.takeIf { status == RentalStatus.RENTING }?.let {
         val daysFromReturnDate = daysFromToday(endDate)

@@ -54,7 +54,7 @@ import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.util.daysFromToday
-import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.rentalPeriodFormatter
 import com.example.rentit.common.component.formatter.toRelativeTimeFormat
 import com.example.rentit.common.enums.RentingStatus
 import com.example.rentit.domain.user.model.MyProductItemModel
@@ -458,7 +458,7 @@ fun MyRentalHistoryListItem(
                 color = Gray400
             )
             Text(
-                text = formatRentalPeriod(LocalContext.current, startDate, endDate),
+                text = rentalPeriodFormatter(LocalContext.current, startDate, endDate),
                 style = MaterialTheme.typography.labelMedium,
             )
         }

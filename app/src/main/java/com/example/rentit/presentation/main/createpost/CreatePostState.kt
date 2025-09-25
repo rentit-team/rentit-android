@@ -2,7 +2,7 @@ package com.example.rentit.presentation.main.createpost
 
 import android.net.Uri
 import androidx.compose.ui.text.input.TextFieldValue
-import com.example.rentit.common.PRICE_LIMIT
+import com.example.rentit.common.util.PRICE_LIMIT
 import com.example.rentit.domain.product.model.CategoryModel
 
 data class CreatePostState(

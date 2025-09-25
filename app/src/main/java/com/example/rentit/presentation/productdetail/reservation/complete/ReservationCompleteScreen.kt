@@ -28,8 +28,8 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
-import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.priceFormatter
+import com.example.rentit.common.util.rentalPeriodFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -58,7 +58,7 @@ fun ReservationCompleteScreen(
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
-            Text(text = formatRentalPeriod(LocalContext.current, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
+            Text(text = rentalPeriodFormatter(LocalContext.current, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
         RentItDivider()
         Row(modifier = Modifier
@@ -68,7 +68,7 @@ fun ReservationCompleteScreen(
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_total_price), style = MaterialTheme.typography.bodyLarge)
-            Text(text = "${formatPrice(totalPrice)} 원",
+            Text(text = "${priceFormatter(totalPrice)} 원",
                 style = MaterialTheme.typography.bodyLarge,
                 color = PrimaryBlue500)
         }

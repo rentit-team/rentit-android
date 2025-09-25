@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.common.util.MultipartUtil
+import com.example.rentit.core.network.uriToMultipart
 import com.example.rentit.domain.product.usecase.CreatePostUseCase
 import com.example.rentit.domain.product.usecase.GetCategoryMapUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -157,7 +157,7 @@ class CreatePostViewModel @Inject constructor(
             val imageParts =
                 if (selectedImageUriList.isNotEmpty()) {
                     selectedImageUriList.mapNotNull {
-                        MultipartUtil.uriToMultipart(context, it)
+                        uriToMultipart(context, it)
                     }
                 } else null
 

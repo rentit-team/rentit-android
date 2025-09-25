@@ -32,7 +32,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.D_DAY_ALERT_THRESHOLD_DAYS
+import com.example.rentit.common.util.D_DAY_ALERT_THRESHOLD_DAYS
 import com.example.rentit.common.component.item.RentItArrowedTextButton
 import com.example.rentit.common.component.layout.RentItTopAppBar
 import com.example.rentit.common.component.item.RentItFilterButton
@@ -44,7 +44,7 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.rentalPeriodFormatter
 import com.example.rentit.common.component.formatter.toRelativeTimeFormat
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryDateModel
@@ -349,7 +349,7 @@ fun OtherStatusListItem(
                 )
             }
             Text(
-                text = formatRentalPeriod(LocalContext.current, rentalStartDate, rentalEndDate),
+                text = rentalPeriodFormatter(LocalContext.current, rentalStartDate, rentalEndDate),
                 style = MaterialTheme.typography.labelMedium,
             )
         }

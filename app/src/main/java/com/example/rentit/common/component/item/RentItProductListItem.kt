@@ -30,7 +30,7 @@ import com.example.rentit.common.enums.ProductStatus
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.priceFormatter
 import com.example.rentit.common.component.formatter.toRelativeTimeFormat
 import java.time.LocalDateTime
 
@@ -129,7 +129,7 @@ fun RentItProductListItem(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = formatPrice(price) + stringResource(R.string.common_price_unit_per_day),
+                        text = priceFormatter(price) + stringResource(R.string.common_price_unit_per_day),
                         style = MaterialTheme.typography.bodyLarge
                     )
                 }

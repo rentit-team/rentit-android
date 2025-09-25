@@ -35,7 +35,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.priceFormatter
 import com.example.rentit.presentation.productdetail.reservation.components.DateRangePicker
 import java.time.LocalDate
 
@@ -123,7 +123,7 @@ fun PriceSection(rentalPrice: Int, deposit: Int, totalPrice: Int){
                 ), style = MaterialTheme.typography.bodyMedium
             )
             Text(
-                text = "${formatPrice(rentalPrice)} 원",
+                text = "${priceFormatter(rentalPrice)} 원",
                 style = MaterialTheme.typography.bodyMedium,
                 color = Gray800
             )
@@ -142,7 +142,7 @@ fun PriceSection(rentalPrice: Int, deposit: Int, totalPrice: Int){
                 )
             }
             Text(
-                text = "${formatPrice(deposit)} 원",
+                text = "${priceFormatter(deposit)} 원",
                 style = MaterialTheme.typography.bodyMedium,
                 color = PrimaryBlue500
             )
@@ -155,7 +155,7 @@ fun PriceSection(rentalPrice: Int, deposit: Int, totalPrice: Int){
                 ), style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = "${formatPrice(totalPrice)} 원",
+                text = "${priceFormatter(totalPrice)} 원",
                 style = MaterialTheme.typography.bodyLarge,
                 color = PrimaryBlue500
             )

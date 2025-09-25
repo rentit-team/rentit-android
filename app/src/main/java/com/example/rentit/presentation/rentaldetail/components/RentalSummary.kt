@@ -24,8 +24,8 @@ import com.example.rentit.R
 import com.example.rentit.common.component.item.RentItLoadableUrlImage
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
-import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.priceFormatter
+import com.example.rentit.common.util.rentalPeriodFormatter
 
 /**
 * 대여 정보(상품 사진, 게시글 제목, 대여 기간, 총 금액)을 함께 표시하는 UI 컴포넌트
@@ -63,13 +63,13 @@ fun RentalSummary(
             )
             Text(
                 modifier = Modifier.padding(vertical = periodTextVerticalPadding),
-                text = formatRentalPeriod(LocalContext.current, startDate, endDate),
+                text = rentalPeriodFormatter(LocalContext.current, startDate, endDate),
                 style = MaterialTheme.typography.labelMedium,
                 color = Gray800
             )
             Text(
                 text = "${stringResource(R.string.common_total)} " +
-                        "${formatPrice(totalPrice)} " +
+                        "${priceFormatter(totalPrice)} " +
                         stringResource(R.string.common_price_unit),
                 style = MaterialTheme.typography.labelLarge
             )

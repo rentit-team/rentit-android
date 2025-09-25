@@ -18,7 +18,7 @@ import com.example.rentit.R
 import com.example.rentit.common.component.item.RentItDivider
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.priceFormatter
 import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
 
 /**
@@ -43,7 +43,7 @@ fun PriceSummary(
             LabeledValue(
                 modifier = Modifier.padding(bottom = priceItemBottomPadding),
                 labelText = it.label,
-                value = "${formatPrice(it.price)} ${stringResource(R.string.common_price_unit)}"
+                value = "${priceFormatter(it.price)} ${stringResource(R.string.common_price_unit)}"
             )
         }
 
@@ -58,7 +58,7 @@ fun PriceSummary(
                 style = MaterialTheme.typography.labelLarge
             )
             Text(
-                text = "${formatPrice(totalPrice)} 원",
+                text = "${priceFormatter(totalPrice)} 원",
                 style = MaterialTheme.typography.labelLarge,
                 color = PrimaryBlue500
             )

@@ -58,7 +58,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.priceFormatter
 import com.example.rentit.domain.product.model.ProductDetailModel
 import com.example.rentit.presentation.productdetail.drawer.AvailableDateDrawer
 import com.example.rentit.presentation.productdetail.drawer.MenuDrawer
@@ -275,7 +275,7 @@ fun PostBottomBar(
     onChattingClick: () -> Unit,
     onResvRequestClick: () -> Unit,
 ) {
-    val formattedPrice = formatPrice(price)
+    val formattedPrice = priceFormatter(price)
     // Shadow for bottom bar
     Box(modifier = Modifier
         .fillMaxWidth()

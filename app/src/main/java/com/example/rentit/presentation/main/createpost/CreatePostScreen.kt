@@ -58,7 +58,7 @@ import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.priceFormatter
 import com.example.rentit.domain.product.model.CategoryModel
 import com.example.rentit.presentation.main.createpost.drawer.CategoryTagDrawer
 
@@ -359,7 +359,7 @@ fun RentalPeriodSection(sliderPosition: ClosedFloatingPointRange<Float>, onValue
 
 @Composable
 fun PriceInputSection(price: Int, showEmptyPriceError: Boolean, onPriceChange: (TextFieldValue) -> Unit) {
-    val formattedPrice = formatPrice(price)
+    val formattedPrice = priceFormatter(price)
 
     LabeledContent(stringResource(id = R.string.screen_product_create_price_label)) {
         Column {

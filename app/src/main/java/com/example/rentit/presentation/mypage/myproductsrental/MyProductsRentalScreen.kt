@@ -28,7 +28,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.D_DAY_ALERT_THRESHOLD_DAYS
+import com.example.rentit.common.util.D_DAY_ALERT_THRESHOLD_DAYS
 import com.example.rentit.common.component.layout.RentItTopAppBar
 import com.example.rentit.common.component.item.RentItFilterButton
 import com.example.rentit.common.component.item.RentItLoadableUrlImage
@@ -39,7 +39,7 @@ import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.util.priceFormatter
 import com.example.rentit.domain.user.model.MyProductsRentalModel
 import com.example.rentit.presentation.mypage.myproductsrental.model.MyProductsRentalFilter
 import kotlin.math.abs
@@ -232,7 +232,7 @@ fun getRentalInfoText(
                 }
                 append(stringResource(R.string.screen_my_products_rental_info_text_waiting_for_response))
                 withStyle(style = MaterialTheme.typography.labelMedium.toSpanStyle().copy(Gray400)) {
-                    append(" · " + stringResource(R.string.common_total) + " ${formatPrice(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
+                    append(" · " + stringResource(R.string.common_total) + " ${priceFormatter(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
                 }
             }
         }
@@ -269,7 +269,7 @@ fun getRentalInfoText(
                 }
                 append(stringResource(R.string.screen_my_products_rental_info_text_accepted))
                 withStyle(style = MaterialTheme.typography.labelMedium.toSpanStyle().copy(Gray400)) {
-                    append(" · " + stringResource(R.string.common_total) + " ${formatPrice(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
+                    append(" · " + stringResource(R.string.common_total) + " ${priceFormatter(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
                 }
             }
         }

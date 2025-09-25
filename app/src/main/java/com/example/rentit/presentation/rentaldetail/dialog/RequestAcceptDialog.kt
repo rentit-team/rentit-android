@@ -18,8 +18,8 @@ import com.example.rentit.R
 import com.example.rentit.common.component.dialog.RentItBaseDialog
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
-import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.util.priceFormatter
+import com.example.rentit.common.util.rentalPeriodFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -43,7 +43,7 @@ fun RequestAcceptDialog(
             style = MaterialTheme.typography.bodyLarge
         )
         Text(
-            text = formatRentalPeriod(LocalContext.current, startDate,endDate),
+            text = rentalPeriodFormatter(LocalContext.current, startDate,endDate),
             style = MaterialTheme.typography.bodyMedium,
             color = Gray800
         )
@@ -58,7 +58,7 @@ fun RequestAcceptDialog(
                 style = MaterialTheme.typography.bodyLarge
             )
             Text(
-                text = "${formatPrice(expectedRevenue)} ${stringResource(R.string.common_price_unit)}",
+                text = "${priceFormatter(expectedRevenue)} ${stringResource(R.string.common_price_unit)}",
                 style = MaterialTheme.typography.bodyMedium
             )
         }

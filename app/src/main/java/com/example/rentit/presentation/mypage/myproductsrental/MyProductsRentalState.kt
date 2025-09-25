@@ -1,6 +1,6 @@
 package com.example.rentit.presentation.mypage.myproductsrental
 
-import com.example.rentit.common.D_DAY_ALERT_THRESHOLD_DAYS
+import com.example.rentit.common.util.D_DAY_ALERT_THRESHOLD_DAYS
 import com.example.rentit.domain.user.model.MyProductsRentalModel
 import com.example.rentit.presentation.mypage.myproductsrental.model.MyProductsRentalFilter
 
