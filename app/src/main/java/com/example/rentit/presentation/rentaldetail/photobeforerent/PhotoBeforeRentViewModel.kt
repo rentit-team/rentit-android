@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.PhotoRegistrationType
-import com.example.rentit.core.network.fileToMultipart
+import com.example.rentit.common.util.fileToMultipart
 import com.example.rentit.domain.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow

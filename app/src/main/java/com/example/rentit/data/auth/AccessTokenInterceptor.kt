@@ -1,4 +1,4 @@
-package com.example.rentit.core.network
+package com.example.rentit.data.auth
 
 import com.example.rentit.data.auth.local.AuthPrefsDataSource
 import okhttp3.Interceptor

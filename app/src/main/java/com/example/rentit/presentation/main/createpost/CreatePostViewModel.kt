@@ -6,7 +6,7 @@ import android.util.Log
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.core.network.uriToMultipart
+import com.example.rentit.common.util.uriToMultipart
 import com.example.rentit.domain.product.usecase.CreatePostUseCase
 import com.example.rentit.domain.product.usecase.GetCategoryMapUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

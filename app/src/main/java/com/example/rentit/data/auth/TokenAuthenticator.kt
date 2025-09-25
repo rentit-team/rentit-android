@@ -1,4 +1,4 @@
-package com.example.rentit.core.network
+package com.example.rentit.data.auth
 
 import android.util.Log
 import com.example.rentit.domain.auth.usecase.RefreshAccessTokenUseCase

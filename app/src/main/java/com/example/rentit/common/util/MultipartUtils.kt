@@ -1,4 +1,4 @@
-package com.example.rentit.core.network
+package com.example.rentit.common.util
 
 import android.content.Context
 import android.net.Uri

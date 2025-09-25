@@ -6,7 +6,7 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.core.error.ForbiddenException
+import com.example.rentit.core.exceptions.ForbiddenException
 import com.example.rentit.domain.rental.usecase.GetRentalHistoriesUseCase
 import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalHistoryFilter
 import dagger.hilt.android.lifecycle.HiltViewModel

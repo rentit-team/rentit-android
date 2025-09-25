@@ -2,7 +2,7 @@ package com.example.rentit.presentation.auth.join.phoneverification
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.core.error.ForbiddenException
+import com.example.rentit.core.exceptions.ForbiddenException
 import com.example.rentit.domain.auth.respository.AuthRepository
 import com.example.rentit.presentation.auth.join.phoneverification.model.VerificationError
 import com.example.rentit.presentation.auth.join.phoneverification.model.toUiMessage
