@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.core.error.ForbiddenException
+import com.example.rentit.core.exceptions.ForbiddenException
 import com.example.rentit.data.chat.dto.MessageResponseDto
 import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.chat.usecase.ConvertMessageUseCase

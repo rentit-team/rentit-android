@@ -1,13 +1,13 @@
 package com.example.rentit.core.network
 
-import com.example.rentit.core.error.BadRequestException
-import com.example.rentit.core.error.ConflictException
-import com.example.rentit.core.error.ForbiddenException
-import com.example.rentit.core.error.NotFoundException
-import com.example.rentit.core.error.ServerErrorException
-import com.example.rentit.core.error.UnauthorizedException
-import com.example.rentit.core.error.UnknownException
-import com.example.rentit.core.error.UnprocessableEntityException
+import com.example.rentit.core.exceptions.BadRequestException
+import com.example.rentit.core.exceptions.ConflictException
+import com.example.rentit.core.exceptions.ForbiddenException
+import com.example.rentit.core.exceptions.NotFoundException
+import com.example.rentit.core.exceptions.ServerErrorException
+import com.example.rentit.core.exceptions.UnauthorizedException
+import com.example.rentit.core.exceptions.UnknownException
+import com.example.rentit.core.exceptions.UnprocessableEntityException
 import retrofit2.Response
 
 suspend fun <T> safeApiCall(apiCall: suspend () -> Response<T>): Result<T> {

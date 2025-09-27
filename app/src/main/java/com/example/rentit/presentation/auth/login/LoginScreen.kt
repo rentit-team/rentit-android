@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.auth.login
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,8 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonBorders
 import com.example.rentit.common.theme.AppBlack
+import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.RentItTheme
 
@@ -63,7 +64,7 @@ fun GoogleLoginButton(onGoogleLoginClick: () -> Unit){
             containerColor = Color.Transparent,
             contentColor = AppBlack
         ),
-        border = CommonBorders.mediumBorder()
+        border = BorderStroke(2.dp, Gray200)
     ){
         Row(
             verticalAlignment = Alignment.CenterVertically

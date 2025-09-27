@@ -1,7 +1,7 @@
 package com.example.rentit.di
 
-import com.example.rentit.core.network.AccessTokenInterceptor
-import com.example.rentit.core.network.TokenAuthenticator
+import com.example.rentit.data.auth.AccessTokenInterceptor
+import com.example.rentit.data.auth.TokenAuthenticator
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

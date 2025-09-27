@@ -38,13 +38,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.FilterButton
-import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItFilterButton
+import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.component.item.ProductListItem
-import com.example.rentit.common.component.layout.LoadingScreen
-import com.example.rentit.common.component.layout.PullToRefreshLayout
+import com.example.rentit.common.ui.component.item.RentItProductListItem
+import com.example.rentit.common.ui.component.layout.RentItLoadingScreen
+import com.example.rentit.common.ui.component.layout.RentItPullToRefreshLayout
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.domain.product.model.ProductWithCategoryModel
@@ -79,7 +79,7 @@ fun HomeScreen(
         )
 
 
-        PullToRefreshLayout(
+        RentItPullToRefreshLayout(
             isRefreshing = isRefreshing,
             pullToRefreshState = pullToRefreshState,
             onRefresh = onRefresh
@@ -88,7 +88,7 @@ fun HomeScreen(
         }
     }
 
-    LoadingScreen(isLoading)
+    RentItLoadingScreen(isLoading)
 }
 
 @Composable
@@ -96,7 +96,7 @@ fun HomeTopSection(onSearchClick: () -> Unit = {}) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(top = 30.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -129,12 +129,12 @@ fun HomeFilterSection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(vertical = 13.dp),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        FilterButton(
+        RentItFilterButton(
             modifier = Modifier.padding(end = 9.dp),
             title = stringResource(R.string.screen_home_label_btn_filter_rent_possibility),
             contentDesc = stringResource(R.string.screen_home_label_btn_filter_rent_possibility),
@@ -161,7 +161,7 @@ fun HomeProductListSection(
         state = scrollState
     ) {
         items(sortedProducts, key = { it.productId }) { item ->
-            ProductListItem(
+            RentItProductListItem(
                 price = item.price,
                 title = item.title,
                 thumbnailImgUrl = item.thumbnailImgUrl,
@@ -194,7 +194,7 @@ fun CategoryDropDown(
         modifier = Modifier
             .height(30.dp)
             .clip(RoundedCornerShape(20.dp))
-            .basicRoundedGrayBorder(color = borderColor),
+            .rentItBasicRoundedGrayBorder(color = borderColor),
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {

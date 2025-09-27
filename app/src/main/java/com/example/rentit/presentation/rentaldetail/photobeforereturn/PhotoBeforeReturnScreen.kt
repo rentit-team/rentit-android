@@ -29,13 +29,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.LoadableUriImage
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.basicRoundedGrayBorder
-import com.example.rentit.common.component.dialog.FullImageDialog
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItBasicButton
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItLoadableUriImage
+import com.example.rentit.common.ui.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
+import com.example.rentit.presentation.rentaldetail.dialog.FullImageDialog
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.PrimaryBlue500
@@ -62,7 +62,7 @@ fun PhotoBeforeReturnScreen(
     onRegister: () -> Unit
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar { } },
+        topBar = { RentItTopAppBar { } },
         bottomBar = { BottomButtons(
             currentPageNumber = currentPageNumber,
             totalPageCnt = requiredPhotoCnt,
@@ -78,7 +78,7 @@ fun PhotoBeforeReturnScreen(
         Column(
             Modifier
                 .padding(it)
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
                 .fillMaxHeight(),
         ) {
             Spacer(Modifier.weight(1f))
@@ -135,19 +135,19 @@ private fun BottomButtons(
 
     Row(
         Modifier
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 30.dp),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         if(isBackAvailable){
-            CommonButton(
+            RentItBasicButton(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.screen_photo_before_return_btn_back),
                 containerColor = PrimaryBlue500,
                 contentColor = White
             ) { onPageBack() }
         }
-        CommonButton(
+        RentItBasicButton(
             modifier = Modifier.weight(1f),
             text = if (isLastPage) stringResource(R.string.screen_photo_before_return_btn_complete) else nextBtnText,
             enabled = if(isLastPage) isRegisterAvailable else isNextAvailable,
@@ -173,7 +173,7 @@ fun PhotoWithTakePhotoButton(
             .weight(1F)
             .clickable { onBeforeImageClick() }
         ) {
-            LoadableUrlImage(
+            RentItLoadableUrlImage(
                 modifier = Modifier.fillMaxSize(),
                 imgUrl = beforePhotoUrl,
                 defaultImageResId = R.drawable.img_photo_load_fail,
@@ -195,7 +195,7 @@ fun PhotoWithTakePhotoButton(
                     tint = Gray300
                 )
             } else {
-                LoadableUriImage(
+                RentItLoadableUriImage(
                     modifier = Modifier.fillMaxSize(),
                     imgUri = takenPhotoUri,
                     defaultDescResId = R.string.screen_photo_before_return_taken_photo_content_description
@@ -210,7 +210,7 @@ private fun Modifier.photoBoxModifier() = this
     .fillMaxWidth()
     .aspectRatio(4f / 3f)
     .clip(RoundedCornerShape(20.dp))
-    .basicRoundedGrayBorder()
+    .rentItBasicRoundedGrayBorder()
 
 @Composable
 @Preview(showBackground = true)

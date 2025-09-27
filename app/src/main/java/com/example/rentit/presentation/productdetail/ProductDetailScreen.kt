@@ -2,6 +2,7 @@ package com.example.rentit.presentation.productdetail
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,20 +46,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonBorders
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.ExtendedFAB
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.dialog.FullImagePagerDialog
-import com.example.rentit.common.component.formatPeriodTextWithLabel
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItExtendedFAB
+import com.example.rentit.common.ui.component.item.RentItLoadableUrlImage
+import com.example.rentit.presentation.productdetail.dialog.FullImagePagerDialog
+import com.example.rentit.common.ui.formatter.formatPeriodTextWithLabel
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.domain.product.model.ProductDetailModel
 import com.example.rentit.presentation.productdetail.drawer.AvailableDateDrawer
 import com.example.rentit.presentation.productdetail.drawer.MenuDrawer
@@ -96,7 +96,7 @@ fun ProductDetailScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CommonTopAppBar(
+            RentItTopAppBar(
                 showMenu = isUserOwner,
                 onBackClick = onBackClick,
                 onMenuClick = onMenuDrawerShow
@@ -115,7 +115,7 @@ fun ProductDetailScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFAB(
+            RentItExtendedFAB(
                 iconRes = R.drawable.ic_calendar,
                 textRes = R.string.screen_product_btn_check_detail_of_use,
                 onClick = onBottomSheetShow
@@ -138,7 +138,7 @@ fun ProductDetailScreen(
                 )
                 Text(
                     modifier = Modifier
-                        .screenHorizontalPadding()
+                        .rentItScreenHorizontalPadding()
                         .fillMaxSize(),
                     text = productDetail.content,
                     style = MaterialTheme.typography.bodyMedium,
@@ -185,7 +185,7 @@ fun ImagePager(pagerState: PagerState, imgUrlList: List<String?>, onClick: () ->
                 .fillMaxWidth()
                 .clickable { onClick() }
         ) { page ->
-            LoadableUrlImage(
+            RentItLoadableUrlImage(
                 modifier = Modifier.height(290.dp),
                 imgUrl = imgUrlList[page],
                 defaultImageResId = R.drawable.img_placeholder,
@@ -217,7 +217,7 @@ fun ImagePager(pagerState: PagerState, imgUrlList: List<String?>, onClick: () ->
 fun PostHeader(title: String, categories: List<String>, creationDate: String, onLikeClick: () -> Unit, onShareClick: () -> Unit) {
     Row(Modifier
         .fillMaxWidth()
-        .screenHorizontalPadding()
+        .rentItScreenHorizontalPadding()
         .padding(top = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -243,7 +243,7 @@ fun PostHeader(title: String, categories: List<String>, creationDate: String, on
         }
     }
     Row(
-        modifier = Modifier.fillMaxWidth().screenHorizontalPadding().padding(bottom = 20.dp),
+        modifier = Modifier.fillMaxWidth().rentItScreenHorizontalPadding().padding(bottom = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
@@ -275,7 +275,7 @@ fun PostBottomBar(
     onChattingClick: () -> Unit,
     onResvRequestClick: () -> Unit,
 ) {
-    val formattedPrice = formatPrice(price)
+    val formattedPrice = priceFormatter(price)
     // Shadow for bottom bar
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -286,7 +286,7 @@ fun PostBottomBar(
     )
     Row(modifier = Modifier
         .fillMaxWidth()
-        .screenHorizontalPadding()
+        .rentItScreenHorizontalPadding()
         .padding(vertical = 24.dp),
         verticalAlignment = Alignment.CenterVertically) {
         Column(
@@ -321,7 +321,7 @@ fun MiniButton(isOutlinedButton: Boolean, text: String, onClick: () -> Unit) {
         modifier = Modifier
             .height(38.dp)
             .padding(start = 9.dp),
-        border = if(isOutlinedButton) CommonBorders.basicBorder() else null,
+        border =  BorderStroke(1.dp, Gray200),
         contentPadding = PaddingValues(vertical = 4.dp, horizontal = 16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = if(isOutlinedButton) Color.White else PrimaryBlue500

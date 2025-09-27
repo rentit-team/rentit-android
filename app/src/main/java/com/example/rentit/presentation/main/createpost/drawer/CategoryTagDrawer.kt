@@ -1,5 +1,6 @@
 package com.example.rentit.presentation.main.createpost.drawer
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -22,8 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonBorders
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray200
 import com.example.rentit.common.theme.Gray400
@@ -43,7 +43,7 @@ fun CategoryTagDrawer(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 80.dp)
     ) {
         parentCatList.forEach { parentCat ->
@@ -95,7 +95,7 @@ fun TagButton(
             onClick()
         },
         shape = RoundedCornerShape(25.dp),
-        border = CommonBorders.basicBorder(color = if(isSelectedTag) PrimaryBlue500 else Gray200),
+        border = BorderStroke(1.dp, if(isSelectedTag) PrimaryBlue500 else Gray200),
         contentPadding = PaddingValues(0.dp)
     ) {
         Row(

@@ -19,9 +19,9 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItDivider
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.Gray300
 import com.example.rentit.common.theme.RentItTheme
 
@@ -36,7 +36,7 @@ fun SettingScreen(
     onLogoutClick: () -> Unit = {}
 ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_setting_title), onBackClick = onBackPressed) }
+        topBar = { RentItTopAppBar(title = stringResource(R.string.screen_setting_title), onBackClick = onBackPressed) }
     ) {
         Column(Modifier.padding(it)) {
 
@@ -73,7 +73,7 @@ fun SettingRow(
             .semantics { contentDescription = contentDesc }
             .height(65.dp)
             .clickable(enabled = isClickEnabled) { onClick() }
-            .screenHorizontalPadding(),
+            .rentItScreenHorizontalPadding(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -97,7 +97,7 @@ private fun SettingListItem(label: String, onClick: () -> Unit = {}) {
             contentDescription = contentDesc
         )
     }
-    CommonDivider(Modifier.screenHorizontalPadding())
+    RentItDivider(Modifier.rentItScreenHorizontalPadding())
 }
 
 @Composable
@@ -111,7 +111,7 @@ private fun VersionInfoListItem(versionText: String) {
             style = MaterialTheme.typography.bodyMedium
         )
     }
-    CommonDivider(Modifier.screenHorizontalPadding())
+    RentItDivider(Modifier.rentItScreenHorizontalPadding())
 }
 
 @Composable

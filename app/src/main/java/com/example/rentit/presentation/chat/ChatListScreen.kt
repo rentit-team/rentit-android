@@ -33,17 +33,17 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.FilterButton
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.layout.EmptyContentScreen
-import com.example.rentit.common.component.layout.PullToRefreshLayout
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItFilterButton
+import com.example.rentit.common.ui.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.ui.component.layout.RentItEmptyContentScreen
+import com.example.rentit.common.ui.component.layout.RentItPullToRefreshLayout
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.toRelativeDayFormat
+import com.example.rentit.common.ui.formatter.toRelativeDayFormat
 import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
 import com.example.rentit.presentation.chat.model.ChatListFilter
 import java.time.OffsetDateTime
@@ -67,7 +67,7 @@ fun ChatListScreen(
         .background(Color.White)) {
 
         Text(
-            modifier = Modifier.screenHorizontalPadding(),
+            modifier = Modifier.rentItScreenHorizontalPadding(),
             text = stringResource(id = R.string.title_activity_chat_tab)
         )
 
@@ -75,7 +75,7 @@ fun ChatListScreen(
 
         RentalHistoryFilterSection(isActiveChatRooms, onToggleFilter)
 
-        PullToRefreshLayout(
+        RentItPullToRefreshLayout(
             isRefreshing = isRefreshing,
             pullToRefreshState = pullToRefreshState,
             onRefresh = onRefresh
@@ -93,11 +93,11 @@ fun RentalHistoryFilterSection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 13.dp),
         horizontalArrangement = Arrangement.End,
     ) {
-        FilterButton(
+        RentItFilterButton(
             title = stringResource(R.string.screen_chat_list_filter_active_chat_room),
             contentDesc = stringResource(R.string.screen_chat_list_filter_active_chat_room_content_description),
             isSelected = isActiveChatRooms,
@@ -106,7 +106,7 @@ fun RentalHistoryFilterSection(
 
         Spacer(Modifier.width(10.dp))
 
-        FilterButton(
+        RentItFilterButton(
             title = stringResource(R.string.screen_chat_list_filter_empty_chat_room),
             contentDesc = stringResource(R.string.screen_chat_list_filter_empty_chat_room_content_description),
             isSelected = !isActiveChatRooms,
@@ -124,7 +124,7 @@ fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<C
     } else {
         stringResource(R.string.screen_chat_list_empty_empty_chat_rooms)
     }
-    if(chatRoomSummaries.isEmpty()) return EmptyContentScreen(text = emptyContentText)
+    if(chatRoomSummaries.isEmpty()) return RentItEmptyContentScreen(text = emptyContentText)
 
     LazyColumn (
         modifier = Modifier.fillMaxSize().background(Gray100),
@@ -171,11 +171,11 @@ fun ChatListItem(
     ){
         Row(
             modifier = Modifier
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
                 .padding(vertical = 22.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LoadableUrlImage(
+            RentItLoadableUrlImage(
                 modifier = Modifier.size(74.dp).clip(RoundedCornerShape(20.dp)),
                 imgUrl = thumbnailImgUrl,
                 defaultImageResId = R.drawable.img_thumbnail_placeholder,

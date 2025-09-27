@@ -3,7 +3,7 @@ package com.example.rentit.presentation.splash
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.core.error.UnauthorizedException
+import com.example.rentit.core.exceptions.UnauthorizedException
 import com.example.rentit.domain.user.usecase.CheckUserSessionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel

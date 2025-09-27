@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.PhotoRegistrationType
-import com.example.rentit.common.util.MultipartUtil
+import com.example.rentit.common.util.fileToMultipart
 import com.example.rentit.domain.rental.repository.RentalRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -38,7 +38,7 @@ class PhotoBeforeRentViewModel @Inject constructor(
     }
 
     fun uploadPhotos(productId: Int, reservationId: Int) {
-        val files = takePhotoFiles.map { MultipartUtil.fileToMultipart(it) }
+        val files = takePhotoFiles.map { fileToMultipart(it) }
         viewModelScope.launch {
             setUploading(true)
             rentalRepository.postPhotoRegistration(productId, reservationId, PhotoRegistrationType.RENTAL_BEFORE, files)

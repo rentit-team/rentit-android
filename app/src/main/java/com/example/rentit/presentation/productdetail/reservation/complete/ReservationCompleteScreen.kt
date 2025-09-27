@@ -20,16 +20,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonDivider
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItBasicButton
+import com.example.rentit.common.ui.component.item.RentItDivider
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.Gray800
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
-import com.example.rentit.common.util.formatRentalPeriod
+import com.example.rentit.common.ui.formatter.priceFormatter
+import com.example.rentit.common.ui.formatter.rentalPeriodFormatter
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -42,7 +42,7 @@ fun ReservationCompleteScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .screenHorizontalPadding()
+            .rentItScreenHorizontalPadding()
             .padding(bottom = 100.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -58,9 +58,9 @@ fun ReservationCompleteScreen(
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_resv_period), style = MaterialTheme.typography.bodyLarge)
-            Text(text = formatRentalPeriod(LocalContext.current, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
+            Text(text = rentalPeriodFormatter(LocalContext.current, rentalStartDate, rentalEndDate), style = MaterialTheme.typography.bodyMedium, color = Gray800)
         }
-        CommonDivider()
+        RentItDivider()
         Row(modifier = Modifier
             .fillMaxWidth()
             .padding(top = 12.dp),
@@ -68,11 +68,11 @@ fun ReservationCompleteScreen(
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(text = stringResource(
                 id = R.string.screen_request_confirm_total_price), style = MaterialTheme.typography.bodyLarge)
-            Text(text = "${formatPrice(totalPrice)} 원",
+            Text(text = "${priceFormatter(totalPrice)} 원",
                 style = MaterialTheme.typography.bodyLarge,
                 color = PrimaryBlue500)
         }
-        CommonButton(
+        RentItBasicButton(
             text = "완료",
             containerColor = Gray100,
             contentColor = AppBlack,

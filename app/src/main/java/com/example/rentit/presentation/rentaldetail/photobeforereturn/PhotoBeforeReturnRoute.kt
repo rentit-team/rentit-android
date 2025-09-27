@@ -12,7 +12,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.ui.component.layout.RentItLoadingScreen
 import com.example.rentit.presentation.main.MainViewModel
 import com.example.rentit.presentation.rentaldetail.components.rememberTakePhotoLauncher
 
@@ -71,5 +71,5 @@ fun PhotoBeforeReturnRoute(navHostController: NavHostController, productId: Int,
         onRegister = { viewModel.uploadPhotos(productId, reservationId) },
     )
 
-    LoadingScreen(uiState.isLoading || uiState.isUploadInProgress)
+    RentItLoadingScreen(uiState.isLoading || uiState.isUploadInProgress)
 }

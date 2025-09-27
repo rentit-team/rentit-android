@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.AutoMessageType
 import com.example.rentit.common.enums.RentalStatus
-import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.data.rental.dto.UpdateRentalStatusRequestDto
 import com.example.rentit.domain.chat.repository.ChatRepository
 import com.example.rentit.domain.rental.repository.RentalRepository

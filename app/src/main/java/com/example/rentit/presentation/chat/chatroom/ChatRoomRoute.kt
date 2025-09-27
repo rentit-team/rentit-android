@@ -23,8 +23,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavHostController
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.BaseDialog
-import com.example.rentit.common.component.layout.LoadingScreen
+import com.example.rentit.common.ui.component.dialog.RentItBaseDialog
+import com.example.rentit.common.ui.component.layout.RentItLoadingScreen
 import com.example.rentit.navigation.pay.navigateToPay
 import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
@@ -121,10 +121,10 @@ fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
         navigateBack = navHostController::popBackStack
     )
 
-    LoadingScreen(uiState.isLoading)
+    RentItLoadingScreen(uiState.isLoading)
 
     if(uiState.showForbiddenChatAccessDialog){
-        BaseDialog(
+        RentItBaseDialog(
             title = stringResource(R.string.dialog_forbidden_chat_access_title),
             confirmBtnText = stringResource(R.string.dialog_forbidden_chat_access_btn),
             isBackgroundClickable = false,

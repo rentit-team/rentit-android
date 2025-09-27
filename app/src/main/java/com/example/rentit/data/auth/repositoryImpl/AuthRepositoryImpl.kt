@@ -1,6 +1,6 @@
 package com.example.rentit.data.auth.repositoryImpl
 
-import com.example.rentit.core.error.BadRequestException
+import com.example.rentit.core.exceptions.BadRequestException
 import com.example.rentit.core.network.safeApiCall
 import com.example.rentit.data.auth.dto.GoogleLoginResponseDto
 import com.example.rentit.data.auth.local.AuthPrefsDataSource

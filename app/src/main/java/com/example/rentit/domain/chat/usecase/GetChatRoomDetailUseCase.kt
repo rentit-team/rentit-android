@@ -2,7 +2,7 @@ package com.example.rentit.domain.chat.usecase
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.example.rentit.core.error.ForbiddenException
+import com.example.rentit.core.exceptions.ForbiddenException
 import com.example.rentit.data.chat.mapper.toModel
 import com.example.rentit.data.product.mapper.toChatRoomSummaryModel
 import com.example.rentit.data.rental.mapper.toChatRoomSummaryModel

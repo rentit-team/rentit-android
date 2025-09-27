@@ -16,13 +16,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.uimodel.PriceSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.PriceSummaryUiModel
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalTrackingSection
-import com.example.rentit.common.uimodel.RentalSummaryUiModel
+import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.common.theme.PrimaryBlue500
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.common.enums.RentingStatus
 import kotlin.math.abs
@@ -45,7 +45,7 @@ fun OwnerRentingContent(
         )
     )
 
-    val formattedDeposit = formatPrice(rentingData.deposit)
+    val formattedDeposit = priceFormatter(rentingData.deposit)
 
     RentalInfoSection(
         title = stringResource(rentingData.status.strRes),

@@ -4,7 +4,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.core.error.ConflictException
+import com.example.rentit.core.exceptions.ConflictException
 import com.example.rentit.domain.auth.usecase.LoginAndInitializeAuthUseCase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException

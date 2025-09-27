@@ -25,8 +25,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rentit.common.component.calendar.CalendarHeader
-import com.example.rentit.common.component.calendar.DayOfWeek
+import com.example.rentit.common.ui.component.calendar.CalendarHeader
+import com.example.rentit.common.ui.component.calendar.DayOfWeek
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.AppBlack
 import com.example.rentit.common.theme.PrimaryBlue500

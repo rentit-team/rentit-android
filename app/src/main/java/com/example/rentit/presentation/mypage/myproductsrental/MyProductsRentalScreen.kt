@@ -28,18 +28,18 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.D_DAY_ALERT_THRESHOLD_DAYS
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.FilterButton
-import com.example.rentit.common.component.LoadableUrlImage
-import com.example.rentit.common.component.AnimatedNoticeBanner
-import com.example.rentit.common.component.layout.EmptyContentScreen
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.util.D_DAY_ALERT_THRESHOLD_DAYS
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItFilterButton
+import com.example.rentit.common.ui.component.item.RentItLoadableUrlImage
+import com.example.rentit.common.ui.component.item.RentItAnimatedNoticeBanner
+import com.example.rentit.common.ui.component.layout.RentItEmptyContentScreen
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.AppRed
 import com.example.rentit.common.theme.Gray400
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
-import com.example.rentit.common.util.formatPrice
+import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.domain.user.model.MyProductsRentalModel
 import com.example.rentit.presentation.mypage.myproductsrental.model.MyProductsRentalFilter
 import kotlin.math.abs
@@ -58,7 +58,7 @@ fun MyProductsRentalScreen(
 ) {
     Scaffold(
         topBar = {
-            CommonTopAppBar(
+            RentItTopAppBar(
                 title = stringResource(R.string.screen_my_products_rental_title),
                 onBackClick = onBackClick
             )
@@ -67,7 +67,7 @@ fun MyProductsRentalScreen(
         Column(
             modifier = Modifier
                 .padding(it)
-                .screenHorizontalPadding()
+                .rentItScreenHorizontalPadding()
         ) {
             FilterSection(selectedFilter, historyCountMap, onFilterChange)
 
@@ -94,7 +94,7 @@ fun FilterSection(
     ) {
         MyProductsRentalFilter.entries.forEach {
             if(it == MyProductsRentalFilter.NONE) return
-            FilterButton(
+            RentItFilterButton(
                 title = stringResource(it.titleRes) + " ${historyCountMap[it]}",
                 contentDesc = stringResource(it.contentDescRes),
                 isSelected = selectedFilter == it,
@@ -127,7 +127,7 @@ fun NoticeBannerSection(selectedFilter: MyProductsRentalFilter, upcomingShipment
                 else -> { }
         }
     }
-    AnimatedNoticeBanner(
+    RentItAnimatedNoticeBanner(
         modifier = Modifier.padding(bottom = 10.dp),
         noticeText = noticeText
     )
@@ -140,7 +140,7 @@ fun RentalHistoriesSection(
     rentals: List<MyProductsRentalModel> = emptyList(),
     onItemClick: (selectedFilter: MyProductsRentalFilter, productId: Int, reservationId: Int) -> Unit
 ) {
-    if(rentals.isEmpty()) return EmptyContentScreen(text = stringResource(R.string.screen_my_products_rental_empty_list))
+    if(rentals.isEmpty()) return RentItEmptyContentScreen(text = stringResource(R.string.screen_my_products_rental_empty_list))
 
     LazyColumn {
         items(rentals.size) { i ->
@@ -189,7 +189,7 @@ fun RentalHistoryItem(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.Top
     ) {
-        LoadableUrlImage(
+        RentItLoadableUrlImage(
             modifier = Modifier
                 .fillMaxWidth(0.25f)
                 .aspectRatio(1f)
@@ -232,7 +232,7 @@ fun getRentalInfoText(
                 }
                 append(stringResource(R.string.screen_my_products_rental_info_text_waiting_for_response))
                 withStyle(style = MaterialTheme.typography.labelMedium.toSpanStyle().copy(Gray400)) {
-                    append(" · " + stringResource(R.string.common_total) + " ${formatPrice(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
+                    append(" · " + stringResource(R.string.common_total) + " ${priceFormatter(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
                 }
             }
         }
@@ -269,7 +269,7 @@ fun getRentalInfoText(
                 }
                 append(stringResource(R.string.screen_my_products_rental_info_text_accepted))
                 withStyle(style = MaterialTheme.typography.labelMedium.toSpanStyle().copy(Gray400)) {
-                    append(" · " + stringResource(R.string.common_total) + " ${formatPrice(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
+                    append(" · " + stringResource(R.string.common_total) + " ${priceFormatter(totalExpectRevenue)}" + stringResource(R.string.common_price_unit))
                 }
             }
         }

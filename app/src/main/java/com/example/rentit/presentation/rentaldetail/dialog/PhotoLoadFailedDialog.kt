@@ -7,12 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.rentit.R
-import com.example.rentit.common.component.dialog.BaseDialog
+import com.example.rentit.common.ui.component.dialog.RentItBaseDialog
 import com.example.rentit.common.theme.RentItTheme
 
 @Composable
 fun PhotoLoadFailedDialog(onDismiss: () -> Unit = {}) {
-    BaseDialog(
+    RentItBaseDialog(
         title = stringResource(R.string.dialog_fetch_photos_failed_title),
         confirmBtnText = stringResource(R.string.dialog_rental_detail_unknown_confirm_btn),
         onDismissRequest = onDismiss,

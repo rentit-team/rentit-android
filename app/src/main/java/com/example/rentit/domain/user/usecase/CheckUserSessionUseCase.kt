@@ -1,6 +1,6 @@
 package com.example.rentit.domain.user.usecase
 
-import com.example.rentit.core.error.UnauthorizedException
+import com.example.rentit.core.exceptions.UnauthorizedException
 import com.example.rentit.domain.auth.respository.AuthRepository
 import com.example.rentit.domain.user.repository.UserRepository
 import javax.inject.Inject

@@ -22,16 +22,16 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonButton
-import com.example.rentit.common.component.CommonTextField
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.paddingForBottomBarButton
-import com.example.rentit.common.component.screenHorizontalPadding
+import com.example.rentit.common.ui.component.item.RentItBasicButton
+import com.example.rentit.common.ui.component.item.RentItTextField
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.extension.renItPaddingForBottomBarButton
+import com.example.rentit.common.ui.extension.rentItScreenHorizontalPadding
 import com.example.rentit.common.theme.PretendardTextStyle
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.White
-import com.example.rentit.common.component.InputErrorMessage
+import com.example.rentit.common.ui.component.item.RentItInputErrorMessage
 
 const val PHONE_NUMBER_DIGITS_LENGTH = 11
 const val PHONE_NUMBER_SECOND_SPLIT_MIN = 8
@@ -54,11 +54,11 @@ fun JoinPhoneVerificationScreen(
     onConfirm: () -> Unit,
     ) {
     Scaffold(
-        topBar = { CommonTopAppBar(title = stringResource(R.string.screen_join_title)) { onBackPressed() } },
-        bottomBar = { CommonButton(
+        topBar = { RentItTopAppBar(title = stringResource(R.string.screen_join_title)) { onBackPressed() } },
+        bottomBar = { RentItBasicButton(
             modifier = Modifier
-                .screenHorizontalPadding()
-                .paddingForBottomBarButton(),
+                .rentItScreenHorizontalPadding()
+                .renItPaddingForBottomBarButton(),
             text = stringResource(R.string.screen_join_phone_verification_btn_check_code),
             enabled = isConfirmEnabled,
             containerColor = PrimaryBlue500,
@@ -67,7 +67,7 @@ fun JoinPhoneVerificationScreen(
     ) {
         Column(Modifier
             .padding(it)
-            .screenHorizontalPadding()) {
+            .rentItScreenHorizontalPadding()) {
 
             Spacer(Modifier.weight(0.8f))
 
@@ -83,7 +83,7 @@ fun JoinPhoneVerificationScreen(
             )
 
             if(showRemainingTime) {
-                InputErrorMessage(
+                RentItInputErrorMessage(
                     stringResource(
                         R.string.screen_join_phone_verification_text_remaining_time,
                         remainingMinutes,
@@ -93,7 +93,7 @@ fun JoinPhoneVerificationScreen(
             }
 
             errorMessageRes?.let {
-                InputErrorMessage(stringResource(errorMessageRes))
+                RentItInputErrorMessage(stringResource(errorMessageRes))
             }
 
             Spacer(Modifier.weight(2f))
@@ -125,7 +125,7 @@ private fun PhoneVerificationForm(
     onRequestCode: () -> Unit = {},
 ) {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-        CommonTextField(
+        RentItTextField(
             modifier = Modifier.weight(1f),
             value = TextFieldValue(phoneNumber, TextRange(phoneNumber.length)), // 맨 뒤로 커서 조정
             onValueChange = {
@@ -147,7 +147,7 @@ private fun PhoneVerificationForm(
             )
         }
     }
-    CommonTextField(
+    RentItTextField(
         modifier = Modifier.padding(top = 10.dp),
         value = code,
         onValueChange = onCodeChange,

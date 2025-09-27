@@ -2,7 +2,7 @@ package com.example.rentit.presentation.rentaldetail
 
 import com.example.rentit.common.enums.RentalRole
 import com.example.rentit.common.enums.RentalProcessType
-import com.example.rentit.common.uimodel.RequestAcceptDialogUiModel
+import com.example.rentit.presentation.rentaldetail.model.RequestAcceptDialogUiModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 
 data class RentalDetailState(

@@ -5,8 +5,8 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.rentit.core.error.ConflictException
-import com.example.rentit.core.error.ForbiddenException
+import com.example.rentit.core.exceptions.ConflictException
+import com.example.rentit.core.exceptions.ForbiddenException
 import com.example.rentit.domain.product.repository.ProductRepository
 import com.example.rentit.domain.product.usecase.PostReservationUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel

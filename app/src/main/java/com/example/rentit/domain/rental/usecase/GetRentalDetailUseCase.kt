@@ -3,7 +3,7 @@ package com.example.rentit.domain.rental.usecase
 import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalRole
-import com.example.rentit.core.error.ServerErrorException
+import com.example.rentit.core.exceptions.ServerErrorException
 import com.example.rentit.data.rental.mapper.toModel
 import com.example.rentit.domain.rental.model.RentalDetailModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel

@@ -11,9 +11,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.rentit.common.component.dialog.NetworkErrorDialog
-import com.example.rentit.common.component.dialog.ServerErrorDialog
-import com.example.rentit.common.component.dialog.SessionExpiredDialog
+import com.example.rentit.presentation.main.dialog.NetworkErrorDialog
+import com.example.rentit.presentation.main.dialog.ServerErrorDialog
+import com.example.rentit.presentation.main.dialog.SessionExpiredDialog
 import com.example.rentit.navigation.auth.navigateToLogin
 import com.example.rentit.navigation.bottomtab.navigateBottomTab
 import com.example.rentit.navigation.createpost.navigateToCreatePost

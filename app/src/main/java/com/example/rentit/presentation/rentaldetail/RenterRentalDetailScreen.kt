@@ -18,9 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.rentit.R
-import com.example.rentit.common.component.CommonTopAppBar
-import com.example.rentit.common.component.ExtendedFAB
-import com.example.rentit.common.component.layout.PullToRefreshLayout
+import com.example.rentit.common.ui.component.layout.RentItTopAppBar
+import com.example.rentit.common.ui.component.item.RentItExtendedFAB
+import com.example.rentit.common.ui.component.layout.RentItPullToRefreshLayout
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.data.rental.dto.DeliveryStatusDto
@@ -57,7 +57,7 @@ fun RentalDetailRenterScreen(
 ) {
     Scaffold(
         topBar = {
-            CommonTopAppBar (
+            RentItTopAppBar (
                 title = stringResource(R.string.screen_rental_detail_title),
                 showTransactionReceipt = true,
                 onBackClick = onBackClick,
@@ -65,7 +65,7 @@ fun RentalDetailRenterScreen(
             )
         },
         floatingActionButton = {
-            ExtendedFAB(
+            RentItExtendedFAB(
                 modifier = Modifier.padding(bottom = 16.dp),
                 iconRes = R.drawable.ic_chat,
                 textRes = R.string.screen_rental_detail_chat_floating_button,
@@ -73,7 +73,7 @@ fun RentalDetailRenterScreen(
             )
         }
     ) {
-        PullToRefreshLayout(
+        RentItPullToRefreshLayout(
             isRefreshing = isRefreshing,
             pullToRefreshState = pullToRefreshState,
             onRefresh = onRefresh
