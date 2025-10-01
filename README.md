@@ -2,9 +2,10 @@
 <br>
 
 # RentIt, 중고 물품 대여 플랫폼
-![Galaxy S20 Ultra (1)](https://github.com/user-attachments/assets/d77ba1ff-aeb7-4b08-868b-d03973f214da)  
+<img width="4960" height="3228" alt="Poster" src="https://github.com/user-attachments/assets/c14b44f5-516c-4d2e-8c40-49a885ab7076" />  
+<br><br>   
 
-> **RentIt으로 중고 물품을 쉽고 안전하게 단기 대여해요!**
+> RentIt으로 중고 물품을 쉽고 안전하게 대여해요!
 
 <br><br>
 
@@ -40,13 +41,6 @@
 </table>
 <br>
 
-## Upcoming Features
-- 상품 대여 및 배송 현황 페이지 개발 예정
-- 대여 전후 사진 인증 기능 개발 예정
-- 신고용 PDF 자동 생성 기능 추가 예정
-- 다양한 예외 처리 및 안정성 강화 작업 진행 중
-- 지속적인 리팩토링과 코드 개선 병행
-<br><br>
 ## Tech Stack
 - Kotlin
 - Jetpack Compose
