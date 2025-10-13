@@ -41,60 +41,38 @@
 > 대여 프로세스 흐름
 <img width="500" src="https://github.com/user-attachments/assets/efbaa0ff-05bf-493f-a79b-a35cae07e7d3" />
 
-**1. [대여 요청]**
+<table>
+  <tr>
+    <th width="33%">1. [대여 요청]</th>
+    <th width="33%">2. [대여 수락] 및 채팅</th>
+    <th width="33%">3. [결제 완료] 및 채팅</th>
+  </tr>
+  <tr>
+    <td align="center"><video loop width="33%" src="https://github.com/user-attachments/assets/1a2a3d89-dbb3-4be6-b9fc-f7b4cd9dfc7a"/></td>
+    <td align="center"><video loop width="33%" src="https://github.com/user-attachments/assets/fefc39a6-2c05-4192-8bfd-8647fb65c8bf"/></td>
+    <td align="center"><video loop width="33%" src="https://github.com/user-attachments/assets/6b29bec6-501a-4d56-a6a2-40c6734f7cc7"/></td>
+  </tr>
+  <tr>
+    <td align="center">사용자</td>
+    <td align="center">대여자</td>
+    <td align="center">사용자</td>
+  </tr>
+</table>  
 
 <table>
   <tr>
-    <td>사용자 화면</td>
+    <th width="33%">4. 대여 전 사진 등록</th>
+    <th width="45%">5. [대여 중] (반납 전 사진 등록) 및 [반납 완료]</th>
   </tr>
   <tr>
-    <td align="center"><video loop width="400" src="https://github.com/user-attachments/assets/1a2a3d89-dbb3-4be6-b9fc-f7b4cd9dfc7a"/></td>
-  </tr>
-</table><br>  
-      
-**2. [대여 수락] 및 채팅**
-
-<table>
-  <tr>
-    <td>대여자 화면</td>
+    <td align="center"><video loop width="33%" src="https://github.com/user-attachments/assets/f1b634f9-a83c-40f7-845a-d29251d69dc5"/></td>
+    <td align="center"><video loop width="33%" src="https://github.com/user-attachments/assets/2d382155-9ca5-4947-86e8-364eae6901eb"/></td>
   </tr>
   <tr>
-    <td align="center"><video loop width="400" src="https://github.com/user-attachments/assets/fefc39a6-2c05-4192-8bfd-8647fb65c8bf"/></td>
+    <td align="center">대여자</td>
+    <td align="center">사용자</td>
   </tr>
-</table><br>
-
-**3. [결제 완료] 및 채팅**
-
-<table>
-  <tr>
-    <td>사용자 화면</td>
-  </tr>
-  <tr>
-    <td align="center"><video loop width="400" src="https://github.com/user-attachments/assets/6b29bec6-501a-4d56-a6a2-40c6734f7cc7"/></td>
-  </tr>
-</table><br>  
-      
-**3. 대여 전 사진 등록**
-
-<table>
-  <tr>
-    <td>대여자 화면</td>
-  </tr>
-  <tr>
-    <td align="center"><video loop width="400" src="https://github.com/user-attachments/assets/f1b634f9-a83c-40f7-845a-d29251d69dc5"/></td>
-  </tr>
-</table><br>  
-      
-**4. [대여 중] (반납 전 사진 등록) 및 [반납 완료]**
-
-<table>
-  <tr>
-    <td>사용자 화면</td>
-  </tr>
-  <tr>
-    <td align="center"><video loop width="400" src="https://github.com/user-attachments/assets/2d382155-9ca5-4947-86e8-364eae6901eb"/></td>
-  </tr>
-</table><br>
+    </table>
 
 ## Tech Stack
 - Kotlin
