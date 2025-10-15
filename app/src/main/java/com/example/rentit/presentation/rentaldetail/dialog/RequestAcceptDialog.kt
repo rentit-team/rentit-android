@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.dialog
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
