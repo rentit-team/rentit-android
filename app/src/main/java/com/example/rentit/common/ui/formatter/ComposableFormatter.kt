@@ -1,7 +1,5 @@
 package com.example.rentit.common.ui.formatter
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.example.rentit.R
@@ -74,7 +72,6 @@ fun formatPeriodTextWithLabel(minPeriod: Int?, maxPeriod: Int?): String {
  *
  * @return 변환된 상대 시간 문자열
  */
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OffsetDateTime.toRelativeDayFormat(): String {
     val now = LocalDate.now()
@@ -99,7 +96,6 @@ fun OffsetDateTime.toRelativeDayFormat(): String {
  *
  * @return 변환된 상대 시간 문자열.
  */
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun LocalDateTime.toRelativeTimeFormat(): String {
     val now = LocalDate.now()

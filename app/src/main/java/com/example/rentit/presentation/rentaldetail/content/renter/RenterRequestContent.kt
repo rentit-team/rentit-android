@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.content.renter
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +32,6 @@ import com.example.rentit.domain.rental.model.RentalDetailStatusModel
  * 요청과 관련된 상태(대여 요청, 요청 수락, 요청 거절, 거래 취소)를 나타내는 UI 컨텐츠
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RenterRequestContent(
     requestData: RentalDetailStatusModel.Request,
@@ -114,7 +111,6 @@ fun NoticeBannerSection(isPending: Boolean, isAccepted: Boolean) {
     RentItAnimatedNoticeBanner(modifier = Modifier.rentItScreenHorizontalPadding(), noticeText = noticeText)
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {

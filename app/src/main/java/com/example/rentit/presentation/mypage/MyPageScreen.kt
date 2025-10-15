@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.mypage
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -65,7 +63,6 @@ import java.time.LocalDateTime
 import kotlin.math.abs
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyPageScreen(
     profileImgUrl: String?,
@@ -308,7 +305,6 @@ fun getRentalInfoText(rentingStatus: RentingStatus, remainingRentalDays: Int, hi
 
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TabbedListSection(
     currentTab: MyPageTab,
@@ -398,7 +394,6 @@ fun TabTitle(modifier: Modifier, title: String, isTabSelected: Boolean, onClick:
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyRentalHistoryListItem(
     title: String,
@@ -466,7 +461,6 @@ fun MyRentalHistoryListItem(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun MyPageScreenPreview() {

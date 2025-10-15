@@ -1,8 +1,6 @@
 package com.example.rentit.presentation.productdetail.rentalhistory
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
@@ -20,7 +18,6 @@ import javax.inject.Inject
 
 private const val TAG = "RentalHistoryViewModel"
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalHistoryViewModel @Inject constructor(
     private val getRentalHistoriesUseCase: GetRentalHistoriesUseCase,

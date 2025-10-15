@@ -1,7 +1,5 @@
 package com.example.rentit.domain.chat.usecase
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.data.chat.dto.MessageResponseDto
 import com.example.rentit.data.chat.mapper.toChatMessageModel
 import com.example.rentit.domain.chat.model.ChatMessageModel
@@ -15,7 +13,6 @@ import javax.inject.Inject
  * - Presentation Layer 또는 다른 도메인 로직에서 바로 사용할 수 있는 모델 반환
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 class ConvertMessageUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {

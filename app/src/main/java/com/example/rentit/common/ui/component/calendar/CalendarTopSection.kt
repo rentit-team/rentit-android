@@ -1,7 +1,5 @@
 package com.example.rentit.common.ui.component.calendar
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,7 +21,6 @@ import com.example.rentit.R
 import java.time.YearMonth
 import java.time.DayOfWeek
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarHeader(yearMonth: YearMonth, leftChevronOnClick: () -> Unit, rightChevronOnClick: () -> Unit) {
     Row(modifier = Modifier.width(336.dp),
@@ -40,7 +37,6 @@ fun CalendarHeader(yearMonth: YearMonth, leftChevronOnClick: () -> Unit, rightCh
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DayOfWeek(cellWidth: Dp) {
     val dayOfWeek = DayOfWeek.entries.let { it.takeLast(1) + it.dropLast(1) }   // 일요일부터 시작하도록 순서 변경

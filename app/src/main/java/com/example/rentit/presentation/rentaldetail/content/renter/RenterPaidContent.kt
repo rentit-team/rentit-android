@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.content.renter
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
@@ -22,7 +20,6 @@ import com.example.rentit.domain.rental.model.RentalDetailStatusModel
  * 결제 완료 상태를 나타내는 UI 컨텐츠
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RenterPaidContent(
     paidData: RentalDetailStatusModel.Paid,
@@ -63,7 +60,6 @@ fun RenterPaidContent(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {

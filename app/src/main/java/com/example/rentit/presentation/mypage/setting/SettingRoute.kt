@@ -2,14 +2,13 @@ package com.example.rentit.presentation.mypage.setting
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -18,7 +17,6 @@ import androidx.navigation.NavHostController
 import com.example.rentit.R
 import com.example.rentit.navigation.auth.navigateToLogin
 import com.example.rentit.presentation.mypage.setting.dialog.LogoutConfirmDialog
-import androidx.core.net.toUri
 import java.io.File
 
 @Composable

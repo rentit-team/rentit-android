@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,7 +48,6 @@ import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.domain.product.model.ProductWithCategoryModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeScreen(
     scrollState: LazyListState = rememberLazyListState(),
@@ -149,7 +146,6 @@ fun HomeFilterSection(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeProductListSection(
     scrollState: LazyListState,
@@ -232,7 +228,6 @@ fun CategoryDropDown(
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {

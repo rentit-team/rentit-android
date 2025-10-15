@@ -1,7 +1,5 @@
 package com.example.rentit.domain.user.usecase
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.data.user.mapper.toModel
 import com.example.rentit.data.user.mapper.toMyRentalItemModel
@@ -21,7 +19,6 @@ import javax.inject.Inject
 class GetMyRentalsWithNearestDueUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend operator fun invoke(): Result<MyRentalsWithNearestDueModel> {
         return runCatching {
             val response = userRepository.getMyRentalList().getOrThrow()

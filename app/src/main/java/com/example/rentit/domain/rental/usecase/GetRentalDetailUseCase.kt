@@ -1,7 +1,5 @@
 package com.example.rentit.domain.rental.usecase
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalRole
 import com.example.rentit.core.exceptions.ServerErrorException
 import com.example.rentit.data.rental.mapper.toModel
@@ -23,7 +21,6 @@ class GetRentalDetailUseCase @Inject constructor(
     private val rentalRepository: RentalRepository,
     private val userRepository: UserRepository
 ) {
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend operator fun invoke(productId: Int, reservationId: Int): Result<RentalDetailModel> {
         return runCatching {
             val rentalDetail = rentalRepository.getRentalDetail(productId, reservationId).getOrThrow()

@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.dialog
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +19,6 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.common.ui.formatter.rentalPeriodFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RequestAcceptDialog(
     startDate: String,
@@ -65,7 +62,6 @@ fun RequestAcceptDialog(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {

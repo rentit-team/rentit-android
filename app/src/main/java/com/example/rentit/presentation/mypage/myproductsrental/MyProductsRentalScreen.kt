@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.mypage.myproductsrental
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -44,7 +42,6 @@ import com.example.rentit.domain.user.model.MyProductsRentalModel
 import com.example.rentit.presentation.mypage.myproductsrental.model.MyProductsRentalFilter
 import kotlin.math.abs
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyProductsRentalScreen(
     rentals: List<MyProductsRentalModel> = emptyList(),
@@ -133,7 +130,6 @@ fun NoticeBannerSection(selectedFilter: MyProductsRentalFilter, upcomingShipment
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoriesSection(
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
@@ -159,7 +155,6 @@ fun RentalHistoriesSection(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryItem(
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
@@ -215,7 +210,6 @@ fun RentalHistoryItem(
 }
 
 @Composable
-@RequiresApi(Build.VERSION_CODES.O)
 fun getRentalInfoText(
     selectedFilter: MyProductsRentalFilter = MyProductsRentalFilter.WAITING_FOR_RESPONSE,
     rentalCount: Int = 0,
@@ -277,7 +271,6 @@ fun getRentalInfoText(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 fun MyProductsRentalPreview() {

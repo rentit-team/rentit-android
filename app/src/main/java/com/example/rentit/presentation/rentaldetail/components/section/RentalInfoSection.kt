@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.components.section
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -17,7 +15,6 @@ import com.example.rentit.presentation.rentaldetail.components.RentalSummary
 import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.common.theme.AppBlack
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalInfoSection(
     title: String,
@@ -56,7 +53,6 @@ fun RentalInfoSection(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {

@@ -1,7 +1,5 @@
 package com.example.rentit.navigation.bottomtab
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -27,7 +25,6 @@ fun NavHostController.navigateToHome() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.bottomTabGraph(navHostController: NavHostController) {
     composable(BottomTabRoute.Home.route) {
         HomeRoute(navHostController)

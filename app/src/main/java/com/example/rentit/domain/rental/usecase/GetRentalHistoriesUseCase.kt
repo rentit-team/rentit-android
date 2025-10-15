@@ -1,7 +1,5 @@
 package com.example.rentit.domain.rental.usecase
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.data.rental.mapper.toModel
 import com.example.rentit.domain.rental.model.RentalHistoryModel
 import com.example.rentit.domain.rental.repository.RentalRepository
@@ -19,7 +17,6 @@ class GetRentalHistoriesUseCase @Inject constructor(
     private val rentalRepository: RentalRepository
 ) {
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend operator fun invoke(productId: Int): Result<List<RentalHistoryModel>> {
         return runCatching {
             val rentalHistories = rentalRepository.getRentalHistoriesByProduct(productId).getOrThrow()

@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail.rentalhistory
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -57,7 +55,6 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import kotlin.math.abs
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryScreen(
     rentalHistoryList: List<RentalHistoryModel>,
@@ -142,7 +139,6 @@ fun RentalHistoryFilterSection(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryListSection(
     rentalHistoryList: List<RentalHistoryModel> = emptyList(),
@@ -225,7 +221,6 @@ private fun ExpandableRoundedItem(isExpanded: Boolean = false, onRentalDetailCli
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentingListItem(
     nickName: String = "",
@@ -273,7 +268,6 @@ fun RentingListItem(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReadyToShipListItem(
     nickName: String = "",
@@ -312,7 +306,6 @@ fun ReadyToShipListItem(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OtherStatusListItem(
     status: RentalStatus = RentalStatus.RETURNED,
@@ -357,7 +350,6 @@ fun OtherStatusListItem(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun RentalHistoryScreenPreview() {
@@ -379,7 +371,6 @@ private fun RentalHistoryScreenPreview() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun RentalHistoryListItemPreview() {

@@ -1,7 +1,5 @@
 package com.example.rentit.navigation.rentaldetail
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -46,7 +44,6 @@ fun NavHostController.navigateToPhotoBeforeReturn(productId: Int, reservationId:
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.rentalDetailGraph(navHostController: NavHostController) {
     composable<RentalDetailRoute.RentalDetail> { backStackEntry ->
         val items: RentalDetailRoute.RentalDetail = backStackEntry.toRoute()

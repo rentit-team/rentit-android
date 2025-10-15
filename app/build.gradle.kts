@@ -1,18 +1,19 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("kotlin-kapt")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.dagger.hilt.android)
 }
 
 val localProps = gradleLocalProperties(rootDir, providers)
 
 android {
     namespace = "com.example.rentit"
-    compileSdk = 34
+    compileSdk = 36
 
     buildFeatures {
         buildConfig = true
@@ -21,15 +22,12 @@ android {
 
     defaultConfig {
         applicationId = "com.example.rentit"
-        minSdk = 24
-        targetSdk = 34
+        minSdk = 26
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
 
         buildConfigField(
             "String",
@@ -56,9 +54,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.7"
     }
@@ -69,71 +64,69 @@ android {
     }
 }
 
-dependencies {
-    // Specify the Compose BOM with a version definition
-    val composeBom = platform("androidx.compose:compose-bom:2023.08.00")
-    implementation(composeBom)
-    testImplementation(composeBom)
-    androidTestImplementation(composeBom)
-
-    implementation("androidx.security:security-crypto:1.1.0-alpha03")
-
-    implementation("com.google.android.gms:play-services-auth:21.0.0")
-
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
-
-    // Stomp
-    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
-    
-    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
-
-    // Google Play Service
-    val credentialVersion = "1.3.0-alpha01"
-    implementation("androidx.credentials:credentials:$credentialVersion")
-    implementation("androidx.credentials:credentials-play-services-auth:$credentialVersion")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
-
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
-
-    implementation("androidx.core:core-splashscreen:1.0.1")
-
-    implementation("androidx.compose.material:material:1.7.8")
-
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-
-    // Retrofit2 통신
-    implementation("com.squareup.retrofit2:retrofit:2.11.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
-
-    val navVersion = "2.8.9"
-    implementation("androidx.navigation:navigation-compose:$navVersion")
-
-    implementation("io.coil-kt:coil-compose:2.4.0")
-
-    // Specify Compose library dependencies without a version definition
-    implementation("androidx.compose.foundation:foundation")
-    testImplementation("androidx.compose.ui:ui-test-junit4")
-    androidTestImplementation("androidx.compose.ui:ui-test")
-
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3:1.3.2")
-
-    testImplementation("junit:junit:4.13.2")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-    androidTestImplementation("androidx.test.ext:junit:1.2.1")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
-    implementation("androidx.activity:activity-compose:1.9.1")
+kotlin {
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8)
+    }
 }
 
 kapt {
     correctErrorTypes = true
+}
+
+dependencies {
+
+    // 보안
+    implementation(libs.androidx.security.crypto)
+
+    // 구글 로그인
+    implementation(libs.android.play.services.auth)
+
+    // 네트워크
+    implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.naikSoftware.stompprotocolandroid)
+    implementation(libs.io.rxandroid)
+
+    // 의존성 주입
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // 데이터 직렬화
+    implementation(libs.kotlinx.serialization.json)
+
+    // Retrofit2 통신
+    implementation(libs.retrofit2)
+    implementation(libs.retrofit2.converter.gson)
+
+    // Compose UI
+    implementation(platform(libs.androidx.compose.bom))
+    testImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+
+    implementation(libs.androidx.foundation)
+    implementation(libs.androidx.material)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.io.coil.compose)
+
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    androidTestImplementation(libs.androidx.espresso.core)
+
+    // 테스트
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    androidTestImplementation(libs.androidx.ui.test)
+    androidTestImplementation(libs.androidx.junit)
+
+    // 기타
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashScreen)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
 }

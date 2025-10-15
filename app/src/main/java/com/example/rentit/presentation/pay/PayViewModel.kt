@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.pay
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.AutoMessageType
@@ -41,7 +39,6 @@ class PayViewModel @Inject constructor(
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun getPayInfo(productId: Int, reservationId: Int) {
         setLoading(true)
         rentalRepository.getRentalDetail(productId, reservationId)
@@ -65,7 +62,6 @@ class PayViewModel @Inject constructor(
         setLoading(false)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun updateStatusToPaid(productId: Int, reservationId: Int) {
         viewModelScope.launch {
             setLoading(true)
@@ -104,7 +100,6 @@ class PayViewModel @Inject constructor(
         emitSideEffect(PaySideEffect.NavigateBack)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun reloadData(productId: Int, reservationId: Int) {
         viewModelScope.launch {
             getPayInfo(productId, reservationId)

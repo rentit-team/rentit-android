@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.content.owner
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -36,7 +34,6 @@ import com.example.rentit.domain.rental.model.RentalDetailStatusModel
  * 상품 발송 준비(사용자 결제 완료) 상태를 나타내는 UI 컨텐츠
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OwnerPaidContent(
     paidData: RentalDetailStatusModel.Paid,
@@ -111,7 +108,6 @@ fun NoticeBannerSection() {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {

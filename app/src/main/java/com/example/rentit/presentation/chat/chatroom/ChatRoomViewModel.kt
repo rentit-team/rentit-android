@@ -1,8 +1,6 @@
 package com.example.rentit.presentation.chat.chatroom
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.core.exceptions.ForbiddenException
@@ -23,7 +21,6 @@ import javax.inject.Inject
 
 private const val TAG = "ChatRoomViewModel"
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatRoomViewModel @Inject constructor(
     private val chatRepository: ChatRepository,

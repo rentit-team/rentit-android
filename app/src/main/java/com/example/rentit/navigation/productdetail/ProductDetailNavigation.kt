@@ -1,7 +1,5 @@
 package com.example.rentit.navigation.productdetail
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -59,7 +57,6 @@ fun NavHostController.navigateToRentalHistory(productId: Int, selectedReservatio
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.productDetailGraph(navHostController: NavHostController) {
     composable<ProductDetailRoute.ProductDetail> { backStackEntry ->
         val items: ProductDetailRoute.ProductDetail = backStackEntry.toRoute()

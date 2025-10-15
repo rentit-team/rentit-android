@@ -1,9 +1,7 @@
 package com.example.rentit.presentation.rentaldetail
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.AutoMessageType
@@ -28,7 +26,6 @@ import javax.inject.Inject
 
 private const val TAG = "RentalDetailViewModel"
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class RentalDetailViewModel @Inject constructor(
     private val chatRepository: ChatRepository,

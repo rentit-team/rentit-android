@@ -1,7 +1,5 @@
 package com.example.rentit.common.ui.component.item
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,7 +32,6 @@ import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.common.ui.formatter.toRelativeTimeFormat
 import java.time.LocalDateTime
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentItProductListItem(
     title: String = "",
@@ -139,7 +136,6 @@ fun RentItProductListItem(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ProductListItemPreview() {

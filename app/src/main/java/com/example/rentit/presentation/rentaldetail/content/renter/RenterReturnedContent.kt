@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.content.renter
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.offset
 import androidx.compose.runtime.Composable
@@ -26,7 +24,6 @@ import com.example.rentit.domain.rental.model.RentalDetailStatusModel
  * 반납 완료 완료 상태를 나타내는 UI 컨텐츠
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RenterReturnedContent(
     returnedData: RentalDetailStatusModel.Returned,
@@ -73,7 +70,6 @@ fun RenterReturnedContent(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {
