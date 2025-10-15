@@ -2,8 +2,9 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.plugin.serialization)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.dagger.hilt.android)
 }
@@ -12,7 +13,7 @@ val localProps = gradleLocalProperties(rootDir, providers)
 
 android {
     namespace = "com.example.rentit"
-    compileSdk = 34
+    compileSdk = 36
 
     buildFeatures {
         buildConfig = true
@@ -22,7 +23,7 @@ android {
     defaultConfig {
         applicationId = "com.example.rentit"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
