@@ -24,7 +24,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.rentit.common.ui.extension.rentItBasicRoundedGrayBorder
 import com.example.rentit.common.ui.component.calendar.CalendarDate
 import com.example.rentit.common.ui.component.calendar.CalendarHeader
