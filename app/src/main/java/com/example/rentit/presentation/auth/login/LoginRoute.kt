@@ -77,6 +77,7 @@ fun launchGoogleSignIn(launcher: ManagedActivityResultLauncher<Intent, ActivityR
     val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestIdToken(BuildConfig.GOOGLE_CLIENT_ID)
         .requestServerAuthCode(BuildConfig.GOOGLE_CLIENT_ID)
+        .requestEmail()
         .build()
     val googleSignInClient = GoogleSignIn.getClient(context, gso)
     launcher.launch(googleSignInClient.signInIntent)    // Google Login Intent 실행
