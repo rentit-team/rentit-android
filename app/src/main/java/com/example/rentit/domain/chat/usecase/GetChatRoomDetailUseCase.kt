@@ -1,7 +1,5 @@
 package com.example.rentit.domain.chat.usecase
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.core.exceptions.ForbiddenException
 import com.example.rentit.data.chat.mapper.toModel
 import com.example.rentit.data.product.mapper.toChatRoomSummaryModel
@@ -21,7 +19,6 @@ import javax.inject.Inject
  * - 채팅방의 상대방 정보와 메시지 리스트를 도메인 모델로 변환
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 class GetChatRoomDetailUseCase @Inject constructor(
     private val productRepository: ProductRepository,
     private val rentalRepository: RentalRepository,

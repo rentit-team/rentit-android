@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,7 +35,6 @@ import com.example.rentit.presentation.rentaldetail.content.owner.OwnerRequestCo
 import com.example.rentit.presentation.rentaldetail.content.owner.OwnerReturnedContent
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun OwnerRentalDetailScreen(
     uiModel: RentalDetailStatusModel,
@@ -116,7 +113,6 @@ fun OwnerRentalDetailScreen(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun OwnerRentalDetailScreenPreview() {

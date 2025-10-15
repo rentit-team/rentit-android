@@ -1,7 +1,5 @@
 package com.example.rentit.navigation.pay
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -14,7 +12,6 @@ fun NavHostController.navigateToPay(productId: Int, reservationId: Int) {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.payGraph(navHostController: NavHostController) {
     composable<PayRoute.Pay> { backStackEntry ->
         val items: PayRoute.Pay = backStackEntry.toRoute()

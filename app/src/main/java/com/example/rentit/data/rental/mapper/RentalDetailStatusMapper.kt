@@ -1,7 +1,5 @@
 package com.example.rentit.data.rental.mapper
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.data.rental.dto.RentalDetailResponseDto
@@ -9,7 +7,6 @@ import com.example.rentit.presentation.rentaldetail.model.RentalSummaryUiModel
 import com.example.rentit.domain.rental.model.RentalDetailStatusModel
 import com.example.rentit.common.enums.RentingStatus
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun RentalDetailResponseDto.toModel(): RentalDetailStatusModel {
     val status = rental.status
 

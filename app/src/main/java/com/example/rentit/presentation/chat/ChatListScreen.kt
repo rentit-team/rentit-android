@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.chat
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -49,7 +47,6 @@ import com.example.rentit.presentation.chat.model.ChatListFilter
 import java.time.OffsetDateTime
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListScreen(
     chatRoomSummaries: List<ChatRoomSummaryModel> = emptyList(),
@@ -115,8 +112,6 @@ fun RentalHistoryFilterSection(
     }
 }
 
-
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<ChatRoomSummaryModel>, scrollState: LazyListState, onItemClick: (String) -> Unit) {
     val emptyContentText = if(isActiveChatRooms) {
@@ -142,7 +137,6 @@ fun ChatListSection(isActiveChatRooms: Boolean = true, chatRoomSummaries: List<C
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListItem(
     lastMessageTime: OffsetDateTime?,
@@ -223,7 +217,6 @@ fun ChatListItem(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ChatListScreenPreview() {

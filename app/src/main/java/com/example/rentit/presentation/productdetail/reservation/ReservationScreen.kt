@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail.reservation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +37,6 @@ import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.presentation.productdetail.reservation.components.DateRangePicker
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReservationScreen(
     rentalStartDate: LocalDate? = null,
@@ -174,7 +171,6 @@ fun LabelValueRow(modifier: Modifier, content: @Composable () -> Unit) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun ReservationScreenPreview() {

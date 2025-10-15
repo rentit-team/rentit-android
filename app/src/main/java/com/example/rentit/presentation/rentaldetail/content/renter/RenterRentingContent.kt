@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.content.renter
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,7 +42,6 @@ import kotlin.math.abs
  * 대여중 상태(대여중, 반납 전, 반납 지연)를 나타내는 UI 컨텐츠
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RenterRentingContent(
     rentingData: RentalDetailStatusModel.Renting,
@@ -166,7 +163,6 @@ fun ReturnOverdueWarning(daysFromReturnDate: Int, deposit: Int) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {

@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail.drawer
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,7 +29,6 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.theme.SecondaryYellow
 import java.time.YearMonth
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AvailableDateDrawer(reservedDateList: List<String>) {
     Column(
@@ -43,7 +40,6 @@ fun AvailableDateDrawer(reservedDateList: List<String>) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarLegend() {
     Row(
@@ -72,7 +68,6 @@ fun CalendarLegend() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AvailableDateCalendar(yearMonth: YearMonth, disabledDates: List<String> = emptyList()) {
     val month = remember { mutableStateOf(yearMonth) }
@@ -87,7 +82,6 @@ fun AvailableDateCalendar(yearMonth: YearMonth, disabledDates: List<String> = em
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
@@ -96,7 +90,6 @@ private fun Preview() {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun CalendarLegendPreview() {

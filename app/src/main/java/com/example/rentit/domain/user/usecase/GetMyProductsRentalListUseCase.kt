@@ -1,7 +1,5 @@
 package com.example.rentit.domain.user.usecase
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.common.enums.RentalStatus
 import com.example.rentit.common.util.daysFromToday
 import com.example.rentit.domain.user.model.MyProductsRentalModel
@@ -16,7 +14,6 @@ import javax.inject.Inject
 class GetMyProductsRentalHistoryUseCase @Inject constructor(
     private val userRepository: UserRepository,
 ) {
-    @RequiresApi(Build.VERSION_CODES.O)
     suspend operator fun invoke(): Result<Map<RentalStatus, List<MyProductsRentalModel>>> {
         return runCatching {
             val rentalHistories =

@@ -1,8 +1,6 @@
 package com.example.rentit.presentation.productdetail.reservation
 
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -20,7 +18,6 @@ import com.example.rentit.common.ui.component.layout.RentItLoadingScreen
 import com.example.rentit.navigation.productdetail.navigateToReservationComplete
 import com.example.rentit.presentation.main.MainViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReservationRoute(navHostController: NavHostController, productId: Int) {
     val mainViewModel: MainViewModel = hiltViewModel()

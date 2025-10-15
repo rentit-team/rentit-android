@@ -1,8 +1,6 @@
 package com.example.rentit.presentation.productdetail.reservation
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.core.exceptions.ConflictException
@@ -21,7 +19,6 @@ import javax.inject.Inject
 private const val TAG = "ReservationViewModel"
 private const val DEFAULT_DEPOSIT_DAYS = 3 // 기본 보증금 계산 기준 일수
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ReservationViewModel @Inject constructor(
     private val productRepository: ProductRepository,

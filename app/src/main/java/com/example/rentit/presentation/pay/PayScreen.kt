@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.pay
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Column
@@ -36,7 +34,6 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.presentation.rentaldetail.components.section.RentalInfoSection
 import com.example.rentit.presentation.rentaldetail.components.section.RentalPaymentSection
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun PayScreen(
     rentalSummary: RentalSummaryUiModel,
@@ -155,7 +152,6 @@ fun PayResultDialog(
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun Preview() {

@@ -1,7 +1,5 @@
 package com.example.rentit.navigation.setting
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -13,7 +11,6 @@ fun NavHostController.navigateToSetting() {
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun NavGraphBuilder.settingNavGraph(navHostController: NavHostController) {
     composable<SettingRoute.Setting> { SettingRoute(navHostController) }
 }

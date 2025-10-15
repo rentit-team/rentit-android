@@ -1,8 +1,6 @@
 package com.example.rentit.common.ui.formatter
 
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.R
 import com.example.rentit.common.util.getKorLabel
 import com.example.rentit.common.util.inclusiveDaysBetween
@@ -26,7 +24,6 @@ fun priceFormatter(price: Int): String = NumberFormat.getNumberInstance().format
  * 예: "2025.08.17" ~ "2025.08.20" → "25.08.17 (일) ~ 25.08.20 (수) · 4일"
  * @return 형식에 맞게 변환된 대여 기간 문자열 또는 에러 메시지
  */
-@RequiresApi(Build.VERSION_CODES.O)
 fun rentalPeriodFormatter(context: Context, startDateStr: String, endDateStr: String): String {
     val errorMsg = context.getString(R.string.util_error_rental_period_unavailable)
     val start = parseLocalDateOrNull(startDateStr) ?: return errorMsg
@@ -46,7 +43,6 @@ fun rentalPeriodFormatter(context: Context, startDateStr: String, endDateStr: St
     )
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 fun rentalPeriodFormatter(context: Context, startDate: LocalDate?, endDate: LocalDate?): String {
     if(startDate == null || endDate == null) return context.getString(R.string.util_error_rental_period_unavailable)
 

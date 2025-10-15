@@ -1,7 +1,5 @@
 package com.example.rentit.domain.chat.usecase
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.example.rentit.domain.chat.model.ChatRoomSummaryModel
 import com.example.rentit.domain.chat.repository.ChatRepository
 import java.time.OffsetDateTime
@@ -15,7 +13,6 @@ import javax.inject.Inject
  * - Presentation Layer에서 바로 사용 가능
  */
 
-@RequiresApi(Build.VERSION_CODES.O)
 class GetChatRoomSummariesUseCase @Inject constructor(
     private val chatRepository: ChatRepository
 ) {

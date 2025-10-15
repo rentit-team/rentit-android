@@ -1,9 +1,7 @@
 package com.example.rentit.presentation.chat.chatroom
 
 import android.content.Context
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
@@ -30,7 +28,6 @@ import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.presentation.main.MainViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatroomRoute(navHostController: NavHostController, chatRoomId: String) {
     val mainViewModel: MainViewModel = hiltViewModel()

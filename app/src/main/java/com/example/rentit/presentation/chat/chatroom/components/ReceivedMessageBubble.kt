@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.chat.chatroom.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +29,6 @@ import com.example.rentit.common.theme.White
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReceivedMessageBubble(msg: String, sentAt: String, senderNickname: String, onPayClick: () -> Unit = {}) {
     val msgTime = formatDateTime(sentAt)
@@ -84,13 +81,11 @@ fun ReceivedMessageBubble(msg: String, sentAt: String, senderNickname: String, o
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 private fun formatDateTime(dateTimeString: String): String {
     val localDateTime = LocalDateTime.parse(dateTimeString, DateTimeFormatter.ISO_DATE_TIME)
     return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun Preview() {

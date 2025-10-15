@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail.reservation.complete
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,7 +29,6 @@ import com.example.rentit.common.theme.RentItTheme
 import com.example.rentit.common.ui.formatter.priceFormatter
 import com.example.rentit.common.ui.formatter.rentalPeriodFormatter
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ReservationCompleteScreen(
     rentalStartDate: String,
@@ -82,7 +79,6 @@ fun ReservationCompleteScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {

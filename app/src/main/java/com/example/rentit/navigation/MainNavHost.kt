@@ -1,7 +1,5 @@
 package com.example.rentit.navigation
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -22,7 +20,6 @@ import com.example.rentit.navigation.setting.settingNavGraph
 import com.example.rentit.navigation.splash.SplashRoute
 import com.example.rentit.navigation.splash.splashGraph
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavHost(navHostController: NavHostController, paddingValues: PaddingValues) {
     NavHost(

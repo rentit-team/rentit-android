@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail.rentalhistory.calendar
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,7 +33,6 @@ import com.example.rentit.presentation.productdetail.rentalhistory.model.RentalH
 import java.time.LocalDate
 import java.time.YearMonth
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryCalendar(
     rentalHistoryByDateMap: Map<LocalDate, RentalHistoryDateModel>,
@@ -56,7 +53,6 @@ fun RentalHistoryCalendar(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryCalendarDates(
     yearMonth: YearMonth,
@@ -130,7 +126,6 @@ fun RentalHistoryCalendarDates(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, apiLevel = 33)
 @Composable
 fun RentalHistoryCalendarPreview() {

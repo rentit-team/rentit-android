@@ -1,8 +1,6 @@
 package com.example.rentit.presentation.mypage
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.common.enums.RentalStatus
@@ -20,7 +18,6 @@ import javax.inject.Inject
 
 private const val TAG = "MyPageViewModel"
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val userRepository: UserRepository,

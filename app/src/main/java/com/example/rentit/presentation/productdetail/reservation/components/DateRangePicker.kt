@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail.reservation.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -38,7 +36,6 @@ import com.example.rentit.common.theme.RentItTheme
 import java.time.LocalDate
 import java.time.YearMonth
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun DateRangePicker(
     modifier: Modifier = Modifier,
@@ -127,7 +124,6 @@ fun DateBox(date: String, isSelectingDate: Boolean, onDateClick: () -> Unit) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true, apiLevel = 33)
 @Composable
 private fun Preview() {

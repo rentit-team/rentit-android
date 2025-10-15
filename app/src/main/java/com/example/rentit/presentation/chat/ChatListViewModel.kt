@@ -1,8 +1,6 @@
 package com.example.rentit.presentation.chat
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rentit.domain.chat.usecase.GetChatRoomSummariesUseCase
@@ -17,7 +15,6 @@ import javax.inject.Inject
 
 private const val TAG = "ChatListViewModel"
 
-@RequiresApi(Build.VERSION_CODES.O)
 @HiltViewModel
 class ChatListViewModel @Inject constructor(
     private val getChatRoomSummariesUseCase: GetChatRoomSummariesUseCase

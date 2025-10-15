@@ -2,9 +2,7 @@ package com.example.rentit.presentation.rentaldetail
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -37,7 +35,6 @@ import com.example.rentit.presentation.rentaldetail.dialog.TransactionReceiptCon
 import java.io.File
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalDetailRoute(navHostController: NavHostController, productId: Int, reservationId: Int) {
     val mainViewModel: MainViewModel = hiltViewModel()

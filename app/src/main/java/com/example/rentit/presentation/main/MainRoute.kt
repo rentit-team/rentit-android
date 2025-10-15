@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.main
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -18,7 +16,6 @@ import com.example.rentit.navigation.auth.navigateToLogin
 import com.example.rentit.navigation.bottomtab.navigateBottomTab
 import com.example.rentit.navigation.createpost.navigateToCreatePost
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainRoute() {
     val navHostController = rememberNavController()

@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.main
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
@@ -35,7 +33,6 @@ import com.example.rentit.common.theme.White
 import com.example.rentit.navigation.MainNavHost
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainScreen(
     navHostController: NavHostController,
@@ -103,7 +100,6 @@ fun CreatePostFloatingButton(onClick: () -> Unit) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainView() {

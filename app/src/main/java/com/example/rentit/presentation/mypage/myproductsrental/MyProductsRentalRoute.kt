@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.mypage.myproductsrental
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -15,7 +13,6 @@ import com.example.rentit.common.ui.component.layout.RentItLoadingScreen
 import com.example.rentit.navigation.productdetail.navigateToRentalHistory
 import com.example.rentit.presentation.main.MainViewModel
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MyProductsRentalRoute(navHostController: NavHostController) {
     val mainViewModel: MainViewModel = hiltViewModel()

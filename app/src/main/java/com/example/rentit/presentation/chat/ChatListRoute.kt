@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.chat
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -18,7 +16,6 @@ import com.example.rentit.navigation.chatroom.navigateToChatRoom
 import com.example.rentit.presentation.main.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatListRoute(navHostController: NavHostController) {
     val mainViewModel: MainViewModel = hiltViewModel()

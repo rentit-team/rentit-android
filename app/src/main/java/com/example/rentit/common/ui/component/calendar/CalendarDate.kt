@@ -1,7 +1,5 @@
 package com.example.rentit.common.ui.component.calendar
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -36,7 +34,6 @@ import com.example.rentit.common.theme.SecondaryYellow
 import java.time.LocalDate
 import java.time.YearMonth
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CalendarDate(
     yearMonth: YearMonth,
@@ -145,8 +142,7 @@ fun CalendarDate(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Preview(showBackground = true, apiLevel = 33)
+@Preview(showBackground = true)
 @Composable
 fun PreviewCalendarDate() {
     RentItTheme {

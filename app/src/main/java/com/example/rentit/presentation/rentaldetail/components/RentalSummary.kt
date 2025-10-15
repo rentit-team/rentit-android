@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.rentaldetail.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,7 +33,6 @@ private const val imageFraction = 0.23f
 private val contentStartPadding = 15.dp
 private val periodTextVerticalPadding = 8.dp
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalSummary(
     modifier: Modifier = Modifier,
@@ -77,7 +74,6 @@ fun RentalSummary(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview(showBackground = true)
 private fun RentalSummaryPreview() {

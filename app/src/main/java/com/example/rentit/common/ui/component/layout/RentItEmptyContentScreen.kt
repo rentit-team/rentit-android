@@ -1,7 +1,5 @@
 package com.example.rentit.common.ui.component.layout
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -46,7 +44,6 @@ fun RentItEmptyContentScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun EmptyContentScreenPreview() {

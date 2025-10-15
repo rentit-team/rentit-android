@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.chat.chatroom
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,7 +62,6 @@ import com.example.rentit.presentation.chat.chatroom.components.ReceivedMessageB
 import com.example.rentit.presentation.chat.chatroom.components.SentMessageBubble
 import java.time.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun ChatroomScreen(
     messageText: TextFieldValue,
@@ -123,7 +120,6 @@ fun ChatroomScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun ProductInfoSection(
     thumbnailImgUrl: String?,
@@ -186,7 +182,6 @@ private fun ProductInfoSection(
 }
 
 // 요청 정보
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun RequestInfo(
     status: RentalStatus,
@@ -226,7 +221,6 @@ private fun RequestInfo(
 }
 
 // 채팅 메세지 리스트
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun ChatMessageList(
     modifier: Modifier,
@@ -312,7 +306,6 @@ private fun BottomInputBar(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 @Preview
 fun ChatRoomScreenPreview() {

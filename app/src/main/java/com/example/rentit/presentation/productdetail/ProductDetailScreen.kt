@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -63,7 +61,6 @@ import com.example.rentit.domain.product.model.ProductDetailModel
 import com.example.rentit.presentation.productdetail.drawer.AvailableDateDrawer
 import com.example.rentit.presentation.productdetail.drawer.MenuDrawer
 
-@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailScreen(
@@ -335,7 +332,6 @@ fun MiniButton(isOutlinedButton: Boolean, text: String, onClick: () -> Unit) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun Preview() {

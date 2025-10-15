@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.home
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
@@ -17,7 +15,6 @@ import com.example.rentit.navigation.productdetail.navigateToProductDetail
 import com.example.rentit.presentation.main.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun HomeRoute(navHostController: NavHostController) {
     val mainViewModel: MainViewModel = hiltViewModel()

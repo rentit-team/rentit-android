@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.productdetail.rentalhistory
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,7 +15,6 @@ import com.example.rentit.navigation.rentaldetail.navigateToRentalDetail
 import com.example.rentit.presentation.main.MainViewModel
 import com.example.rentit.presentation.productdetail.rentalhistory.dialog.AccessForbiddenDialog
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun RentalHistoryRoute(navHostController: NavHostController, productId: Int, selectedReservationId: Int?, initialRentalStatus: RentalStatus?, ) {
     val mainViewModel: MainViewModel = hiltViewModel()

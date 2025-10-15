@@ -1,7 +1,5 @@
 package com.example.rentit.presentation.chat.chatroom.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,7 +29,6 @@ import com.example.rentit.common.theme.Gray100
 import com.example.rentit.common.theme.PrimaryBlue500
 import com.example.rentit.common.theme.RentItTheme
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -> Unit = {}) {
     val isPayButtonAvailable = !isSender
@@ -97,7 +94,6 @@ fun AutoMessageBubble(isSender: Boolean, type: AutoMessageType, onPayClick: () -
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun Preview() {
